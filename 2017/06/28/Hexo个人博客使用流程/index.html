@@ -5,14 +5,19 @@
   
 
   
-  <title>Tag: 前端 | 不止是一位程序员</title>
+  <title>Hexo个人博客使用流程 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="不止是一位程序员">
-<meta property="og:url" content="http://ckmessi.github.io/tags/前端/index.html">
+  <meta name="description" content="这一段时间一直在使用Hexo搭建个人博客，此前研究了Hexo配合Github-Pages进行部署、Hexo添加图片、Hexo进行版本控制等相关内容。这篇文章主要总结一下Hexo个人博客的整体流程使用规范。    首先，我们把个人博客部分划分为三部分：  【仓库1】Hexo源文件，保存着博客内容的原生内容及Hexo项目自身的配置信息 【仓库2】Hexo生成文件，保存着根据主题模板生成的静态网页内容。">
+<meta name="keywords" content="Hexo,个人博客">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo个人博客使用流程">
+<meta property="og:url" content="http://ckmessi.github.io/2017/06/28/Hexo个人博客使用流程/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="这一段时间一直在使用Hexo搭建个人博客，此前研究了Hexo配合Github-Pages进行部署、Hexo添加图片、Hexo进行版本控制等相关内容。这篇文章主要总结一下Hexo个人博客的整体流程使用规范。    首先，我们把个人博客部分划分为三部分：  【仓库1】Hexo源文件，保存着博客内容的原生内容及Hexo项目自身的配置信息 【仓库2】Hexo生成文件，保存着根据主题模板生成的静态网页内容。">
+<meta property="og:updated_time" content="2017-06-28T02:21:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="不止是一位程序员">
+<meta name="twitter:title" content="Hexo个人博客使用流程">
+<meta name="twitter:description" content="这一段时间一直在使用Hexo搭建个人博客，此前研究了Hexo配合Github-Pages进行部署、Hexo添加图片、Hexo进行版本控制等相关内容。这篇文章主要总结一下Hexo个人博客的整体流程使用规范。    首先，我们把个人博客部分划分为三部分：  【仓库1】Hexo源文件，保存着博客内容的原生内容及Hexo项目自身的配置信息 【仓库2】Hexo生成文件，保存着根据主题模板生成的静态网页内容。">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -63,40 +68,72 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog-hexo/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/06/17/Swiper插件的使用/" class="archive-article-date">
-  <time datetime="2017-06-17T13:14:20.000Z" itemprop="datePublished">Jun 17</time>
+        <section id="main"><article id="post-Hexo个人博客使用流程" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/06/28/Hexo个人博客使用流程/" class="article-date">
+  <time datetime="2017-06-28T02:11:19.000Z" itemprop="datePublished">2017-06-28</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/06/17/Swiper插件的使用/">Swiper插件的使用</a>
+    <h1 class="article-title" itemprop="name">
+      Hexo个人博客使用流程
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这一段时间一直在使用Hexo搭建个人博客，此前研究了Hexo配合Github-Pages进行部署、Hexo添加图片、Hexo进行版本控制等相关内容。这篇文章主要总结一下Hexo个人博客的整体流程使用规范。   </p>
+<p>首先，我们把个人博客部分划分为三部分：</p>
+<ol>
+<li>【仓库1】Hexo源文件，保存着博客内容的原生内容及Hexo项目自身的配置信息</li>
+<li>【仓库2】Hexo生成文件，保存着根据主题模板生成的静态网页内容。</li>
+<li>【仓库3】Github-Pages个人主页，用于使用[username].github.io域名访问</li>
+</ol>
+<p>其中【仓库3】中可能不只包含【仓库2】的内容，使用Git的submodule方法添加【仓库2】作为其子目录。</p>
+<p>基于上述划分，我们可以得出个人博客使用时的基本流程：</p>
+<ol>
+<li>撰写Hexo源文件，完成后提交到【仓库1】</li>
+<li>在确认生成内容无误后，使用<code>Hexo generate</code>生成<code>public</code>目录（可修改名称），提交至【仓库2】</li>
+<li>在【仓库3】中的【仓库2】目录下拉取最新内容，然后合并到【仓库3】中，提交。</li>
+</ol>
+<p>此时【仓库3】中的【仓库2】内容保存着最新生成的静态网页内容，可使用<code>[username].github.io/[blog-project]</code>域名访问到。</p>
 
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/06/28/Hexo个人博客使用流程/" data-id="cj4gdkh330000zk8tauq9lf8w" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog-hexo/2017/06/23/Hexo项目的Git版本控制/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hexo项目的Git版本控制</div>
+    </a>
+  
+</nav>
+
+  
+</article>
 
 </section>
         
