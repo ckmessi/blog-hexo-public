@@ -5,14 +5,19 @@
   
 
   
-  <title>Tag: Git | 不止是一位程序员</title>
+  <title>Ubuntu修改Mysql数据库连接端口号 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="不止是一位程序员">
-<meta property="og:url" content="http://ckmessi.github.io/tags/Git/index.html">
+  <meta name="description" content="在实际情况中，为了避免不避要的攻击，最好更换Mysql数据库的默认端口号3306为其它端口号。    基本的更换步骤如下：找到mysql的配置文件，使用locate my.cnf命令可以查找my.cnf文件所在位置。使用vim进行编辑vim /etc/mysql/my.cnf，查找port = 3306所在位置。一共有两行:123[client]port            = 3306sock">
+<meta name="keywords" content="Mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu修改Mysql数据库连接端口号">
+<meta property="og:url" content="http://ckmessi.github.io/2017/05/22/Ubuntu修改Mysql数据库连接端口号/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="在实际情况中，为了避免不避要的攻击，最好更换Mysql数据库的默认端口号3306为其它端口号。    基本的更换步骤如下：找到mysql的配置文件，使用locate my.cnf命令可以查找my.cnf文件所在位置。使用vim进行编辑vim /etc/mysql/my.cnf，查找port = 3306所在位置。一共有两行:123[client]port            = 3306sock">
+<meta property="og:updated_time" content="2017-07-11T14:07:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="不止是一位程序员">
+<meta name="twitter:title" content="Ubuntu修改Mysql数据库连接端口号">
+<meta name="twitter:description" content="在实际情况中，为了避免不避要的攻击，最好更换Mysql数据库的默认端口号3306为其它端口号。    基本的更换步骤如下：找到mysql的配置文件，使用locate my.cnf命令可以查找my.cnf文件所在位置。使用vim进行编辑vim /etc/mysql/my.cnf，查找port = 3306所在位置。一共有两行:123[client]port            = 3306sock">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -63,40 +68,71 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog-hexo/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/06/23/Hexo项目的Git版本控制/" class="archive-article-date">
-  <time datetime="2017-06-23T15:24:40.000Z" itemprop="datePublished">Jun 23</time>
+        <section id="main"><article id="post-Ubuntu修改Mysql数据库连接端口号" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/05/22/Ubuntu修改Mysql数据库连接端口号/" class="article-date">
+  <time datetime="2017-05-22T08:43:00.000Z" itemprop="datePublished">2017-05-22</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/06/23/Hexo项目的Git版本控制/">Hexo项目的Git版本控制</a>
+    <h1 class="article-title" itemprop="name">
+      Ubuntu修改Mysql数据库连接端口号
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在实际情况中，为了避免不避要的攻击，最好更换Mysql数据库的默认端口号3306为其它端口号。   </p>
+<p>基本的更换步骤如下：<br>找到mysql的配置文件，使用<code>locate my.cnf</code>命令可以查找my.cnf文件所在位置。<br>使用vim进行编辑<code>vim /etc/mysql/my.cnf</code>，查找<code>port = 3306</code>所在位置。<br>一共有两行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[client]</div><div class="line">port            = 3306</div><div class="line">socket          = /var/run/mysqld/mysqld.sock</div></pre></td></tr></table></figure></p>
+<p>以及<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[mysqld]</div><div class="line">#</div><div class="line"># * Basic Settings</div><div class="line">#</div><div class="line">user            = mysql</div><div class="line">pid-file        = /var/run/mysqld/mysqld.pid</div><div class="line">socket          = /var/run/mysqld/mysqld.sock</div><div class="line">port            = 3306</div><div class="line">basedir         = /usr</div><div class="line">datadir         = /var/lib/mysql</div><div class="line">tmpdir          = /tmp</div><div class="line">lc-messages-dir = /usr/share/mysql</div></pre></td></tr></table></figure></p>
+<p>这两处的3306替换为新端口号即可。</p>
+<p>然后重启mysql服务：<code>service mysqld restart</code></p>
 
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/05/22/Ubuntu修改Mysql数据库连接端口号/" data-id="cj4znekta000fxy8t2mg0knn6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog-hexo/2017/06/15/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Hello World
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog-hexo/2017/05/16/Hashids的使用/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hashids的使用</div>
+    </a>
+  
+</nav>
+
+  
+</article>
 
 </section>
         
