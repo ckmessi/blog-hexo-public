@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Grunt入门 | 不止是一位程序员</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="什么是Grunt？Javascript的任务运行器（The Javascript Task Runner） 为什么需要使用任务运行器？自动化。当执行重复任务如压缩、编译、单元测试等的工作越少，工作就越轻松。只要通过配置Gruntfile文件，任务运行器就能帮助你以几乎零付出的代价完成这些平庸的事情。 为什么使用GruntGrunt的生态系统很大，并且每天还在不断增长。基于成千上百的插件可供选择，能">
+<meta name="keywords" content="Grunt,Javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Grunt入门">
+<meta property="og:url" content="http://ckmessi.github.io/2017/07/19/Grunt入门/index.html">
+<meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="什么是Grunt？Javascript的任务运行器（The Javascript Task Runner） 为什么需要使用任务运行器？自动化。当执行重复任务如压缩、编译、单元测试等的工作越少，工作就越轻松。只要通过配置Gruntfile文件，任务运行器就能帮助你以几乎零付出的代价完成这些平庸的事情。 为什么使用GruntGrunt的生态系统很大，并且每天还在不断增长。基于成千上百的插件可供选择，能">
+<meta property="og:updated_time" content="2017-07-19T14:24:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Grunt入门">
+<meta name="twitter:description" content="什么是Grunt？Javascript的任务运行器（The Javascript Task Runner） 为什么需要使用任务运行器？自动化。当执行重复任务如压缩、编译、单元测试等的工作越少，工作就越轻松。只要通过配置Gruntfile文件，任务运行器就能帮助你以几乎零付出的代价完成这些平庸的事情。 为什么使用GruntGrunt的生态系统很大，并且每天还在不断增长。基于成千上百的插件可供选择，能">
+  
+    <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/blog-hexo/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog-hexo/" id="logo">不止是一位程序员</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog-hexo/" id="subtitle">Lionel的技术空间</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog-hexo/">Home</a>
+        
+          <a class="main-nav-link" href="/blog-hexo/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Grunt入门" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/07/19/Grunt入门/" class="article-date">
+  <time datetime="2017-07-19T14:19:15.000Z" itemprop="datePublished">2017-07-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Grunt入门
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="什么是Grunt？"><a href="#什么是Grunt？" class="headerlink" title="什么是Grunt？"></a>什么是Grunt？</h2><p>Javascript的任务运行器（The Javascript Task Runner）</p>
+<p>为什么需要使用任务运行器？<br>自动化。当执行重复任务如压缩、编译、单元测试等的工作越少，工作就越轻松。只要通过配置Gruntfile文件，任务运行器就能帮助你以几乎零付出的代价完成这些平庸的事情。</p>
+<p>为什么使用Grunt<br>Grunt的生态系统很大，并且每天还在不断增长。基于成千上百的插件可供选择，能够使用Grunt自动完成许多工作。如果没有人构建你所需要的，制作并发布自己的Grunt插件也是一件轻而易举的事情。</p>
+<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>首先安装Grunt的命令行界面grunt-cli（Grunt’s command line interface (CLI) ）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g grunt-cli</div></pre></td></tr></table></figure></p>
+<p>Grunt项目中通常会有两个文件：<br><code>package.json</code><br><code>Gruntfile</code> 可能是Gruntfile.js或Gruntfile.coffee，用于配置或定义tasks并载入Grunt插件。</p>
+<h3 id="Package-json"><a href="#Package-json" class="headerlink" title="Package.json"></a>Package.json</h3><p>npm包所使用的依赖库文件。</p>
+<h3 id="GruntFile-js"><a href="#GruntFile-js" class="headerlink" title="GruntFile.js"></a>GruntFile.js</h3><p>GruntFile由以下四部分组成：</p>
+<ul>
+<li>包装函数（The “wrapper” function）</li>
+<li>项目和任务配置（Project and task configuration）</li>
+<li>载入Grunt插件和任务（Loading Grunt plugins and tasks）</li>
+<li>自定义任务（Custom tasks）</li>
+</ul>
+<h5 id="样例文件"><a href="#样例文件" class="headerlink" title="样例文件"></a>样例文件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">module.exports = function(grunt) &#123;</div><div class="line"></div><div class="line">  // Project configuration.</div><div class="line">  grunt.initConfig(&#123;</div><div class="line">    pkg: grunt.file.readJSON(&apos;package.json&apos;),</div><div class="line">    uglify: &#123;</div><div class="line">      options: &#123;</div><div class="line">        banner: &apos;/*! &lt;%= pkg.name %&gt; &lt;%= grunt.template.today(&quot;yyyy-mm-dd&quot;) %&gt; */\n&apos;</div><div class="line">      &#125;,</div><div class="line">      build: &#123;</div><div class="line">        src: &apos;src/&lt;%= pkg.name %&gt;.js&apos;,</div><div class="line">        dest: &apos;build/&lt;%= pkg.name %&gt;.min.js&apos;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">  // Load the plugin that provides the &quot;uglify&quot; task.</div><div class="line">  grunt.loadNpmTasks(&apos;grunt-contrib-uglify&apos;);</div><div class="line"></div><div class="line">  // Default task(s).</div><div class="line">  grunt.registerTask(&apos;default&apos;, [&apos;uglify&apos;]);</div><div class="line"></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h5 id="包装函数"><a href="#包装函数" class="headerlink" title="包装函数"></a>包装函数</h5><p>每一个Gruntfile都使用这种基础格式，所有你自己的Grunt代码必须定义在这个函数以内。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">module.exports = function(grunt) &#123;</div><div class="line">  // Do grunt-related things in here</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<h5 id="项目和任务配置"><a href="#项目和任务配置" class="headerlink" title="项目和任务配置"></a>项目和任务配置</h5><p>大多数Grunt任务依赖于定义在grunt.initConfig方法的配置数据。<br><code>&lt;% %&gt;</code>模板字符串能够引用配置的属性，这样文件路径、文件列表等内容能够通过这种方式定义以减少重复。<br>如大多数任务一样，uglify任务期望它的配置数据以相同名称的属性定义。</p>
+<h5 id="载入Grunt插件和任务"><a href="#载入Grunt插件和任务" class="headerlink" title="载入Grunt插件和任务"></a>载入Grunt插件和任务</h5><p>大多数常用的任务如<a href="https://github.com/gruntjs/grunt-contrib-concat" target="_blank" rel="external">连接（concatenation）</a>、<a href="https://github.com/gruntjs/grunt-contrib-uglify" target="_blank" rel="external">压缩（minification）</a>和<a href="https://github.com/gruntjs/grunt-contrib-jshint" target="_blank" rel="external">lint</a>都是可用的grunt插件。<br>只要一个插件在package.json中指定为依赖包，并且通过npm install安装，它就能够在你的Gruntfile中以简单的命令使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// Load the plugin that provides the &quot;uglify&quot; task.</div><div class="line">grunt.loadNpmTasks(&apos;grunt-contrib-uglify&apos;);</div></pre></td></tr></table></figure></p>
+<p>注意：<code>grunt -help</code>命令将列出所有可用的任务。</p>
+<h5 id="自定义任务"><a href="#自定义任务" class="headerlink" title="自定义任务"></a>自定义任务</h5><p>你能够配置使Grunt默认运行一个或多个任务，通过定义一个<code>default</code>的任务。在下面的样例中，在命令行中没有指定任务执行grunt，将运行<code>uglify</code>任务。这在功能上与显式地直接执行<code>grunt uglify</code>或者<code>grunt default</code>是一样的。任意数量的任务可以被指定在数组中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// Default task(s).</div><div class="line">grunt.registerTask(&apos;default&apos;, [&apos;uglify&apos;]);</div></pre></td></tr></table></figure></p>
+<p>如果你的项目需要一个Grunt插件不曾提供的任务，你可以在<code>Gruntfile</code>中定义自定义任务。比如，下面的<code>GruntFile</code>指定了一个完全自定义的<code>default</code>任务，甚至不使用任务配置。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">module.exports = function(grunt) &#123;</div><div class="line"></div><div class="line">  // A very basic default task.</div><div class="line">  grunt.registerTask(&apos;default&apos;, &apos;Log some stuff.&apos;, function() &#123;</div><div class="line">    grunt.log.write(&apos;Logging some stuff...&apos;).ok();</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>自定义项目指定的任务不需要在<code>Gruntfile</code>中指定；它们能够在外部的<code>.js</code>文件中定义，并通过<code>grunt.loadTasks</code>方法导入。</p>
+<h2 id="Grunt的使用习惯"><a href="#Grunt的使用习惯" class="headerlink" title="Grunt的使用习惯"></a>Grunt的使用习惯</h2><p>传统的文件夹结构特征会包含这些文件夹：<code>src</code>、<code>dist</code>和<code>test</code>。</p>
+<ul>
+<li><code>src</code>文件夹（有时命名为<code>app</code>）包含创作的源代码库</li>
+<li><code>dist</code>文件夹（有时命名为<code>build</code>）包含发布版本，已经压缩的源代码。压缩文件中所有不必要的字符，比如空格、换行、注释，都被移除，但不影响源代码的功能。压缩源代码是很有用的，因为能够减少需要传输的数据量。</li>
+<li><code>test</code>文件夹包含测试项目的源代码。</li>
+</ul>
+<p>开发功能库并发布新版本时，有一些基础任务是必须执行的。<br>比如，你希望确保你所撰写的代码达到最好的实际效果，或者说代码不会造成意外的行为。为了确保这一点，你可能需要使用一个工具JSHint。Grunt有一个官方插件grunt-contrib-jshint。尤其，你可能希望确保当你修改代码时，不会打破任何规则和实用效果。因此一个比较好的策略是在每次你执行改动时都检查代码。<br>为了完成这个任务，我们还会涉及到一个Grunt插件grunt-contrib-watch。当文件增加、修改、或删除时，其能够运行预定义的任务，比如grunt-contrib-jshint。<br>好好检查你的源代码符合最优结果不足以保证它是稳定以及不包含bug的。为了创建一个鲁棒的项目，你需要对它进行测试。有一些库可以采用，比如QUnit或Jasmine。在Grunt插件中可以使用grunt-contrib-qunit来测试代码。<br>当需要分发你的工作时，你希望提供一个尽可能小的版本。为了创建一个压缩版本，你需要Grunt插件如grunt-contrib-uglify。进一步，除非你正在开发的项目很小，你将代码划分到多个文件中的可能性是很大的。尽管这对于开发者来说是一个好习惯，但你希望用户只包含一个文件。因此，在压缩代码后，你还希望将源代码们合并成一个单一的文件。为了实现这个目标，你还需要Grunt插件grunt-contrib-concat。</p>
+<p>总结一下，通常会用到以下五个Grunt插件：</p>
+<ul>
+<li>grunt-contrib-uglify</li>
+<li>grunt-contrib-qunit</li>
+<li>grunt-contrib-concat</li>
+<li>grunt-contrib-jshint</li>
+<li>grunt-contrib-watch</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>Grunt是基于Node.js的自动化任务运行器，能够帮助减轻重复性的代码工作。</li>
+<li>Grunt生态系统强大，有丰富的插件可供选择</li>
+<li>Grunt项目中最重要的两个文件是<code>package.json</code>和<code>Gruntfile</code></li>
+<li><code>Gruntfile</code>定义了运行器的配置，由4部分组织：包装函数、任务配置、载入执行、自定义任务</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/07/19/Grunt入门/" data-id="cj5b3kc9v0004qd8t00okalp3" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog-hexo/2017/07/07/使用mysqldump快速拷贝一个数据库/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用mysqldump快速拷贝一个数据库</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Git/" style="font-size: 10px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 20px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 13.33px;">Javascript</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 10px;">PHP</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 16.67px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog-hexo/2017/07/19/Grunt入门/">Grunt入门</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2017/07/07/使用mysqldump快速拷贝一个数据库/">使用mysqldump快速拷贝一个数据库</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2017/07/06/Apache配置php5升级为php7/">Apache配置php5升级为php7</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2017/06/28/Hexo个人博客使用流程/">Hexo个人博客使用流程</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2017/06/23/Hexo项目的Git版本控制/">Hexo项目的Git版本控制</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 ckmessi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog-hexo/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog-hexo/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/blog-hexo/fancybox/jquery.fancybox.css">
+  <script src="/blog-hexo/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/blog-hexo/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
