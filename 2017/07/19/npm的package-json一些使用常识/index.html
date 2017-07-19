@@ -5,14 +5,19 @@
   
 
   
-  <title>Archives | 不止是一位程序员</title>
+  <title>npm的package.json一些使用常识 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="不止是一位程序员">
-<meta property="og:url" content="http://ckmessi.github.io/archives/page/2/index.html">
+  <meta name="description" content="npm install –savenpm install --save 能够将安装包的信息保存到package.json中但如果一开始没有package.json，它不会创建文件。因此需要先npm init，会自动生成一个package.json文件，之后再执行带--save的安装包操作时就会保存了。 –save和–save-dev的区别使用--save时，会在package.json的depen">
+<meta name="keywords" content="Node.js,npm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="npm的package.json一些使用常识">
+<meta property="og:url" content="http://ckmessi.github.io/2017/07/19/npm的package-json一些使用常识/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="npm install –savenpm install --save 能够将安装包的信息保存到package.json中但如果一开始没有package.json，它不会创建文件。因此需要先npm init，会自动生成一个package.json文件，之后再执行带--save的安装包操作时就会保存了。 –save和–save-dev的区别使用--save时，会在package.json的depen">
+<meta property="og:updated_time" content="2017-07-19T14:31:56.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="不止是一位程序员">
+<meta name="twitter:title" content="npm的package.json一些使用常识">
+<meta name="twitter:description" content="npm install –savenpm install --save 能够将安装包的信息保存到package.json中但如果一开始没有package.json，它不会创建文件。因此需要先npm init，会自动生成一个package.json文件，之后再执行带--save的安装包操作时就会保存了。 –save和–save-dev的区别使用--save时，会在package.json的depen">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -63,102 +68,69 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog-hexo/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/06/16/随机游走/" class="archive-article-date">
-  <time datetime="2017-06-16T01:50:51.000Z" itemprop="datePublished">Jun 16</time>
+        <section id="main"><article id="post-npm的package-json一些使用常识" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/07/19/npm的package-json一些使用常识/" class="article-date">
+  <time datetime="2017-07-19T14:28:56.000Z" itemprop="datePublished">2017-07-19</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/06/16/随机游走/">随机游走</a>
+    <h1 class="article-title" itemprop="name">
+      npm的package.json一些使用常识
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/06/15/hello-world/" class="archive-article-date">
-  <time datetime="2017-06-15T13:47:21.000Z" itemprop="datePublished">Jun 15</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/06/15/hello-world/">Hello World</a>
-    </h1>
-  
+        <h2 id="npm-install-–save"><a href="#npm-install-–save" class="headerlink" title="npm install –save"></a>npm install –save</h2><p><code>npm install --save</code> 能够将安装包的信息保存到<code>package.json</code>中<br>但如果一开始没有<code>package.json</code>，它不会创建文件。<br>因此需要先<code>npm init</code>，会自动生成一个<code>package.json</code>文件，之后再执行带<code>--save</code>的安装包操作时就会保存了。</p>
+<h2 id="–save和–save-dev的区别"><a href="#–save和–save-dev的区别" class="headerlink" title="–save和–save-dev的区别"></a>–save和–save-dev的区别</h2><p>使用<code>--save</code>时，会在<code>package.json</code>的<code>dependencies</code>属性中添加相关包的信息<br>使用<code>--save-dev</code>时，会在<code>package.json</code>的<code>devDependencies</code>属性中添加相关包的信息。<br>以上两者是独立的。</p>
+<h2 id="dependencies和devDependencies属性的区别"><a href="#dependencies和devDependencies属性的区别" class="headerlink" title="dependencies和devDependencies属性的区别"></a>dependencies和devDependencies属性的区别</h2><p>使用<code>npm install</code>默认会安装以上两种依赖。<br>使用<code>npm install --production</code>只安装<code>dependencies</code>，不安装<code>devDependencies</code>。</p>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/05/22/Ubuntu修改Mysql数据库连接端口号/" class="archive-article-date">
-  <time datetime="2017-05-22T08:43:00.000Z" itemprop="datePublished">May 22</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/05/22/Ubuntu修改Mysql数据库连接端口号/">Ubuntu修改Mysql数据库连接端口号</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/05/16/Hashids的使用/" class="archive-article-date">
-  <time datetime="2017-05-16T04:06:00.000Z" itemprop="datePublished">May 16</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/07/19/npm的package-json一些使用常识/" data-id="cj5b3z2yw000v5r8toz1q736g" class="article-share-link">Share</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/05/16/Hashids的使用/">Hashids的使用</a>
-    </h1>
-  
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li></ul>
 
-    </header>
+    </footer>
   </div>
-</article>
   
-  
-    </div></section>
-  
-
-
-  <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/archives/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/archives/">1</a><span class="page-number current">2</span>
-  </nav>
+<nav id="article-nav">
+  
+    <a href="/blog-hexo/2017/07/19/PowerShell实现光标快速移动操作和自动补全/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          PowerShell实现光标快速移动操作和自动补全
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog-hexo/2017/07/19/Grunt入门/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Grunt入门</div>
+    </a>
+  
+</nav>
+
+  
+</article>
 
 </section>
         

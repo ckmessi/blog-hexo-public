@@ -5,14 +5,19 @@
   
 
   
-  <title>Archives | 不止是一位程序员</title>
+  <title>PowerShell实现光标快速移动操作和自动补全 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="不止是一位程序员">
-<meta property="og:url" content="http://ckmessi.github.io/archives/page/2/index.html">
+  <meta name="description" content="在Windows的PowerShell操作界面中，使用Ctrl+a并不能将光标移动到当前行首，同理Ctrl+e也不能将光标移动到行尾。这很蛋疼。 可以使用下面这个语句设置编辑模式：Set-PSReadlineOptional -EditMode Emacs 此外，在切换路径的时候，默认按Tab键只会从第一个目录开始遍历，不会根据当前输入进行补全，也是比较烦人的设置。    可以通过以下语句设置Ta">
+<meta name="keywords" content="PowerShell,Command Line">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PowerShell实现光标快速移动操作和自动补全">
+<meta property="og:url" content="http://ckmessi.github.io/2017/07/19/PowerShell实现光标快速移动操作和自动补全/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="在Windows的PowerShell操作界面中，使用Ctrl+a并不能将光标移动到当前行首，同理Ctrl+e也不能将光标移动到行尾。这很蛋疼。 可以使用下面这个语句设置编辑模式：Set-PSReadlineOptional -EditMode Emacs 此外，在切换路径的时候，默认按Tab键只会从第一个目录开始遍历，不会根据当前输入进行补全，也是比较烦人的设置。    可以通过以下语句设置Ta">
+<meta property="og:updated_time" content="2017-07-19T14:33:46.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="不止是一位程序员">
+<meta name="twitter:title" content="PowerShell实现光标快速移动操作和自动补全">
+<meta name="twitter:description" content="在Windows的PowerShell操作界面中，使用Ctrl+a并不能将光标移动到当前行首，同理Ctrl+e也不能将光标移动到行尾。这很蛋疼。 可以使用下面这个语句设置编辑模式：Set-PSReadlineOptional -EditMode Emacs 此外，在切换路径的时候，默认按Tab键只会从第一个目录开始遍历，不会根据当前输入进行补全，也是比较烦人的设置。    可以通过以下语句设置Ta">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -63,102 +68,63 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog-hexo/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/06/16/随机游走/" class="archive-article-date">
-  <time datetime="2017-06-16T01:50:51.000Z" itemprop="datePublished">Jun 16</time>
+        <section id="main"><article id="post-PowerShell实现光标快速移动操作和自动补全" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/07/19/PowerShell实现光标快速移动操作和自动补全/" class="article-date">
+  <time datetime="2017-07-19T14:32:50.000Z" itemprop="datePublished">2017-07-19</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/06/16/随机游走/">随机游走</a>
+    <h1 class="article-title" itemprop="name">
+      PowerShell实现光标快速移动操作和自动补全
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/06/15/hello-world/" class="archive-article-date">
-  <time datetime="2017-06-15T13:47:21.000Z" itemprop="datePublished">Jun 15</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/06/15/hello-world/">Hello World</a>
-    </h1>
-  
+        <p>在Windows的PowerShell操作界面中，使用<code>Ctrl</code>+<code>a</code>并不能将光标移动到当前行首，同理<code>Ctrl</code>+<code>e</code>也不能将光标移动到行尾。<br>这很蛋疼。</p>
+<p>可以使用下面这个语句设置编辑模式：<br><code>Set-PSReadlineOptional -EditMode Emacs</code></p>
+<p>此外，在切换路径的时候，默认按<code>Tab</code>键只会从第一个目录开始遍历，不会根据当前输入进行补全，也是比较烦人的设置。   </p>
+<p>可以通过以下语句设置<code>Tab</code>键的作用：<br><code>Set-PSReadlineKeyHandler -Key Tab -Function TabCompleteNext</code></p>
+<p>将上述两个语句加入到<code>$profile</code>文件中，即可设置<code>PowerShell</code>启动时自动执行这两个设置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Set-PSReadlineOptional -EditMode Emacs </div><div class="line">Set-PSReadlineKeyHandler -Key Tab -Function TabCompleteNext</div></pre></td></tr></table></figure></p>
+<p>以上。</p>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/05/22/Ubuntu修改Mysql数据库连接端口号/" class="archive-article-date">
-  <time datetime="2017-05-22T08:43:00.000Z" itemprop="datePublished">May 22</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/05/22/Ubuntu修改Mysql数据库连接端口号/">Ubuntu修改Mysql数据库连接端口号</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/05/16/Hashids的使用/" class="archive-article-date">
-  <time datetime="2017-05-16T04:06:00.000Z" itemprop="datePublished">May 16</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/07/19/PowerShell实现光标快速移动操作和自动补全/" data-id="cj5b3z2yg000f5r8tgoeltkzx" class="article-share-link">Share</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/05/16/Hashids的使用/">Hashids的使用</a>
-    </h1>
-  
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li></ul>
 
-    </header>
+    </footer>
   </div>
-</article>
   
-  
-    </div></section>
-  
-
-
-  <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/archives/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/archives/">1</a><span class="page-number current">2</span>
-  </nav>
+<nav id="article-nav">
+  
+  
+    <a href="/blog-hexo/2017/07/19/npm的package-json一些使用常识/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">npm的package.json一些使用常识</div>
+    </a>
+  
+</nav>
+
+  
+</article>
 
 </section>
         
