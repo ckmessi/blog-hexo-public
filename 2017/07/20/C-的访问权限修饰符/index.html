@@ -5,14 +5,19 @@
   
 
   
-  <title>Tag: Node.js | 不止是一位程序员</title>
+  <title>C#的访问权限修饰符 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="不止是一位程序员">
-<meta property="og:url" content="http://ckmessi.github.io/tags/Node-js/index.html">
+  <meta name="description" content="C#的访问权限修饰符internal关键字是类型和类型成员的访问修饰符。只有在同一程序集的文件中，内部类型或成员才可访问。 在C#语言中，共有五种访问修饰符：public、private、protected、internal、protected internal。作用范围如下：  public 公有访问，不受任何限制。 private 私有访问，只限于本类成员访问，子类，实例都不能访问。 prot">
+<meta name="keywords" content="C#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C#的访问权限修饰符">
+<meta property="og:url" content="http://ckmessi.github.io/2017/07/20/C-的访问权限修饰符/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="C#的访问权限修饰符internal关键字是类型和类型成员的访问修饰符。只有在同一程序集的文件中，内部类型或成员才可访问。 在C#语言中，共有五种访问修饰符：public、private、protected、internal、protected internal。作用范围如下：  public 公有访问，不受任何限制。 private 私有访问，只限于本类成员访问，子类，实例都不能访问。 prot">
+<meta property="og:updated_time" content="2017-07-20T12:38:40.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="不止是一位程序员">
+<meta name="twitter:title" content="C#的访问权限修饰符">
+<meta name="twitter:description" content="C#的访问权限修饰符internal关键字是类型和类型成员的访问修饰符。只有在同一程序集的文件中，内部类型或成员才可访问。 在C#语言中，共有五种访问修饰符：public、private、protected、internal、protected internal。作用范围如下：  public 公有访问，不受任何限制。 private 私有访问，只限于本类成员访问，子类，实例都不能访问。 prot">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -63,40 +68,74 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog-hexo/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/07/19/npm的package-json一些使用常识/" class="archive-article-date">
-  <time datetime="2017-07-19T14:28:56.000Z" itemprop="datePublished">Jul 19</time>
+        <section id="main"><article id="post-C-的访问权限修饰符" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/07/20/C-的访问权限修饰符/" class="article-date">
+  <time datetime="2017-07-20T12:36:59.000Z" itemprop="datePublished">2017-07-20</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/07/19/npm的package-json一些使用常识/">npm的package.json一些使用常识</a>
+    <h1 class="article-title" itemprop="name">
+      C#的访问权限修饰符
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="C-的访问权限修饰符"><a href="#C-的访问权限修饰符" class="headerlink" title="C#的访问权限修饰符"></a>C#的访问权限修饰符</h2><p><code>internal</code>关键字是类型和类型成员的访问修饰符。只有在同一程序集的文件中，内部类型或成员才可访问。</p>
+<p>在C#语言中，共有五种访问修饰符：public、private、protected、internal、protected internal。<br>作用范围如下：</p>
+<ul>
+<li><code>public</code> 公有访问，不受任何限制。</li>
+<li><code>private</code> 私有访问，只限于本类成员访问，子类，实例都不能访问。</li>
+<li><code>protected</code> 保护访问，只限于本类和子类访问，实例不能访问。</li>
+<li><code>internal</code> 内部访问，只限于本项目内访问，其他不能访问。</li>
+<li><code>protected internal</code> 内部保护访问，只限于本项目或是子类访问，其他不能访问。</li>
+</ul>
+<h2 id="扩展：Java的访问限制修饰符"><a href="#扩展：Java的访问限制修饰符" class="headerlink" title="扩展：Java的访问限制修饰符"></a>扩展：Java的访问限制修饰符</h2><p>在Java中，存在四种访问权限。<br>其中三种有访问权限修饰符，分别为private、public和protected。<br>还有一种不带任何修饰符，为default，可称为默认访问权限。</p>
+<ul>
+<li><code>private</code>：私有访问权限。被其修饰的类、属性以及方法只能被该类的对象访问，其子类不能访问，不允许跨包访问。</li>
+<li><code>default</code>：默认访问权限。即不加任何访问修饰符，该模式下，只允许在同一个包中进行访问。</li>
+<li><code>protect</code>：保护访问权限。访问权限介于<code>public</code>和<code>private</code>之间。被其修饰的类、属性以及方法只能被类本身的方法及子类访问。子类在不同的包中也可以访问。</li>
+<li><code>public</code>：公有访问权限。访问限制最宽的修饰符。被其修饰的类、属性以及方法不仅可以跨类访问。允许跨包访问。</li>
+</ul>
+<h2 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h2><p>C#中的<code>internal</code>访问权限类似于Java中的<code>default</code>访问权限。</p>
 
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/07/20/C-的访问权限修饰符/" data-id="cj5cfawni0001k68tg6p8qv7r" class="article-share-link">Compartir</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C#</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog-hexo/2017/07/19/PowerShell实现光标快速移动操作和自动补全/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Viejo</strong>
+      <div class="article-nav-title">PowerShell实现光标快速移动操作和自动补全</div>
+    </a>
+  
+</nav>
+
+  
+</article>
 
 </section>
         
