@@ -65,6 +65,52 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-C-使用XmlDocument解析XML内容" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/07/24/C-使用XmlDocument解析XML内容/" class="article-date">
+  <time datetime="2017-07-24T15:05:20.000Z" itemprop="datePublished">2017-07-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/07/24/C-使用XmlDocument解析XML内容/">C#使用XmlDocument解析XML内容</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在实际应用中，我们通常需要对XML格式的文件进行一些处理。在C#语言中，我们可以使用XmlDocument类执行相关的操作。</p>
+<p>载入一个XML节点，其中<code>xmlStr</code>是XML格式内容的字符串，<code>filepath</code>是XML文件路径：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">XmlDocument xml = new XmlDocument();</div><div class="line">xml.LoadXml(xmlStr);</div><div class="line">xml.Load(filePath);</div></pre></td></tr></table></figure></p>
+<p>使用递归地方法遍历每个节点及属性：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">XmlDocument xml = new XmlDocument();</div><div class="line">xml.LoadXml(xmlStr);</div><div class="line">XmlNode node = (XmlNode)xml.DocumentElement;</div><div class="line">handleNode(node);</div><div class="line"></div><div class="line">private static void handleNode(XmlNode node)</div><div class="line">&#123;</div><div class="line">    XmlAttributeCollection attributes = node.Attributes;</div><div class="line">    if (attributes != null)</div><div class="line">    &#123;</div><div class="line">        foreach (XmlAttribute attr in attributes)</div><div class="line">        &#123;</div><div class="line">            String guid = attemptToConvertToStdGuid(attr.Value);</div><div class="line">            if (guid.Equals(attr.Value) == false)</div><div class="line">            &#123;</div><div class="line">                // if the attr.Value has been reformated, change the value.</div><div class="line">                node.Attributes[attr.Name].Value = guid;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    if (node.HasChildNodes)</div><div class="line">    &#123;</div><div class="line">        foreach (XmlNode child in node.ChildNodes)</div><div class="line">        &#123;</div><div class="line">            handleNode(child);</div><div class="line">        &#125;</div><div class="line">    &#125;                </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>基本的使用语句如上所示，更进一步的操作可以对应查找相关文档。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/07/24/C-使用XmlDocument解析XML内容/" data-id="cj5iafhaz00000o8tfg13i9mp" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Laravel使用Maatwebsite操作Excel" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2017/07/22/Laravel使用Maatwebsite操作Excel/" class="article-date">
@@ -107,7 +153,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/22/Laravel使用Maatwebsite操作Excel/" data-id="cj5fdept7000ikq8twwkkmeag" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/22/Laravel使用Maatwebsite操作Excel/" data-id="cj5iafhc1000m0o8tefitzbvn" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -166,7 +212,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/20/C-的访问权限修饰符/" data-id="cj5fdeps70001kq8tgaqhy5ud" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/20/C-的访问权限修饰符/" data-id="cj5iafhb500010o8tvvj7woao" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C#</a></li></ul>
@@ -214,7 +260,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/19/PowerShell实现光标快速移动操作和自动补全/" data-id="cj5fdeptb000mkq8thc1gqrzp" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/19/PowerShell实现光标快速移动操作和自动补全/" data-id="cj5iafhc5000o0o8t4zuakovm" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li></ul>
@@ -259,7 +305,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/19/npm的package-json一些使用常识/" data-id="cj5fdeptm000vkq8toqxc7jxu" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/19/npm的package-json一些使用常识/" data-id="cj5iafhco00120o8tvaplrvnm" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li></ul>
@@ -343,7 +389,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/19/Grunt入门/" data-id="cj5fdepsg0004kq8tvjon15gd" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/19/Grunt入门/" data-id="cj5iafhbi00060o8to8jg1h3o" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -398,7 +444,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/07/使用mysqldump快速拷贝一个数据库/" data-id="cj5fdeptq0012kq8tp1zp4u41" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/07/使用mysqldump快速拷贝一个数据库/" data-id="cj5iafhcr00150o8tbpxcexix" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li></ul>
@@ -449,7 +495,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/06/Apache配置php5升级为php7/" data-id="cj5fdeps00000kq8tv3rbrl8p" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/06/Apache配置php5升级为php7/" data-id="cj5iafhbd00040o8tg2b3qw3l" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -506,7 +552,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/28/Hexo个人博客使用流程/" data-id="cj5fdepsn0006kq8tvu7hx5w5" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/28/Hexo个人博客使用流程/" data-id="cj5iafhbm000a0o8ttm3x0bg8" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li></ul>
@@ -583,67 +629,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/23/Hexo项目的Git版本控制/" data-id="cj5fdept4000fkq8tucxtu4fr" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/23/Hexo项目的Git版本控制/" data-id="cj5iafhbt000g0o8te2dl5n9s" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Hexo博客正文添加图片" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/06/22/Hexo博客正文添加图片/" class="article-date">
-  <time datetime="2017-06-22T02:04:50.000Z" itemprop="datePublished">2017-06-22</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/06/22/Hexo博客正文添加图片/">Hexo博客正文添加图片</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>很多情况下我们希望文章内容图文并茂，此时就需要添加图片。   </p>
-<h2 id="图片位置的比较"><a href="#图片位置的比较" class="headerlink" title="图片位置的比较"></a>图片位置的比较</h2><p>通常来讲，添加图片可以有两种方式。一是将图片上传到第三方云平台，如七牛云、新浪图床等，然后在正文中直接使用绝对路径引用；二是将图片内容保存在与文章所在项目的相关目录下，通过相对路径引用完成。   </p>
-<p>经过调研，Hexo对于两种方式都支持。<br>为了保持项目的完整性，防止因第三方云平台爆炸导致的图片失效，我们决定采用第二种方案。   </p>
-<h2 id="在Hexo中放置图片"><a href="#在Hexo中放置图片" class="headerlink" title="在Hexo中放置图片"></a>在Hexo中放置图片</h2><p>传统的方式可以将图片都放置在source/img下，然后通过路径进行引用。然而这种方式在图片数量较多时，管理起来比较麻烦。   </p>
-<p>还有一种方法可以将图片按照每篇文章为目录组织起来，这样一篇文章的所有图片在一个特定的文件夹下，简洁清楚。</p>
-<p>首先，在<code>_config.yml</code>中将配置项<code>post_asset_folder</code>设置为<code>true</code>。<br>这样在执行<code>hexo new &quot;[post_title]&quot;</code>命令时，会自动在<code>_post</code>目录下生成与<code>[post_title].md</code>同级的文件夹<code>[post_title]</code>，之后可以将图片文件放置在该文件夹中。</p>
-<p>正常情况下使用markdown格式放置图片的格式为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">![image_title](image_path)</div></pre></td></tr></table></figure></p>
-<p>其中<code>image_title</code>是显示在图片下方的图片标题，<code>image_path</code>指定了图片文件路径。    </p>
-<p>然后使用<code>![image_title]([image_path])</code>就可以放置图片，比如使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">![有可能这个图显示不出来](其实你超棒的.jpg)</div></pre></td></tr></table></figure></p>
-<p>能够得到<br><img src="其实你超棒的.jpg" alt="有可能这个图显示不出来"></p>
-<h2 id="通过Markdown引用vs-通过标签插件引用"><a href="#通过Markdown引用vs-通过标签插件引用" class="headerlink" title="通过Markdown引用vs.通过标签插件引用"></a>通过Markdown引用vs.通过标签插件引用</h2><p>然而，由于文章内容可能在不同位置引用，在首页或其它一些地方可能不能正确显示图片（因为图片是相对路径）。<br>许多文章也提到：<code>通过常规的 markdown 语法和相对路径来引用图片和其它资源可能会导致它们在存档页或者主页上显示不正确。</code></p>
-<p><strong>警告：</strong> 这里很困惑的一点是许多方法提到使用插件<a href="https://github.com/CodeFalling/hexo-asset-image" target="_blank" rel="external">hexo-asset-image</a>替换为绝对路径，但并不能解决上述问题。而且会将本来已经正常的内容替换得非常奇怪，非常不建议使用。</p>
-<p>真正有效的方法是使用下列的标签插件而不是markdown：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;% asset_img [image_name] [image_title] %&#125;</div></pre></td></tr></table></figure></p>
-<p>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;% asset_img 其实你超棒的.jpg 图片标题 %&#125;</div></pre></td></tr></table></figure></p>
-<p>能够得到<br><img src="/blog-hexo/2017/06/22/Hexo博客正文添加图片/其实你超棒的.jpg" alt="图片标题" title="图片标题"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/22/Hexo博客正文添加图片/" data-id="cj5fdepst0009kq8t16tdlf2w" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li></ul>
 
     </footer>
   </div>
@@ -677,7 +666,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li></ul>
     </div>
   </div>
 
@@ -687,7 +676,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C#</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 10px;">Command Line</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Git/" style="font-size: 10px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 20px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 13.33px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 10px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 13.33px;">PHP</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 10px;">PowerShell</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 16.67px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a>
+      <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C#</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 10px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 10px;">Command Line</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Git/" style="font-size: 10px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 20px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 13.33px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 10px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 13.33px;">PHP</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 10px;">PowerShell</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 16.67px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a>
     </div>
   </div>
 
@@ -709,6 +698,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2017/07/24/C-使用XmlDocument解析XML内容/">C#使用XmlDocument解析XML内容</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2017/07/22/Laravel使用Maatwebsite操作Excel/">Laravel使用Maatwebsite操作Excel</a>
           </li>
         
@@ -722,10 +715,6 @@
         
           <li>
             <a href="/blog-hexo/2017/07/19/npm的package-json一些使用常识/">npm的package.json一些使用常识</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2017/07/19/Grunt入门/">Grunt入门</a>
           </li>
         
       </ul>
