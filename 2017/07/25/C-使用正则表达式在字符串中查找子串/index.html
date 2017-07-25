@@ -5,19 +5,19 @@
   
 
   
-  <title>Laravel使用Maatwebsite操作Excel | 不止是一位程序员</title>
+  <title>C#使用正则表达式在字符串中查找子串 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在后台代码中，通常会遇到读写Excel表格的情况。在Laravel框架中，有一个插件Maatwebsite能够比较全面地完成这种任务。 安装安装Maatwebsite只需按照正常的Composer组件安装方式即可。1composer install Maatwebsite --save-dev 然后在config/app.php中添加1Maatwebsite\Excel\ExcelServiceP">
-<meta name="keywords" content="PHP,Laravel,Excel">
+  <meta name="description" content="基础使用方法首先定义字符串和正则表达式。123string pattern = &amp;quot;[a-zA-Z0-9]&amp;#123;2&amp;#125;&amp;quot;;Regex patternRex = new Regex(pattern);string str = &amp;quot;1234567890abcdefghij&amp;quot;; 使用Regex对象的IsMatch函数，能够直接输出是否匹配的布尔值。1bo">
+<meta name="keywords" content="CSharp,正则表达式">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Laravel使用Maatwebsite操作Excel">
-<meta property="og:url" content="http://ckmessi.github.io/2017/07/22/Laravel使用Maatwebsite操作Excel/index.html">
+<meta property="og:title" content="C#使用正则表达式在字符串中查找子串">
+<meta property="og:url" content="http://ckmessi.github.io/2017/07/25/C-使用正则表达式在字符串中查找子串/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
-<meta property="og:description" content="在后台代码中，通常会遇到读写Excel表格的情况。在Laravel框架中，有一个插件Maatwebsite能够比较全面地完成这种任务。 安装安装Maatwebsite只需按照正常的Composer组件安装方式即可。1composer install Maatwebsite --save-dev 然后在config/app.php中添加1Maatwebsite\Excel\ExcelServiceP">
-<meta property="og:updated_time" content="2017-07-22T14:09:29.000Z">
+<meta property="og:description" content="基础使用方法首先定义字符串和正则表达式。123string pattern = &amp;quot;[a-zA-Z0-9]&amp;#123;2&amp;#125;&amp;quot;;Regex patternRex = new Regex(pattern);string str = &amp;quot;1234567890abcdefghij&amp;quot;; 使用Regex对象的IsMatch函数，能够直接输出是否匹配的布尔值。1bo">
+<meta property="og:updated_time" content="2017-07-25T13:08:41.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Laravel使用Maatwebsite操作Excel">
-<meta name="twitter:description" content="在后台代码中，通常会遇到读写Excel表格的情况。在Laravel框架中，有一个插件Maatwebsite能够比较全面地完成这种任务。 安装安装Maatwebsite只需按照正常的Composer组件安装方式即可。1composer install Maatwebsite --save-dev 然后在config/app.php中添加1Maatwebsite\Excel\ExcelServiceP">
+<meta name="twitter:title" content="C#使用正则表达式在字符串中查找子串">
+<meta name="twitter:description" content="基础使用方法首先定义字符串和正则表达式。123string pattern = &amp;quot;[a-zA-Z0-9]&amp;#123;2&amp;#125;&amp;quot;;Regex patternRex = new Regex(pattern);string str = &amp;quot;1234567890abcdefghij&amp;quot;; 使用Regex对象的IsMatch函数，能够直接输出是否匹配的布尔值。1bo">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -68,10 +68,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-Laravel使用Maatwebsite操作Excel" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-C-使用正则表达式在字符串中查找子串" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog-hexo/2017/07/22/Laravel使用Maatwebsite操作Excel/" class="article-date">
-  <time datetime="2017-07-22T14:06:22.000Z" itemprop="datePublished">2017-07-22</time>
+    <a href="/blog-hexo/2017/07/25/C-使用正则表达式在字符串中查找子串/" class="article-date">
+  <time datetime="2017-07-25T13:04:06.000Z" itemprop="datePublished">2017-07-25</time>
 </a>
     
   <div class="article-category">
@@ -86,7 +86,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Laravel使用Maatwebsite操作Excel
+      C#使用正则表达式在字符串中查找子串
     </h1>
   
 
@@ -94,26 +94,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在后台代码中，通常会遇到读写Excel表格的情况。在Laravel框架中，有一个插件<a href="https://github.com/Maatwebsite/Laravel-Excel" target="_blank" rel="external">Maatwebsite</a>能够比较全面地完成这种任务。</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装Maatwebsite只需按照正常的Composer组件安装方式即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer install Maatwebsite --save-dev</div></pre></td></tr></table></figure></p>
-<p>然后在<code>config/app.php</code>中添加<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Maatwebsite\Excel\ExcelServiceProvider::class,</div></pre></td></tr></table></figure></p>
-<p>并添加Alias<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&apos;Excel&apos; =&gt; Maatwebsite\Excel\Facades\Excel::class,</div></pre></td></tr></table></figure></p>
-<p>之后就可以在代码中引用<code>use Maatwebsite\Excel\Facades\Excel;</code>，并使用类似<code>Excel::create...</code>的语句</p>
-<p>对于Maatwebsite的配置，可以使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">php artisan vendor:publish --provider=&quot;Maatwebsite\Excel\ExcelServiceProvider&quot;</div></pre></td></tr></table></figure></p>
-<p>这样会在<code>config</code>文件夹生成<code>excel.php</code>配置文件，相关配置可以在其中修改。之后我们用到导出Excel表格时，路径之所以在<code>storage/exports/[filename]</code>，就是因为这个配置文件中的定义。</p>
-<h2 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h2><p>单纯考虑按行读出Excel文件的内容，可以使用以下代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Excel::load($file_path, function($reader) use ($variable) &#123;</div><div class="line">	$reader = $reader-&gt;getSheet(0);//excel第一张sheet</div><div class="line">	$results = $reader-&gt;toArray();</div><div class="line">	for($i = 0; $i &lt; count($results); $i++)&#123;</div><div class="line">	    $row = $results[$i];</div><div class="line">	    $customer_name = $row[0];</div><div class="line">	    $customer_telephone = $row[1];</div><div class="line">	    $customer_address = $row[2];</div><div class="line">	    // ...</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>其中<code>$results</code>保存着所有行，而<code>$row</code>保存着对应每一行的所有列。</p>
-<h2 id="导出"><a href="#导出" class="headerlink" title="导出"></a>导出</h2><p>单纯考虑将一个二维矩阵导出为一个Excel的一个Sheet，可以<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Excel::create(&apos;filename&apos;, function($excel) use ($matrix)&#123;</div><div class="line">    $excel-&gt;sheet(&apos;sheet_name&apos;, function($sheet) use ($matrix)&#123;</div><div class="line">        $sheet-&gt;rows($matrix);</div><div class="line">    &#125;);</div><div class="line">&#125;)-&gt;store(&apos;xls&apos;);</div></pre></td></tr></table></figure></p>
-<p>这样就会将matrix中二维数组的内容，按一行一行的形式写出到Excel表中</p>
-<h4 id="存储和下载的差别"><a href="#存储和下载的差别" class="headerlink" title="存储和下载的差别"></a>存储和下载的差别</h4><p>注意到之前代码中最后的一语句是<code>-&gt;store(&#39;xls&#39;)</code>，这表示以<code>xls</code>文件格式存储。<br>如果是Web应用，可以尝试<code>-&gt;export(&#39;xls&#39;)</code>，这表示以<code>xls</code>文件格式下载。</p>
+        <h2 id="基础使用方法"><a href="#基础使用方法" class="headerlink" title="基础使用方法"></a>基础使用方法</h2><p>首先定义字符串和正则表达式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">string pattern = &quot;[a-zA-Z0-9]&#123;2&#125;&quot;;</div><div class="line">Regex patternRex = new Regex(pattern);</div><div class="line">string str = &quot;1234567890abcdefghij&quot;;</div></pre></td></tr></table></figure></p>
+<p>使用<code>Regex</code>对象的<code>IsMatch</code>函数，能够直接输出是否匹配的布尔值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bool result = patternRex.IsMatch(str);</div></pre></td></tr></table></figure></p>
+<p>使用<code>Regex</code>对象的<code>Matches</code>函数（或者<code>Regex</code>类的<code>Matches</code>静态方法），可以找到字符串中所有满足正则表达式的子串。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">foreach (Match mch in patternRex.Matches(str))</div><div class="line">&#123;</div><div class="line">	string x = mch.Value.Trim();</div><div class="line">	Console.WriteLine(x);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>类似的，使用下面的方法也能得到同样的结果。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">foreach (Match mch in Regex.Matches(str, patternRex))</div><div class="line">&#123;</div><div class="line">	string x = mch.Value.Trim();</div><div class="line">	Console.WriteLine(x);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>需要注意的是，匹配出来的所有结果之间是不能重复的，即如果字符串<code>abc</code>中的<code>ab</code>已经匹配，不会再匹配<code>bc</code>。<br><code>1234567890abcdefghij</code>使用<code>[a-zA-Z0-9]{2}</code>进行匹配的结果会是：<br><code>12</code>,<code>34</code>,<code>56</code>,<code>78</code>,…<br>而不是<br><code>12</code>,<code>23</code>,<code>34</code>,<code>45</code>,…</p>
+<h2 id="特殊匹配需求"><a href="#特殊匹配需求" class="headerlink" title="特殊匹配需求"></a>特殊匹配需求</h2><p>实际中需求可能是这样的，需要找到一段字母数字组成的8位字符串，它可能出现在字符串的任何位置，但最多只可能出现一次。<br>上述这种形式转化为形式化描述是，找到一段8位字母数字字符串，要么其前后没有内容，要么其前后的字符不是字母数字。<br>再转化为正则表达式的形式为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(([^a-zA-Z0-9])+|^)[a-zA-Z0-9]&#123;8&#125;(([^a-zA-Z0-9])+|$)</div></pre></td></tr></table></figure></p>
+<p>但使用这种正则表达式进行筛选后，可能会包含前后的”_”、”-“等字符串，需要进行二次提纯。<br>代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">string pattern = &quot;(([^a-zA-Z0-9])+|^)[a-zA-Z0-9]&#123;8&#125;(([^a-zA-Z0-9])+|$)&quot;;</div><div class="line">Regex patternRex = new Regex(patternRex);</div><div class="line">if(patternRex.Matches(str).Count == 1)</div><div class="line">&#123;</div><div class="line">	Match mch = patternRex.Matches(str)[0];</div><div class="line">	string x = mch.Value.Trim();</div><div class="line">	string purePattern = &quot;[a-zA-Z0-9]&#123;32&#125;&quot;;</div><div class="line">	Regex purePatternRex = new Regex(purePattern);</div><div class="line">	if(purePatternRex.Matches(x).Count == 1)</div><div class="line">	&#123;</div><div class="line">		Match sub = purePatternRex.Matches(x)[0];</div><div class="line">		string subStr = sub.Value.Trim;</div><div class="line">		return subStr;</div><div class="line">	&#125;</div><div class="line">	else</div><div class="line">	&#123;</div><div class="line">		// 理论上不可能进入这个分支</div><div class="line">		return &quot;&quot;;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">else</div><div class="line">&#123;</div><div class="line">	return &quot;&quot;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>使用C#中<code>Regex</code>对象的<code>Matches</code>函数，或者<code>Regex</code>类的<code>Matches</code>静态方法，能够快速查找可能存在的满足正则表达式的子串。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/22/Laravel使用Maatwebsite操作Excel/" data-id="cj5jlg4tp000pmb8tbe29vp9f" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/07/25/C-使用正则表达式在字符串中查找子串/" data-id="cj5jlg4sj0001mb8tx7ynoqzs" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
 
     </footer>
   </div>
@@ -121,19 +117,10 @@
     
 <nav id="article-nav">
   
-    <a href="/blog-hexo/2017/07/24/C-使用XmlDocument解析XML内容/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          C#使用XmlDocument解析XML内容
-        
-      </div>
-    </a>
   
-  
-    <a href="/blog-hexo/2017/07/20/C-的访问权限修饰符/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/blog-hexo/2017/07/24/C-使用XmlDocument解析XML内容/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">C#的访问权限修饰符</div>
+      <div class="article-nav-title">C#使用XmlDocument解析XML内容</div>
     </a>
   
 </nav>
