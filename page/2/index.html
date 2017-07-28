@@ -54,7 +54,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -64,6 +64,57 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Apache配置php5升级为php7" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/07/06/Apache配置php5升级为php7/" class="article-date">
+  <time datetime="2017-07-06T14:05:39.000Z" itemprop="datePublished">2017-07-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/07/06/Apache配置php5升级为php7/">Apache配置php5升级为php7</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近遇到一个问题，在测试服上测通了的代码，推到正式服之后却出现莫名其妙的问题。后来经多方查找，终于发现原来是正式服的php版本和测试服的不一致。测试服是php7，而正式服是php5.6。<br>这样就有了升级php版本的需求。<br>结合服务器使用的是Apache2，这里大概列举一下升级相关的步骤。    </p>
+<h2 id="安装php7"><a href="#安装php7" class="headerlink" title="安装php7"></a>安装php7</h2><p>在Ubuntu下安装php7还是比较容易的，如果是Ubuntu16，自带php7的源，可以直接使用apt-get进行安装；如果是Ubuntu14，则需要先手动添加如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install -y language-pack-en-base </div><div class="line">$ sudo LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php</div></pre></td></tr></table></figure></p>
+<p>如果说add-apt-repository command not find，则可能需要：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install software-properties-common </div><div class="line">sudo apt-get install python-software-properties（实测这一句可能多余）</div></pre></td></tr></table></figure></p>
+<p>更新源列表：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get update</div></pre></td></tr></table></figure></p>
+<p>然后安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install php7.0</div></pre></td></tr></table></figure></p>
+<p>对应地，安装php7.0-fpm、php7.0-mysql等许多插件。</p>
+<h2 id="设置apache关联"><a href="#设置apache关联" class="headerlink" title="设置apache关联"></a>设置apache关联</h2><p>尽管安装了php7，但apache服务器默认关联的php还是php5，在这种情况下需要使用以下命令进行修改。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo a2dismod php5.6;</div><div class="line">sudo a2enmod php7.0; </div><div class="line">sudo service apache2 restart</div></pre></td></tr></table></figure></p>
+<p>这样就完成了apache关联php的版本转换。</p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>在升级后，需要安装需要插件确保服务器的正常运行。<br>使用<code>php -m</code>可以查看当前已经安装的模块，缺少任何模块时，可以通过<code>apt-get install php7.0-xxx</code>进行安装。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/07/06/Apache配置php5升级为php7/" data-id="cj5nuj5q30000hu8ttip2naai" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Hexo个人博客使用流程" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -110,7 +161,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/28/Hexo个人博客使用流程/" data-id="cj5l16spr0009d48tm14p24vc" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/28/Hexo个人博客使用流程/" data-id="cj5nuj5ra000ihu8t2kfpbfry" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li></ul>
@@ -187,7 +238,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/23/Hexo项目的Git版本控制/" data-id="cj5l16sq3000nd48txq3u986e" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/23/Hexo项目的Git版本控制/" data-id="cj5nuj5rg000qhu8tzacrso09" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li></ul>
@@ -244,7 +295,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/22/Hexo博客正文添加图片/" data-id="cj5l16sq1000id48t7xhuhxox" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/22/Hexo博客正文添加图片/" data-id="cj5nuj5rc000nhu8tq8r37y7k" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li></ul>
@@ -327,7 +378,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/21/Hexo配合Github-Pages部署个人博客/" data-id="cj5l16sq8000pd48t4c4c1nwa" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/21/Hexo配合Github-Pages部署个人博客/" data-id="cj5nuj5rj000uhu8tma8n4u94" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li></ul>
@@ -388,7 +439,7 @@ var swiper = new Swiper('.swiper-container', {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/17/Swiper插件的使用/" data-id="cj5l16sql0011d48tlrzxvqkg" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/17/Swiper插件的使用/" data-id="cj5nuj5rt0012hu8t84t39okz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li></ul>
@@ -459,7 +510,7 @@ var swiper = new Swiper('.swiper-container', {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/16/随机游走/" data-id="cj5l16sr0001fd48ti2rciaav" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/16/随机游走/" data-id="cj5nuj5s5001ghu8ti1d0n0p5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li></ul>
@@ -506,7 +557,7 @@ var swiper = new Swiper('.swiper-container', {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/15/hello-world/" data-id="cj5l16sqv001ad48tevl25jyj" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/15/hello-world/" data-id="cj5nuj5rx0015hu8t26qposi4" class="article-share-link">Share</a>
       
       
     </footer>
@@ -551,7 +602,7 @@ var swiper = new Swiper('.swiper-container', {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/05/22/Ubuntu修改Mysql数据库连接端口号/" data-id="cj5l16sqo0014d48tqhpgf7z4" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/05/22/Ubuntu修改Mysql数据库连接端口号/" data-id="cj5nuj5s00018hu8t2pee58cu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li></ul>
@@ -614,7 +665,7 @@ var swiper = new Swiper('.swiper-container', {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/05/16/Hashids的使用/" data-id="cj5l16sq0000fd48t8llxdi2u" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/05/16/Hashids的使用/" data-id="cj5nuj5r8000fhu8t19mm2666" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li></ul>
@@ -630,7 +681,7 @@ var swiper = new Swiper('.swiper-container', {
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/blog-hexo/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><span class="page-number current">2</span>
   </nav>
 
 </section>
@@ -639,7 +690,7 @@ var swiper = new Swiper('.swiper-container', {
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li></ul>
     </div>
@@ -651,7 +702,7 @@ var swiper = new Swiper('.swiper-container', {
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
     </div>
   </div>
 
@@ -661,14 +712,14 @@ var swiper = new Swiper('.swiper-container', {
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C#</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 13.33px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 10px;">Command Line</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Git/" style="font-size: 13.33px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 20px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 13.33px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 10px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 13.33px;">PHP</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 10px;">PowerShell</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 16.67px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+      <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/C/" style="font-size: 13.33px;">C#</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 13.33px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 10px;">Command Line</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Git/" style="font-size: 13.33px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 20px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 13.33px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 10px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 13.33px;">PHP</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 10px;">PowerShell</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 16.67px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
     </div>
   </div>
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -678,9 +729,13 @@ var swiper = new Swiper('.swiper-container', {
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2017/07/28/C-读取XML格式内容/">C#读取XML格式内容</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2017/07/26/Git常用撤销命令总结/">Git常用撤销命令总结</a>
@@ -696,10 +751,6 @@ var swiper = new Swiper('.swiper-container', {
         
           <li>
             <a href="/blog-hexo/2017/07/22/Laravel使用Maatwebsite操作Excel/">Laravel使用Maatwebsite操作Excel</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2017/07/20/C-的访问权限修饰符/">C#的访问权限修饰符</a>
           </li>
         
       </ul>
