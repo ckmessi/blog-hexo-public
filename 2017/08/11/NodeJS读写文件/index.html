@@ -5,14 +5,19 @@
   
 
   
-  <title>Archiv: 2017 | 不止是一位程序员</title>
+  <title>NodeJS读写文件 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="不止是一位程序员">
-<meta property="og:url" content="http://ckmessi.github.io/archives/2017/page/2/index.html">
+  <meta name="description" content="许多项目可能在生成时需要执行一些脚本处理文件，由于npm环境下NodeJS是最合适的选择，因此使用NodeJS进行文件读写成为必要操作。    简单查找了一下，参考这篇文章学会了基本的NodeJS文件读写。 首先需要require两个包：12var fs = require(&amp;apos;fs&amp;apos;);var path = require(&amp;apos;path&amp;apos;); 然后定义咱们的操">
+<meta name="keywords" content="NodeJS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NodeJS读写文件">
+<meta property="og:url" content="http://ckmessi.github.io/2017/08/11/NodeJS读写文件/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="许多项目可能在生成时需要执行一些脚本处理文件，由于npm环境下NodeJS是最合适的选择，因此使用NodeJS进行文件读写成为必要操作。    简单查找了一下，参考这篇文章学会了基本的NodeJS文件读写。 首先需要require两个包：12var fs = require(&amp;apos;fs&amp;apos;);var path = require(&amp;apos;path&amp;apos;); 然后定义咱们的操">
+<meta property="og:updated_time" content="2017-08-11T13:53:09.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="不止是一位程序员">
+<meta name="twitter:title" content="NodeJS读写文件">
+<meta name="twitter:description" content="许多项目可能在生成时需要执行一些脚本处理文件，由于npm环境下NodeJS是最合适的选择，因此使用NodeJS进行文件读写成为必要操作。    简单查找了一下，参考这篇文章学会了基本的NodeJS文件读写。 首先需要require两个包：12var fs = require(&amp;apos;fs&amp;apos;);var path = require(&amp;apos;path&amp;apos;); 然后定义咱们的操">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -63,216 +68,64 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog-hexo/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/07/19/Grunt入门/" class="archive-article-date">
-  <time datetime="2017-07-19T14:19:15.000Z" itemprop="datePublished">Jul 19</time>
+        <section id="main"><article id="post-NodeJS读写文件" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/08/11/NodeJS读写文件/" class="article-date">
+  <time datetime="2017-08-11T13:48:57.000Z" itemprop="datePublished">2017-08-11</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/07/19/Grunt入门/">Grunt入门</a>
+    <h1 class="article-title" itemprop="name">
+      NodeJS读写文件
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/07/07/使用mysqldump快速拷贝一个数据库/" class="archive-article-date">
-  <time datetime="2017-07-07T14:13:16.000Z" itemprop="datePublished">Jul 7</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/07/07/使用mysqldump快速拷贝一个数据库/">使用mysqldump快速拷贝一个数据库</a>
-    </h1>
-  
+        <p>许多项目可能在生成时需要执行一些脚本处理文件，由于npm环境下NodeJS是最合适的选择，因此使用NodeJS进行文件读写成为必要操作。   </p>
+<p>简单查找了一下，参考<a href="http://www.2cto.com/kf/201411/351586.html" target="_blank" rel="external">这篇文章</a>学会了基本的NodeJS文件读写。</p>
+<p>首先需要require两个包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var fs = require(&apos;fs&apos;);</div><div class="line">var path = require(&apos;path&apos;);</div></pre></td></tr></table></figure></p>
+<p>然后定义咱们的操作数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var data = &#123;</div><div class="line">	&quot;user_id&quot;: 1,</div><div class="line">	&quot;user_name&quot;: &quot;Lionel&quot;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>使用<code>fs.writeFile</code>函数能够实现文件的写入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">fs.writeFile(path.join(__dirname, &apos;data.json&apos;), JSON.stringify(data), function (err) &#123;</div><div class="line">    if (err) &#123;</div><div class="line">        throw err;</div><div class="line">    &#125;</div><div class="line">    console.log(&quot;Export Account Success!&quot;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>使用<code>fs.readFile</code>函数能够实现文件的读取：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">fs.readFile(path.join(__dirname, &apos;data.json&apos;),&#123;encoding:&apos;utf-8&apos;&#125;, function (err,bytesRead) &#123;</div><div class="line">	if (err) &#123;</div><div class="line">	    throw err;</div><div class="line">	&#125;</div><div class="line">	console.log(&quot;readFile success&quot;);</div><div class="line">	console.log(&quot;content below:&quot;);</div><div class="line">	console.log(bytesRead);</div><div class="line">	var data = JSON.parse(bytesRead);</div><div class="line">	console.log(data);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>以上。</p>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/07/06/Apache配置php5升级为php7/" class="archive-article-date">
-  <time datetime="2017-07-06T14:05:39.000Z" itemprop="datePublished">Jul 6</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/07/06/Apache配置php5升级为php7/">Apache配置php5升级为php7</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/06/28/Hexo个人博客使用流程/" class="archive-article-date">
-  <time datetime="2017-06-28T02:11:19.000Z" itemprop="datePublished">Jun 28</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/08/11/NodeJS读写文件/" data-id="cj67xnifd000u0r8tvljoolqw" class="article-share-link">Teilen</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/06/28/Hexo个人博客使用流程/">Hexo个人博客使用流程</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/06/23/Hexo项目的Git版本控制/" class="archive-article-date">
-  <time datetime="2017-06-23T15:24:40.000Z" itemprop="datePublished">Jun 23</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/06/23/Hexo项目的Git版本控制/">Hexo项目的Git版本控制</a>
-    </h1>
-  
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li></ul>
 
-    </header>
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog-hexo/2017/08/02/PowerShell-Alias设置/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">PowerShell Alias设置</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/06/22/Hexo博客正文添加图片/" class="archive-article-date">
-  <time datetime="2017-06-22T02:04:50.000Z" itemprop="datePublished">Jun 22</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/06/22/Hexo博客正文添加图片/">Hexo博客正文添加图片</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/06/21/Hexo配合Github-Pages部署个人博客/" class="archive-article-date">
-  <time datetime="2017-06-21T02:01:17.000Z" itemprop="datePublished">Jun 21</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/06/21/Hexo配合Github-Pages部署个人博客/">Hexo配合Github Pages部署个人博客</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/06/17/Swiper插件的使用/" class="archive-article-date">
-  <time datetime="2017-06-17T13:14:20.000Z" itemprop="datePublished">Jun 17</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/06/17/Swiper插件的使用/">Swiper插件的使用</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/06/16/随机游走/" class="archive-article-date">
-  <time datetime="2017-06-16T01:50:51.000Z" itemprop="datePublished">Jun 16</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/06/16/随机游走/">随机游走</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/06/15/hello-world/" class="archive-article-date">
-  <time datetime="2017-06-15T13:47:21.000Z" itemprop="datePublished">Jun 15</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/06/15/hello-world/">Hello World</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-
-  <nav id="page-nav">
-    
-    <a class="extend prev" rel="prev" href="/blog-hexo/archives/2017/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/archives/2017/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog-hexo/archives/2017/page/3/">3</a><a class="extend next" rel="next" href="/blog-hexo/archives/2017/page/3/">weiter &raquo;</a>
-  </nav>
 
 </section>
         
