@@ -5,19 +5,19 @@
   
 
   
-  <title>使用mysqldump快速拷贝一个数据库 | 不止是一位程序员</title>
+  <title>Azure Application Insights入门 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="工作背景在工作中会遇到这样一个情况：在正式服发现的bug在测试服上无法复现，或者正式服的数据有差错等问题。在这种情况下，如果直接使用正式服进行调试，是非常冒险的；比较好的方案是构建一份线上数据库的复本，在开发环境下进行bug的修复工作。    实现方案要快速实现数据库内容的拷贝，可以使用mysqldump命令。具体使用步骤有两步：  使用mysqldump命令导出  12mysqldump -h">
-<meta name="keywords" content="mysql">
+  <meta name="description" content="Application Insights是微软Azure平台的一项服务，声称能够全面监控和了解服务的行为、可靠性和性能。可以这样理解，当一项应用添加了Application Insights插件后，相当于给自己的应用添加了许多监控机制，可以通过Azure平台页面直接监测服务的运行状况。类似于阿里云平台查看云主机吞吐量，或自行使用tail -f x.log命令监控日志信息。 基本概念首先需要理解以下">
+<meta name="keywords" content="C#,Azure">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用mysqldump快速拷贝一个数据库">
-<meta property="og:url" content="http://ckmessi.github.io/2017/07/07/使用mysqldump快速拷贝一个数据库/index.html">
+<meta property="og:title" content="Azure Application Insights入门">
+<meta property="og:url" content="http://ckmessi.github.io/2017/09/11/Azure-Application-Insights入门/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
-<meta property="og:description" content="工作背景在工作中会遇到这样一个情况：在正式服发现的bug在测试服上无法复现，或者正式服的数据有差错等问题。在这种情况下，如果直接使用正式服进行调试，是非常冒险的；比较好的方案是构建一份线上数据库的复本，在开发环境下进行bug的修复工作。    实现方案要快速实现数据库内容的拷贝，可以使用mysqldump命令。具体使用步骤有两步：  使用mysqldump命令导出  12mysqldump -h">
-<meta property="og:updated_time" content="2017-07-07T15:43:36.000Z">
+<meta property="og:description" content="Application Insights是微软Azure平台的一项服务，声称能够全面监控和了解服务的行为、可靠性和性能。可以这样理解，当一项应用添加了Application Insights插件后，相当于给自己的应用添加了许多监控机制，可以通过Azure平台页面直接监测服务的运行状况。类似于阿里云平台查看云主机吞吐量，或自行使用tail -f x.log命令监控日志信息。 基本概念首先需要理解以下">
+<meta property="og:updated_time" content="2017-09-11T14:52:18.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用mysqldump快速拷贝一个数据库">
-<meta name="twitter:description" content="工作背景在工作中会遇到这样一个情况：在正式服发现的bug在测试服上无法复现，或者正式服的数据有差错等问题。在这种情况下，如果直接使用正式服进行调试，是非常冒险的；比较好的方案是构建一份线上数据库的复本，在开发环境下进行bug的修复工作。    实现方案要快速实现数据库内容的拷贝，可以使用mysqldump命令。具体使用步骤有两步：  使用mysqldump命令导出  12mysqldump -h">
+<meta name="twitter:title" content="Azure Application Insights入门">
+<meta name="twitter:description" content="Application Insights是微软Azure平台的一项服务，声称能够全面监控和了解服务的行为、可靠性和性能。可以这样理解，当一项应用添加了Application Insights插件后，相当于给自己的应用添加了许多监控机制，可以通过Azure平台页面直接监测服务的运行状况。类似于阿里云平台查看云主机吞吐量，或自行使用tail -f x.log命令监控日志信息。 基本概念首先需要理解以下">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -68,10 +68,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-使用mysqldump快速拷贝一个数据库" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Azure-Application-Insights入门" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog-hexo/2017/07/07/使用mysqldump快速拷贝一个数据库/" class="article-date">
-  <time datetime="2017-07-07T14:13:16.000Z" itemprop="datePublished">2017-07-07</time>
+    <a href="/blog-hexo/2017/09/11/Azure-Application-Insights入门/" class="article-date">
+  <time datetime="2017-09-11T14:32:06.000Z" itemprop="datePublished">2017-09-11</time>
 </a>
     
   <div class="article-category">
@@ -86,7 +86,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      使用mysqldump快速拷贝一个数据库
+      Azure Application Insights入门
     </h1>
   
 
@@ -94,27 +94,28 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="工作背景"><a href="#工作背景" class="headerlink" title="工作背景"></a>工作背景</h2><p>在工作中会遇到这样一个情况：在正式服发现的bug在测试服上无法复现，或者正式服的数据有差错等问题。在这种情况下，如果直接使用正式服进行调试，是非常冒险的；比较好的方案是构建一份线上数据库的复本，在开发环境下进行bug的修复工作。   </p>
-<h2 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h2><p>要快速实现数据库内容的拷贝，可以使用mysqldump命令。具体使用步骤有两步：</p>
-<ol>
-<li>使用mysqldump命令导出</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysqldump -h [host] -u[user_name] &apos;-p[password]&apos; [database_name] &gt; [output].dump</div><div class="line">mysqldump -h localhost -ulionel &apos;-plionel&apos; lionelDB &gt; output.dump</div></pre></td></tr></table></figure>
-<p>是的，这里比较坑的是，那个<code>-u</code>和<code>-p</code>的后头没有空格！没有空格，就是和具体的<code>user_name</code>以及<code>password</code>粘在一起的。不知道是无心之失，还是有意为之。<br><code>-p</code>那个地方加不加单引号，主要是根据密码内容来的，如果密码内容有特殊字符会有其它含义，可能导致语句中断，因此加上单引号能够避免这种情况的发生。   </p>
-<ol>
-<li>使用mysql导入</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysqldump -h [host] -u[user_name] &apos;-p[password]&apos; [new_database_name] &lt; [output].dump</div><div class="line">mysqldump -h localhost -ulionel &apos;-plionel&apos; lionelDB_copy &lt; output.dump</div></pre></td></tr></table></figure>
-<p>但是这样貌似会执行，但没有生成表和内容。<br>解决方案是将mysqldump命令换成mysql，直接执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -h localhost -ulionel &apos;-lionel&apos; lionelDB_copy &lt; output.dump</div></pre></td></tr></table></figure></p>
-<p>这样就完成了。</p>
+        <p>Application Insights是微软Azure平台的一项服务，声称能够全面监控和了解服务的行为、可靠性和性能。<br>可以这样理解，当一项应用添加了Application Insights插件后，相当于给自己的应用添加了许多监控机制，可以通过Azure平台页面直接监测服务的运行状况。类似于阿里云平台查看云主机吞吐量，或自行使用<code>tail -f x.log</code>命令监控日志信息。</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>首先需要理解以下几个概念：</p>
+<ul>
+<li>Azure Application Insights：微软推出的服务监控插件，可自行配置安装到应用中。</li>
+<li>Microsoft Azure：微软推出的云平台，用于监控配置了Application Insights的服务资源。</li>
+<li>InstrumentationKey：检测密钥，一项Azure上的Application Insights资源对应唯一的密钥，当项目配置密钥后，将直接将该项目应用绑定到密钥所标识的Azure资源上。</li>
+</ul>
+<h2 id="Application-Insights在ASP-NET中的使用"><a href="#Application-Insights在ASP-NET中的使用" class="headerlink" title="Application Insights在ASP.NET中的使用"></a>Application Insights在ASP.NET中的使用</h2><h4 id="设置InstrumentationKey"><a href="#设置InstrumentationKey" class="headerlink" title="设置InstrumentationKey"></a>设置<code>InstrumentationKey</code></h4><p>Application Insights的基本使用方法可以参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-asp-net" target="_blank" rel="external">微软官方文档</a>。<br>主要包括安装相关SDK，初始化Application Insights配置等流程。<br>最重要的步骤是添加<code>InstrumentationKey</code>，事实证明所有流程的最终结果本质上是在<code>ApplicationInsights.config</code>文件中添加该配置项，这样应用就能够连上Azure监控平台。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;InstrumentationKey&gt;Your Key&lt;/InstrumentationKey&gt;</div></pre></td></tr></table></figure></p>
+<p>由于不同部署平台可能需要使用不同的<code>InstrumentationKey</code>，比较好的方案是在程序启动后执行的代码中读取配置文件动态添加。<br>参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-configuration-with-applicationinsights-config#instrumentationkey" target="_blank" rel="external">文档</a>，可以在项目的启动添加中动态添加<code>InstrumentationKey</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">protected void Application_Start()</div><div class="line">&#123;</div><div class="line">	Microsoft.ApplicationInsights.Extensibility.</div><div class="line">		TelemetryConfiguration.Active.InstrumentationKey =</div><div class="line">          // - for example -</div><div class="line">        WebConfigurationManager.Settings[&quot;ikey&quot;];</div><div class="line">    //...</div></pre></td></tr></table></figure>
+<h4 id="设置cloud-RoleName"><a href="#设置cloud-RoleName" class="headerlink" title="设置cloud_RoleName"></a>设置<code>cloud_RoleName</code></h4><p><code>cloud_RoleName</code>的作用是区分使用同一个<code>InstrumentationKey</code>的不同组件（Components）。例如，在同一个应用下，可能有多个组件组成，此时如果希望对一些性能指标、日志记录进行筛选，则需要给每个组件添加唯一的<code>cloud_RoleName</code>，在Azure监控平台上的”搜索”中可以添加<code>cloud_RoleName</code>的筛选条件。</p>
+<p>参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-monitor-multi-role-apps" target="_blank" rel="external">官方文档1</a>和<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-api-filtering-sampling#add-properties-itelemetryinitializer" target="_blank" rel="external">cloud_RoleName的覆写方法</a>，可以在程序启动时为应用配置特殊的<code>cloud_RoleName</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">private class MyTelemetryInitializer : ITelemetryInitializer</div><div class="line">&#123;</div><div class="line">	public void Initialize(ITelemetry telemetry)</div><div class="line">	&#123;</div><div class="line">		telemetry.Context.Cloud.RoleName = &quot;TEST_ROLE_NAME&quot;;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">TelemetryConfiguration.Active.TelemetryInitializers.Add(new MyTelemetryInitializer());</div></pre></td></tr></table></figure></p>
+<h4 id="添加遥测追踪"><a href="#添加遥测追踪" class="headerlink" title="添加遥测追踪"></a>添加遥测追踪</h4><p>参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-asp-net-trace-logs" target="_blank" rel="external">文档</a>可以添加日志记录，最基础的方案是手动添加一项遥测数据。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var telemetry = new Microsoft.ApplicationInsights.TelemetryClient();</div><div class="line">telemetry.TrackTrace(&quot;Slow database response&quot;,</div><div class="line">               SeverityLevel.Warning,</div><div class="line">               new Dictionary&lt;string,string&gt; &#123; &#123;&quot;database&quot;, db.ID&#125; &#125;);</div></pre></td></tr></table></figure></p>
+<p>当包含上述代码的代码段运行后，在监控平台上可以找到相关追踪的日志记录。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/07/使用mysqldump快速拷贝一个数据库/" data-id="cj7g9polm001yzd8tya83wug8" class="article-share-link">Compartir</a>
+      <a data-url="http://ckmessi.github.io/2017/09/11/Azure-Application-Insights入门/" data-id="cj7g9poil0000zd8to60yy8ek" class="article-share-link">Compartir</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C#</a></li></ul>
 
     </footer>
   </div>
@@ -122,19 +123,10 @@
     
 <nav id="article-nav">
   
-    <a href="/blog-hexo/2017/07/19/Grunt入门/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Nuevo</strong>
-      <div class="article-nav-title">
-        
-          Grunt入门
-        
-      </div>
-    </a>
   
-  
-    <a href="/blog-hexo/2017/07/06/Apache配置php5升级为php7/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/blog-hexo/2017/08/19/Laravel中Collection排序函数的使用/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Viejo</strong>
-      <div class="article-nav-title">Apache配置php5升级为php7</div>
+      <div class="article-nav-title">Laravel中Collection排序函数的使用</div>
     </a>
   
 </nav>
