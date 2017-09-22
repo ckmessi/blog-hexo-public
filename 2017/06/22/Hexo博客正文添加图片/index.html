@@ -15,7 +15,6 @@
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="很多情况下我们希望文章内容图文并茂，此时就需要添加图片。    图片位置的比较通常来讲，添加图片可以有两种方式。一是将图片上传到第三方云平台，如七牛云、新浪图床等，然后在正文中直接使用绝对路径引用；二是将图片内容保存在与文章所在项目的相关目录下，通过相对路径引用完成。    经过调研，Hexo对于两种方式都支持。为了保持项目的完整性，防止因第三方云平台爆炸导致的图片失效，我们决定采用第二种方案。">
 <meta property="og:image" content="http://ckmessi.github.io/2017/06/22/Hexo博客正文添加图片/其实你超棒的.jpg">
-<meta property="og:image" content="http://ckmessi.github.io/blog-hexo/2017/06/22/Hexo博客正文添加图片/其实你超棒的.jpg">
 <meta property="og:updated_time" content="2017-06-22T03:05:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo博客正文添加图片">
@@ -111,12 +110,12 @@
 <p><strong>警告：</strong> 这里很困惑的一点是许多方法提到使用插件<a href="https://github.com/CodeFalling/hexo-asset-image" target="_blank" rel="external">hexo-asset-image</a>替换为绝对路径，但并不能解决上述问题。而且会将本来已经正常的内容替换得非常奇怪，非常不建议使用。</p>
 <p>真正有效的方法是使用下列的标签插件而不是markdown：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;% asset_img [image_name] [image_title] %&#125;</div></pre></td></tr></table></figure></p>
 <p>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;% asset_img 其实你超棒的.jpg 图片标题 %&#125;</div></pre></td></tr></table></figure></p>
-<p>能够得到<br><img src="/blog-hexo/2017/06/22/Hexo博客正文添加图片/其实你超棒的.jpg" alt="图片标题" title="图片标题"></p>
+<p>能够得到<br></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/22/Hexo博客正文添加图片/" data-id="cj7q9gw3r000oi58th7qwgx55" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/22/Hexo博客正文添加图片/" data-id="cj7vw3534000s6r8tugyget44" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li></ul>
@@ -175,7 +174,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 16.67px;">C#</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 13.33px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 13.33px;">Command Line</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Git/" style="font-size: 13.33px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 20px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 13.33px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 13.33px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 16.67px;">PHP</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 13.33px;">PowerShell</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 16.67px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+      <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 16.67px;">C#</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 13.33px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 13.33px;">Command Line</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Git/" style="font-size: 13.33px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 20px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 13.33px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 13.33px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 13.33px;">PowerShell</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 16.67px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
     </div>
   </div>
 
@@ -197,6 +196,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2017/09/22/php7新特性中的一些语法糖/">php7新特性中的一些语法糖</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2017/09/18/开源许可协议简介/">开源许可协议简介</a>
           </li>
         
@@ -210,10 +213,6 @@
         
           <li>
             <a href="/blog-hexo/2017/08/19/Laravel中Collection排序函数的使用/">Laravel中Collection排序函数的使用</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2017/08/18/Solution-sln-File-in-Visual-Studio/">Solution(.sln) File in Visual Studio</a>
           </li>
         
       </ul>
