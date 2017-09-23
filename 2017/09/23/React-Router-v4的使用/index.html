@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>React Router v4的使用 | 不止是一位程序员</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近在入门React，学习的过程中发现一些样例的Router不好使用。经过摸索后发现，react-router版本不是向下兼容的，react-router v2和v4有着截然不同的使用方法。网上许多样例都使用的是react-router@2.，因此在依赖包为react-router@4.时无法正确运行。 根据react-router@4.*的一些参考教程，简单描述撰写一个能够使用的React Ro">
+<meta name="keywords" content="React">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React Router v4的使用">
+<meta property="og:url" content="http://ckmessi.github.io/2017/09/23/React-Router-v4的使用/index.html">
+<meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="最近在入门React，学习的过程中发现一些样例的Router不好使用。经过摸索后发现，react-router版本不是向下兼容的，react-router v2和v4有着截然不同的使用方法。网上许多样例都使用的是react-router@2.，因此在依赖包为react-router@4.时无法正确运行。 根据react-router@4.*的一些参考教程，简单描述撰写一个能够使用的React Ro">
+<meta property="og:updated_time" content="2017-09-23T11:15:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React Router v4的使用">
+<meta name="twitter:description" content="最近在入门React，学习的过程中发现一些样例的Router不好使用。经过摸索后发现，react-router版本不是向下兼容的，react-router v2和v4有着截然不同的使用方法。网上许多样例都使用的是react-router@2.，因此在依赖包为react-router@4.时无法正确运行。 根据react-router@4.*的一些参考教程，简单描述撰写一个能够使用的React Ro">
+  
+    <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/blog-hexo/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog-hexo/" id="logo">不止是一位程序员</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog-hexo/" id="subtitle">Lionel的技术空间</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog-hexo/">Home</a>
+        
+          <a class="main-nav-link" href="/blog-hexo/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-React-Router-v4的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/09/23/React-Router-v4的使用/" class="article-date">
+  <time datetime="2017-09-23T11:12:33.000Z" itemprop="datePublished">2017-09-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      React Router v4的使用
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在入门React，学习的过程中发现一些样例的Router不好使用。经过摸索后发现，react-router版本不是向下兼容的，react-router v2和v4有着截然不同的使用方法。网上许多样例都使用的是react-router@2.<em>，因此在依赖包为react-router@4.</em>时无法正确运行。</p>
+<p>根据<code>react-router@4.*</code>的一些参考教程，简单描述撰写一个能够使用的React Router的步骤。</p>
+<p>首先要说明的是，React路由相关的组件有许多，包括<code>react-router</code>，<code>react-router-dom</code>和<code>react-dom</code>。在这种情况下，应该使用npm安装<code>react-router-dom</code>。</p>
+<pre><code>You should almost never have to install react-router directly. That package provides the core routing components and functions for React Router applications. The other two provide environment specific (browser and react-native) components, but they both also re-export all of react-router&apos;s exports.
+</code></pre><h4 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h4><p>创建一个全新的React项目<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">create-react-app react-router-v4-sample</div></pre></td></tr></table></figure></p>
+<p>进入项目，使用<code>npm start</code>命令，检查项目是否能正常运行。</p>
+<p>安装<code>react-router-dom</code>插件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install react-router-dom -S</div></pre></td></tr></table></figure></p>
+<p>打开<code>package.json</code>，会发现<code>react-router-dom</code>和<code>react-dom</code>都已经安装了。</p>
+<p>修改<code>index.js</code>文件，将<code>&lt;App /&gt;</code>元素放置到<code>&lt;BrowserRouter&gt;</code>元素中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">import React from &apos;react&apos;;</div><div class="line">import ReactDOM from &apos;react-dom&apos;;</div><div class="line">import Main from &apos;./Main&apos;;</div><div class="line">import &apos;./index.css&apos;;</div><div class="line">import registerServiceWorker from &apos;./registerServiceWorker&apos;;</div><div class="line">import &#123; BrowserRouter &#125; from &apos;react-router-dom&apos;;</div><div class="line"></div><div class="line">ReactDOM.render((</div><div class="line">  &lt;BrowserRouter&gt;</div><div class="line">    &lt;Main /&gt;</div><div class="line">  &lt;/BrowserRouter&gt;</div><div class="line"> ), document.getElementById(&apos;root&apos;));</div><div class="line">registerServiceWorker();</div></pre></td></tr></table></figure></p>
+<p>此时项目应该不受影响，正常运行。</p>
+<h4 id="添加根据路由显示的内容"><a href="#添加根据路由显示的内容" class="headerlink" title="添加根据路由显示的内容"></a>添加根据路由显示的内容</h4><p>接下来要进行较多的改动，首先在<code>App.js</code>文件中添加一个<code>Switch</code>区域，表示根据路由选择不同的组件，并引入相关组件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">import React, &#123; Component &#125; from &apos;react&apos;;</div><div class="line">import &#123; Route, Switch &#125; from &apos;react-router-dom&apos;;</div><div class="line">import Home from &apos;./Home&apos;;</div><div class="line">import About from &apos;./About&apos;;</div><div class="line">import Blog from &apos;./Blog&apos;;</div><div class="line"></div><div class="line">class App extends Component &#123;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;div className=&quot;App&quot;&gt;</div><div class="line">        &lt;div&gt;</div><div class="line">            Here is common area</div><div class="line">        &lt;/div&gt;</div><div class="line">        &lt;Switch&gt;</div><div class="line">          &lt;Route exact path=&apos;/&apos; component=&#123;Home&#125;/&gt;</div><div class="line">          &lt;Route path=&apos;/about&apos; component=&#123;About&#125;/&gt;</div><div class="line">          &lt;Route path=&apos;/blog&apos; component=&#123;Blog&#125;/&gt;</div><div class="line">        &lt;/Switch&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">export default App;</div></pre></td></tr></table></figure></p>
+<p>在<code>src</code>目录添加三个新文件<code>Home.js</code>，<code>About.js</code>和<code>Blog.js</code>，并按照如下模板添加内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">import React, &#123; Component &#125; from &apos;react&apos;;</div><div class="line">class Home extends Component &#123;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;div&gt;</div><div class="line">        Here is Home page.</div><div class="line">      &lt;/div&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">export default Home;</div></pre></td></tr></table></figure></p>
+<p>运行，此时网页应该有两行文字，上面一行永远是<code>Here is common area</code>，下面一行则根据不同的路由显示对应的文字，如<code>Here is Home page</code></p>
+<h4 id="添加导航链接"><a href="#添加导航链接" class="headerlink" title="添加导航链接"></a>添加导航链接</h4><p>在<code>App.js</code>文件中，添加<code>Here is common area</code>所在的代码段，添加导航链接：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;header&gt;</div><div class="line">  &lt;nav&gt;</div><div class="line">	&lt;ul&gt;</div><div class="line">	  &lt;li&gt;&lt;Link to=&apos;/&apos;&gt;Home&lt;/Link&gt;&lt;/li&gt;</div><div class="line">	  &lt;li&gt;&lt;Link to=&apos;/about&apos;&gt;About&lt;/Link&gt;&lt;/li&gt;</div><div class="line">	  &lt;li&gt;&lt;Link to=&apos;blog&apos;&gt;Blog&lt;/Link&gt;&lt;/li&gt;</div><div class="line">	&lt;/ul&gt;</div><div class="line">  &lt;/nav&gt;</div><div class="line">&lt;/header&gt;</div></pre></td></tr></table></figure></p>
+<p>注意添加<code>Link</code>的引用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import &#123; Route, Switch, Link &#125; from &apos;react-router-dom&apos;;</div></pre></td></tr></table></figure></p>
+<p>打开网页，此时应该能够出现三个选择，点击不同的链接，下面<code>Switch</code>区域的文字内容将根据路由规则进行切换。</p>
+<p>基本的React Router v4使用方法就是这些。</p>
+<hr>
+<p>参考资料：<br><a href="https://medium.com/@pshrmn/a-simple-react-router-v4-tutorial-7f23ff27adf" target="_blank" rel="external">https://medium.com/@pshrmn/a-simple-react-router-v4-tutorial-7f23ff27adf</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/09/23/React-Router-v4的使用/" data-id="cj7x7vhj1001lxj8tzech75wf" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/React/">React</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog-hexo/2017/09/22/php7新特性中的一些语法糖/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">php7新特性中的一些语法糖</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Kategorien</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 16.67px;">C#</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 13.33px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 13.33px;">Command Line</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Git/" style="font-size: 13.33px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 20px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 13.33px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 13.33px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 13.33px;">PowerShell</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 16.67px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog-hexo/2017/09/23/React-Router-v4的使用/">React Router v4的使用</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2017/09/22/php7新特性中的一些语法糖/">php7新特性中的一些语法糖</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2017/09/18/开源许可协议简介/">开源许可协议简介</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2017/09/12/Access-Control-Allow-Origin实现跨域访问/">Access-Control-Allow-Origin实现跨域访问</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2017/09/11/Azure-Application-Insights入门/">Azure Application Insights入门</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 ckmessi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog-hexo/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog-hexo/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/blog-hexo/fancybox/jquery.fancybox.css">
+  <script src="/blog-hexo/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/blog-hexo/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

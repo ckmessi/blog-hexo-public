@@ -5,19 +5,14 @@
   
 
   
-  <title>Access-Control-Allow-Origin实现跨域访问 | 不止是一位程序员</title>
+  <title>Tag: React | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在前端使用Ajax请求后台时，如果前端和后台项目是分离的，很容易出现跨域请求访问的错误：1XMLHttpRequest cannot load http://localhost/.... The &amp;apos;Access-Control-Allow-Origin&amp;apos; header has a value  that is not equal to the supplied origin.">
-<meta name="keywords" content="Ajax,Frontend">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Access-Control-Allow-Origin实现跨域访问">
-<meta property="og:url" content="http://ckmessi.github.io/2017/09/12/Access-Control-Allow-Origin实现跨域访问/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="不止是一位程序员">
+<meta property="og:url" content="http://ckmessi.github.io/tags/React/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
-<meta property="og:description" content="在前端使用Ajax请求后台时，如果前端和后台项目是分离的，很容易出现跨域请求访问的错误：1XMLHttpRequest cannot load http://localhost/.... The &amp;apos;Access-Control-Allow-Origin&amp;apos; header has a value  that is not equal to the supplied origin.">
-<meta property="og:updated_time" content="2017-09-12T13:34:14.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Access-Control-Allow-Origin实现跨域访问">
-<meta name="twitter:description" content="在前端使用Ajax请求后台时，如果前端和后台项目是分离的，很容易出现跨域请求访问的错误：1XMLHttpRequest cannot load http://localhost/.... The &amp;apos;Access-Control-Allow-Origin&amp;apos; header has a value  that is not equal to the supplied origin.">
+<meta name="twitter:title" content="不止是一位程序员">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -68,71 +63,40 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-Access-Control-Allow-Origin实现跨域访问" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/09/12/Access-Control-Allow-Origin实现跨域访问/" class="article-date">
-  <time datetime="2017-09-12T13:26:43.000Z" itemprop="datePublished">2017-09-12</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+        <section id="main">
   
-    <h1 class="article-title" itemprop="name">
-      Access-Control-Allow-Origin实现跨域访问
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/blog-hexo/archives/2017" class="archive-year">2017</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/blog-hexo/2017/09/23/React-Router-v4的使用/" class="archive-article-date">
+  <time datetime="2017-09-23T11:12:33.000Z" itemprop="datePublished">Sep 23</time>
+</a>
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/blog-hexo/2017/09/23/React-Router-v4的使用/">React Router v4的使用</a>
     </h1>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在前端使用Ajax请求后台时，如果前端和后台项目是分离的，很容易出现跨域请求访问的错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">XMLHttpRequest cannot load http://localhost/.... The &apos;Access-Control-Allow-Origin&apos; header has a value  that is not equal to the supplied origin. Origin &apos;null&apos; is therefore not allowed access.</div></pre></td></tr></table></figure></p>
-<p>跨域指的是浏览器执行了其他网站的脚本。这是由浏览器的同源策略造成的，是浏览器对javascript施加的安全限制。<br>之前一直为其困扰，最近找到一种便捷的方法实现跨域访问，其基本原理是在服务器端设置Access-Control-Allow-Origin，表示允许浏览器跨域访问，相当于被请求资源给浏览器开了一道绿色通行证。</p>
-<p>客户端正常使用ajax请求资源：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">axios.get(&apos;http://localhost/your/path&apos;).then(function (response) &#123;</div><div class="line">    var data = response.data;</div><div class="line">    if (data.code === 200) &#123;</div><div class="line">        alert(data.data.message)</div><div class="line">    &#125; else &#123;</div><div class="line">        alert(data.data);</div><div class="line">    &#125;</div><div class="line">&#125;).catch(function (error) &#123;</div><div class="line">    alert(error);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-<p>服务器端需要添加以下内容设置<code>header</code>信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// 指定允许其他域名访问  </div><div class="line">header(&apos;Access-Control-Allow-Origin:*&apos;);  </div><div class="line">// 响应类型  </div><div class="line">header(&apos;Access-Control-Allow-Methods:GET&apos;);  </div><div class="line">// 响应头设置  </div><div class="line">header(&apos;Access-Control-Allow-Headers:x-requested-with,content-type&apos;);</div></pre></td></tr></table></figure></p>
-<p>这样前端就不会报浏览器跨域访问的错误了。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/12/Access-Control-Allow-Origin实现跨域访问/" data-id="cj7x7vhg40005xj8tkb14u3l8" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li></ul>
-
-    </footer>
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/blog-hexo/2017/09/18/开源许可协议简介/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Neuer</strong>
-      <div class="article-nav-title">
-        
-          开源许可协议简介
-        
-      </div>
-    </a>
-  
-  
-    <a href="/blog-hexo/2017/09/11/Azure-Application-Insights入门/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Älter</strong>
-      <div class="article-nav-title">Azure Application Insights入门</div>
-    </a>
-  
-</nav>
-
-  
 </article>
+  
+  
+    </div></section>
+  
+
 
 </section>
         
