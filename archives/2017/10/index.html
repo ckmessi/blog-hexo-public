@@ -5,19 +5,14 @@
   
 
   
-  <title>C#读取XML格式内容 | 不止是一位程序员</title>
+  <title>Archiv: 2017/10 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="XML(Extensible Markup Language)可扩展标记语言是一种标准通用语言的子集，通常我们将其称为XML格式，对应的还有JSON(JavaScript Object Notation)JS对象标记数据格式等。在C#中要读取XML格式的数据，常用方法是按照XML语法对数据进行解析，然后提取感兴趣的信息。 使用XmlDocument的方式XmlDocument类能够存储一份XML格">
-<meta name="keywords" content="C#,XML">
-<meta property="og:type" content="article">
-<meta property="og:title" content="C#读取XML格式内容">
-<meta property="og:url" content="http://ckmessi.github.io/2017/07/28/C-读取XML格式内容/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="不止是一位程序员">
+<meta property="og:url" content="http://ckmessi.github.io/archives/2017/10/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
-<meta property="og:description" content="XML(Extensible Markup Language)可扩展标记语言是一种标准通用语言的子集，通常我们将其称为XML格式，对应的还有JSON(JavaScript Object Notation)JS对象标记数据格式等。在C#中要读取XML格式的数据，常用方法是按照XML语法对数据进行解析，然后提取感兴趣的信息。 使用XmlDocument的方式XmlDocument类能够存储一份XML格">
-<meta property="og:updated_time" content="2017-07-28T12:30:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="C#读取XML格式内容">
-<meta name="twitter:description" content="XML(Extensible Markup Language)可扩展标记语言是一种标准通用语言的子集，通常我们将其称为XML格式，对应的还有JSON(JavaScript Object Notation)JS对象标记数据格式等。在C#中要读取XML格式的数据，常用方法是按照XML语法对数据进行解析，然后提取感兴趣的信息。 使用XmlDocument的方式XmlDocument类能够存储一份XML格">
+<meta name="twitter:title" content="不止是一位程序员">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -68,71 +63,40 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-C-读取XML格式内容" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/07/28/C-读取XML格式内容/" class="article-date">
-  <time datetime="2017-07-28T12:30:05.000Z" itemprop="datePublished">2017-07-28</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+        <section id="main">
   
-    <h1 class="article-title" itemprop="name">
-      C#读取XML格式内容
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/blog-hexo/archives/2017" class="archive-year">2017</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/blog-hexo/2017/10/09/Git-tag的使用/" class="archive-article-date">
+  <time datetime="2017-10-09T13:33:23.000Z" itemprop="datePublished">Oct 9</time>
+</a>
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/blog-hexo/2017/10/09/Git-tag的使用/">Git tag的使用</a>
     </h1>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>XML(Extensible Markup Language)可扩展标记语言是一种标准通用语言的子集，通常我们将其称为XML格式，对应的还有JSON(JavaScript Object Notation)JS对象标记数据格式等。<br>在C#中要读取XML格式的数据，常用方法是按照XML语法对数据进行解析，然后提取感兴趣的信息。</p>
-<h2 id="使用XmlDocument的方式"><a href="#使用XmlDocument的方式" class="headerlink" title="使用XmlDocument的方式"></a>使用XmlDocument的方式</h2><p><code>XmlDocument</code>类能够存储一份XML格式数据，可以将其看成一棵树，通过访问树的节点和属性来访问XML数据。<br>以下代码实现了用递归的方式遍历XML树：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">private string TravelXmlTree(string xmlStr)</div><div class="line">&#123;</div><div class="line">	XmlDocument xml = new XmlDocument();</div><div class="line">	try</div><div class="line">	&#123;</div><div class="line">		xml.LoadXml(xmlStr);</div><div class="line">		XmlNode node = (XmlNode)xml.DocumentElement;</div><div class="line">		travelNode(node);</div><div class="line">		return xml.OuterXml;</div><div class="line">	&#125;</div><div class="line">	catch</div><div class="line">	&#123;</div><div class="line">		return xmlStr;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">private void travelNode(XmlNode node)</div><div class="line">&#123;</div><div class="line">	// do some operation to attributes</div><div class="line">	if (node.Attributes != null)</div><div class="line">	&#123;</div><div class="line">		foreach (XmlAttribute attr in node.Attributes)</div><div class="line">		&#123;</div><div class="line">			string str = attr.Value;</div><div class="line">			node.Attributes[attr.Name].Value = guid;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	// travel the child nodes</div><div class="line">	if (node.HasChildNodes)</div><div class="line">	&#123;</div><div class="line">		foreach (XmlNode child in node.ChildNodes)</div><div class="line">		&#123;</div><div class="line">			travelNode(child);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	// if the node is leaf, visit InnerText</div><div class="line">	else</div><div class="line">	&#123;</div><div class="line">		string str = node.InnerText;</div><div class="line">		node.InnerText = &quot;111&quot;;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="使用XmlReader进行流式读取的方式"><a href="#使用XmlReader进行流式读取的方式" class="headerlink" title="使用XmlReader进行流式读取的方式"></a>使用XmlReader进行流式读取的方式</h2><p>有些时候，当整个XML数据太大时，使用<code>XmlDocument</code>进行数据的载入<code>.load</code>会抛出out of memory的异常。<br>这时候可选方案是使用<code>XmlReader</code>类，以流式读取XML格式字符串内容，一边读取一边处理。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">private string ConvertGuidToUuidInXmlContentByTravel(string xmlStr)</div><div class="line">&#123;</div><div class="line">	using (XmlReader reader = XmlReader.Create(new StringReader(xmlStr)))</div><div class="line">	&#123;</div><div class="line">		try</div><div class="line">		&#123;</div><div class="line">			while (reader.Read())</div><div class="line">			&#123;</div><div class="line">				switch (reader.NodeType)</div><div class="line">				&#123;</div><div class="line">					case XmlNodeType.Element:</div><div class="line">						for (int attInd = 0; attInd &lt; reader.AttributeCount; attInd++)</div><div class="line">						&#123;</div><div class="line">							reader.MoveToAttribute(attInd);</div><div class="line">							string attr = reader.Name;</div><div class="line">							string str = reader.Value;</div><div class="line">						&#125;</div><div class="line">						reader.MoveToElement();</div><div class="line">						break;</div><div class="line">					case XmlNodeType.Text:</div><div class="line">						string str2 = reader.Value;</div><div class="line">						break;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		catch</div><div class="line">		&#123;</div><div class="line">			return xmlStr;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>当然，使用流式读取的一个缺点在于，无法即时地对<code>xmlStr</code>数据本身进行编辑操作。通常只能在读取的过程中将相关信息记录下来，在读取结束后执行对应的编辑。   </p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/28/C-读取XML格式内容/" data-id="cj8k7ysw1000eef8t9l8902g9" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li></ul>
-
-    </footer>
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/blog-hexo/2017/08/02/PowerShell-Alias设置/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Neuer</strong>
-      <div class="article-nav-title">
-        
-          PowerShell Alias设置
-        
-      </div>
-    </a>
-  
-  
-    <a href="/blog-hexo/2017/07/26/Git常用撤销命令总结/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Älter</strong>
-      <div class="article-nav-title">Git常用撤销命令总结</div>
-    </a>
-  
-</nav>
-
-  
 </article>
+  
+  
+    </div></section>
+  
+
 
 </section>
         
