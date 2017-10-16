@@ -5,14 +5,19 @@
   
 
   
-  <title>Archivos: 2017/7 | 不止是一位程序员</title>
+  <title>Git分支基本操作 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="不止是一位程序员">
-<meta property="og:url" content="http://ckmessi.github.io/archives/2017/07/index.html">
+  <meta name="description" content="本文总结关于Git操作分支的相关操作。 创建分支使用git branch [branch_name]可以创建新分支。 使用git checkout -b [branch_name]可以创建并切换到新分支。 使用git push --set-upstream orgin [branch_name]将当前分支提交到远程服务器上。 查看分支使用git branch可以查看所有分支，当前分支前面会标一个*">
+<meta name="keywords" content="Git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git分支基本操作">
+<meta property="og:url" content="http://ckmessi.github.io/2017/10/16/Git分支基本操作/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="本文总结关于Git操作分支的相关操作。 创建分支使用git branch [branch_name]可以创建新分支。 使用git checkout -b [branch_name]可以创建并切换到新分支。 使用git push --set-upstream orgin [branch_name]将当前分支提交到远程服务器上。 查看分支使用git branch可以查看所有分支，当前分支前面会标一个*">
+<meta property="og:updated_time" content="2017-10-16T12:51:01.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="不止是一位程序员">
+<meta name="twitter:title" content="Git分支基本操作">
+<meta name="twitter:description" content="本文总结关于Git操作分支的相关操作。 创建分支使用git branch [branch_name]可以创建新分支。 使用git checkout -b [branch_name]可以创建并切换到新分支。 使用git push --set-upstream orgin [branch_name]将当前分支提交到远程服务器上。 查看分支使用git branch可以查看所有分支，当前分支前面会标一个*">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -63,216 +68,67 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog-hexo/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/07/28/C-读取XML格式内容/" class="archive-article-date">
-  <time datetime="2017-07-28T12:30:05.000Z" itemprop="datePublished">Jul 28</time>
+        <section id="main"><article id="post-Git分支基本操作" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/10/16/Git分支基本操作/" class="article-date">
+  <time datetime="2017-10-16T12:50:11.000Z" itemprop="datePublished">2017-10-16</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/07/28/C-读取XML格式内容/">C#读取XML格式内容</a>
+    <h1 class="article-title" itemprop="name">
+      Git分支基本操作
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/07/26/Git常用撤销命令总结/" class="archive-article-date">
-  <time datetime="2017-07-26T12:56:19.000Z" itemprop="datePublished">Jul 26</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/07/26/Git常用撤销命令总结/">Git常用撤销命令总结</a>
-    </h1>
-  
+        <p>本文总结关于Git操作分支的相关操作。</p>
+<h2 id="创建分支"><a href="#创建分支" class="headerlink" title="创建分支"></a>创建分支</h2><p>使用<code>git branch [branch_name]</code>可以创建新分支。</p>
+<p>使用<code>git checkout -b [branch_name]</code>可以创建并切换到新分支。</p>
+<p>使用<code>git push --set-upstream orgin [branch_name]</code>将当前分支提交到远程服务器上。</p>
+<h2 id="查看分支"><a href="#查看分支" class="headerlink" title="查看分支"></a>查看分支</h2><p>使用<code>git branch</code>可以查看所有分支，当前分支前面会标一个<code>*</code>符号。</p>
+<p>使用<code>git branch -a</code> 可以查看远程分支</p>
+<h2 id="重命名分支"><a href="#重命名分支" class="headerlink" title="重命名分支"></a>重命名分支</h2><p>使用<code>git branch -m [old_branch_name] [new_branch_name]</code>重命名本地分支。</p>
+<p>若希望重命名远程分支，实质是先删除远程分支，然后重命名本地分支，再重新提交一个远程分支。</p>
+<h2 id="删除分支"><a href="#删除分支" class="headerlink" title="删除分支"></a>删除分支</h2><p>使用<code>git branch -d [branch_name]</code>删除对应分支</p>
+<p>使用<code>git push origin --delete [branch_name]</code>删除远程分支</p>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/07/25/C-使用正则表达式在字符串中查找子串/" class="archive-article-date">
-  <time datetime="2017-07-25T13:04:06.000Z" itemprop="datePublished">Jul 25</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/07/25/C-使用正则表达式在字符串中查找子串/">C#使用正则表达式在字符串中查找子串</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/07/24/C-使用XmlDocument解析XML内容/" class="archive-article-date">
-  <time datetime="2017-07-24T15:05:20.000Z" itemprop="datePublished">Jul 24</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/10/16/Git分支基本操作/" data-id="cj8u6hqhh000rtx8tt59h9s74" class="article-share-link">Compartir</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/07/24/C-使用XmlDocument解析XML内容/">C#使用XmlDocument解析XML内容</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/07/22/Laravel使用Maatwebsite操作Excel/" class="archive-article-date">
-  <time datetime="2017-07-22T14:06:22.000Z" itemprop="datePublished">Jul 22</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/07/22/Laravel使用Maatwebsite操作Excel/">Laravel使用Maatwebsite操作Excel</a>
-    </h1>
-  
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
 
-    </header>
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog-hexo/2017/10/09/Git-tag的使用/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Viejo</strong>
+      <div class="article-nav-title">Git tag的使用</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/07/20/C-的访问权限修饰符/" class="archive-article-date">
-  <time datetime="2017-07-20T12:36:59.000Z" itemprop="datePublished">Jul 20</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/07/20/C-的访问权限修饰符/">C#的访问权限修饰符</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/07/19/PowerShell实现光标快速移动操作和自动补全/" class="archive-article-date">
-  <time datetime="2017-07-19T14:32:50.000Z" itemprop="datePublished">Jul 19</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/07/19/PowerShell实现光标快速移动操作和自动补全/">PowerShell实现光标快速移动操作和自动补全</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/07/19/npm的package-json一些使用常识/" class="archive-article-date">
-  <time datetime="2017-07-19T14:28:56.000Z" itemprop="datePublished">Jul 19</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/07/19/npm的package-json一些使用常识/">npm的package.json一些使用常识</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/07/19/Grunt入门/" class="archive-article-date">
-  <time datetime="2017-07-19T14:19:15.000Z" itemprop="datePublished">Jul 19</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/07/19/Grunt入门/">Grunt入门</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/07/07/使用mysqldump快速拷贝一个数据库/" class="archive-article-date">
-  <time datetime="2017-07-07T14:13:16.000Z" itemprop="datePublished">Jul 7</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/07/07/使用mysqldump快速拷贝一个数据库/">使用mysqldump快速拷贝一个数据库</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-
-  <nav id="page-nav">
-    
-    <span class="page-number current">1</span><a class="page-number" href="/blog-hexo/archives/2017/07/page/2/">2</a><a class="extend next" rel="next" href="/blog-hexo/archives/2017/07/page/2/">Siguiente &raquo;</a>
-  </nav>
 
 </section>
         
