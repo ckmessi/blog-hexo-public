@@ -65,6 +65,57 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-PHPUnit测试protected方法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/11/09/PHPUnit测试protected方法/" class="article-date">
+  <time datetime="2017-11-09T13:26:08.000Z" itemprop="datePublished">2017-11-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/11/09/PHPUnit测试protected方法/">PHPUnit测试protected方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在使用PHPUnit进行单元测试时，可能需要对某个类的保护成员函数进行测试。<br>然而，权限为<code>protected</code>及<code>private</code>的成员函数是无法通过类对象直接访问的。<br>在这种情况下，有两种方法可以对保护及私有方法进行测试。</p>
+<h2 id="使用继承类"><a href="#使用继承类" class="headerlink" title="使用继承类"></a>使用继承类</h2><p>创建一个继承自待测试类的子类，同时在类中定义一个<code>public</code>方法，在方法中调用对应<code>protected</code>方法并返回，这样间接调用了父类的<code>protected</code>方法。<br>首先，创建一个子类继承自待测试类，并创建一个<code>public</code>方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">class Children extends Base</div><div class="line">&#123;</div><div class="line">    public function publicBar($param) </div><div class="line">    &#123;</div><div class="line">        return $this-&gt;protectedBar($param);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后直接使用即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$children = new Children();</div><div class="line">$res = $childen-&gt;publicBar($param);</div></pre></td></tr></table></figure></p>
+<h2 id="使用反射"><a href="#使用反射" class="headerlink" title="使用反射"></a>使用反射</h2><p>可以使用类的反射机制，根据方法名称取出对应方法，设置其访问级别，然后调用。<br>首先，创建一个<code>ReflectionClass</code>，使用<code>getMethod</code>方法获取方法，使用<code>setAccessible</code>方法设置访问权限。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">protected static function getMethod($name) &#123;</div><div class="line">  $class = new \ReflectionClass(&apos;MyClass&apos;);</div><div class="line">  $method = $class-&gt;getMethod($name);</div><div class="line">  $method-&gt;setAccessible(true);</div><div class="line">  return $method;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>使用<code>invokeArgs</code>方法触发方法的调用，第二个参数是对应方法的参数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public function testFoo() &#123;</div><div class="line">  $foo = self::getMethod(&apos;foo&apos;);</div><div class="line">  $obj = new MyClass();</div><div class="line">  $foo-&gt;invokeArgs($obj, array(...));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这里需要注意的是，Myclass会被直接或间接用到两次。第一次用于创建类的反射，第二次用于创建一个对象。</p>
+<p>在测试类中可参考如下写法组织测试：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">$this-&gt;controller_reflection = new \ReflectionClass(&apos;App\Http\Controllers\Controller&apos;);</div><div class="line">$request = new Request();</div><div class="line">$this-&gt;controller = new Controller($request);</div><div class="line"></div><div class="line">protected function getMethod($name) &#123;</div><div class="line">    $method = $this-&gt;controller_reflection-&gt;getMethod($name);</div><div class="line">    $method-&gt;setAccessible(true);</div><div class="line">    return $method;</div><div class="line">&#125;</div><div class="line">protected function callOutputJSON($code, $msg, $data)&#123;</div><div class="line">    $method = $this-&gt;getMethod(&apos;outputJSON&apos;);</div><div class="line">    return $method-&gt;invokeArgs($this-&gt;controller, array($code, $msg, $data));</div><div class="line">&#125;</div><div class="line">public function testOutputJSON()</div><div class="line">&#123;</div><div class="line">    $code = 0;</div><div class="line">    $msg = &apos;msg&apos;;</div><div class="line">    $data = array(&apos;user&apos; =&gt; &apos;abcd&apos;);</div><div class="line">    $response = $this-&gt;callOutputJSON($code, $msg, $data);</div><div class="line">    $this-&gt;assertTrue(true);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>类似的，类的私有方法只能通过反射机制的方案进行测试。</p>
+<p>参考链接：<br><a href="https://stackoverflow.com/questions/249664/best-practices-to-test-protected-methods-with-phpunit" target="_blank" rel="external">https://stackoverflow.com/questions/249664/best-practices-to-test-protected-methods-with-phpunit</a><br><a href="https://stackoverflow.com/questions/42094809/how-to-unit-test-protected-methods" target="_blank" rel="external">https://stackoverflow.com/questions/42094809/how-to-unit-test-protected-methods</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/11/09/PHPUnit测试protected方法/" data-id="cj9sitrop002k7l8tgmezk02z" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-AngularJS中ng-if和ng-show的区别" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2017/11/02/AngularJS中ng-if和ng-show的区别/" class="article-date">
@@ -112,7 +163,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/02/AngularJS中ng-if和ng-show的区别/" data-id="cj9ihzwoc0001j78tsikzk6rc" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/02/AngularJS中ng-if和ng-show的区别/" data-id="cj9sitre100007l8tsoxumrce" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -176,7 +227,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/30/Angular1模块间通信方式/" data-id="cj9ihzwon0004j78t5059ks13" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/10/30/Angular1模块间通信方式/" data-id="cj9sitree00017l8ttbjtmwzd" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -252,7 +303,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/23/Laravel-Database-Query-Builder-insert的效率问题/" data-id="cj9ihzwqx001ij78tlhdy98vx" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/10/23/Laravel-Database-Query-Builder-insert的效率问题/" data-id="cj9sitrnu00267l8tutapsfwm" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -298,7 +349,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/21/Angular类的成员变量初始化的问题/" data-id="cj9ihzwor0005j78ty7oz2q98" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/10/21/Angular类的成员变量初始化的问题/" data-id="cj9sitrfw00097l8t9ubwp81p" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -350,7 +401,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/16/Git分支基本操作/" data-id="cj9ihzwpy000rj78tmo3zuj64" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/10/16/Git分支基本操作/" data-id="cj9sitrn5001l7l8til2f6nkw" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -408,7 +459,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/09/Git-tag的使用/" data-id="cj9ihzwpt000oj78t7c2xt0hq" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/10/09/Git-tag的使用/" data-id="cj9sitrfz000b7l8t07fj0nnd" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -469,7 +520,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/23/React-Router-v4的使用/" data-id="cj9ihzwrb001uj78t9wmnytp6" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/09/23/React-Router-v4的使用/" data-id="cj9sitrpd00327l8tmldpw7k6" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/React/">React</a></li></ul>
@@ -532,7 +583,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/22/php7新特性中的一些语法糖/" data-id="cj9ihzws6002jj78tca0q9jg1" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/09/22/php7新特性中的一些语法糖/" data-id="cj9sitrq7003d7l8t5aho4f12" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -597,57 +648,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/18/开源许可协议简介/" data-id="cj9ihzwsh002pj78t0txjg0ob" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/09/18/开源许可协议简介/" data-id="cj9sitrqo003m7l8td2zfmkgl" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/License/">License</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Access-Control-Allow-Origin实现跨域访问" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/09/12/Access-Control-Allow-Origin实现跨域访问/" class="article-date">
-  <time datetime="2017-09-12T13:26:43.000Z" itemprop="datePublished">2017-09-12</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/09/12/Access-Control-Allow-Origin实现跨域访问/">Access-Control-Allow-Origin实现跨域访问</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在前端使用Ajax请求后台时，如果前端和后台项目是分离的，很容易出现跨域请求访问的错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">XMLHttpRequest cannot load http://localhost/.... The &apos;Access-Control-Allow-Origin&apos; header has a value  that is not equal to the supplied origin. Origin &apos;null&apos; is therefore not allowed access.</div></pre></td></tr></table></figure></p>
-<p>跨域指的是浏览器执行了其他网站的脚本。这是由浏览器的同源策略造成的，是浏览器对javascript施加的安全限制。<br>之前一直为其困扰，最近找到一种便捷的方法实现跨域访问，其基本原理是在服务器端设置Access-Control-Allow-Origin，表示允许浏览器跨域访问，相当于被请求资源给浏览器开了一道绿色通行证。</p>
-<p>客户端正常使用ajax请求资源：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">axios.get(&apos;http://localhost/your/path&apos;).then(function (response) &#123;</div><div class="line">    var data = response.data;</div><div class="line">    if (data.code === 200) &#123;</div><div class="line">        alert(data.data.message)</div><div class="line">    &#125; else &#123;</div><div class="line">        alert(data.data);</div><div class="line">    &#125;</div><div class="line">&#125;).catch(function (error) &#123;</div><div class="line">    alert(error);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-<p>服务器端需要添加以下内容设置<code>header</code>信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// 指定允许其他域名访问  </div><div class="line">header(&apos;Access-Control-Allow-Origin:*&apos;);  </div><div class="line">// 响应类型  </div><div class="line">header(&apos;Access-Control-Allow-Methods:GET&apos;);  </div><div class="line">// 响应头设置  </div><div class="line">header(&apos;Access-Control-Allow-Headers:x-requested-with,content-type&apos;);</div></pre></td></tr></table></figure></p>
-<p>这样前端就不会报浏览器跨域访问的错误了。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/12/Access-Control-Allow-Origin实现跨域访问/" data-id="cj9ihzwo40000j78tme67i2sc" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li></ul>
 
     </footer>
   </div>
@@ -681,7 +685,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
     </div>
   </div>
 
@@ -691,7 +695,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 15px;">Angular</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 15px;">C#</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 12.5px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 12.5px;">Command Line</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Git/" style="font-size: 17.5px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 17.5px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 20px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 15px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 12.5px;">PowerShell</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 15px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+      <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 14px;">Angular</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 14px;">C#</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 12px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 12px;">Command Line</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Git/" style="font-size: 16px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 16px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 18px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 14px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 12px;">PowerShell</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 14px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
     </div>
   </div>
 
@@ -713,6 +717,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2017/11/09/PHPUnit测试protected方法/">PHPUnit测试protected方法</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2017/11/02/AngularJS中ng-if和ng-show的区别/">AngularJS中ng-if和ng-show的区别</a>
           </li>
         
@@ -726,10 +734,6 @@
         
           <li>
             <a href="/blog-hexo/2017/10/21/Angular类的成员变量初始化的问题/">Angular类的成员变量初始化的问题</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2017/10/16/Git分支基本操作/">Git分支基本操作</a>
           </li>
         
       </ul>
