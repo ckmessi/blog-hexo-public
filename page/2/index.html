@@ -52,9 +52,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Buscar"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -64,6 +64,64 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Git-tag的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/10/09/Git-tag的使用/" class="article-date">
+  <time datetime="2017-10-09T13:33:23.000Z" itemprop="datePublished">2017-10-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/10/09/Git-tag的使用/">Git tag的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>Git Tag故名思义是给Git打标签，可以对某一时间点上的版本打上标签。<br>在发布软件版本的时候，常用于标记某个特定版本的提交，方便查找和管理。</p>
+<h2 id="主要命令"><a href="#主要命令" class="headerlink" title="主要命令"></a>主要命令</h2><h4 id="显示标签"><a href="#显示标签" class="headerlink" title="显示标签"></a>显示标签</h4><p><code>git tag</code> 显示所有标签<br><code>git tag -l</code> 对标签名称进行特定过滤，如<br><code>git tag -l &#39;v1.4.2.*&#39;</code> 只显示v1.4.2系列的标签</p>
+<h4 id="新建标签"><a href="#新建标签" class="headerlink" title="新建标签"></a>新建标签</h4><p>Git使用的标签有两种类型：轻量级的（lightweight）和含附注的（annotated）。<br>轻量级标签是指向特定提交对象的引用（类似于一个Alias，方便记忆）；含附注标签实际上是存储在仓库中的独立对象，有自身的检验和信息，包含标签名字、电子邮件地址、日期、说明等，同时还允许使用GNU Privacy Guard(GPG)来签署或验证。<br>通常建议使用含附注标签，以便保留相关信息。</p>
+<h6 id="轻量级标签"><a href="#轻量级标签" class="headerlink" title="轻量级标签"></a>轻量级标签</h6><p>轻量级标签实际上就是一个保存着对应提交对象的校验和信息的文件。创建轻量级标签时，不需要相关选项，直接给出标签名答即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git tag v2.1</div></pre></td></tr></table></figure></p>
+<h6 id="含附注标签"><a href="#含附注标签" class="headerlink" title="含附注标签"></a>含附注标签</h6><p>创建含附注标签的方式使用<code>-a</code>选项指定标签名称，并使用<code>-m</code>选项添加附注说明。<br><code>git tag -a [version] -m &#39;[annotation information]&#39;</code>，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git tag -a v1.2 -m &apos;this version is for publish blablabla&apos;</div></pre></td></tr></table></figure></p>
+<p>类似于<code>git commit</code>时的<code>-m</code>选项，如果没有给出，Git会启动文本编辑软件提供输入标签说明。</p>
+<h4 id="显示特定标签信息"><a href="#显示特定标签信息" class="headerlink" title="显示特定标签信息"></a>显示特定标签信息</h4><p>使用<code>git show [tagname]</code>可以显示特定标签的相关信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git show v1.2</div></pre></td></tr></table></figure>
+<h4 id="签署标签"><a href="#签署标签" class="headerlink" title="签署标签"></a>签署标签</h4><p>如果有自己的私钥，可以使用GPG来签署标签，只需要把之前的<code>-a</code>改为<code>-s</code>即可<br>`git tag -s [version] -m ‘[annotation information]’，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git tag -a v1.2 -m &apos;this version is a signed blablabla&apos;</div></pre></td></tr></table></figure>
+<h4 id="验证标签"><a href="#验证标签" class="headerlink" title="验证标签"></a>验证标签</h4><p>使用<code>git tag -v [tagname]</code>可以验证已经签署的标签，这个命令会调用GPG来验证签名，需要拥有签署者的公钥，存放在keyring中，才能验证。</p>
+<h4 id="后期加注标签"><a href="#后期加注标签" class="headerlink" title="后期加注标签"></a>后期加注标签</h4><p>可以对之前某次提交添加加注标签，方法是在创建标签时添加上提交的md5值<code>git tag -a [version] -m &#39;[annotation information] [commit_id]</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git tag -a v1.2 af98ce0</div></pre></td></tr></table></figure>
+<h4 id="分享标签"><a href="#分享标签" class="headerlink" title="分享标签"></a>分享标签</h4><p>默认情况下，<code>git push</code>不会将标签信息推送到远程服务器，需要显示添加命令<code>git push [branch] [tagname]</code>，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push origin v1.5</div></pre></td></tr></table></figure></p>
+<p>如果要一次性把所有本地新增的标签都推上去，可以使用<code>--tags</code>选项：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push origin --tags</div></pre></td></tr></table></figure></p>
+<h2 id="常用方案"><a href="#常用方案" class="headerlink" title="常用方案"></a>常用方案</h2><p>在产品发布里程碑版本后，给其打上一个标签，以便需要时候查看和快速切换。<br>从本质上讲，就是使用一个<code>tag</code>记录某次提交的语义信息，通过直接用<code>tag</code>而不是<code>commit_id</code>的方法检索到对应的某次提交。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/10/09/Git-tag的使用/" data-id="cja9ph8u6000ykm8tszbtw78x" class="article-share-link">Compartir</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-React-Router-v4的使用" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -114,7 +172,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/23/React-Router-v4的使用/" data-id="cja4s0cpv0021jl8t2dtelfn1" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/09/23/React-Router-v4的使用/" data-id="cja9ph8x0002skm8tn2ykbz2j" class="article-share-link">Compartir</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/React/">React</a></li></ul>
@@ -177,7 +235,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/22/php7新特性中的一些语法糖/" data-id="cja4s0cqi002rjl8tc8d2g2w6" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/09/22/php7新特性中的一些语法糖/" data-id="cja9ph8x4002ykm8tsgt26fc9" class="article-share-link">Compartir</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -236,13 +294,13 @@
 <h4 id="Apache"><a href="#Apache" class="headerlink" title="Apache"></a>Apache</h4><p>Apache Licence是著名的非盈利开源组织Apache采用的协议。该协议和BSD类似，同样鼓励代码共享和尊重原作者的著作权，同样允许代码修改，再发布（作为开源或商业软件）。需要条件和BSD类似：<br>1.需要给代码的用户一份Apache Licence<br>2.如果你修改了代码，需要再被修改的文件中说明。<br>3.在延伸的代码中（修改和有源代码衍生的代码中）需要带有原来代码中的协议，商标，专利声明和其他原来作者规定需要包含的说明。<br>4.如果再发布的产品中包含一个Notice文件，则在Notice文件中需要带有Apache Licence。你可以在Notice中增加自己的许可，但不可以表现为对Apache Licence构成更改。</p>
 <p>Apache Licence也是对商业应用友好的许可。使用者也可以在需要的时候修改代码来满足需要并作为开源或商业产品发布/销售。</p>
 <hr>
-<img src="/blog-hexo/2017/09/18/开源许可协议简介/license.PNG" alt="开源许可协议示意图" title="开源许可协议示意图">
+
 <p>总结：通常来讲，商业使用通常闭源，因此只能选择BSD、MIT和Apache；如果只是引用，可以使用LGPL和Mozilla。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/18/开源许可协议简介/" data-id="cja4s0cqn0032jl8t8j026d6n" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/09/18/开源许可协议简介/" data-id="cja9ph8za005hkm8tleb8gw5v" class="article-share-link">Compartir</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/License/">License</a></li></ul>
@@ -289,7 +347,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/12/Access-Control-Allow-Origin实现跨域访问/" data-id="cja4s0cng0000jl8ttnbgpy3m" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/09/12/Access-Control-Allow-Origin实现跨域访问/" data-id="cja9ph8s80001km8t41gf76sl" class="article-share-link">Compartir</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li></ul>
@@ -345,7 +403,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/11/Azure-Application-Insights入门/" data-id="cja4s0co40009jl8ty8oqkade" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/09/11/Azure-Application-Insights入门/" data-id="cja9ph8t5000bkm8t3xfljd8e" class="article-share-link">Compartir</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C#</a></li></ul>
@@ -395,7 +453,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/08/19/Laravel中Collection排序函数的使用/" data-id="cja4s0cpd001hjl8tfdx13rb1" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/08/19/Laravel中Collection排序函数的使用/" data-id="cja9ph8us001ckm8tzpqi5ml4" class="article-share-link">Compartir</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -463,7 +521,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/08/18/Solution-sln-File-in-Visual-Studio/" data-id="cja4s0cqf002ljl8t7b6zgd41" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/08/18/Solution-sln-File-in-Visual-Studio/" data-id="cja9ph8we002ekm8tilq2fo1h" class="article-share-link">Compartir</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li></ul>
@@ -512,7 +570,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/08/11/NodeJS读写文件/" data-id="cja4s0cpm001sjl8tr17lqomr" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/08/11/NodeJS读写文件/" data-id="cja9ph8vt0022km8ti14cwza3" class="article-share-link">Compartir</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li></ul>
@@ -560,57 +618,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/08/02/PowerShell-Alias设置/" data-id="cja4s0cq3002ajl8twtsne13f" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/08/02/PowerShell-Alias设置/" data-id="cja9ph8w70027km8t0qyi2os4" class="article-share-link">Compartir</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-C-读取XML格式内容" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/07/28/C-读取XML格式内容/" class="article-date">
-  <time datetime="2017-07-28T12:30:05.000Z" itemprop="datePublished">2017-07-28</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/07/28/C-读取XML格式内容/">C#读取XML格式内容</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>XML(Extensible Markup Language)可扩展标记语言是一种标准通用语言的子集，通常我们将其称为XML格式，对应的还有JSON(JavaScript Object Notation)JS对象标记数据格式等。<br>在C#中要读取XML格式的数据，常用方法是按照XML语法对数据进行解析，然后提取感兴趣的信息。</p>
-<h2 id="使用XmlDocument的方式"><a href="#使用XmlDocument的方式" class="headerlink" title="使用XmlDocument的方式"></a>使用XmlDocument的方式</h2><p><code>XmlDocument</code>类能够存储一份XML格式数据，可以将其看成一棵树，通过访问树的节点和属性来访问XML数据。<br>以下代码实现了用递归的方式遍历XML树：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">private string TravelXmlTree(string xmlStr)</div><div class="line">&#123;</div><div class="line">	XmlDocument xml = new XmlDocument();</div><div class="line">	try</div><div class="line">	&#123;</div><div class="line">		xml.LoadXml(xmlStr);</div><div class="line">		XmlNode node = (XmlNode)xml.DocumentElement;</div><div class="line">		travelNode(node);</div><div class="line">		return xml.OuterXml;</div><div class="line">	&#125;</div><div class="line">	catch</div><div class="line">	&#123;</div><div class="line">		return xmlStr;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">private void travelNode(XmlNode node)</div><div class="line">&#123;</div><div class="line">	// do some operation to attributes</div><div class="line">	if (node.Attributes != null)</div><div class="line">	&#123;</div><div class="line">		foreach (XmlAttribute attr in node.Attributes)</div><div class="line">		&#123;</div><div class="line">			string str = attr.Value;</div><div class="line">			node.Attributes[attr.Name].Value = guid;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	// travel the child nodes</div><div class="line">	if (node.HasChildNodes)</div><div class="line">	&#123;</div><div class="line">		foreach (XmlNode child in node.ChildNodes)</div><div class="line">		&#123;</div><div class="line">			travelNode(child);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	// if the node is leaf, visit InnerText</div><div class="line">	else</div><div class="line">	&#123;</div><div class="line">		string str = node.InnerText;</div><div class="line">		node.InnerText = &quot;111&quot;;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="使用XmlReader进行流式读取的方式"><a href="#使用XmlReader进行流式读取的方式" class="headerlink" title="使用XmlReader进行流式读取的方式"></a>使用XmlReader进行流式读取的方式</h2><p>有些时候，当整个XML数据太大时，使用<code>XmlDocument</code>进行数据的载入<code>.load</code>会抛出out of memory的异常。<br>这时候可选方案是使用<code>XmlReader</code>类，以流式读取XML格式字符串内容，一边读取一边处理。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">private string ConvertGuidToUuidInXmlContentByTravel(string xmlStr)</div><div class="line">&#123;</div><div class="line">	using (XmlReader reader = XmlReader.Create(new StringReader(xmlStr)))</div><div class="line">	&#123;</div><div class="line">		try</div><div class="line">		&#123;</div><div class="line">			while (reader.Read())</div><div class="line">			&#123;</div><div class="line">				switch (reader.NodeType)</div><div class="line">				&#123;</div><div class="line">					case XmlNodeType.Element:</div><div class="line">						for (int attInd = 0; attInd &lt; reader.AttributeCount; attInd++)</div><div class="line">						&#123;</div><div class="line">							reader.MoveToAttribute(attInd);</div><div class="line">							string attr = reader.Name;</div><div class="line">							string str = reader.Value;</div><div class="line">						&#125;</div><div class="line">						reader.MoveToElement();</div><div class="line">						break;</div><div class="line">					case XmlNodeType.Text:</div><div class="line">						string str2 = reader.Value;</div><div class="line">						break;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		catch</div><div class="line">		&#123;</div><div class="line">			return xmlStr;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>当然，使用流式读取的一个缺点在于，无法即时地对<code>xmlStr</code>数据本身进行编辑操作。通常只能在读取的过程中将相关信息记录下来，在读取结束后执行对应的编辑。   </p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/28/C-读取XML格式内容/" data-id="cja4s0coe000ijl8tf701feux" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li></ul>
 
     </footer>
   </div>
@@ -623,7 +634,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><a class="extend next" rel="next" href="/blog-hexo/page/3/">weiter &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/">&laquo; Previo</a><a class="page-number" href="/blog-hexo/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><a class="extend next" rel="next" href="/blog-hexo/page/3/">Siguiente &raquo;</a>
   </nav>
 
 </section>
@@ -632,7 +643,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categorías</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li></ul>
     </div>
@@ -652,16 +663,16 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
+    <h3 class="widget-title">Nube de Tags</h3>
     <div class="widget tagcloud">
-      <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 14px;">Angular</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 14px;">C#</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 12px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 12px;">Command Line</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Git/" style="font-size: 18px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 16px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 18px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 12px;">PowerShell</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 14px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+      <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 14px;">Angular</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 14px;">C#</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 12px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 12px;">Command Line</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Git/" style="font-size: 18px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 16px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 18px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 12px;">Mysql</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 12px;">PowerShell</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 14px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
     </div>
   </div>
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archivos</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -671,9 +682,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Posts recientes</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2017/11/21/Mysql导出数据库表结构到Excel/">Mysql导出数据库表结构到Excel</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2017/11/18/Git-Fast-forward的一些常识/">Git Fast-forward的一些常识</a>
@@ -691,10 +706,6 @@
             <a href="/blog-hexo/2017/11/09/PHPUnit测试protected方法/">PHPUnit测试protected方法</a>
           </li>
         
-          <li>
-            <a href="/blog-hexo/2017/11/02/AngularJS中ng-if和ng-show的区别/">AngularJS中ng-if和ng-show的区别</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -708,7 +719,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2017 ckmessi<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Construido por <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>

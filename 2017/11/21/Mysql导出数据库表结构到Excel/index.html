@@ -5,19 +5,19 @@
   
 
   
-  <title>Apache配置php5升级为php7 | 不止是一位程序员</title>
+  <title>Mysql导出数据库表结构到Excel | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近遇到一个问题，在测试服上测通了的代码，推到正式服之后却出现莫名其妙的问题。后来经多方查找，终于发现原来是正式服的php版本和测试服的不一致。测试服是php7，而正式服是php5.6。这样就有了升级php版本的需求。结合服务器使用的是Apache2，这里大概列举一下升级相关的步骤。     安装php7在Ubuntu下安装php7还是比较容易的，如果是Ubuntu16，自带php7的源，可以直接">
-<meta name="keywords" content="PHP,Apache">
+  <meta name="description" content="在工作中遇到这样一个问题，希望能够将Mysql数据库的表结构导出，方便进行分析。通常情况下，可以使用mysqldump命令，添加只导出数据库结构的选项，得到sql文件。1mysqldump --opt --host [db_host] -d [db_name] -u [user_name] -p &amp;gt; output.sql 然而得到的结果文件是sql语法的，尽管能够用于再次导入，但可读性较差。">
+<meta name="keywords" content="Mysql">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Apache配置php5升级为php7">
-<meta property="og:url" content="http://ckmessi.github.io/2017/07/06/Apache配置php5升级为php7/index.html">
+<meta property="og:title" content="Mysql导出数据库表结构到Excel">
+<meta property="og:url" content="http://ckmessi.github.io/2017/11/21/Mysql导出数据库表结构到Excel/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
-<meta property="og:description" content="最近遇到一个问题，在测试服上测通了的代码，推到正式服之后却出现莫名其妙的问题。后来经多方查找，终于发现原来是正式服的php版本和测试服的不一致。测试服是php7，而正式服是php5.6。这样就有了升级php版本的需求。结合服务器使用的是Apache2，这里大概列举一下升级相关的步骤。     安装php7在Ubuntu下安装php7还是比较容易的，如果是Ubuntu16，自带php7的源，可以直接">
-<meta property="og:updated_time" content="2017-07-07T15:45:00.000Z">
+<meta property="og:description" content="在工作中遇到这样一个问题，希望能够将Mysql数据库的表结构导出，方便进行分析。通常情况下，可以使用mysqldump命令，添加只导出数据库结构的选项，得到sql文件。1mysqldump --opt --host [db_host] -d [db_name] -u [user_name] -p &amp;gt; output.sql 然而得到的结果文件是sql语法的，尽管能够用于再次导入，但可读性较差。">
+<meta property="og:updated_time" content="2017-11-21T14:21:51.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Apache配置php5升级为php7">
-<meta name="twitter:description" content="最近遇到一个问题，在测试服上测通了的代码，推到正式服之后却出现莫名其妙的问题。后来经多方查找，终于发现原来是正式服的php版本和测试服的不一致。测试服是php7，而正式服是php5.6。这样就有了升级php版本的需求。结合服务器使用的是Apache2，这里大概列举一下升级相关的步骤。     安装php7在Ubuntu下安装php7还是比较容易的，如果是Ubuntu16，自带php7的源，可以直接">
+<meta name="twitter:title" content="Mysql导出数据库表结构到Excel">
+<meta name="twitter:description" content="在工作中遇到这样一个问题，希望能够将Mysql数据库的表结构导出，方便进行分析。通常情况下，可以使用mysqldump命令，添加只导出数据库结构的选项，得到sql文件。1mysqldump --opt --host [db_host] -d [db_name] -u [user_name] -p &amp;gt; output.sql 然而得到的结果文件是sql语法的，尽管能够用于再次导入，但可读性较差。">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -68,10 +68,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-Apache配置php5升级为php7" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Mysql导出数据库表结构到Excel" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog-hexo/2017/07/06/Apache配置php5升级为php7/" class="article-date">
-  <time datetime="2017-07-06T14:05:39.000Z" itemprop="datePublished">2017-07-06</time>
+    <a href="/blog-hexo/2017/11/21/Mysql导出数据库表结构到Excel/" class="article-date">
+  <time datetime="2017-11-21T14:07:09.000Z" itemprop="datePublished">2017-11-21</time>
 </a>
     
   <div class="article-category">
@@ -86,7 +86,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Apache配置php5升级为php7
+      Mysql导出数据库表结构到Excel
     </h1>
   
 
@@ -94,23 +94,21 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近遇到一个问题，在测试服上测通了的代码，推到正式服之后却出现莫名其妙的问题。后来经多方查找，终于发现原来是正式服的php版本和测试服的不一致。测试服是php7，而正式服是php5.6。<br>这样就有了升级php版本的需求。<br>结合服务器使用的是Apache2，这里大概列举一下升级相关的步骤。    </p>
-<h2 id="安装php7"><a href="#安装php7" class="headerlink" title="安装php7"></a>安装php7</h2><p>在Ubuntu下安装php7还是比较容易的，如果是Ubuntu16，自带php7的源，可以直接使用apt-get进行安装；如果是Ubuntu14，则需要先手动添加如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install -y language-pack-en-base </div><div class="line">$ sudo LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php</div></pre></td></tr></table></figure></p>
-<p>如果说add-apt-repository command not find，则可能需要：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install software-properties-common </div><div class="line">sudo apt-get install python-software-properties（实测这一句可能多余）</div></pre></td></tr></table></figure></p>
-<p>更新源列表：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get update</div></pre></td></tr></table></figure></p>
-<p>然后安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install php7.0</div></pre></td></tr></table></figure></p>
-<p>对应地，安装php7.0-fpm、php7.0-mysql等许多插件。</p>
-<h2 id="设置apache关联"><a href="#设置apache关联" class="headerlink" title="设置apache关联"></a>设置apache关联</h2><p>尽管安装了php7，但apache服务器默认关联的php还是php5，在这种情况下需要使用以下命令进行修改。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo a2dismod php5.6;</div><div class="line">sudo a2enmod php7.0; </div><div class="line">sudo service apache2 restart</div></pre></td></tr></table></figure></p>
-<p>这样就完成了apache关联php的版本转换。</p>
-<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>在升级后，需要安装需要插件确保服务器的正常运行。<br>使用<code>php -m</code>可以查看当前已经安装的模块，缺少任何模块时，可以通过<code>apt-get install php7.0-xxx</code>进行安装。</p>
+        <p>在工作中遇到这样一个问题，希望能够将Mysql数据库的表结构导出，方便进行分析。<br>通常情况下，可以使用<code>mysqldump</code>命令，添加只导出数据库结构的选项，得到sql文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysqldump --opt --host [db_host] -d [db_name] -u [user_name] -p &gt; output.sql</div></pre></td></tr></table></figure></p>
+<p>然而得到的结果文件是sql语法的，尽管能够用于再次导入，但可读性较差。  </p>
+
+<p>后来发现一种方式，能够直接在可视化数据库连接应用（如<code>Navicat</code>, <code>Sequel Pro</code>）中获取数据库表结构。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">SELECT</div><div class="line">  TABLE_NAME 表名,</div><div class="line">  COLUMN_NAME 列名,</div><div class="line">  COLUMN_TYPE 数据类型,</div><div class="line">    DATA_TYPE 字段类型,</div><div class="line">  CHARACTER_MAXIMUM_LENGTH 长度,</div><div class="line">  IS_NULLABLE 是否为空,</div><div class="line">  COLUMN_DEFAULT 默认值,</div><div class="line">  COLUMN_COMMENT 备注 </div><div class="line">FROM</div><div class="line"> INFORMATION_SCHEMA.COLUMNS</div><div class="line">WHERE</div><div class="line">table_schema =&apos;[database_name]&apos;</div></pre></td></tr></table></figure></p>
+<p>得到的结果直接全选复制，粘贴到Excel表格中即可。</p>
+
+<p>参考链接：<br>    <a href="http://www.jb51.net/article/28855.htm" target="_blank" rel="external">http://www.jb51.net/article/28855.htm</a><br>    <a href="http://blog.csdn.net/yangshijin1988/article/details/70229473" target="_blank" rel="external">http://blog.csdn.net/yangshijin1988/article/details/70229473</a>     </p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/06/Apache配置php5升级为php7/" data-id="cja9ph8sp0006km8t8d8e3jl7" class="article-share-link">Compartir</a>
+      <a data-url="http://ckmessi.github.io/2017/11/21/Mysql导出数据库表结构到Excel/" data-id="cja9ph8vf001skm8t149p312j" class="article-share-link">Compartir</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li></ul>
 
     </footer>
   </div>
@@ -118,19 +116,10 @@
     
 <nav id="article-nav">
   
-    <a href="/blog-hexo/2017/07/07/使用mysqldump快速拷贝一个数据库/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Nuevo</strong>
-      <div class="article-nav-title">
-        
-          使用mysqldump快速拷贝一个数据库
-        
-      </div>
-    </a>
   
-  
-    <a href="/blog-hexo/2017/06/28/Hexo个人博客使用流程/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/blog-hexo/2017/11/18/Git-Fast-forward的一些常识/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Viejo</strong>
-      <div class="article-nav-title">Hexo个人博客使用流程</div>
+      <div class="article-nav-title">Git Fast-forward的一些常识</div>
     </a>
   
 </nav>
