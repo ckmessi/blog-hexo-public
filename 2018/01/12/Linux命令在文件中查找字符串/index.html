@@ -5,14 +5,19 @@
   
 
   
-  <title>Archiv: 2017/9 | 不止是一位程序员</title>
+  <title>Linux命令在文件中查找字符串 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="不止是一位程序员">
-<meta property="og:url" content="http://ckmessi.github.io/archives/2017/09/index.html">
+  <meta name="description" content="使用grep命令指定文件在指定文件中查找相关字符串，可以使用grep命令：1grep [target_str] [target_file] 比如查找后台访问日志中，调用接口v1/user/profile/2的所有记录：1grep v1/user/profile/2 storage/logs/laravel-2016-11-25.log 指定文件夹在指定文件夹中查找相关字符串，可以使用带参数的gre">
+<meta name="keywords" content="Linux,grep">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux命令在文件中查找字符串">
+<meta property="og:url" content="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="使用grep命令指定文件在指定文件中查找相关字符串，可以使用grep命令：1grep [target_str] [target_file] 比如查找后台访问日志中，调用接口v1/user/profile/2的所有记录：1grep v1/user/profile/2 storage/logs/laravel-2016-11-25.log 指定文件夹在指定文件夹中查找相关字符串，可以使用带参数的gre">
+<meta property="og:updated_time" content="2018-01-12T05:44:53.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="不止是一位程序员">
+<meta name="twitter:title" content="Linux命令在文件中查找字符串">
+<meta name="twitter:description" content="使用grep命令指定文件在指定文件中查找相关字符串，可以使用grep命令：1grep [target_str] [target_file] 比如查找后台访问日志中，调用接口v1/user/profile/2的所有记录：1grep v1/user/profile/2 storage/logs/laravel-2016-11-25.log 指定文件夹在指定文件夹中查找相关字符串，可以使用带参数的gre">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -63,116 +68,65 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog-hexo/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/09/23/React-Router-v4的使用/" class="archive-article-date">
-  <time datetime="2017-09-23T11:12:33.000Z" itemprop="datePublished">Sep 23</time>
+        <section id="main"><article id="post-Linux命令在文件中查找字符串" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/01/12/Linux命令在文件中查找字符串/" class="article-date">
+  <time datetime="2018-01-12T05:44:14.000Z" itemprop="datePublished">2018-01-12</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/09/23/React-Router-v4的使用/">React Router v4的使用</a>
+    <h1 class="article-title" itemprop="name">
+      Linux命令在文件中查找字符串
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/09/22/php7新特性中的一些语法糖/" class="archive-article-date">
-  <time datetime="2017-09-22T12:54:22.000Z" itemprop="datePublished">Sep 22</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/09/22/php7新特性中的一些语法糖/">php7新特性中的一些语法糖</a>
-    </h1>
-  
+        <h2 id="使用grep命令"><a href="#使用grep命令" class="headerlink" title="使用grep命令"></a>使用<code>grep</code>命令</h2><h4 id="指定文件"><a href="#指定文件" class="headerlink" title="指定文件"></a>指定文件</h4><p>在指定文件中查找相关字符串，可以使用<code>grep</code>命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">grep [target_str] [target_file]</div></pre></td></tr></table></figure></p>
+<p>比如查找后台访问日志中，调用接口<code>v1/user/profile/2</code>的所有记录：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">grep v1/user/profile/2 storage/logs/laravel-2016-11-25.log</div></pre></td></tr></table></figure></p>
+<h4 id="指定文件夹"><a href="#指定文件夹" class="headerlink" title="指定文件夹"></a>指定文件夹</h4><p>在指定文件夹中查找相关字符串，可以使用带参数的<code>grep</code>命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">grep -rnw [target_dir] -e [target_str]</div></pre></td></tr></table></figure></p>
+<p>其中<code>-r</code>或<code>-R</code>表示递归向下搜索，<code>-n</code>是显示匹配行号，<code>-w</code>表示匹配整个字符。</p>
+<h2 id="使用find命令结合grep命令"><a href="#使用find命令结合grep命令" class="headerlink" title="使用find命令结合grep命令"></a>使用<code>find</code>命令结合<code>grep</code>命令</h2><p>在一堆文件中查找相关字符串及其出现的文件，可以使用<code>find</code>命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">find [dir_path] -type f -exec grep -H [target_str] &#123;&#125; \;</div></pre></td></tr></table></figure></p>
+<p>其中<code>find</code>命令是Linux中常用的查找命令，后面接着的<code>-exec grep ... {} \;</code>表示执行<code>grep</code>命令，注意后面的<code>{} \;</code>是必须的。grep</p>
+<p>这类命令还是以实际使用场景为准，具体问题查询具体的参数语法即可。</p>
+<p>参考链接：<a href="https://stackoverflow.com/questions/16956810/how-do-i-find-all-files-containing-specific-text-on-linux" target="_blank" rel="external">https://stackoverflow.com/questions/16956810/how-do-i-find-all-files-containing-specific-text-on-linux</a></p>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/09/18/开源许可协议简介/" class="archive-article-date">
-  <time datetime="2017-09-18T14:22:23.000Z" itemprop="datePublished">Sep 18</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/09/18/开源许可协议简介/">开源许可协议简介</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/09/12/Access-Control-Allow-Origin实现跨域访问/" class="archive-article-date">
-  <time datetime="2017-09-12T13:26:43.000Z" itemprop="datePublished">Sep 12</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="cjcbi0oo2001hir8t1oexzih5" class="article-share-link">Teilen</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/09/12/Access-Control-Allow-Origin实现跨域访问/">Access-Control-Allow-Origin实现跨域访问</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/09/11/Azure-Application-Insights入门/" class="archive-article-date">
-  <time datetime="2017-09-11T14:32:06.000Z" itemprop="datePublished">Sep 11</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/09/11/Azure-Application-Insights入门/">Azure Application Insights入门</a>
-    </h1>
-  
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li></ul>
 
-    </header>
+    </footer>
   </div>
-</article>
+  
+    
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/blog-hexo/2018/01/04/Linux管道和awk实现字符连接/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">Linux管道和awk实现字符连接</div>
+    </a>
   
+</nav>
 
+  
+</article>
 
 </section>
         
