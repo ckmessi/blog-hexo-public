@@ -52,9 +52,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Buscar"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -64,6 +64,147 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-借鉴py-faster-rcnn完成自定义的对象检测任务" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/" class="article-date">
+  <time datetime="2018-01-13T05:13:15.000Z" itemprop="datePublished">2018-01-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/深度学习/">深度学习</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/">借鉴py-faster-rcnn完成自定义的对象检测任务</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这篇文章主要讲解如何基于<code>py-faster-rcnn</code>完成自定义的对象检测任务。</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>有时，在工作中需要使用<code>对象检测</code>方法在图片中检测出特定类别的物体。作为目前相对先进的对象检测算法，<code>faster-rcnn</code>成为可选算法之一，此外还可以考虑<code>YOLO</code>、<code>SSD</code>等方法。<br>本文借鉴了rgb大神的<code>py-faster-rcnn</code>项目进行修改，主要记录进行的相关修改内容。<br><code>py-faster-rcnn</code>的Github地址：<a href="https://github.com/rbgirshick/py-faster-rcnn" target="_blank" rel="external">https://github.com/rbgirshick/py-faster-rcnn</a></p>
+<p>项目<code>py-faster-rcnn</code>是基于<code>Caffe</code>框架用<code>Python</code>语言实现的<code>faster-rcnn</code>算法，因此需要有以下基本知识背景：</p>
+<ul>
+<li>基本的Python语法</li>
+<li>Caffe框架使用方法</li>
+<li>Pascal VOC数据集</li>
+</ul>
+<p>本文基于的系统环境为：</p>
+<ul>
+<li>Unbuntu 16.04</li>
+<li>python 2.7.12</li>
+<li>Cuda 8.0</li>
+</ul>
+<h2 id="第1部，运行Demo"><a href="#第1部，运行Demo" class="headerlink" title="第1部，运行Demo"></a>第1部，运行Demo</h2><p>首先参考项目主页的README文档内容，尝试跑通<code>py-faster-rcnn</code>项目，以验证环境是否满足相关依赖。</p>
+<p>1.1）首先递归地clone整个项目：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone --recursive https://github.com/rbgirshick/py-faster-rcnn.git</div></pre></td></tr></table></figure></p>
+<p>1.2）安装Cython模块：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd $FRCN_ROOT/lib</div><div class="line">make</div></pre></td></tr></table></figure></p>
+<p>其中<code>$FRCN_ROOT</code>表示<code>py-faster-rcnn</code>项目所在目录的根路径。</p>
+<p>1.3）安装Caffe和pycaffe，注意<code>Makefile.config</code>中要设置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># In your Makefile.config, make sure to have this line uncommented</div><div class="line">WITH_PYTHON_LAYER := 1</div><div class="line"># Unrelatedly, it&apos;s also recommended that you use CUDNN</div><div class="line">USE_CUDNN := 1</div></pre></td></tr></table></figure></p>
+<p>其中设置<code>WITH_PYTHON_LAYER</code>是必须的，而<code>USE_CUDNN</code>是可选的。配置好<code>Makefile.config</code>文件后，执行命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd $FRCN_ROOT/caffe-fast-rcnn</div><div class="line">make -j16</div><div class="line">make pycaffe</div></pre></td></tr></table></figure></p>
+<p>1.4）下载预先训练好的Faster R-CNN模型，里面包含了一个<code>VGG16</code>和一个<code>ZF</code>的caffemodel。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd $FRCN_ROOT</div><div class="line">./data/scripts/fetch_faster_rcnn_models.sh</div></pre></td></tr></table></figure></p>
+<p>目标是在<code>$FRCN_ROOT/data</code>目录下存在<code>faster_rcnn_models</code>文件夹，里面放置着相关模型文件。</p>
+<p>1.5）讲道理，这时候就可以运行demo了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd $FRCN_ROOT</div><div class="line">./tools/demo.py</div></pre></td></tr></table></figure></p>
+<p>顺利的话，如果你的操作系统有图形界面，此时会弹出几张图片，图片上用颜色框出了被检测到的对象。</p>
+<p>注：</p>
+<ul>
+<li>其中可能会遇到各种问题，大多数是python库缺失的问题，可以使用<code>pip install xxx</code>解决。</li>
+<li>在<code>demo.py</code>脚本中使用的图片路径是<code>cfg.DATA_DIR</code>，实质是<code>lib/fast_rcnn/config.py</code>文件中的配置，默认是<code>data/demo</code>下的几张图片，可以根据需要修改为自定义的图片路径。</li>
+<li>另外，官方教程将demo放在这一步，没有考虑一个问题：大多数服务器是没有图形界面的。而<code>demo.py</code>中需要显示图片，在命令行下是会报错的。需要进行相应修改，具体可参考<code>demo.py</code>文件中的<code>vis_detections()</code>函数。</li>
+</ul>
+<h2 id="第2步，运行官方的训练"><a href="#第2步，运行官方的训练" class="headerlink" title="第2步，运行官方的训练"></a>第2步，运行官方的训练</h2><p>在完成demo后，接下来可以尝试根据官方教程执行训练操作，为此后自定义地进行模型训练打下基础。<br>这个部分的流程主要有以下几点：</p>
+<ul>
+<li>准备数据集</li>
+<li>准备预训练模型</li>
+<li>修改对应训练脚本</li>
+<li>执行脚本。</li>
+</ul>
+<p>2.1）下载<code>Pascal VOC</code>数据集，包括<code>VOC2007</code>相关的训练集、验证集和测试集，以及相关开发包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">wget http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCtrainval_06-Nov-2007.tar</div><div class="line">wget http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCtest_06-Nov-2007.tar</div><div class="line">wget http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCdevkit_08-Jun-2007.tar</div></pre></td></tr></table></figure></p>
+<p>解压到放置大型数据的位置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">tar xvf VOCtrainval_06-Nov-2007.tar</div><div class="line">tar xvf VOCtest_06-Nov-2007.tar</div><div class="line">tar xvf VOCdevkit_08-Jun-2007.tar</div></pre></td></tr></table></figure></p>
+<p>此时，在相关位置，目录文件结构应该是如下的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$VOCdevkit/  # VOC开发工具包根目录</div><div class="line">$VOCdevkit/VOCcode/ # VOC工具代码</div><div class="line">$VOCdevkit/VOC2007 # 图片、标注信息等</div></pre></td></tr></table></figure></p>
+<p>在<code>py-faster-rcnn</code>项目中设置软链接，指向真实的数据存放位置。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd $FRCN_ROOT/data</div><div class="line">ln -s $VOCdevkit VOCdevkit2007</div></pre></td></tr></table></figure></p>
+<p>这种方式有助于在多个项目中共享同一份数据集文件，并且能够控制代码项目的大小，将所有较大的数据集文件统一归类放置。</p>
+<p>2.2）下载训练好的<code>ImageNet</code>网络模型：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd $FRCN_ROOT</div><div class="line">./data/scripts/fetch_imagenet_models.sh</div></pre></td></tr></table></figure></p>
+<p>2.3）修改对应的脚本内容：</p>
+<p>这一步由于目前是执行官方训练，不需要修改相关内容。</p>
+<p>2.4）执行训练脚本，执行<code>experiments/scripts/faster_rcnn_end2end.sh</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">cd $FRCN_ROOT</div><div class="line">./experiments/scripts/faster_rcnn_end2end.sh [GPU_ID] [NET] [--set ...]</div><div class="line"># GPU_ID is the GPU you want to train on</div><div class="line"># NET in &#123;ZF, VGG_CNN_M_1024, VGG16&#125; is the network arch to use</div><div class="line"># --set ... allows you to specify fast_rcnn.config options, e.g.</div><div class="line"># --set EXP_DIR seed_rng1701 RNG_SEED 1701</div></pre></td></tr></table></figure></p>
+<p>上述是官方文档的示例说明，实质上执行的命令为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./experiments/scripts/faster_rcnn_end2end.sh 0 VGG16 pascal_voc</div></pre></td></tr></table></figure></p>
+<p>这一步可能会遇到挺多问题，主要问题有两个：</p>
+<p>遇到<code>AttributeError: &#39;module&#39; object has no attribute &#39;text_format&#39;</code>的问题，参考<a href="https://github.com/rbgirshick/py-faster-rcnn/issues/198，解决方案是在`tools/train_net.py`前添加：" target="_blank" rel="external">https://github.com/rbgirshick/py-faster-rcnn/issues/198，解决方案是在`tools/train_net.py`前添加：</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import google.protobuf.text_format</div></pre></td></tr></table></figure></p>
+<p>可能会遇到<code>TypeError: slice indices must be integers or None or have an index method</code>的问题，参考<a href="https://github.com/rbgirshick/py-faster-rcnn/issues/480，为了解决numpy1.13不支持Float作为数组下标的问题，在`lib/proposal_target_layer.py`文件中添加：" target="_blank" rel="external">https://github.com/rbgirshick/py-faster-rcnn/issues/480，为了解决numpy1.13不支持Float作为数组下标的问题，在`lib/proposal_target_layer.py`文件中添加：</a><br>（在126行之后）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">start=int(start)</div><div class="line">end=int(end)</div></pre></td></tr></table></figure></p>
+<p>（在166行之后）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fg_rois_per_this_image=int(fg_rois_per_this_image)</div></pre></td></tr></table></figure></p>
+<p>解决相关问题后，训练脚本应该可以运行，结果文件输出在<code>$FRCN_ROOT/output</code>文件夹中。</p>
+<h2 id="第3步，改造模型"><a href="#第3步，改造模型" class="headerlink" title="第3步，改造模型"></a>第3步，改造模型</h2><p><code>py-faster-rcnn</code>项目实现了端到端的对象检测算法，基础模型包含了20个类别。<br>在某些场景下可能不需要这么多类别，并且希望检测的对象类别可能不在上述20个类别中，这时候需要改造<code>py-faster-rcnn</code>，训练适合自定义任务的网络模型。<br>改造模型的流程类似于第2步中的4个步骤：</p>
+<ul>
+<li>准备数据集（这一步比较辛苦，需要进行数据的标注，并以指定格式组织好）</li>
+<li>准备预训练模型（这一步很简单，直接使用此前的<code>ImageNet</code>模型即可）</li>
+<li>修改对应训练脚本（这一步比较关键，主要是类比<code>pascal_voc</code>数据集的训练方法，创建属于自定义任务的训练方法</li>
+<li>执行脚本。</li>
+</ul>
+<p>因此，改造模型的工作量主要集中在数据集的准备以及相关脚本代码的修改。<br>假定我们的数据集名称为<code>custom_task</code>，这个名称的性质与<code>pascal_voc</code>相同，会在之后的修改中多次用到。</p>
+<h4 id="准备数据集"><a href="#准备数据集" class="headerlink" title="准备数据集"></a>准备数据集</h4><p><code>Pascal VOC</code>这个数据集比较著名，仔细研究之后可以发现，与对象检测相关的数据文件有几个：</p>
+<ul>
+<li>原始图片，放置在<code>JPEGImages</code>目录下，假定有n张图片</li>
+<li>图片标注，放置在<code>Annotations</code>目录下，同样也有n个文件，文件名称与图片名称一一对应，后缀名由<code>.jpg</code>替换为<code>.xml</code></li>
+<li>训练/测试图片列表文件，可命名为<code>trainval.txt</code>，放置在<code>ImageSets/Main</code>目录下</li>
+</ul>
+<p>其中原始图片全都放置在<code>JPEGImages</code>目录下即可。<br>对应根据划分生成<code>trainval.txt</code>文件内容，每行为一个文件名称，格式可参考<code>Pascal VOC</code>数据集中相关文件的格式。<br>比较麻烦的图片标注，生成的xml文件格式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&lt;annotation&gt;    # 标准tag根节点</div><div class="line">        &lt;folder&gt;CUSTOM2018&lt;/folder&gt;    # 数据集名称，需要与数据集所在根目录名称相同</div><div class="line">        &lt;filename&gt;0000110.jpg&lt;/filename&gt;    # 图片名称</div><div class="line">        &lt;object&gt;</div><div class="line">                &lt;name&gt;class_2&lt;/name&gt;    # 类别名称，需要与此后datasets相关脚本中的类别相同</div><div class="line">                &lt;difficult&gt;0&lt;/difficult&gt;    # 不确定有什么用，但缺少了会报错</div><div class="line">                &lt;bndbox&gt;                        # bounding box信息，包含4个值</div><div class="line">                        &lt;xmin&gt;945&lt;/xmin&gt;</div><div class="line">                        &lt;ymin&gt;696&lt;/ymin&gt;</div><div class="line">                        &lt;xmax&gt;1131&lt;/xmax&gt;</div><div class="line">                        &lt;ymax&gt;897&lt;/ymax&gt;</div><div class="line">                &lt;/bndbox&gt;</div><div class="line">        &lt;/object&gt;</div><div class="line">        &lt;object&gt;</div><div class="line">                &lt;name&gt;class_2&lt;/name&gt;</div><div class="line">                &lt;difficult&gt;0&lt;/difficult&gt;</div><div class="line">                &lt;bndbox&gt;</div><div class="line">                        &lt;xmin&gt;566&lt;/xmin&gt;</div><div class="line">                        &lt;ymin&gt;945&lt;/ymin&gt;</div><div class="line">                        &lt;xmax&gt;756&lt;/xmax&gt;</div><div class="line">                        &lt;ymax&gt;1080&lt;/ymax&gt;</div><div class="line">                &lt;/bndbox&gt;</div><div class="line">        &lt;/object&gt;</div><div class="line">&lt;/annotation&gt;</div></pre></td></tr></table></figure></p>
+<p>借鉴<code>Pascal VOC</code>数据集中相关文件的格式，生成并组织好自己的数据集，就可以执行接下来的步骤。</p>
+<h4 id="修改相关脚本文件"><a href="#修改相关脚本文件" class="headerlink" title="修改相关脚本文件"></a>修改相关脚本文件</h4><p>这一步内容比较庞大，将详细讲解。<br>3.1）修改相关网络结构定义<br>在路径<code>$FRCN_ROOT/models/[dataset_name]/[model_name]/faster_rcnn_end2end</code>目录下，放置着三个网络结构定义文件：</p>
+<ul>
+<li>test.prototxt</li>
+<li>train.prototxt</li>
+<li>solver.prototxt</li>
+</ul>
+<p>对于自定义的数据集，也需要创建类似路径的文件，并修改网络结构。其中主要是针对检测目标类别数量的修改：<br>对于<code>solver.prototxt</code>，修改：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">train_net: &quot;models/pascal_voc/VGG16/faster_rcnn_end2end/train.prototxt&quot;</div></pre></td></tr></table></figure></p>
+<p>为对应自身对应的<code>train.prototxt</code>路径：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">train_net: &quot;models/[dataset_name]/[model_name]/faster_rcnn_end2end/train.prototxt&quot;</div></pre></td></tr></table></figure></p>
+<p>另外，对于快照存放路径：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">snapshot_prefix: &quot;vgg16_faster_rcnn&quot;</div></pre></td></tr></table></figure></p>
+<p>最好修改为其它路径，否则会在<code>$FRCN_ROOT</code>项目根目录下产生很多模型文件，使项目目录杂乱无章。</p>
+<p>对于<code>test.prototxt</code>和<code>train.prototxt</code>文件，主要有以下几点：<br>（搜索”input-data”层相关）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">layer &#123;</div><div class="line">  name: &apos;input-data&apos;</div><div class="line">  type: &apos;Python&apos;</div><div class="line">  top: &apos;data&apos;</div><div class="line">  top: &apos;im_info&apos;</div><div class="line">  top: &apos;gt_boxes&apos;</div><div class="line">  python_param &#123;</div><div class="line">    module: &apos;roi_data_layer.layer&apos;</div><div class="line">    layer: &apos;RoIDataLayer&apos;</div><div class="line">    param_str: &quot;&apos;num_classes&apos;: 21&quot;    # 这里需要修改为类别数量+1</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>（搜索”roi-data”层相关）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">layer &#123;</div><div class="line">  name: &apos;roi-data&apos;</div><div class="line">  type: &apos;Python&apos;</div><div class="line">  bottom: &apos;rpn_rois&apos;</div><div class="line">  bottom: &apos;gt_boxes&apos;</div><div class="line">  top: &apos;rois&apos;</div><div class="line">  top: &apos;labels&apos;</div><div class="line">  top: &apos;bbox_targets&apos;</div><div class="line">  top: &apos;bbox_inside_weights&apos;</div><div class="line">  top: &apos;bbox_outside_weights&apos;</div><div class="line">  python_param &#123;</div><div class="line">    module: &apos;rpn.proposal_target_layer&apos;</div><div class="line">    layer: &apos;ProposalTargetLayer&apos;</div><div class="line">    param_str: &quot;&apos;num_classes&apos;: 21&quot;    # 这里需要修改为类别数量+1</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>（搜索”cls_score”层相关）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">layer &#123;</div><div class="line">  name: &quot;cls_score&quot;</div><div class="line">  type: &quot;InnerProduct&quot;</div><div class="line">  bottom: &quot;fc7&quot;</div><div class="line">  top: &quot;cls_score&quot;</div><div class="line">  param &#123;</div><div class="line">    lr_mult: 1</div><div class="line">  &#125;</div><div class="line">  param &#123;</div><div class="line">    lr_mult: 2</div><div class="line">  &#125;</div><div class="line">  inner_product_param &#123;</div><div class="line">    num_output: 21    # 这里需要修改为类别数量+1</div><div class="line">    weight_filler &#123;</div><div class="line">      type: &quot;gaussian&quot;</div><div class="line">      std: 0.01</div><div class="line">    &#125;</div><div class="line">    bias_filler &#123;</div><div class="line">      type: &quot;constant&quot;</div><div class="line">      value: 0</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>（搜索”bbox_pred”层相关）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">layer &#123;</div><div class="line">  name: &quot;bbox_pred&quot;</div><div class="line">  type: &quot;InnerProduct&quot;</div><div class="line">  bottom: &quot;fc7&quot;</div><div class="line">  top: &quot;bbox_pred&quot;</div><div class="line">  param &#123;</div><div class="line">    lr_mult: 1</div><div class="line">  &#125;</div><div class="line">  param &#123;</div><div class="line">    lr_mult: 2</div><div class="line">  &#125;</div><div class="line">  inner_product_param &#123;</div><div class="line">    num_output: 84    # 这里需要修改为(类别数量+1) * 4</div><div class="line">    weight_filler &#123;</div><div class="line">      type: &quot;gaussian&quot;</div><div class="line">      std: 0.001</div><div class="line">    &#125;</div><div class="line">    bias_filler &#123;</div><div class="line">      type: &quot;constant&quot;</div><div class="line">      value: 0</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>3.2）修改自定义的训练数据集定义脚本</p>
+<p>主要修改文件有两个：</p>
+<ul>
+<li>修改<code>./lib/datasets/factory.py</code></li>
+<li>添加<code>./lib/datasets/custom_task.py</code>文件</li>
+</ul>
+<p>在文件<code>./lib/datasets/factory.py</code>中，依照<code>pascal_voc</code>和<code>coco</code>的相关代码，添加相关代码。<br>导入代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">from datasets.custom_task import custom_task</div></pre></td></tr></table></figure></p>
+<p>需要设置<code>__sets</code>变量中对应键值的内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">for year in [&apos;2018&apos;]:</div><div class="line">    for split in [&apos;trainval&apos;, &apos;test&apos;]:</div><div class="line">        name = &apos;custom_task_&#123;&#125;_&#123;&#125;&apos;.format(year, split)</div><div class="line">        __sets[name] = (lambda split=split, year=year: head(split, year))</div></pre></td></tr></table></figure></p>
+<p>至于新创建的<code>./lib/datasets/custom_task.py</code>文件，可以模仿<code>./lib/datasets/pascal_voc.py</code>进行修改，主要注意修改如下几点：<br>所有名称出现<code>voc</code>的位置进行对应替换：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">imdb.__init__(self, &apos;voc_&apos; + year + &apos;_&apos; + image_set)</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">annopath = os.path.join(</div><div class="line">            self._devkit_path,</div><div class="line">            &apos;VOC&apos; + self._year,</div><div class="line">            &apos;Annotations&apos;,</div><div class="line">            &apos;&#123;:s&#125;.xml&apos;)</div><div class="line">        imagesetfile = os.path.join(</div><div class="line">            self._devkit_path,</div><div class="line">            &apos;VOC&apos; + self._year,</div><div class="line">            &apos;ImageSets&apos;,</div><div class="line">            &apos;Main&apos;,</div><div class="line">            self._image_set + &apos;.txt&apos;)</div></pre></td></tr></table></figure>
+<p>修改类别名称及数量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">self._classes = (&apos;__background__&apos;, # always index 0</div><div class="line">                         &apos;aeroplane&apos;, &apos;bicycle&apos;, &apos;bird&apos;, &apos;boat&apos;,</div><div class="line">                         &apos;bottle&apos;, &apos;bus&apos;, &apos;car&apos;, &apos;cat&apos;, &apos;chair&apos;,</div><div class="line">                         &apos;cow&apos;, &apos;diningtable&apos;, &apos;dog&apos;, &apos;horse&apos;,</div><div class="line">                         &apos;motorbike&apos;, &apos;person&apos;, &apos;pottedplant&apos;,</div><div class="line">                         &apos;sheep&apos;, &apos;sofa&apos;, &apos;train&apos;, &apos;tvmonitor&apos;)</div></pre></td></tr></table></figure></p>
+<p>3.3）修改训练脚本<br>执行训练的入口是<code>./experiments/scripts/faster_rcnn_end2end.sh</code>脚本。<br>我们希望执行的也是一个端到端的训练，因此不需要新建训练脚本，只需要在文件<code>faster_rcnn_end2end.sh</code>中添加一个新的数据集：<br>原始脚本中关于数据集选择的定义代码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">case $DATASET in</div><div class="line">  pascal_voc)</div><div class="line">    TRAIN_IMDB=&quot;voc_2007_trainval&quot;</div><div class="line">    TEST_IMDB=&quot;voc_2007_test&quot;</div><div class="line">    PT_DIR=&quot;pascal_voc&quot;</div><div class="line">    ITERS=70000</div><div class="line">    ;;</div><div class="line">  coco)</div><div class="line">    # This is a very long and slow training schedule</div><div class="line">    # You can probably use fewer iterations and reduce the</div><div class="line">    # time to the LR drop (set in the solver to 350,000 iterations).</div><div class="line">    TRAIN_IMDB=&quot;coco_2014_train&quot;</div><div class="line">    TEST_IMDB=&quot;coco_2014_minival&quot;</div><div class="line">    PT_DIR=&quot;coco&quot;</div><div class="line">    ITERS=490000</div><div class="line">    ;;</div><div class="line">  *)</div><div class="line">    echo &quot;No dataset given&quot;</div><div class="line">    exit</div><div class="line">    ;;</div><div class="line">esac</div></pre></td></tr></table></figure></p>
+<p>类比于<code>pascal_voc</code>和<code>coco</code>，添加自定义的数据集任务如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">customer_task)</div><div class="line">  TRAIN_IMDB=&quot;custom_task_2018_trainval&quot;</div><div class="line">  TEST_IMDB=&quot;custom_task_2014_test&quot;</div><div class="line">  PT_DIR=&quot;custom_task&quot;</div><div class="line">  ITERS=50000</div><div class="line">  ;;</div></pre></td></tr></table></figure></p>
+<p>查看脚本后续代码可知：<br><code>PT_DIR</code>用于定义<code>--solver</code>的路径名称，因此设置<code>PT_DIR=&quot;custom_task&quot;</code>意味着能够在<code>models/custom_task/[model_name]/faster_rcnn_end2end/</code>目录下找到<code>solver.prototxt</code>文件；<br><code>TRAIN_IMDB</code>和<code>TEST_IMDB</code>作为<code>--imdb</code>参数的内容传入<code>$PRCN_ROOT/tools/train_net.py</code>和<code>$PRCN_ROOT/tool/test_net.py</code>脚本中，具体使用内容可查看相关代码，基本格式是<code>[dataset_name]_[year]_[split_name]</code>。</p>
+<p>完成上述修改后，可以尝试开始执行训练。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文记录了借鉴<code>py-faster-rcnn</code>进行改造，完成自定义对象检测任务的主要流程。<br>其中包括了必须执行的相关步骤，以及可能遇到的一些坑。</p>
+<h2 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h2><p>参考链接：<a href="https://github.com/rbgirshick/py-faster-rcnn" target="_blank" rel="external">https://github.com/rbgirshick/py-faster-rcnn</a><br>参考链接：<a href="https://saicoco.github.io/object-detection-4/" target="_blank" rel="external">https://saicoco.github.io/object-detection-4/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/" data-id="cjccwd5y10037ch8tcfg1x3fr" class="article-share-link">Compartir</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Linux命令在文件中查找字符串" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -103,7 +244,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="cjcbi0oo2001hir8t1oexzih5" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="cjccwd5w60021ch8t0coccy7r" class="article-share-link">Compartir</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li></ul>
@@ -158,7 +299,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/04/Linux管道和awk实现字符连接/" data-id="cjcbi0ool0021ir8tpfeebydg" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/04/Linux管道和awk实现字符连接/" data-id="cjccwd5wa0025ch8t4rl2hqsh" class="article-share-link">Compartir</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li></ul>
@@ -206,7 +347,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/02/Mac使用命令行快速生成zip包/" data-id="cjcbi0ooe001wir8thlpws38v" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/02/Mac使用命令行快速生成zip包/" data-id="cjccwd5wf0027ch8ttyozdnp8" class="article-share-link">Compartir</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li></ul>
@@ -255,7 +396,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/21/Mysql导出数据库表结构到Excel/" data-id="cjcbi0oot002gir8tumizcdpu" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/21/Mysql导出数据库表结构到Excel/" data-id="cjccwd5wo002ach8t492cc60i" class="article-share-link">Compartir</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li></ul>
@@ -315,7 +456,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/18/Git-Fast-forward的一些常识/" data-id="cjcbi0oni000vir8t0sa7fr3k" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/18/Git-Fast-forward的一些常识/" data-id="cjccwd5u4000och8twct9l31f" class="article-share-link">Compartir</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -361,7 +502,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/17/Laravel扩展Guzzle-发送HTTP请求/" data-id="cjcbi0oo6001mir8tv1or8oj3" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/17/Laravel扩展Guzzle-发送HTTP请求/" data-id="cjccwd5vu001vch8tjuj5r47n" class="article-share-link">Compartir</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -410,7 +551,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/14/Laravel模拟创建Request/" data-id="cjcbi0opa002nir8teb9cc452" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/14/Laravel模拟创建Request/" data-id="cjccwd5vy001ych8tt9ik76vt" class="article-share-link">Compartir</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -461,7 +602,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/09/PHPUnit测试protected方法/" data-id="cjcbi0opk0037ir8tfghhd0on" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/09/PHPUnit测试protected方法/" data-id="cjccwd5wr002dch8t0hlue530" class="article-share-link">Compartir</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li></ul>
@@ -520,71 +661,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/02/AngularJS中ng-if和ng-show的区别/" data-id="cjcbi0omo0004ir8tbdrw6u9n" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Angular1模块间通信方式" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/10/30/Angular1模块间通信方式/" class="article-date">
-  <time datetime="2017-10-30T13:34:14.000Z" itemprop="datePublished">2017-10-30</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/10/30/Angular1模块间通信方式/">Angular1模块间通信方式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在Angular中通常需要进行模块间通讯，总结常用的几种通讯方式如下。</p>
-<h2 id="通讯方式"><a href="#通讯方式" class="headerlink" title="通讯方式"></a>通讯方式</h2><ul>
-<li>共享Service</li>
-<li>基于事件：自定义$broadcast及$emit</li>
-<li>在link函数中使用属性</li>
-<li>单向数据流+$onChanges</li>
-<li>使用第三方工具</li>
-</ul>
-<h4 id="共享Service"><a href="#共享Service" class="headerlink" title="共享Service"></a>共享Service</h4><p>定义一个公有的服务，多个组件都导入该service并访问。相当于创建了一个全局变量。</p>
-<h4 id="基于事件：自定义-broadcast及-emit"><a href="#基于事件：自定义-broadcast及-emit" class="headerlink" title="基于事件：自定义$broadcast及$emit"></a>基于事件：自定义$broadcast及$emit</h4><p>Angular1提供了scope之间事件的传播机制。<br>使用<code>scope.$emit</code>可以往父级scope传播自定义事件并携带数据，<br>使用<code>scope.$broadcast</code>可以给所有子scope广播事件和数据，<br>使用<code>scope.$on(eventName,callback)</code>方法在所有需要接收到的scope中监听事件。<br>然而可能造成的问题是，每广播一次，整个scope下面的监听器都需要检测是否有对应的事件在监听并执行，如果scope层级较深，效率不高，代码也不容易追踪。</p>
-<h4 id="在link函数中使用属性"><a href="#在link函数中使用属性" class="headerlink" title="在link函数中使用属性"></a>在link函数中使用属性</h4><p>每个directive在定义的时候都有一个<code>link</code>函数，函数签名的第三个参数是attrs，代表在该directive上面的所有属性数组。<br>attrs提供了一些方法，比较有用的是<code>$set</code>和<code>$observe</code>，前者可以自定义attr或修改已经有的attr的值，后者可以监听到该值的变化。<br>利用这种方式，我们可以让在位于同一个dom元素上的两个directive进行通讯，因为它们之间共享一个attrs数组。</p>
-<h4 id="单向数据流-onChanges"><a href="#单向数据流-onChanges" class="headerlink" title="单向数据流+$onChanges"></a>单向数据流+$onChanges</h4><p>通过在component中声明bindings，可以进行数据的单向绑定，实现父组件与子组件之间的通信。</p>
-<h4 id="使用第三方工具"><a href="#使用第三方工具" class="headerlink" title="使用第三方工具"></a>使用第三方工具</h4><p>如<code>Rxjs</code>等工具。</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>个人感觉可以将通讯场景分为两种：</p>
-<ul>
-<li>父子模块间的通信</li>
-<li>平行模块间的通信</li>
-</ul>
-<p>对于父子模块间的通信，通常可使用事件、属性传递、单向数据流等基础方式进行，缺点是当层次较多时，需要一层层传递，比较麻烦。<br>对于平行模块间的通信，最常用的可用共享Service，这相当于定义了一个全局变量，缺点在于增加了不同模块之间的耦合性。<br>此外还可以使用第三方组件（如<code>Rxjs</code>）进行监听和订阅，缺点在于不容易跟踪代码，此外需要注意取消订阅，否则可能会有内存泄露的问题。  </p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><blockquote>
-<p><a href="http://www.cnblogs.com/myzhibie/p/5745018.html" target="_blank" rel="external">http://www.cnblogs.com/myzhibie/p/5745018.html</a></p>
-</blockquote>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/30/Angular1模块间通信方式/" data-id="cjcbi0oms0006ir8t5ie2zn76" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/02/AngularJS中ng-if和ng-show的区别/" data-id="cjccwd5th0006ch8t5c7d2e2d" class="article-share-link">Compartir</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -600,7 +677,7 @@
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/blog-hexo/page/2/">2</a><a class="page-number" href="/blog-hexo/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/5/">5</a><a class="extend next" rel="next" href="/blog-hexo/page/2/">weiter &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/blog-hexo/page/2/">2</a><a class="page-number" href="/blog-hexo/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/5/">5</a><a class="extend next" rel="next" href="/blog-hexo/page/2/">Siguiente &raquo;</a>
   </nav>
 
 </section>
@@ -609,9 +686,9 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categorías</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
   </div>
 
@@ -621,7 +698,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
     </div>
   </div>
 
@@ -629,16 +706,16 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
+    <h3 class="widget-title">Nube de Tags</h3>
     <div class="widget tagcloud">
-      <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 14px;">Angular</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 14px;">C#</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 12px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 12px;">Command Line</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Git/" style="font-size: 18px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 16px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 18px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 12px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 12px;">Mysql</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 12px;">PowerShell</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 14px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+      <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 14px;">Angular</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 14px;">C#</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 12px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 12px;">Command Line</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Git/" style="font-size: 18px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 16px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 18px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 12px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 12px;">Mysql</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 12px;">PowerShell</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 14px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
     </div>
   </div>
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archivos</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -648,9 +725,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Posts recientes</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/">借鉴py-faster-rcnn完成自定义的对象检测任务</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2018/01/12/Linux命令在文件中查找字符串/">Linux命令在文件中查找字符串</a>
@@ -668,10 +749,6 @@
             <a href="/blog-hexo/2017/11/21/Mysql导出数据库表结构到Excel/">Mysql导出数据库表结构到Excel</a>
           </li>
         
-          <li>
-            <a href="/blog-hexo/2017/11/18/Git-Fast-forward的一些常识/">Git Fast-forward的一些常识</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -685,7 +762,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2018 ckmessi<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Construido por <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
