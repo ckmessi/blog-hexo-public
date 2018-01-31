@@ -5,14 +5,19 @@
   
 
   
-  <title>Tag: Frontend | 不止是一位程序员</title>
+  <title>Laravel中对OPTIONS请求的批量处理 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="不止是一位程序员">
-<meta property="og:url" content="http://ckmessi.github.io/tags/Frontend/index.html">
+  <meta name="description" content="在前后端分离的应用中，需要使用CORS完成跨域访问。在CORS中发送非简单请求时，前端会发一个类型为OPTIONS的预请求，服务器需要正确响应这个OPTIONS请求后，前端才会发送正常的请求，否则前端将抛出跨域相关的错误。 这篇文章主要总结在Laravel中如何正确处理这类OPTIONS请求。 问题描述Laraval处理OPTIONS方式的请求机制是个谜。 假设我们请求的url是http://lo">
+<meta name="keywords" content="PHP,Laravel">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Laravel中对OPTIONS请求的批量处理">
+<meta property="og:url" content="http://ckmessi.github.io/2018/01/31/Laravel中对OPTIONS请求的批量处理/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="在前后端分离的应用中，需要使用CORS完成跨域访问。在CORS中发送非简单请求时，前端会发一个类型为OPTIONS的预请求，服务器需要正确响应这个OPTIONS请求后，前端才会发送正常的请求，否则前端将抛出跨域相关的错误。 这篇文章主要总结在Laravel中如何正确处理这类OPTIONS请求。 问题描述Laraval处理OPTIONS方式的请求机制是个谜。 假设我们请求的url是http://lo">
+<meta property="og:updated_time" content="2018-01-31T06:06:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="不止是一位程序员">
+<meta name="twitter:title" content="Laravel中对OPTIONS请求的批量处理">
+<meta name="twitter:description" content="在前后端分离的应用中，需要使用CORS完成跨域访问。在CORS中发送非简单请求时，前端会发一个类型为OPTIONS的预请求，服务器需要正确响应这个OPTIONS请求后，前端才会发送正常的请求，否则前端将抛出跨域相关的错误。 这篇文章主要总结在Laravel中如何正确处理这类OPTIONS请求。 问题描述Laraval处理OPTIONS方式的请求机制是个谜。 假设我们请求的url是http://lo">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -63,40 +68,70 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog-hexo/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/09/12/Access-Control-Allow-Origin实现跨域访问/" class="archive-article-date">
-  <time datetime="2017-09-12T13:26:43.000Z" itemprop="datePublished">Sep 12</time>
+        <section id="main"><article id="post-Laravel中对OPTIONS请求的批量处理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/01/31/Laravel中对OPTIONS请求的批量处理/" class="article-date">
+  <time datetime="2018-01-31T06:05:51.000Z" itemprop="datePublished">2018-01-31</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/09/12/Access-Control-Allow-Origin实现跨域访问/">Access-Control-Allow-Origin实现跨域访问</a>
+    <h1 class="article-title" itemprop="name">
+      Laravel中对OPTIONS请求的批量处理
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在前后端分离的应用中，需要使用CORS完成跨域访问。在CORS中发送<code>非简单请求</code>时，前端会发一个类型为<code>OPTIONS</code>的预请求，服务器需要正确响应这个OPTIONS请求后，前端才会发送正常的请求，否则前端将抛出跨域相关的错误。</p>
+<p>这篇文章主要总结在Laravel中如何正确处理这类OPTIONS请求。</p>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>Laraval处理OPTIONS方式的请求机制是个谜。</p>
+<p>假设我们请求的url是<code>http://localhost:8080/api/test</code>，请求方式是<code>OPTIONS</code>。<br>如果请求的url不存在相关的其它方式（如GET或POST）的请求，则会返回404 NOT FOUND的错误。<br>如果存在相同url的请求，会返回一个200响应，但没有任何内容。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Route::get(&apos;/test&apos;, &apos;TestController@test&apos;);</div></pre></td></tr></table></figure></p>
+<p>同时通过分析可以发现，这个OPTIONS请求不会进到相关路由的生命周期，至少GET或POST请求所在路由文件的中间件是没有进入的。</p>
+<p>如果手动添加一个OPTIONS请求，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Route::get(&apos;/test&apos;, &apos;TestController@test&apos;);</div><div class="line">Route::options(&apos;/test&apos;, function(Request $request) &#123;</div><div class="line">    return response(&apos;abc&apos;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>则会至少进入该路由文件所带有的中间件，可以在相关<code>handle</code>函数中捕获到这个请求。</p>
+<p>这样就有点头疼，不知道在哪里处理OPTIONS请求比较好，总不能针对跨域请求的每一个GET或POST请求都撰写一个同名的<code>OPTIONS</code>类型的路由。</p>
+<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><p>查询Laravel官方文档<a href="https://laravel.com/docs/5.5/routing#parameters-regular-expression-constraints" target="_blank" rel="external">Routing</a>，可知如何在路由中使用正则表达式进行模式匹配。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Route::get(&apos;user/&#123;id&#125;/&#123;name&#125;&apos;, function ($id, $name) &#123;</div><div class="line">    //</div><div class="line">&#125;)-&gt;where([&apos;id&apos; =&gt; &apos;[0-9]+&apos;, &apos;name&apos; =&gt; &apos;[a-z]+&apos;]);</div></pre></td></tr></table></figure></p>
+<p>类似的，可以撰写针对<code>OPTIONS</code>类型请求的泛化处理路由条件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Route::options(&apos;/&#123;all&#125;&apos;, function(Request $request) &#123;</div><div class="line">     return response(&apos;options here!&apos;);</div><div class="line">&#125;)-&gt;where([&apos;all&apos; =&gt; &apos;([a-zA-Z-]|/)+&apos;]);</div></pre></td></tr></table></figure></p>
+<p><strong>注：这里正则表达式中不能使用符号<code>*</code></strong></p>
+<p>因此，针对跨域问题，对于<code>OPTIONS</code>方式的请求可以撰写如下路由响应：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Route::options(&apos;/&#123;all&#125;&apos;, function(Request $request) &#123;</div><div class="line">    $origin = $request-&gt;header(&apos;ORIGIN&apos;, &apos;*&apos;);</div><div class="line">    header(&quot;Access-Control-Allow-Origin: $origin&quot;);</div><div class="line">    header(&quot;Access-Control-Allow-Credentials: true&quot;);</div><div class="line">    header(&apos;Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE&apos;);</div><div class="line">    header(&apos;Access-Control-Allow-Headers: Origin, Access-Control-Request-Headers, SERVER_NAME, Access-Control-Allow-Headers, cache-control, token, X-Requested-With, Content-Type, Accept, Connection, User-Agent, Cookie&apos;);</div><div class="line">&#125;)-&gt;where([&apos;all&apos; =&gt; &apos;([a-zA-Z-]|/)+&apos;]);</div></pre></td></tr></table></figure></p>
+<p>这样即可泛化地处理所有OPTIONS请求，不需要额外进行处理。</p>
 
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/01/31/Laravel中对OPTIONS请求的批量处理/" data-id="cjd2o5nt9001h3w8t7451faym" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog-hexo/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">借鉴py-faster-rcnn完成自定义的对象检测任务</div>
+    </a>
+  
+</nav>
+
+  
+</article>
 
 </section>
         
