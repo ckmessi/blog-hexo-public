@@ -5,19 +5,14 @@
   
 
   
-  <title>Solution(.sln) File in Visual Studio | 不止是一位程序员</title>
+  <title>Categoría: 后台 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="使用Visual Studio创建的项目都包含一个.sln文件，本文简要说明文件的内容及相关作用。 文件说明在Visual Studio中，解决方案是用于组织管理项目的结构。解决方案将所有项目的状态信息保存在.sln文件和.suo文件中。.sln文件以文本信息的方式，保存着环境需要用于查找和载入项目及其引用VSPackage的持久化数据name-value参数。当一个用户打开解决方案时，开发环境将">
-<meta name="keywords" content="VisualStudio">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Solution(.sln) File in Visual Studio">
-<meta property="og:url" content="http://ckmessi.github.io/2017/08/18/Solution-sln-File-in-Visual-Studio/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="不止是一位程序员">
+<meta property="og:url" content="http://ckmessi.github.io/categories/后台/page/3/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
-<meta property="og:description" content="使用Visual Studio创建的项目都包含一个.sln文件，本文简要说明文件的内容及相关作用。 文件说明在Visual Studio中，解决方案是用于组织管理项目的结构。解决方案将所有项目的状态信息保存在.sln文件和.suo文件中。.sln文件以文本信息的方式，保存着环境需要用于查找和载入项目及其引用VSPackage的持久化数据name-value参数。当一个用户打开解决方案时，开发环境将">
-<meta property="og:updated_time" content="2017-08-18T13:35:45.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Solution(.sln) File in Visual Studio">
-<meta name="twitter:description" content="使用Visual Studio创建的项目都包含一个.sln文件，本文简要说明文件的内容及相关作用。 文件说明在Visual Studio中，解决方案是用于组织管理项目的结构。解决方案将所有项目的状态信息保存在.sln文件和.suo文件中。.sln文件以文本信息的方式，保存着环境需要用于查找和载入项目及其引用VSPackage的持久化数据name-value参数。当一个用户打开解决方案时，开发环境将">
+<meta name="twitter:title" content="不止是一位程序员">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -68,92 +63,45 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-Solution-sln-File-in-Visual-Studio" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/08/18/Solution-sln-File-in-Visual-Studio/" class="article-date">
-  <time datetime="2017-08-18T13:34:32.000Z" itemprop="datePublished">2017-08-18</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+        <section id="main">
   
-    <h1 class="article-title" itemprop="name">
-      Solution(.sln) File in Visual Studio
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/blog-hexo/archives/2017" class="archive-year">2017</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/blog-hexo/2017/05/16/Hashids的使用/" class="archive-article-date">
+  <time datetime="2017-05-16T04:06:00.000Z" itemprop="datePublished">May 16</time>
+</a>
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/blog-hexo/2017/05/16/Hashids的使用/">Hashids的使用</a>
     </h1>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>使用Visual Studio创建的项目都包含一个<code>.sln</code>文件，本文简要说明文件的内容及相关作用。</p>
-<h2 id="文件说明"><a href="#文件说明" class="headerlink" title="文件说明"></a>文件说明</h2><p>在Visual Studio中，解决方案是用于组织管理项目的结构。解决方案将所有项目的状态信息保存在<code>.sln</code>文件和<code>.suo</code>文件中。<code>.sln</code>文件以文本信息的方式，保存着环境需要用于查找和载入项目及其引用VSPackage的持久化数据name-value参数。当一个用户打开解决方案时，开发环境将遍历<code>.sln</code>文件中的<code>preSolution</code>、<code>Project</code>和<code>postSolution</code>信息，载入解决方案、解决方案中的项目、以及解决方案相关联的持久化信息。</p>
-<h2 id="内容概览"><a href="#内容概览" class="headerlink" title="内容概览"></a>内容概览</h2><p>我们可以显示地将<code>.sln</code>文件中的内容划分为以下几个部分：</p>
-<h4 id="第一部分，版本信息"><a href="#第一部分，版本信息" class="headerlink" title="第一部分，版本信息"></a>第一部分，版本信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Microsoft Visual Studio Solution File, Format Version 12.00</div><div class="line"># Visual Studio 14</div><div class="line">VisualStudioVersion = 14.0.25420.1</div><div class="line">MinimumVisualStudioVersion = 10.0.40219.1</div></pre></td></tr></table></figure>
-<h4 id="第二部分，项目信息"><a href="#第二部分，项目信息" class="headerlink" title="第二部分，项目信息"></a>第二部分，项目信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Project(&quot;&#123;FAE04EC0-301F-11D3-BF4B-00C04F79EFBC&#125;&quot;) = &quot;WebApplicationSample&quot;, &quot;WebApplicationSample\WebApplicationSample.csproj&quot;, &quot;&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;&quot;</div><div class="line">EndProject</div></pre></td></tr></table></figure>
-<h4 id="第三部分，全局信息"><a href="#第三部分，全局信息" class="headerlink" title="第三部分，全局信息"></a>第三部分，全局信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">Global</div><div class="line">	GlobalSection(SolutionConfigurationPlatforms) = preSolution</div><div class="line">		Debug|Any CPU = Debug|Any CPU</div><div class="line">		Release|Any CPU = Release|Any CPU</div><div class="line">	EndGlobalSection</div><div class="line">	GlobalSection(ProjectConfigurationPlatforms) = postSolution</div><div class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Debug|Any CPU.ActiveCfg = Debug|Any CPU</div><div class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Debug|Any CPU.Build.0 = Debug|Any CPU</div><div class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Release|Any CPU.ActiveCfg = Release|Any CPU</div><div class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Release|Any CPU.Build.0 = Release|Any CPU</div><div class="line">	EndGlobalSection</div><div class="line">	GlobalSection(SolutionProperties) = preSolution</div><div class="line">		HideSolutionNode = FALSE</div><div class="line">	EndGlobalSection</div><div class="line">EndGlobal</div></pre></td></tr></table></figure>
-<h2 id="开发环境载入流程"><a href="#开发环境载入流程" class="headerlink" title="开发环境载入流程"></a>开发环境载入流程</h2><p>参考(MSDN官方文档)[<a href="https://msdn.microsoft.com/en-us/library/bb165951.aspx]，为了载入`解决方案`，环境平台将执行以下任务：" target="_blank" rel="external">https://msdn.microsoft.com/en-us/library/bb165951.aspx]，为了载入`解决方案`，环境平台将执行以下任务：</a></p>
-<ol>
-<li><p>开发环境将阅读Global区域，处理所有标记为<code>preSolution</code>的区域，例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">GlobalSection(SolutionConfigurationPlatforms) = preSolution</div><div class="line">	Debug|Any CPU = Debug|Any CPU</div><div class="line">	Release|Any CPU = Release|Any CPU</div></pre></td></tr></table></figure>
-</li>
-<li><p>开发环境载入VSPackage，调用其中的接口<code>QueryInterface</code>，并使用区域中的数据调用<code>ReadSolutionProps</code>方法，这样数据就能存储在VSPackage中。开发环境将对每个<code>preSolution</code>区域重复这个流程。</p>
-</li>
-<li><p>开发环境迭代存留区域（persistence blocks）的项目。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Project(&quot;&#123;FAE04EC0-301F-11D3-BF4B-00C04F79EFBC&#125;&quot;) = &quot;WebApplicationSample&quot;, &quot;WebApplicationSample\WebApplicationSample.csproj&quot;, &quot;&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;&quot;</div><div class="line">EndProject</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>这份声明包含了唯一的项目GUID，以及项目类型GUID。这些信息是被开发环境用于找到属于解决方案的项目文件，以及每个项目所需要的VSPackage。项目GUID将被传递给IVsProjectFactory以载入相关的VSPackage，然后载入项目。</p>
-<ol>
-<li><p>基于.sln文件项目区域所包含的信息，环境变量载入每个项目文件。项目自身需要负责构建项目层级并载入内嵌的项目</p>
-</li>
-<li><p>在.sln文件所有区域后，解决方案将被显示在Solution Explorer中，并准备好呈现给用户。</p>
-</li>
-</ol>
-<p>如果解决方案中任何实现项目的VSPackage载入失败，将调用<code>OnProjectLoadFailure</code>方法，其它项目将让用户选择是否忽略。如果发生解析错误，开发环境将显示对话框警告用户解决方案损坏了。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>.sln</code>文件包含了解决方案所需要的相关信息，包括开发环境的版本要求、属于解决方案的项目信息、载入解决方案所需要执行的相关操作等。在启动时，开发环境将根据<code>.sln</code>文件执行相关准备，完成后将解决方案呈现给用户，否则提供相关的提示信息。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/08/18/Solution-sln-File-in-Visual-Studio/" data-id="cjd5r8erq002va28tozx6pbkb" class="article-share-link">Compartir</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li></ul>
-
-    </footer>
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/blog-hexo/2017/08/19/Laravel中Collection排序函数的使用/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Nuevo</strong>
-      <div class="article-nav-title">
-        
-          Laravel中Collection排序函数的使用
-        
-      </div>
-    </a>
-  
-  
-    <a href="/blog-hexo/2017/08/11/NodeJS读写文件/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Viejo</strong>
-      <div class="article-nav-title">NodeJS读写文件</div>
-    </a>
-  
-</nav>
-
-  
 </article>
+  
+  
+    </div></section>
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/blog-hexo/categories/后台/page/2/">&laquo; Previo</a><a class="page-number" href="/blog-hexo/categories/后台/">1</a><a class="page-number" href="/blog-hexo/categories/后台/page/2/">2</a><span class="page-number current">3</span>
+  </nav>
 
 </section>
         
