@@ -65,6 +65,57 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-PHP-unpack-函数的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/03/19/PHP-unpack-函数的使用/" class="article-date">
+  <time datetime="2018-03-19T12:31:56.000Z" itemprop="datePublished">2018-03-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/03/19/PHP-unpack-函数的使用/">PHP unpack()函数的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近工作中遇到需要使用<code>base64_decode()</code>解码加密过的base64字符串的问题，然而这个字符串是在<code>Python</code>语言中使用<code>base64.b64encode</code>方法加密的，在PHP中没有直接对应的解码方式，这时候就需要用到<code>PHP</code>的<code>unpack()</code>函数。</p>
+<p>官方对于<code>unpack()</code>函数的解释是：从二进制字符串对数据进行解包。<br>它的语法为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">unpack(format,data)</div></pre></td></tr></table></figure></p>
+<p>其中<code>format</code>必需，规定在解包数据时所使用的格式；<code>data</code>可选，规定被解包的二进制数据。</p>
+<p>format 参数的可能值：<br>a - NUL-padded string<br>A - SPACE-padded string<br>h - Hex string, low nibble first<br>H - Hex string, high nibble first<br>c - signed char<br>C - unsigned char<br>s - signed short (always 16 bit, machine byte order)<br>S - unsigned short (always 16 bit, machine byte order)<br>n - unsigned short (always 16 bit, big endian byte order)<br>v - unsigned short (always 16 bit, little endian byte order)<br>i - signed integer (machine dependent size and byte order)<br>I - unsigned integer (machine dependent size and byte order)<br>l - signed long (always 32 bit, machine byte order)<br>L - unsigned long (always 32 bit, machine byte order)<br>N - unsigned long (always 32 bit, big endian byte order)<br>V - unsigned long (always 32 bit, little endian byte order)<br>f - float (machine dependent size and representation)<br>d - double (machine dependent size and representation)<br>x - NUL byte<br>X - Back up one byte<br>@ - NUL-fill to absolute position</p>
+<p>有一些基础样例可以参考，摘自PHP官方手册。</p>
+<p>按照<code>char</code>和<code>unsigned short</code>进行解析，并且以<code>chars</code>和<code>int</code>为键保存结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">$binarydata = &quot;\x04\x00\xa0\x00&quot;;</div><div class="line">$array = unpack(&quot;cchars/nint&quot;, $binarydata);</div><div class="line">print_r($array);</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<p>结果是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Array</div><div class="line">(</div><div class="line">    [chars] =&gt; 4</div><div class="line">    [int] =&gt; 160</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p>具体使用方案可以根据实际情况进行选择，比如将字符串按照<code>float</code>类型，128维长度数组，进行解析，则代码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$feature_array = unpack(&quot;f128&quot;, $feature_str);</div></pre></td></tr></table></figure></p>
+<p>得到的结果为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;1&quot;: -0.037321969866753,</div><div class="line">    &quot;2&quot;: -0.12857535481453,</div><div class="line">    &quot;3&quot;: 0.09706449508667,</div><div class="line">    &quot;4&quot;: 0.049328539520502,</div><div class="line">    &quot;5&quot;: 0.039704125374556,</div><div class="line">    ...,</div><div class="line">    &quot;128&quot;: -0.064088962972164</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/" data-id="cjey80beg002kyf8tbh5hmwtn" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Nginx-PHP上传大文件场景需要注意的配置" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" class="article-date">
@@ -108,7 +159,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" data-id="cjeiga0g4002e8z8tozfken1g" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" data-id="cjey80beo002qyf8tyf5nkgqm" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -204,7 +255,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/01/初识AIDL/" data-id="cjeiga0gv003u8z8taiip3vpe" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/01/初识AIDL/" data-id="cjey80bg30043yf8t1akjvy56" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li></ul>
@@ -299,7 +350,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" data-id="cjeiga0fu001s8z8tla77xz4z" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" data-id="cjey80bdh001oyf8tej1kyeh6" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -345,7 +396,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="cjeiga0g3002a8z8ta83319lu" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="cjey80bee002gyf8t922w2gcl" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li></ul>
@@ -420,7 +471,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/31/Laravel中对OPTIONS请求的批量处理/" data-id="cjeiga0fx00208z8teiwq4u2g" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/31/Laravel中对OPTIONS请求的批量处理/" data-id="cjey80bdv001vyf8t6e1nynn8" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -561,7 +612,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/" data-id="cjeiga0gu003r8z8tztkh1kc9" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/" data-id="cjey80bfv003tyf8tp58eszyc" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li></ul>
@@ -611,7 +662,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="cjeiga0g6002h8z8tcx2hys26" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="cjey80bec002dyf8tj42og872" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li></ul>
@@ -666,7 +717,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/04/Linux管道和awk实现字符连接/" data-id="cjeiga0g100268z8tinqqc4id" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/04/Linux管道和awk实现字符连接/" data-id="cjey80be90027yf8tjzav27ap" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li></ul>
@@ -714,59 +765,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/02/Mac使用命令行快速生成zip包/" data-id="cjeiga0g8002l8z8t913a2wj8" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/02/Mac使用命令行快速生成zip包/" data-id="cjey80bea002ayf8tp3shmc9v" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Mysql导出数据库表结构到Excel" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/11/21/Mysql导出数据库表结构到Excel/" class="article-date">
-  <time datetime="2017-11-21T14:07:09.000Z" itemprop="datePublished">2017-11-21</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/11/21/Mysql导出数据库表结构到Excel/">Mysql导出数据库表结构到Excel</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在工作中遇到这样一个问题，希望能够将Mysql数据库的表结构导出，方便进行分析。<br>通常情况下，可以使用<code>mysqldump</code>命令，添加只导出数据库结构的选项，得到sql文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysqldump --opt --host [db_host] -d [db_name] -u [user_name] -p &gt; output.sql</div></pre></td></tr></table></figure></p>
-<p>然而得到的结果文件是sql语法的，尽管能够用于再次导入，但可读性较差。  </p>
-<img src="/blog-hexo/2017/11/21/Mysql导出数据库表结构到Excel/1.png" alt="输出的sql文件内容" title="输出的sql文件内容">
-<p>后来发现一种方式，能够直接在可视化数据库连接应用（如<code>Navicat</code>, <code>Sequel Pro</code>）中获取数据库表结构。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">SELECT</div><div class="line">  TABLE_NAME 表名,</div><div class="line">  COLUMN_NAME 列名,</div><div class="line">  COLUMN_TYPE 数据类型,</div><div class="line">    DATA_TYPE 字段类型,</div><div class="line">  CHARACTER_MAXIMUM_LENGTH 长度,</div><div class="line">  IS_NULLABLE 是否为空,</div><div class="line">  COLUMN_DEFAULT 默认值,</div><div class="line">  COLUMN_COMMENT 备注 </div><div class="line">FROM</div><div class="line"> INFORMATION_SCHEMA.COLUMNS</div><div class="line">WHERE</div><div class="line">table_schema =&apos;[database_name]&apos;</div></pre></td></tr></table></figure></p>
-<p>得到的结果直接全选复制，粘贴到Excel表格中即可。</p>
-<img src="/blog-hexo/2017/11/21/Mysql导出数据库表结构到Excel/2.png" alt="SequelPro中的查询结果" title="SequelPro中的查询结果">
-<p>参考链接：<br>    <a href="http://www.jb51.net/article/28855.htm" target="_blank" rel="external">http://www.jb51.net/article/28855.htm</a><br>    <a href="http://blog.csdn.net/yangshijin1988/article/details/70229473" target="_blank" rel="external">http://blog.csdn.net/yangshijin1988/article/details/70229473</a>     </p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/21/Mysql导出数据库表结构到Excel/" data-id="cjeiga0g9002n8z8tjm2oo3f6" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li></ul>
 
     </footer>
   </div>
@@ -832,6 +834,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2018/03/19/PHP-unpack-函数的使用/">PHP unpack()函数的使用</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/">Nginx+PHP上传大文件场景需要注意的配置</a>
           </li>
         
@@ -845,10 +851,6 @@
         
           <li>
             <a href="/blog-hexo/2018/02/02/MySQL连接缓慢的情况处理/">MySQL连接缓慢的情况处理</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/01/31/Laravel中对OPTIONS请求的批量处理/">Laravel中对OPTIONS请求的原理探索及批量处理方案</a>
           </li>
         
       </ul>
