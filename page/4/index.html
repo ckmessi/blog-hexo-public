@@ -54,7 +54,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -64,6 +64,54 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-PowerShell-Alias设置" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/08/02/PowerShell-Alias设置/" class="article-date">
+  <time datetime="2017-08-02T11:35:29.000Z" itemprop="datePublished">2017-08-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/08/02/PowerShell-Alias设置/">PowerShell Alias设置</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在PowerShell中，可以定义一些别名，实现许多复杂命令的简化。</p>
+<p>使用<code>Get-Alias</code>可以查看当前别名列表。<br>使用<code>Get-Alias -name [cmd_name]</code>可以查看对应<code>cmd_name</code>命令的别名信息。</p>
+<p><code>$profile</code>文件保存着PowerShell中的一些配置，有点类似于Linux下的<code>.bashrc</code>或者<code>.zshrc</code>文件。<br>这个文件路径可以用<code>echo $PROFILE</code>命令看到：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">C:\Users\[username]\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1</div></pre></td></tr></table></figure></p>
+<p>编辑$PROFILE文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim $PROFILE</div></pre></td></tr></table></figure></p>
+<p>设置<code>vim</code>和<code>sublime</code>的快捷打开方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">set-alias vim &quot;C:/Program Files (x86)/Vim/vim80./vim.exe&quot;</div><div class="line">set-alias subl &quot;C:/Program Files\Sublime Text 3/sublime_text.exe&quot;</div></pre></td></tr></table></figure></p>
+<p>如果希望添加一串带有参数的命令，就不能使用<code>Set-Alias</code>方法。<br>如果添加<code>set-alias sdk &quot;cd C:/SDK/&quot;</code>，在使用<code>sdk</code>命令时会报错。<br>正确方法是添加一个函数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">function sdk &#123;</div><div class="line">    cd C:/SDK/</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/08/02/PowerShell-Alias设置/" data-id="cjf52nmek005h178to2w0llmd" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-C-读取XML格式内容" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -100,7 +148,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/28/C-读取XML格式内容/" data-id="cjey80b9t000myf8tyzk0oafv" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/28/C-读取XML格式内容/" data-id="cjf52nm89000m178tj8ucnc2q" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li></ul>
@@ -170,7 +218,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/26/Git常用撤销命令总结/" data-id="cjey80bcc0010yf8t9hql6t77" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/26/Git常用撤销命令总结/" data-id="cjf52nm8t000z178tqrql6333" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -220,7 +268,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/25/C-使用正则表达式在字符串中查找子串/" data-id="cjey80b9i000fyf8t3dsk48fo" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/25/C-使用正则表达式在字符串中查找子串/" data-id="cjf52nm7x000f178tpvavvu7j" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
@@ -266,7 +314,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/24/C-使用XmlDocument解析XML内容/" data-id="cjey80b9a000byf8tknczmjrg" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/24/C-使用XmlDocument解析XML内容/" data-id="cjf52nm7q000b178tfx0cl9pz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li></ul>
@@ -320,7 +368,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/22/Laravel使用Maatwebsite操作Excel/" data-id="cjey80bdx001yyf8tceyqevrd" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/22/Laravel使用Maatwebsite操作Excel/" data-id="cjf52nmal0021178tawbsrzyi" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -379,7 +427,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/20/C-的访问权限修饰符/" data-id="cjey80b9p000iyf8tzi7guunq" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/20/C-的访问权限修饰符/" data-id="cjf52nm84000i178twsu48pji" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C#</a></li></ul>
@@ -427,7 +475,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/19/PowerShell实现光标快速移动操作和自动补全/" data-id="cjey80bew002yyf8tpxq9eoq9" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/19/PowerShell实现光标快速移动操作和自动补全/" data-id="cjf52nmem005k178tbvivu1ti" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li></ul>
@@ -472,7 +520,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/19/npm的package-json一些使用常识/" data-id="cjey80bfs003qyf8t1mo2fdhb" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/19/npm的package-json一些使用常识/" data-id="cjf52nmfe0062178t1whszbs0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li></ul>
@@ -556,65 +604,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/19/Grunt入门/" data-id="cjey80bbw000zyf8tqlq3p0ym" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/19/Grunt入门/" data-id="cjf52nm8v0010178t6cya7yk8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-使用mysqldump快速拷贝一个数据库" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/07/07/使用mysqldump快速拷贝一个数据库/" class="article-date">
-  <time datetime="2017-07-07T14:13:16.000Z" itemprop="datePublished">2017-07-07</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/07/07/使用mysqldump快速拷贝一个数据库/">使用mysqldump快速拷贝一个数据库</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="工作背景"><a href="#工作背景" class="headerlink" title="工作背景"></a>工作背景</h2><p>在工作中会遇到这样一个情况：在正式服发现的bug在测试服上无法复现，或者正式服的数据有差错等问题。在这种情况下，如果直接使用正式服进行调试，是非常冒险的；比较好的方案是构建一份线上数据库的复本，在开发环境下进行bug的修复工作。   </p>
-<h2 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h2><p>要快速实现数据库内容的拷贝，可以使用mysqldump命令。具体使用步骤有两步：</p>
-<ol>
-<li>使用mysqldump命令导出</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysqldump -h [host] -u[user_name] &apos;-p[password]&apos; [database_name] &gt; [output].dump</div><div class="line">mysqldump -h localhost -ulionel &apos;-plionel&apos; lionelDB &gt; output.dump</div></pre></td></tr></table></figure>
-<p>是的，这里比较坑的是，那个<code>-u</code>和<code>-p</code>的后头没有空格！没有空格，就是和具体的<code>user_name</code>以及<code>password</code>粘在一起的。不知道是无心之失，还是有意为之。<br><code>-p</code>那个地方加不加单引号，主要是根据密码内容来的，如果密码内容有特殊字符会有其它含义，可能导致语句中断，因此加上单引号能够避免这种情况的发生。   </p>
-<ol>
-<li>使用mysql导入</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysqldump -h [host] -u[user_name] &apos;-p[password]&apos; [new_database_name] &lt; [output].dump</div><div class="line">mysqldump -h localhost -ulionel &apos;-plionel&apos; lionelDB_copy &lt; output.dump</div></pre></td></tr></table></figure>
-<p>但是这样貌似会执行，但没有生成表和内容。<br>解决方案是将mysqldump命令换成mysql，直接执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -h localhost -ulionel &apos;-lionel&apos; lionelDB_copy &lt; output.dump</div></pre></td></tr></table></figure></p>
-<p>这样就完成了。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/07/使用mysqldump快速拷贝一个数据库/" data-id="cjey80bfe003kyf8tzq0pwx1m" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li></ul>
 
     </footer>
   </div>
@@ -627,7 +620,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/page/3/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><a class="page-number" href="/blog-hexo/page/2/">2</a><a class="page-number" href="/blog-hexo/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/blog-hexo/page/5/">5</a><a class="extend next" rel="next" href="/blog-hexo/page/5/">weiter &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/3/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><a class="page-number" href="/blog-hexo/page/2/">2</a><a class="page-number" href="/blog-hexo/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/blog-hexo/page/5/">5</a><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="extend next" rel="next" href="/blog-hexo/page/5/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -636,7 +629,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -665,7 +658,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -675,9 +668,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2018/03/24/Laravel个性化404页面/">Laravel个性化404页面</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2018/03/19/PHP-unpack-函数的使用/">PHP unpack()函数的使用</a>
@@ -693,10 +690,6 @@
         
           <li>
             <a href="/blog-hexo/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/">Laravel+Vue前后端分离跨域CORS的一点知识</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/02/02/MySQL连接缓慢的情况处理/">MySQL连接缓慢的情况处理</a>
           </li>
         
       </ul>

@@ -54,7 +54,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -64,6 +64,54 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Mac使用命令行快速生成zip包" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/01/02/Mac使用命令行快速生成zip包/" class="article-date">
+  <time datetime="2018-01-02T05:49:52.000Z" itemprop="datePublished">2018-01-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/01/02/Mac使用命令行快速生成zip包/">Mac使用命令行快速生成zip包</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Mac OS自带<code>zip</code>命令，可以用于生成<code>.zip</code>格式压缩文件。   </p>
+<h4 id="压缩单个文件"><a href="#压缩单个文件" class="headerlink" title="压缩单个文件"></a>压缩单个文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zip -e [file_name.zip] [file_name]</div></pre></td></tr></table></figure>
+<p>其中<code>-e</code>选项表示加密压缩，需要在上述命令后输入密码和确认密码。</p>
+<h4 id="压缩文件夹"><a href="#压缩文件夹" class="headerlink" title="压缩文件夹"></a>压缩文件夹</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zip -e -r [file_name.zip] [file_dir]</div></pre></td></tr></table></figure>
+<p>其中<code>-r</code>选项表示递归地进行压缩，与Linux命令中<code>rm -r</code>的使用方式类似。</p>
+<p>关于输入密码也可以通过一行命令直接完成。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zip -r -p [password] [file_name.zip] [file_dir]</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/01/02/Mac使用命令行快速生成zip包/" data-id="cjf52nmb0002g178tlzxpzku6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Mysql导出数据库表结构到Excel" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -102,7 +150,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/21/Mysql导出数据库表结构到Excel/" data-id="cjey80bei002myf8tz3lfnma4" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/21/Mysql导出数据库表结构到Excel/" data-id="cjf52nmd70056178tkwxt28jx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li></ul>
@@ -162,7 +210,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/18/Git-Fast-forward的一些常识/" data-id="cjey80b9x000oyf8t6t1hok2j" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/18/Git-Fast-forward的一些常识/" data-id="cjf52nm8d000o178todlmcpew" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -208,7 +256,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/17/Laravel扩展Guzzle-发送HTTP请求/" data-id="cjey80be30025yf8tap02ko69" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/17/Laravel扩展Guzzle-发送HTTP请求/" data-id="cjf52nman0025178ty9oiwc08" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -257,7 +305,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/14/Laravel模拟创建Request/" data-id="cjey80bdz0021yf8tiqt1o1ip" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/14/Laravel模拟创建Request/" data-id="cjf52nmar0027178tzq5d9oi1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -308,7 +356,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/09/PHPUnit测试protected方法/" data-id="cjey80bf40035yf8tt8omwq5p" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/09/PHPUnit测试protected方法/" data-id="cjf52nmei005d178th3f4yyhn" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li></ul>
@@ -367,7 +415,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/02/AngularJS中ng-if和ng-show的区别/" data-id="cjey80b8x0004yf8tdrw83ftk" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/02/AngularJS中ng-if和ng-show的区别/" data-id="cjf52nm6z0004178t4463mitp" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -431,7 +479,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/30/Angular1模块间通信方式/" data-id="cjey80b8o0001yf8tzf63eqzk" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/10/30/Angular1模块间通信方式/" data-id="cjf52nm6k0001178tvxfsangz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -507,7 +555,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/23/Laravel-Database-Query-Builder-insert的效率问题/" data-id="cjey80bde001kyf8tqafdwr5v" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/10/23/Laravel-Database-Query-Builder-insert的效率问题/" data-id="cjf52nm9z001l178tmlq1gp1z" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -553,62 +601,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/21/Angular类的成员变量初始化的问题/" data-id="cjey80b920006yf8twajvk73o" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/10/21/Angular类的成员变量初始化的问题/" data-id="cjf52nm750005178tbnifv1yo" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Git分支基本操作" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/10/16/Git分支基本操作/" class="article-date">
-  <time datetime="2017-10-16T12:50:11.000Z" itemprop="datePublished">2017-10-16</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/10/16/Git分支基本操作/">Git分支基本操作</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文总结关于Git操作分支的相关操作。</p>
-<h2 id="创建分支"><a href="#创建分支" class="headerlink" title="创建分支"></a>创建分支</h2><p>使用<code>git branch [branch_name]</code>可以创建新分支。</p>
-<p>使用<code>git checkout -b [branch_name]</code>可以创建并切换到新分支。</p>
-<p>使用<code>git push --set-upstream orgin [branch_name]</code>将当前分支提交到远程服务器上。</p>
-<h2 id="查看分支"><a href="#查看分支" class="headerlink" title="查看分支"></a>查看分支</h2><p>使用<code>git branch</code>可以查看所有分支，当前分支前面会标一个<code>*</code>符号。</p>
-<p>使用<code>git branch -a</code> 可以查看远程分支</p>
-<h2 id="重命名分支"><a href="#重命名分支" class="headerlink" title="重命名分支"></a>重命名分支</h2><p>使用<code>git branch -m [old_branch_name] [new_branch_name]</code>重命名本地分支。</p>
-<p>若希望重命名远程分支，实质是先删除远程分支，然后重命名本地分支，再重新提交一个远程分支。</p>
-<h2 id="删除分支"><a href="#删除分支" class="headerlink" title="删除分支"></a>删除分支</h2><p>使用<code>git branch -d [branch_name]</code>删除对应分支</p>
-<p>使用<code>git push origin --delete [branch_name]</code>删除远程分支</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/16/Git分支基本操作/" data-id="cjey80bag000uyf8txy07yrkp" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
 
     </footer>
   </div>
@@ -621,7 +617,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><a class="page-number" href="/blog-hexo/page/5/">5</a><a class="extend next" rel="next" href="/blog-hexo/page/3/">weiter &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="extend next" rel="next" href="/blog-hexo/page/3/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -630,7 +626,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -659,7 +655,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -669,9 +665,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2018/03/24/Laravel个性化404页面/">Laravel个性化404页面</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2018/03/19/PHP-unpack-函数的使用/">PHP unpack()函数的使用</a>
@@ -687,10 +687,6 @@
         
           <li>
             <a href="/blog-hexo/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/">Laravel+Vue前后端分离跨域CORS的一点知识</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/02/02/MySQL连接缓慢的情况处理/">MySQL连接缓慢的情况处理</a>
           </li>
         
       </ul>
