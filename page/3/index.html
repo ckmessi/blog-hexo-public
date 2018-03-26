@@ -54,7 +54,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -64,6 +64,52 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Angular类的成员变量初始化的问题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/10/21/Angular类的成员变量初始化的问题/" class="article-date">
+  <time datetime="2017-10-21T10:23:34.000Z" itemprop="datePublished">2017-10-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/10/21/Angular类的成员变量初始化的问题/">Angular类的成员变量初始化的问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近工作中遇到一个比较困惑的事情，在使用Angular1.5框架的项目中，通常遇到两种不同风格的变量初始化方法。<br>有的代码直接在类的成员变量声明后紧接着初始化语句，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export class Sample &#123;</div><div class="line">	public name:string = &apos;initialized following statement&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>有的代码只进行了声明，此后在类的构造函数<code>constructor</code>中进行初始化：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">export class Sample &#123;</div><div class="line">	public name:string</div><div class="line">	constructor() &#123;</div><div class="line">		this.name = &apos;initialized in constructor&apos;;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>两种方法是否有区别呢？<br>通过一些查询，可以确认，两种写法都是合法的，并且行为完全一致。<br>前者在编译之后，会变成后者的形式。</p>
+<p>参考链接：<a href="https://stackoverflow.com/questions/42635833/initialization-of-components-class-variables" target="_blank" rel="external">https://stackoverflow.com/questions/42635833/initialization-of-components-class-variables</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/10/21/Angular类的成员变量初始化的问题/" data-id="cjf85fcv60001cy8tlmk8f8dm" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Git分支基本操作" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -105,7 +151,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/16/Git分支基本操作/" data-id="cjf52nm8o000u178tpbw33led" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/10/16/Git分支基本操作/" data-id="cjf85fcx5000ucy8tnzy9zazs" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -163,7 +209,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/09/Git-tag的使用/" data-id="cjf52nm8i000r178t6uueujp3" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/10/09/Git-tag的使用/" data-id="cjf85fcws000rcy8tw4fwvvtp" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -224,7 +270,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/23/React-Router-v4的使用/" data-id="cjf52nmep005n178t2rgcwqbr" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/09/23/React-Router-v4的使用/" data-id="cjf85fcyv0038cy8t5c54xec8" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/React/">React</a></li></ul>
@@ -287,7 +333,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/22/php7新特性中的一些语法糖/" data-id="cjf52nmfh0065178t1x09tbeo" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/09/22/php7新特性中的一些语法糖/" data-id="cjf85fcze003xcy8tnh5xx04h" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -352,7 +398,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/18/开源许可协议简介/" data-id="cjf52nmfr006h178tpt4qog3c" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/09/18/开源许可协议简介/" data-id="cjf85fczn0048cy8t1j39yjw8" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/License/">License</a></li></ul>
@@ -399,7 +445,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/12/Access-Control-Allow-Origin实现跨域访问/" data-id="cjf52nm6c0000178trfbvexo2" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/09/12/Access-Control-Allow-Origin实现跨域访问/" data-id="cjf85fcwb000bcy8tgm15lkpn" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li></ul>
@@ -455,7 +501,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/11/Azure-Application-Insights入门/" data-id="cjf52nm7o0009178tjrjdnjfu" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/09/11/Azure-Application-Insights入门/" data-id="cjf85fcvi0005cy8tiqxikxze" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C#</a></li></ul>
@@ -505,7 +551,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/08/19/Laravel中Collection排序函数的使用/" data-id="cjf52nmaf001v178tz5u8f83l" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/08/19/Laravel中Collection排序函数的使用/" data-id="cjf85fcxw001tcy8t75m4rkdg" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -573,59 +619,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/08/18/Solution-sln-File-in-Visual-Studio/" data-id="cjf52nmes005q178tikek34qk" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/08/18/Solution-sln-File-in-Visual-Studio/" data-id="cjf85fcz1003lcy8t575oqh88" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-NodeJS读写文件" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/08/11/NodeJS读写文件/" class="article-date">
-  <time datetime="2017-08-11T13:48:57.000Z" itemprop="datePublished">2017-08-11</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/08/11/NodeJS读写文件/">NodeJS读写文件</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>许多项目可能在生成时需要执行一些脚本处理文件，由于npm环境下NodeJS是最合适的选择，因此使用NodeJS进行文件读写成为必要操作。   </p>
-<p>简单查找了一下，参考<a href="http://www.2cto.com/kf/201411/351586.html" target="_blank" rel="external">这篇文章</a>学会了基本的NodeJS文件读写。</p>
-<p>首先需要require两个包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var fs = require(&apos;fs&apos;);</div><div class="line">var path = require(&apos;path&apos;);</div></pre></td></tr></table></figure></p>
-<p>然后定义咱们的操作数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var data = &#123;</div><div class="line">	&quot;user_id&quot;: 1,</div><div class="line">	&quot;user_name&quot;: &quot;Lionel&quot;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
-<p>使用<code>fs.writeFile</code>函数能够实现文件的写入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">fs.writeFile(path.join(__dirname, &apos;data.json&apos;), JSON.stringify(data), function (err) &#123;</div><div class="line">    if (err) &#123;</div><div class="line">        throw err;</div><div class="line">    &#125;</div><div class="line">    console.log(&quot;Export Account Success!&quot;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-<p>使用<code>fs.readFile</code>函数能够实现文件的读取：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">fs.readFile(path.join(__dirname, &apos;data.json&apos;),&#123;encoding:&apos;utf-8&apos;&#125;, function (err,bytesRead) &#123;</div><div class="line">	if (err) &#123;</div><div class="line">	    throw err;</div><div class="line">	&#125;</div><div class="line">	console.log(&quot;readFile success&quot;);</div><div class="line">	console.log(&quot;content below:&quot;);</div><div class="line">	console.log(bytesRead);</div><div class="line">	var data = JSON.parse(bytesRead);</div><div class="line">	console.log(data);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-<p>以上。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/08/11/NodeJS读写文件/" data-id="cjf52nmda0057178tnoomkdl1" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li></ul>
 
     </footer>
   </div>
@@ -638,7 +635,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/page/2/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><a class="page-number" href="/blog-hexo/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/blog-hexo/page/4/">4</a><a class="page-number" href="/blog-hexo/page/5/">5</a><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="extend next" rel="next" href="/blog-hexo/page/4/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/2/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><a class="page-number" href="/blog-hexo/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/blog-hexo/page/4/">4</a><a class="page-number" href="/blog-hexo/page/5/">5</a><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="extend next" rel="next" href="/blog-hexo/page/4/">weiter &raquo;</a>
   </nav>
 
 </section>
@@ -647,7 +644,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
+    <h3 class="widget-title">Kategorien</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -676,7 +673,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archiv</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -686,9 +683,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2018/03/26/PHP中警惕悬挂引用可能引起的bug/">PHP中警惕悬挂引用可能引起的bug</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2018/03/24/Laravel个性化404页面/">Laravel个性化404页面</a>
@@ -704,10 +705,6 @@
         
           <li>
             <a href="/blog-hexo/2018/03/01/初识AIDL/">初识AIDL</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/">Laravel+Vue前后端分离跨域CORS的一点知识</a>
           </li>
         
       </ul>
