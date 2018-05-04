@@ -54,7 +54,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -64,6 +64,62 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Azure-Application-Insights入门" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/09/11/Azure-Application-Insights入门/" class="article-date">
+  <time datetime="2017-09-11T14:32:06.000Z" itemprop="datePublished">2017-09-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/09/11/Azure-Application-Insights入门/">Azure Application Insights入门</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Application Insights是微软Azure平台的一项服务，声称能够全面监控和了解服务的行为、可靠性和性能。<br>可以这样理解，当一项应用添加了Application Insights插件后，相当于给自己的应用添加了许多监控机制，可以通过Azure平台页面直接监测服务的运行状况。类似于阿里云平台查看云主机吞吐量，或自行使用<code>tail -f x.log</code>命令监控日志信息。</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>首先需要理解以下几个概念：</p>
+<ul>
+<li>Azure Application Insights：微软推出的服务监控插件，可自行配置安装到应用中。</li>
+<li>Microsoft Azure：微软推出的云平台，用于监控配置了Application Insights的服务资源。</li>
+<li>InstrumentationKey：检测密钥，一项Azure上的Application Insights资源对应唯一的密钥，当项目配置密钥后，将直接将该项目应用绑定到密钥所标识的Azure资源上。</li>
+</ul>
+<h2 id="Application-Insights在ASP-NET中的使用"><a href="#Application-Insights在ASP-NET中的使用" class="headerlink" title="Application Insights在ASP.NET中的使用"></a>Application Insights在ASP.NET中的使用</h2><h4 id="设置InstrumentationKey"><a href="#设置InstrumentationKey" class="headerlink" title="设置InstrumentationKey"></a>设置<code>InstrumentationKey</code></h4><p>Application Insights的基本使用方法可以参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-asp-net" target="_blank" rel="external">微软官方文档</a>。<br>主要包括安装相关SDK，初始化Application Insights配置等流程。<br>最重要的步骤是添加<code>InstrumentationKey</code>，事实证明所有流程的最终结果本质上是在<code>ApplicationInsights.config</code>文件中添加该配置项，这样应用就能够连上Azure监控平台。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;InstrumentationKey&gt;Your Key&lt;/InstrumentationKey&gt;</div></pre></td></tr></table></figure></p>
+<p>由于不同部署平台可能需要使用不同的<code>InstrumentationKey</code>，比较好的方案是在程序启动后执行的代码中读取配置文件动态添加。<br>参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-configuration-with-applicationinsights-config#instrumentationkey" target="_blank" rel="external">文档</a>，可以在项目的启动添加中动态添加<code>InstrumentationKey</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">protected void Application_Start()</div><div class="line">&#123;</div><div class="line">	Microsoft.ApplicationInsights.Extensibility.</div><div class="line">		TelemetryConfiguration.Active.InstrumentationKey =</div><div class="line">          // - for example -</div><div class="line">        WebConfigurationManager.Settings[&quot;ikey&quot;];</div><div class="line">    //...</div></pre></td></tr></table></figure>
+<h4 id="设置cloud-RoleName"><a href="#设置cloud-RoleName" class="headerlink" title="设置cloud_RoleName"></a>设置<code>cloud_RoleName</code></h4><p><code>cloud_RoleName</code>的作用是区分使用同一个<code>InstrumentationKey</code>的不同组件（Components）。例如，在同一个应用下，可能有多个组件组成，此时如果希望对一些性能指标、日志记录进行筛选，则需要给每个组件添加唯一的<code>cloud_RoleName</code>，在Azure监控平台上的”搜索”中可以添加<code>cloud_RoleName</code>的筛选条件。</p>
+<p>参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-monitor-multi-role-apps" target="_blank" rel="external">官方文档1</a>和<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-api-filtering-sampling#add-properties-itelemetryinitializer" target="_blank" rel="external">cloud_RoleName的覆写方法</a>，可以在程序启动时为应用配置特殊的<code>cloud_RoleName</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">private class MyTelemetryInitializer : ITelemetryInitializer</div><div class="line">&#123;</div><div class="line">	public void Initialize(ITelemetry telemetry)</div><div class="line">	&#123;</div><div class="line">		telemetry.Context.Cloud.RoleName = &quot;TEST_ROLE_NAME&quot;;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">TelemetryConfiguration.Active.TelemetryInitializers.Add(new MyTelemetryInitializer());</div></pre></td></tr></table></figure></p>
+<h4 id="添加遥测追踪"><a href="#添加遥测追踪" class="headerlink" title="添加遥测追踪"></a>添加遥测追踪</h4><p>参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-asp-net-trace-logs" target="_blank" rel="external">文档</a>可以添加日志记录，最基础的方案是手动添加一项遥测数据。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var telemetry = new Microsoft.ApplicationInsights.TelemetryClient();</div><div class="line">telemetry.TrackTrace(&quot;Slow database response&quot;,</div><div class="line">               SeverityLevel.Warning,</div><div class="line">               new Dictionary&lt;string,string&gt; &#123; &#123;&quot;database&quot;, db.ID&#125; &#125;);</div></pre></td></tr></table></figure></p>
+<p>当包含上述代码的代码段运行后，在监控平台上可以找到相关追踪的日志记录。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/09/11/Azure-Application-Insights入门/" data-id="cjgrrdbsd000b868tv4b6226s" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C#</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Laravel中Collection排序函数的使用" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -103,7 +159,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/08/19/Laravel中Collection排序函数的使用/" data-id="cjgd51uoo002gy88tnqpf62ry" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/08/19/Laravel中Collection排序函数的使用/" data-id="cjgrrdbtf001t868tllhp4h9o" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -171,7 +227,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/08/18/Solution-sln-File-in-Visual-Studio/" data-id="cjgd51urj005yy88t9arlhons" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/08/18/Solution-sln-File-in-Visual-Studio/" data-id="cjgrrdbuk003i868tm1giv18c" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li></ul>
@@ -220,7 +276,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/08/11/NodeJS读写文件/" data-id="cjgd51urf005uy88tcym737ib" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/08/11/NodeJS读写文件/" data-id="cjgrrdbu8002r868t2dz6cjhw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li></ul>
@@ -268,7 +324,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/08/02/PowerShell-Alias设置/" data-id="cjgd51ure005ry88tt4y3v4zv" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/08/02/PowerShell-Alias设置/" data-id="cjgrrdbuh003b868t8t77rcwy" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li></ul>
@@ -315,7 +371,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/28/C-读取XML格式内容/" data-id="cjgd51umr000oy88t49gtg3ud" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/28/C-读取XML格式内容/" data-id="cjgrrdbsl000m868tc9nlj8og" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li></ul>
@@ -385,7 +441,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/26/Git常用撤销命令总结/" data-id="cjgd51un0000uy88t1aeod3mo" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/26/Git常用撤销命令总结/" data-id="cjgrrdbsu000z868tfw1daq0r" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -435,7 +491,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/25/C-使用正则表达式在字符串中查找子串/" data-id="cjgd51umf000fy88tvi973xds" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/25/C-使用正则表达式在字符串中查找子串/" data-id="cjgrrdbsb0009868t4487erhz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
@@ -481,7 +537,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/24/C-使用XmlDocument解析XML内容/" data-id="cjgd51um7000by88tqhe2zuuh" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/24/C-使用XmlDocument解析XML内容/" data-id="cjgrrdbsj000i868t0xw3g2og" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li></ul>
@@ -535,69 +591,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/22/Laravel使用Maatwebsite操作Excel/" data-id="cjgd51uon002cy88t9iqarux2" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/22/Laravel使用Maatwebsite操作Excel/" data-id="cjgrrdbtt0029868t6sap3lvf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-C-的访问权限修饰符" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/07/20/C-的访问权限修饰符/" class="article-date">
-  <time datetime="2017-07-20T12:36:59.000Z" itemprop="datePublished">2017-07-20</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/07/20/C-的访问权限修饰符/">C#的访问权限修饰符</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="C-的访问权限修饰符"><a href="#C-的访问权限修饰符" class="headerlink" title="C#的访问权限修饰符"></a>C#的访问权限修饰符</h2><p><code>internal</code>关键字是类型和类型成员的访问修饰符。只有在同一程序集的文件中，内部类型或成员才可访问。</p>
-<p>在C#语言中，共有五种访问修饰符：public、private、protected、internal、protected internal。<br>作用范围如下：</p>
-<ul>
-<li><code>public</code> 公有访问，不受任何限制。</li>
-<li><code>private</code> 私有访问，只限于本类成员访问，子类，实例都不能访问。</li>
-<li><code>protected</code> 保护访问，只限于本类和子类访问，实例不能访问。</li>
-<li><code>internal</code> 内部访问，只限于本项目内访问，其他不能访问。</li>
-<li><code>protected internal</code> 内部保护访问，只限于本项目或是子类访问，其他不能访问。</li>
-</ul>
-<h2 id="扩展：Java的访问限制修饰符"><a href="#扩展：Java的访问限制修饰符" class="headerlink" title="扩展：Java的访问限制修饰符"></a>扩展：Java的访问限制修饰符</h2><p>在Java中，存在四种访问权限。<br>其中三种有访问权限修饰符，分别为private、public和protected。<br>还有一种不带任何修饰符，为default，可称为默认访问权限。</p>
-<ul>
-<li><code>private</code>：私有访问权限。被其修饰的类、属性以及方法只能被该类的对象访问，其子类不能访问，不允许跨包访问。</li>
-<li><code>default</code>：默认访问权限。即不加任何访问修饰符，该模式下，只允许在同一个包中进行访问。</li>
-<li><code>protect</code>：保护访问权限。访问权限介于<code>public</code>和<code>private</code>之间。被其修饰的类、属性以及方法只能被类本身的方法及子类访问。子类在不同的包中也可以访问。</li>
-<li><code>public</code>：公有访问权限。访问限制最宽的修饰符。被其修饰的类、属性以及方法不仅可以跨类访问。允许跨包访问。</li>
-</ul>
-<h2 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h2><p>C#中的<code>internal</code>访问权限类似于Java中的<code>default</code>访问权限。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/20/C-的访问权限修饰符/" data-id="cjgd51umo000my88tqy87kwk2" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C#</a></li></ul>
 
     </footer>
   </div>
@@ -610,7 +607,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/page/3/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><a class="page-number" href="/blog-hexo/page/2/">2</a><a class="page-number" href="/blog-hexo/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/blog-hexo/page/5/">5</a><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="extend next" rel="next" href="/blog-hexo/page/5/">weiter &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/3/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><a class="page-number" href="/blog-hexo/page/2/">2</a><a class="page-number" href="/blog-hexo/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/blog-hexo/page/5/">5</a><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="extend next" rel="next" href="/blog-hexo/page/5/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -619,7 +616,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -648,9 +645,9 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
   </div>
 
@@ -658,9 +655,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/">使用Guzzle访问API接口需要登录的解决方案</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2018/04/24/Crontab中可能遇到的php版本问题/">Crontab中可能遇到的php版本问题</a>
@@ -676,10 +677,6 @@
         
           <li>
             <a href="/blog-hexo/2018/03/24/Laravel个性化404页面/">Laravel个性化404页面</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/03/19/PHP-unpack-函数的使用/">PHP unpack()函数的使用</a>
           </li>
         
       </ul>

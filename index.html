@@ -54,7 +54,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -64,6 +64,59 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-使用Guzzle访问API接口需要登录的解决方案" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/" class="article-date">
+  <time datetime="2018-05-04T09:28:36.000Z" itemprop="datePublished">2018-05-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/">使用Guzzle访问API接口需要登录的解决方案</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在工作中遇到一个问题，需要撰写脚本模型HTTP请求进行一些批量操作。而这些HTTP请求是需要登录状态的。<br>在这种情况下，使用 <code>Guzzle</code> 连续发送两条请求，并不能模拟它们在相同浏览器下操作的效果。<br>因此，不能直接以 <code>请求登录接口</code> + <code>请求业务接口</code> 的方式完成。</p>
+<p>查看 <code>Guzzle</code> 的文档，根据关于 <a href="http://guzzle.readthedocs.io/en/stable/quickstart.html#cookies" target="_blank" rel="external">Cookies</a> 相关的教程可知，在使用 <code>Guzzle</code> 发送请求时，可以让其携带一段 <code>cookie session</code> 。<br>这样，如果两个接口所携带的 <code>cookie session</code> 相同，自然能达到浏览器下的效果。</p>
+<blockquote>
+<p>Guzzle can maintain a cookie session for you if instructed using the cookies request option. When sending a request, the cookies option must be set to an instance of GuzzleHttp\Cookie\CookieJarInterface.</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// Use a specific cookie jar</div><div class="line">$jar = new \GuzzleHttp\Cookie\CookieJar;</div><div class="line">$r = $client-&gt;request(&apos;GET&apos;, &apos;http://httpbin.org/cookies&apos;, [</div><div class="line">    &apos;cookies&apos; =&gt; $jar</div><div class="line">]);</div></pre></td></tr></table></figure>
+<blockquote>
+<p>You can set cookies to true in a client constructor if you would like to use a shared cookie jar for all requests.</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// Use a shared client cookie jar</div><div class="line">$client = new \GuzzleHttp\Client([&apos;cookies&apos; =&gt; true]);</div><div class="line">$r = $client-&gt;request(&apos;GET&apos;, &apos;http://httpbin.org/cookies&apos;);</div></pre></td></tr></table></figure>
+<p>这样，通过携带 <code>Cookies</code> 的方式，可以解决 <code>Guzzle</code> 调用API接口需要登录状态的问题。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/" data-id="cjgrrdbus003v868tz19vki68" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Crontab中可能遇到的php版本问题" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -112,7 +165,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/04/24/Crontab中可能遇到的php版本问题/" data-id="cjgd51umi000iy88t7mvphgzw" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/04/24/Crontab中可能遇到的php版本问题/" data-id="cjgrrdbsn000o868tdcyz98lx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -158,7 +211,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/27/PHP使用php-ml完成距离计算/" data-id="cjgd51urb005ky88tu350ibpq" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/27/PHP使用php-ml完成距离计算/" data-id="cjgrrdbue0034868tl99joum6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -219,7 +272,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/26/PHP中警惕悬挂引用可能引起的bug/" data-id="cjgd51ur9005ey88t0emcohh5" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/26/PHP中警惕悬挂引用可能引起的bug/" data-id="cjgrrdbuc0030868tkn4apjrv" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -268,7 +321,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/24/Laravel个性化404页面/" data-id="cjgd51uoa001ty88tf4vetxj4" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/24/Laravel个性化404页面/" data-id="cjgrrdbtl0021868t7qawiafi" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -319,7 +372,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/" data-id="cjgd51ura005gy88tecus71lv" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/" data-id="cjgrrdbub002x868tbbtoytnc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -374,7 +427,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" data-id="cjgd51uqf0054y88tahde9ph8" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" data-id="cjgrrdbu5002n868tgxyhcchf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -470,7 +523,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/01/初识AIDL/" data-id="cjgd51ury006ny88t5sct4a0r" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/01/初识AIDL/" data-id="cjgrrdbv9004c868tr4fsyuc1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li></ul>
@@ -565,7 +618,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" data-id="cjgd51uo2001ny88t36qr6xye" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" data-id="cjgrrdbti001x868tvyx74jez" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -611,85 +664,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="cjgd51uq80053y88to3pkskc0" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="cjgrrdbtx002f868tscnisozd" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Laravel中对OPTIONS请求的批量处理" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2018/01/31/Laravel中对OPTIONS请求的批量处理/" class="article-date">
-  <time datetime="2018-01-31T06:05:51.000Z" itemprop="datePublished">2018-01-31</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2018/01/31/Laravel中对OPTIONS请求的批量处理/">Laravel中对OPTIONS请求的原理探索及批量处理方案</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在前后端分离的应用中，需要使用<code>CORS</code>完成跨域访问。在<code>CORS</code>中发送<code>非简单请求</code>时，前端会发一个请求方式为<code>OPTIONS</code>的预请求，前端只有收到服务器对这个<code>OPTIONS</code>请求的正确响应，才会发送正常的请求，否则将抛出跨域相关的错误。</p>
-<p>这篇文章主要总结对Laravel中处理<code>OPTIONS</code>请求处理机制的探索，以及如何正确处理这类OPTIONS请求的解决方案。</p>
-<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>Laravel处理<code>OPTIONS</code>方式请求的机制是个谜。</p>
-<p>假设我们请求的URL是<code>http://localhost:8080/api/test</code>，请求方式是<code>OPTIONS</code>。<br>如果请求的URL不存在相关的其它方式（如<code>GET</code>或<code>POST</code>）的请求，则会返回<code>404 NOT FOUND</code>的错误。<br>如果存在相同URL的请求，会返回一个状态码为<code>200</code>的成功响应，但没有任何额外内容。</p>
-<p>举例而言，在路由文件<code>routes/api.php</code>中如果存在下面的定义，则以<code>OPTIONS</code>方式调用<code>/api/test</code>请求时，返回状态码为<code>200</code>的成功响应。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Route::get(&apos;/test&apos;, &apos;TestController@test&apos;);</div></pre></td></tr></table></figure></p>
-<p>但同时通过分析可以发现，这个<code>OPTIONS</code>请求不会进到此<code>api</code>路由文件的生命周期内，至少该<code>GET</code>请求所在路由文件<code>api</code>所绑定的中间件是没有进入的。</p>
-<p>此时如果手动添加一个<code>OPTIONS</code>请求，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Route::get(&apos;/test&apos;, &apos;TestController@test&apos;);</div><div class="line">Route::options(&apos;/test&apos;, function(Request $request) &#123;</div><div class="line">    return response(&apos;abc&apos;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-<p>则至少会进入该<code>GET</code>请求所在路由文件<code>api</code>绑定的中间件，可以在相关<code>handle</code>函数中捕获到这个请求。</p>
-<h2 id="分析源码"><a href="#分析源码" class="headerlink" title="分析源码"></a>分析源码</h2><p>通过仔细查看Laravel的源码，发现了一些端倪。</p>
-<p>在<code>vendor/laravel/framework/src/Illuminate/Routing/RouteCollection.php</code>文件的第<code>159</code>行左右，源码内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">$routes = $this-&gt;get($request-&gt;getMethod());</div><div class="line"></div><div class="line">// First, we will see if we can find a matching route for this current request</div><div class="line">// method. If we can, great, we can just return it so that it can be called</div><div class="line">// by the consumer. Otherwise we will check for routes with another verb.</div><div class="line">$route = $this-&gt;matchAgainstRoutes($routes, $request);</div><div class="line"></div><div class="line">if (! is_null($route)) &#123;</div><div class="line">    return $route-&gt;bind($request);</div><div class="line">&#125;</div><div class="line"></div><div class="line">// If no route was found we will now check if a matching route is specified by</div><div class="line">// another HTTP verb. If it is we will need to throw a MethodNotAllowed and</div><div class="line">// inform the user agent of which HTTP verb it should use for this route.</div><div class="line">$others = $this-&gt;checkForAlternateVerbs($request);</div><div class="line"></div><div class="line">if (count($others) &gt; 0) &#123;</div><div class="line">    return $this-&gt;getRouteForMethods($request, $others);</div><div class="line">&#125;</div><div class="line"></div><div class="line">throw new NotFoundHttpException;</div></pre></td></tr></table></figure></p>
-<p>这里的逻辑是：</p>
-<ol>
-<li>首先根据当前HTTP方法（GET/POST/PUT/…）查找是否有匹配的路由，如果有（<code>if(! is_null($route))</code>条件成立)，非常好，绑定后直接返回，继续此后的调用流程即可；</li>
-<li>否则，根据<code>$request</code>的路由找到可能匹配的HTTP方法（即URL匹配，但是HTTP请求方式为其它品种的），如果<code>count($others) &gt; 0)</code>条件成立，则继续进入<code>$this-&gt;getRouteForMethods($request, $others);</code>方法；</li>
-<li>否则抛出<code>NotFoundHttpException</code>，即上述说到的<code>404 NOT FOUND</code>错误。</li>
-</ol>
-<p>倘若走的是第<code>2</code>步，则跳转文件的<code>234</code>行，可看到函数逻辑为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">protected function getRouteForMethods($request, array $methods)</div><div class="line">&#123;</div><div class="line">    if ($request-&gt;method() == &apos;OPTIONS&apos;) &#123;</div><div class="line">        return (new Route(&apos;OPTIONS&apos;, $request-&gt;path(), function () use ($methods) &#123;</div><div class="line">            return new Response(&apos;&apos;, 200, [&apos;Allow&apos; =&gt; implode(&apos;,&apos;, $methods)]);</div><div class="line">        &#125;))-&gt;bind($request);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    $this-&gt;methodNotAllowed($methods);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>判断如果请求方式是<code>OPTIONS</code>，则返回状态码为<code>200</code>的正确响应（但是没有添加任何<code>header</code>信息），否则返回一个<code>methodNotAllowed</code>状态码为<code>405</code>的错误（即请求方式不允许的情况）。</p>
-<p>此处Laravel针对<code>OPTIONS</code>方式的HTTP请求处理方式已经固定了，这样就有点头疼，不知道在哪里添加代码针对<code>OPTIONS</code>请求的<code>header</code>进行处理。最笨的方法是对跨域请求的每一个<code>GET</code>或<code>POST</code>请求都撰写一个同名的<code>OPTIONS</code>类型的路由。</p>
-<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><p>解决方案有两种，一种是添加中间件，一种是使用通配路由匹配方案。<br>总体思想都是在系统处理<code>OPTIONS</code>请求的过程中添加相关<code>header</code>信息。</p>
-<h4 id="中间件方案"><a href="#中间件方案" class="headerlink" title="中间件方案"></a>中间件方案</h4><p>在文件<code>app/Http/Kernel.php</code>中，有两处可以定义中间件。<br>第一处是总中间件<code>$middleware</code>，任何请求都会通过这里；第二处是群组中间件<code>middlewareGroups</code>，只有路由匹配上对应群组模式的才会通过这部分。</p>
-<p>这是总中间件<code>$middleware</code>的定义代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">protected $middleware = [</div><div class="line">    \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,</div><div class="line">    \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,</div><div class="line">    \App\Http\Middleware\TrimStrings::class,</div><div class="line">    \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,</div><div class="line">    \App\Http\Middleware\TrustProxies::class,</div><div class="line">];</div></pre></td></tr></table></figure></p>
-<p>这是群组中间件<code>$middlewareGroups</code>的定义代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">* The application&apos;s route middleware groups.</div><div class="line">*</div><div class="line">* @var array</div><div class="line">*/</div><div class="line">protected $middlewareGroups = [</div><div class="line">    &apos;web&apos; =&gt; [</div><div class="line">        \App\Http\Middleware\EncryptCookies::class,</div><div class="line">        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,</div><div class="line">        \Illuminate\Session\Middleware\StartSession::class,</div><div class="line">        // \Illuminate\Session\Middleware\AuthenticateSession::class,</div><div class="line">        \Illuminate\View\Middleware\ShareErrorsFromSession::class,</div><div class="line">        \App\Http\Middleware\VerifyCsrfToken::class,</div><div class="line">        \Illuminate\Routing\Middleware\SubstituteBindings::class,</div><div class="line">    ],</div><div class="line">    &apos;api&apos; =&gt; [</div><div class="line">        &apos;throttle:60,1&apos;,</div><div class="line">        &apos;bindings&apos;,</div><div class="line">        \Illuminate\Session\Middleware\StartSession::class,</div><div class="line">    ],</div><div class="line">];</div></pre></td></tr></table></figure></p>
-<p>由于群组路由中间件是在路由匹配过程之后才进入，因此之前实验中提及的<code>OPTIONS</code>请求尚未通过此处中间件的<code>handle</code>函数，就已经返回了。</p>
-<p>因此我们添加的中间件，需要添加到<code>$middleware</code>数组中，不能添加到<code>api</code>群组路由中间件中。<br>在<code>app/Http/Middleware</code>文件夹下新建<code>PreflightResponse.php</code>文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">namespace App\Http\Middleware;</div><div class="line">use Closure;</div><div class="line">class PreflightResponse</div><div class="line">&#123;</div><div class="line">    /**</div><div class="line">    * Handle an incoming request.</div><div class="line">    *</div><div class="line">    * @param  \Illuminate\Http\Request  $request</div><div class="line">    * @param  \Closure  $next</div><div class="line">    * @param  string|null  $guard</div><div class="line">    * @return mixed</div><div class="line">    */</div><div class="line">    public function handle($request, Closure $next, $guard = null)</div><div class="line">    &#123;</div><div class="line">        if($request-&gt;getMethod() === &apos;OPTIONS&apos;)&#123;</div><div class="line">            $origin = $request-&gt;header(&apos;ORIGIN&apos;, &apos;*&apos;);</div><div class="line">            header(&quot;Access-Control-Allow-Origin: $origin&quot;);</div><div class="line">            header(&quot;Access-Control-Allow-Credentials: true&quot;);</div><div class="line">            header(&apos;Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE&apos;);</div><div class="line">            header(&apos;Access-Control-Allow-Headers: Origin, Access-Control-Request-Headers, SERVER_NAME, Access-Control-Allow-Headers, cache-control, token, X-Requested-With, Content-Type, Accept, Connection, User-Agent, Cookie, X-XSRF-TOKEN&apos;);</div><div class="line">        &#125;</div><div class="line">        return $next($request);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>其中这里针对<code>OPTIONS</code>请求的处理内容是添加多个<code>header</code>内容，可根据实际需要修改相关处理逻辑：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$origin = $request-&gt;header(&apos;ORIGIN&apos;, &apos;*&apos;);</div><div class="line">header(&quot;Access-Control-Allow-Origin: $origin&quot;);</div><div class="line">header(&quot;Access-Control-Allow-Credentials: true&quot;);</div><div class="line">header(&apos;Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE&apos;);</div><div class="line">header(&apos;Access-Control-Allow-Headers: Origin, Access-Control-Request-Headers, SERVER_NAME, Access-Control-Allow-Headers, cache-control, token, X-Requested-With, Content-Type, Accept, Connection, User-Agent, Cookie, X-XSRF-TOKEN&apos;);</div></pre></td></tr></table></figure></p>
-<p>至此，所有<code>OPTIONS</code>方式的HTTP请求都得到了相关处理。</p>
-<h4 id="通配路由匹配方案"><a href="#通配路由匹配方案" class="headerlink" title="通配路由匹配方案"></a>通配路由匹配方案</h4><p>如果不使用中间件，查询Laravel官方文档<a href="https://laravel.com/docs/5.5/routing#parameters-regular-expression-constraints" target="_blank" rel="external">Routing</a>，可知如何在路由中使用正则表达式进行模式匹配。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Route::get(&apos;user/&#123;id&#125;/&#123;name&#125;&apos;, function ($id, $name) &#123;</div><div class="line">    //</div><div class="line">&#125;)-&gt;where([&apos;id&apos; =&gt; &apos;[0-9]+&apos;, &apos;name&apos; =&gt; &apos;[a-z]+&apos;]);</div></pre></td></tr></table></figure></p>
-<p>类似的，可以撰写针对<code>OPTIONS</code>类型请求的泛化处理路由条件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Route::options(&apos;/&#123;all&#125;&apos;, function(Request $request) &#123;</div><div class="line">     return response(&apos;options here!&apos;);</div><div class="line">&#125;)-&gt;where([&apos;all&apos; =&gt; &apos;([a-zA-Z0-9-]|/)+&apos;]);</div></pre></td></tr></table></figure></p>
-<p><strong>注：这里正则表达式中不能使用符号<code>*</code></strong></p>
-<p>因此，针对跨域问题，对于<code>OPTIONS</code>方式的请求可以撰写如下路由响应：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Route::options(&apos;/&#123;all&#125;&apos;, function(Request $request) &#123;</div><div class="line">    $origin = $request-&gt;header(&apos;ORIGIN&apos;, &apos;*&apos;);</div><div class="line">    header(&quot;Access-Control-Allow-Origin: $origin&quot;);</div><div class="line">    header(&quot;Access-Control-Allow-Credentials: true&quot;);</div><div class="line">    header(&apos;Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE&apos;);</div><div class="line">    header(&apos;Access-Control-Allow-Headers: Origin, Access-Control-Request-Headers, SERVER_NAME, Access-Control-Allow-Headers, cache-control, token, X-Requested-With, Content-Type, Accept, Connection, User-Agent, Cookie&apos;);</div><div class="line">&#125;)-&gt;where([&apos;all&apos; =&gt; &apos;([a-zA-Z0-9-]|/)+&apos;]);</div></pre></td></tr></table></figure></p>
-<p>这样所有的<code>OPTIONS</code>请求都能找到匹配的路由，在此处可统一处理所有OPTIONS请求，不需要额外进行处理。</p>
-<p>参考链接：<br><a href="https://medium.com/@neo/handling-xmlhttprequest-options-pre-flight-request-in-laravel-a4c4322051b9" target="_blank" rel="external">https://medium.com/@neo/handling-xmlhttprequest-options-pre-flight-request-in-laravel-a4c4322051b9</a><br><a href="https://laravel.com/docs/5.5/routing#parameters-regular-expression-constraints" target="_blank" rel="external">https://laravel.com/docs/5.5/routing#parameters-regular-expression-constraints</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/31/Laravel中对OPTIONS请求的批量处理/" data-id="cjgd51uoh0023y88tefq0ejjx" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
 
     </footer>
   </div>
@@ -702,7 +680,7 @@
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/blog-hexo/page/2/">2</a><a class="page-number" href="/blog-hexo/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="extend next" rel="next" href="/blog-hexo/page/2/">weiter &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/blog-hexo/page/2/">2</a><a class="page-number" href="/blog-hexo/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="extend next" rel="next" href="/blog-hexo/page/2/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -711,7 +689,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -740,9 +718,9 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
   </div>
 
@@ -750,9 +728,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/">使用Guzzle访问API接口需要登录的解决方案</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2018/04/24/Crontab中可能遇到的php版本问题/">Crontab中可能遇到的php版本问题</a>
@@ -768,10 +750,6 @@
         
           <li>
             <a href="/blog-hexo/2018/03/24/Laravel个性化404页面/">Laravel个性化404页面</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/03/19/PHP-unpack-函数的使用/">PHP unpack()函数的使用</a>
           </li>
         
       </ul>
