@@ -5,19 +5,19 @@
   
 
   
-  <title>Angular类的成员变量初始化的问题 | 不止是一位程序员</title>
+  <title>使用Element-UI组件Pagination遇到的一个坑 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近工作中遇到一个比较困惑的事情，在使用Angular1.5框架的项目中，通常遇到两种不同风格的变量初始化方法。有的代码直接在类的成员变量声明后紧接着初始化语句，如：123export class Sample &amp;#123;	public name:string = &amp;apos;initialized following statement&amp;apos;&amp;#125; 有的代码只进行了声明，此后在类的">
-<meta name="keywords" content="Angular,Javascript">
+  <meta name="description" content="背景最近在使用 Elment UI Pagination 时遇到一个问题。 业务逻辑通常使用 ElPagination 是结合表格进行使用的，即表格内的数据为分页数据，当用户点击不同分页按钮时，对应获取特定页的数据，加载到表格中。 为了实现这个逻辑，采用的方案是使用变量 current_page 保存当前 Vue 页面所在的页数，并实现以下逻辑：  在组件 ElPagination 的 prop">
+<meta name="keywords" content="Javascript,Vue,ElementUI">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Angular类的成员变量初始化的问题">
-<meta property="og:url" content="http://ckmessi.github.io/2017/10/21/Angular类的成员变量初始化的问题/index.html">
+<meta property="og:title" content="使用Element-UI组件Pagination遇到的一个坑">
+<meta property="og:url" content="http://ckmessi.github.io/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
-<meta property="og:description" content="最近工作中遇到一个比较困惑的事情，在使用Angular1.5框架的项目中，通常遇到两种不同风格的变量初始化方法。有的代码直接在类的成员变量声明后紧接着初始化语句，如：123export class Sample &amp;#123;	public name:string = &amp;apos;initialized following statement&amp;apos;&amp;#125; 有的代码只进行了声明，此后在类的">
-<meta property="og:updated_time" content="2017-10-21T10:25:22.000Z">
+<meta property="og:description" content="背景最近在使用 Elment UI Pagination 时遇到一个问题。 业务逻辑通常使用 ElPagination 是结合表格进行使用的，即表格内的数据为分页数据，当用户点击不同分页按钮时，对应获取特定页的数据，加载到表格中。 为了实现这个逻辑，采用的方案是使用变量 current_page 保存当前 Vue 页面所在的页数，并实现以下逻辑：  在组件 ElPagination 的 prop">
+<meta property="og:updated_time" content="2018-06-27T12:20:51.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Angular类的成员变量初始化的问题">
-<meta name="twitter:description" content="最近工作中遇到一个比较困惑的事情，在使用Angular1.5框架的项目中，通常遇到两种不同风格的变量初始化方法。有的代码直接在类的成员变量声明后紧接着初始化语句，如：123export class Sample &amp;#123;	public name:string = &amp;apos;initialized following statement&amp;apos;&amp;#125; 有的代码只进行了声明，此后在类的">
+<meta name="twitter:title" content="使用Element-UI组件Pagination遇到的一个坑">
+<meta name="twitter:description" content="背景最近在使用 Elment UI Pagination 时遇到一个问题。 业务逻辑通常使用 ElPagination 是结合表格进行使用的，即表格内的数据为分页数据，当用户点击不同分页按钮时，对应获取特定页的数据，加载到表格中。 为了实现这个逻辑，采用的方案是使用变量 current_page 保存当前 Vue 页面所在的页数，并实现以下逻辑：  在组件 ElPagination 的 prop">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -68,10 +68,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-Angular类的成员变量初始化的问题" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-使用Element-UI组件Pagination遇到的一个坑" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog-hexo/2017/10/21/Angular类的成员变量初始化的问题/" class="article-date">
-  <time datetime="2017-10-21T10:23:34.000Z" itemprop="datePublished">2017-10-21</time>
+    <a href="/blog-hexo/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/" class="article-date">
+  <time datetime="2018-06-27T12:20:00.000Z" itemprop="datePublished">2018-06-27</time>
 </a>
     
   <div class="article-category">
@@ -86,7 +86,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Angular类的成员变量初始化的问题
+      使用Element-UI组件Pagination遇到的一个坑
     </h1>
   
 
@@ -94,18 +94,34 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近工作中遇到一个比较困惑的事情，在使用Angular1.5框架的项目中，通常遇到两种不同风格的变量初始化方法。<br>有的代码直接在类的成员变量声明后紧接着初始化语句，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export class Sample &#123;</div><div class="line">	public name:string = &apos;initialized following statement&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>有的代码只进行了声明，此后在类的构造函数<code>constructor</code>中进行初始化：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">export class Sample &#123;</div><div class="line">	public name:string</div><div class="line">	constructor() &#123;</div><div class="line">		this.name = &apos;initialized in constructor&apos;;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>两种方法是否有区别呢？<br>通过一些查询，可以确认，两种写法都是合法的，并且行为完全一致。<br>前者在编译之后，会变成后者的形式。</p>
-<p>参考链接：<a href="https://stackoverflow.com/questions/42635833/initialization-of-components-class-variables" target="_blank" rel="external">https://stackoverflow.com/questions/42635833/initialization-of-components-class-variables</a></p>
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近在使用 <a href="http://element.eleme.io/#/zh-CN/component/pagination" target="_blank" rel="external">Elment UI Pagination</a> 时遇到一个问题。</p>
+<h2 id="业务逻辑"><a href="#业务逻辑" class="headerlink" title="业务逻辑"></a>业务逻辑</h2><p>通常使用 <code>ElPagination</code> 是结合表格进行使用的，即表格内的数据为分页数据，当用户点击不同分页按钮时，对应获取特定页的数据，加载到表格中。</p>
+<p>为了实现这个逻辑，采用的方案是使用变量 <code>current_page</code> 保存当前 <code>Vue</code> 页面所在的页数，并实现以下逻辑：</p>
+<ul>
+<li>在组件 <code>ElPagination</code> 的 <code>prop</code> 定义中，设置 <code>:current-page=current_page</code>，即将分页器的当前页码绑定为本地变量 <code>current_page</code> 的值。</li>
+<li>初始进入页面时，用 <code>路由参数值</code> 初始化 <code>current_page</code> 的值，并获取数据；</li>
+<li>点击分页按钮切换页面时，触发事件响应 <code>@current-change</code> 的回调函数 ，将 <code>current_page</code> 设置为对应的值，并修改<code>路由参数值</code> ，并获取数据；</li>
+<li>获取数据的逻辑：获取<code>路由参数值</code> ，并以此调用API获取数据。</li>
+</ul>
+<p>之所以每次 <code>current_page</code> 的值发生变化，需要同时修改 <code>路由参数对应值</code> ，是希望将这个状态变化信息添加到路由参数中，反应在页面URL里。这样当页面发生跳转，执行返回时，能够保留此前的页面状态。</p>
+<p>举例而言，操作如下：</p>
+<ol>
+<li>打开第 <code>1</code> 页，此时路由参数中没有 <code>current_page</code> 值，默认变量 <code>current_page</code> 值为 <code>1</code> ，获取第 <code>1</code> 页数据，组件 <code>ElPagination</code> 中 <code>prop</code> 的 <code>currentPage</code> 值为 <code>1</code> ；</li>
+<li>点击分页按钮切换到第 <code>2</code> 页，此时触发事件响应 <code>@current-change</code> 的回调函数 ，将 <code>current_page</code> 设置为 <code>2</code> ，并修改<code>路由参数值</code>，获取数据时获取到第 <code>2</code> 页数据，组件 <code>ElPagination</code> 中 <code>prop</code> 的 <code>currentPage</code> 值为 <code>2</code> ；</li>
+<li>点击页面中某个按钮进入详情页；</li>
+<li>点击返回，此时URL回到第2步的状态，保留了<code>路由参数值</code>为 <code>2</code> ，获取数据，获取第 <code>2</code> 页数据。</li>
+</ol>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>然而，这里问题出现了，尽管获取到的第 <code>2</code> 页数据，但组件 <code>ElPagination</code> 却停留在第 <code>1</code> 页的状态。<br>仔细查看发现，是它的子组件 <code>ElPager</code>的 <code>prop</code> 中的 <code>currentPage</code> 还停留在 <code>1</code> ，为什么会这样呢？</p>
+<p>排查了半天，发现终极原因是组件 <code>ElPagination</code> 在更新时，会自动修改这个值，导致我们通过<code>路由参数值</code>设置的 <code>current_page</code> 值被覆盖了。</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>最后发现罪魁祸首是因为组件 <code>ElPagination</code> 的其中一个 <code>prop</code> 项 <code>total</code> 影响的。<br>组件 <code>ElPagination</code> 有一个逻辑，当 <code>total</code> 的值小于 <code>page-size</code> 值时，页码属性 <code>current-page</code> 会强行重置为 <code>1</code> 。<br>因此，解决方案是使用<code>路由参数值</code>初始化 <code>current_page</code> 的值时，要同时设置 <code>total</code> 的值为 <code>page-size * current_page</code> 这样能够使 <code>current-page</code> 属性不会被重置。<br>而获取数据完成后，自然会获取到准确的 <code>total</code> 值，此后不会再受到影响。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/21/Angular类的成员变量初始化的问题/" data-id="cjix39ae90005wt8tu2t7j9i6" class="article-share-link">Compartir</a>
+      <a data-url="http://ckmessi.github.io/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/" data-id="cjix39ai9003xwt8twu9px6az" class="article-share-link">Compartir</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
 
     </footer>
   </div>
@@ -113,19 +129,10 @@
     
 <nav id="article-nav">
   
-    <a href="/blog-hexo/2017/10/23/Laravel-Database-Query-Builder-insert的效率问题/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Nuevo</strong>
-      <div class="article-nav-title">
-        
-          Laravel Database Query Builder insert的效率问题
-        
-      </div>
-    </a>
   
-  
-    <a href="/blog-hexo/2017/10/16/Git分支基本操作/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/blog-hexo/2018/06/11/一个简单的中国大陆身份证号码验证工具/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Viejo</strong>
-      <div class="article-nav-title">Git分支基本操作</div>
+      <div class="article-nav-title">一个简单的中国大陆身份证号码验证工具</div>
     </a>
   
 </nav>

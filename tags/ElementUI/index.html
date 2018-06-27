@@ -5,19 +5,14 @@
   
 
   
-  <title>Angular类的成员变量初始化的问题 | 不止是一位程序员</title>
+  <title>Tag: ElementUI | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近工作中遇到一个比较困惑的事情，在使用Angular1.5框架的项目中，通常遇到两种不同风格的变量初始化方法。有的代码直接在类的成员变量声明后紧接着初始化语句，如：123export class Sample &amp;#123;	public name:string = &amp;apos;initialized following statement&amp;apos;&amp;#125; 有的代码只进行了声明，此后在类的">
-<meta name="keywords" content="Angular,Javascript">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Angular类的成员变量初始化的问题">
-<meta property="og:url" content="http://ckmessi.github.io/2017/10/21/Angular类的成员变量初始化的问题/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="不止是一位程序员">
+<meta property="og:url" content="http://ckmessi.github.io/tags/ElementUI/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
-<meta property="og:description" content="最近工作中遇到一个比较困惑的事情，在使用Angular1.5框架的项目中，通常遇到两种不同风格的变量初始化方法。有的代码直接在类的成员变量声明后紧接着初始化语句，如：123export class Sample &amp;#123;	public name:string = &amp;apos;initialized following statement&amp;apos;&amp;#125; 有的代码只进行了声明，此后在类的">
-<meta property="og:updated_time" content="2017-10-21T10:25:22.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Angular类的成员变量初始化的问题">
-<meta name="twitter:description" content="最近工作中遇到一个比较困惑的事情，在使用Angular1.5框架的项目中，通常遇到两种不同风格的变量初始化方法。有的代码直接在类的成员变量声明后紧接着初始化语句，如：123export class Sample &amp;#123;	public name:string = &amp;apos;initialized following statement&amp;apos;&amp;#125; 有的代码只进行了声明，此后在类的">
+<meta name="twitter:title" content="不止是一位程序员">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -68,70 +63,40 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-Angular类的成员变量初始化的问题" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/10/21/Angular类的成员变量初始化的问题/" class="article-date">
-  <time datetime="2017-10-21T10:23:34.000Z" itemprop="datePublished">2017-10-21</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+        <section id="main">
   
-    <h1 class="article-title" itemprop="name">
-      Angular类的成员变量初始化的问题
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/blog-hexo/archives/2018" class="archive-year">2018</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/blog-hexo/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/" class="archive-article-date">
+  <time datetime="2018-06-27T12:20:00.000Z" itemprop="datePublished">Jun 27</time>
+</a>
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/blog-hexo/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/">使用Element-UI组件Pagination遇到的一个坑</a>
     </h1>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近工作中遇到一个比较困惑的事情，在使用Angular1.5框架的项目中，通常遇到两种不同风格的变量初始化方法。<br>有的代码直接在类的成员变量声明后紧接着初始化语句，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export class Sample &#123;</div><div class="line">	public name:string = &apos;initialized following statement&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>有的代码只进行了声明，此后在类的构造函数<code>constructor</code>中进行初始化：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">export class Sample &#123;</div><div class="line">	public name:string</div><div class="line">	constructor() &#123;</div><div class="line">		this.name = &apos;initialized in constructor&apos;;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>两种方法是否有区别呢？<br>通过一些查询，可以确认，两种写法都是合法的，并且行为完全一致。<br>前者在编译之后，会变成后者的形式。</p>
-<p>参考链接：<a href="https://stackoverflow.com/questions/42635833/initialization-of-components-class-variables" target="_blank" rel="external">https://stackoverflow.com/questions/42635833/initialization-of-components-class-variables</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/21/Angular类的成员变量初始化的问题/" data-id="cjix39ae90005wt8tu2t7j9i6" class="article-share-link">Compartir</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
-
-    </footer>
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/blog-hexo/2017/10/23/Laravel-Database-Query-Builder-insert的效率问题/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Nuevo</strong>
-      <div class="article-nav-title">
-        
-          Laravel Database Query Builder insert的效率问题
-        
-      </div>
-    </a>
-  
-  
-    <a href="/blog-hexo/2017/10/16/Git分支基本操作/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Viejo</strong>
-      <div class="article-nav-title">Git分支基本操作</div>
-    </a>
-  
-</nav>
-
-  
 </article>
+  
+  
+    </div></section>
+  
+
 
 </section>
         
