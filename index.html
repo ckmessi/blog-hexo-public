@@ -65,6 +65,57 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Laravel数据库表连接查询中添加外表字段查询条件" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/07/02/Laravel数据库表连接查询中添加外表字段查询条件/" class="article-date">
+  <time datetime="2018-07-02T08:32:20.000Z" itemprop="datePublished">2018-07-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/07/02/Laravel数据库表连接查询中添加外表字段查询条件/">Laravel数据库表连接查询中添加外表字段查询条件</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在 <code>Laravel</code> 框架中，数据库表连接查询通常使用 <code>leftJoin</code> 语句。</p>
+<p>举个简单的例子，下述查询语句中，查询 <code>persons</code> 表中 <code>person_type</code> 的值为 <code>1</code> 的表项，并左连接 <code>users</code> 表，以 <code>persons_id</code> 为条件进行两个表的关联，获取 <code>persons</code> 表项在 <code>users</code> 表中的对应属性。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$list = Person::where(&apos;person_type&apos;, &apos;=&apos;, &apos;1&apos;)</div><div class="line">    -&gt;leftJoin(&apos;users&apos;, &apos;users.person_id&apos;, &apos;=&apos;, &apos;persons.person_id&apos;)</div><div class="line">    -&gt;get();</div></pre></td></tr></table></figure></p>
+<p>然而如果需要限制 <code>users</code> 表中某个字段，比如限定 <code>users.deleted_at</code> 为 <code>null</code> 的记录才筛选出来，就有点麻烦了。<br>如果直接使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$list = Person::where(&apos;person_type&apos;, &apos;=&apos;, &apos;1&apos;)</div><div class="line">    -&gt;whereNull(&apos;users.deleted_at&apos;)</div><div class="line">    -&gt;leftJoin(&apos;users&apos;, &apos;users.person_id&apos;, &apos;=&apos;, &apos;persons.person_id&apos;)</div><div class="line">    -&gt;get();</div></pre></td></tr></table></figure></p>
+<p>将造成返回空记录。</p>
+<p>这是因为，对于数据库而言，表连接时直接加where条件是不行的，会导致返回结果不返回空记录，正确是写法应该是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select * from persons left join users on persons.person_id=users.person_id and users.deleted_at=null;</div></pre></td></tr></table></figure></p>
+<p>对应地，在 <code>Laravel</code> 中的语句为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$list = Person::where(&apos;person_type&apos;, &apos;=&apos;, &apos;1&apos;)</div><div class="line">    -&gt;leftJoin(&apos;users&apos;, function($join)&#123;</div><div class="line">            $join-&gt;on(&apos;users.person_id&apos;, &apos;=&apos;, &apos;persons.person_id&apos;)</div><div class="line">                    -&gt;whereNull(&apos;users.deleted_at&apos;);</div><div class="line">        &#125;</div><div class="line">    )</div><div class="line">    -&gt;get();</div></pre></td></tr></table></figure></p>
+<p>即将关于 <code>users.deleted_at</code> 列的筛选条件放到 <code>leftJoin</code> 语句的回调函数中进行相关操作。</p>
+<p>这样能够实现在表连接过程中，对外表字段添加查询条件。</p>
+<p>参考链接：<a href="https://blog.csdn.net/php_girl/article/details/77478429" target="_blank" rel="external">https://blog.csdn.net/php_girl/article/details/77478429</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/07/02/Laravel数据库表连接查询中添加外表字段查询条件/" data-id="cjj40fuud0034vj8t18zhmd6b" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Laravel命令php-artisan-key-generate的作用" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2018/06/30/Laravel命令php-artisan-key-generate的作用/" class="article-date">
@@ -102,7 +153,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/06/30/Laravel命令php-artisan-key-generate的作用/" data-id="cjj192al10026f38t683tf5gw" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/06/30/Laravel命令php-artisan-key-generate的作用/" data-id="cjj40fuu5002vvj8t6ee28j1o" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -164,7 +215,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/" data-id="cjj192anl004mf38tnorqsxiu" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/" data-id="cjj40fuwk0055vj8t3idr7dv7" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -242,7 +293,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/06/11/一个简单的中国大陆身份证号码验证工具/" data-id="cjj192anc004bf38tg0q5pol6" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/06/11/一个简单的中国大陆身份证号码验证工具/" data-id="cjj40fuwf004yvj8tuvze746v" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -290,7 +341,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/31/Laravel-migration添加column使用Sqlite可能遇到的错误/" data-id="cjj192akt001xf38tglkjy4do" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/05/31/Laravel-migration添加column使用Sqlite可能遇到的错误/" data-id="cjj40futv002kvj8tzx6retbl" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -337,7 +388,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/" data-id="cjj192ajc000uf38t066mmsgm" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/" data-id="cjj40fusr001jvj8tbx1v15m6" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -390,7 +441,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/" data-id="cjj192ani004if38twn5dmafi" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/" data-id="cjj40fuwh0052vj8t1p5kgnkf" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -449,7 +500,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/04/24/Crontab中可能遇到的php版本问题/" data-id="cjj192aj2000mf38tq735yfuk" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/04/24/Crontab中可能遇到的php版本问题/" data-id="cjj40fuso001hvj8tby62z7lt" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -495,7 +546,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/27/PHP使用php-ml完成距离计算/" data-id="cjj192am9003ef38t5w2b10e6" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/27/PHP使用php-ml完成距离计算/" data-id="cjj40fuvn0048vj8t2ouwq4aa" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -556,59 +607,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/26/PHP中警惕悬挂引用可能引起的bug/" data-id="cjj192aly0034f38tlojxb450" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/26/PHP中警惕悬挂引用可能引起的bug/" data-id="cjj40fuvf0041vj8tntlyeord" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Laravel个性化404页面" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2018/03/24/Laravel个性化404页面/" class="article-date">
-  <time datetime="2018-03-24T07:27:05.000Z" itemprop="datePublished">2018-03-24</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2018/03/24/Laravel个性化404页面/">Laravel个性化404页面</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Larvel5.5 默认的404页面比较普通，在实际中可能需要输出个性化的404页面。</p>
-<img src="/blog-hexo/2018/03/24/Laravel个性化404页面/1.png" alt="Laravel5.5的默认404页面" title="Laravel5.5的默认404页面">
-<p>根据<a href="https://laravel.com/docs/5.5/errors#custom-http-error-pages" target="_blank" rel="external">官方文档</a>，可以通过创建一个<code>resources/views/errors/404.blade.php</code>文件，实现自定义的404错误页面。</p>
-<p>查看相关源码，在文件<code>Illuminate\Foundation\Exceptions\Handler.php</code>中，可知其原理如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">protected function renderHttpException(HttpException $e)</div><div class="line">   &#123;</div><div class="line">       $status = $e-&gt;getStatusCode();</div><div class="line"></div><div class="line">       $paths = collect(config(&apos;view.paths&apos;));</div><div class="line"></div><div class="line">       view()-&gt;replaceNamespace(&apos;errors&apos;, $paths-&gt;map(function ($path) &#123;</div><div class="line">           return &quot;&#123;$path&#125;/errors&quot;;</div><div class="line">       &#125;)-&gt;push(__DIR__.&apos;/views&apos;)-&gt;all());</div><div class="line"></div><div class="line">       if (view()-&gt;exists($view = &quot;errors::&#123;$status&#125;&quot;)) &#123;</div><div class="line">           return response()-&gt;view($view, [&apos;exception&apos; =&gt; $e], $status, $e-&gt;getHeaders());</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       return $this-&gt;convertExceptionToResponse($e);</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
-<p>这个方法<code>renderHttpException</code>的功能故名思义是渲染Http请求异常的。<br>其中会先收集<code>view</code>文件夹（这在<code>config/view.php</code>文件中定义）下所有文件集合，默认会在<code>resources/views/errors</code>文件夹下，查找是否有与<code>$status</code>相同的文件名称。若有，则输出这个页面；否则执行默认的异常渲染操作。   </p>
-<p>这就是为什么通过添加<code>resources/views/errors/404.blade.php</code>文件就能自定义404页面的原理。类似的，如果希望自定义503错误页面，则对应添加一个<code>503.blade.php</code>即可。   </p>
-<p>以上。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/24/Laravel个性化404页面/" data-id="cjj192al00023f38t0si25ag3" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
 
     </footer>
   </div>
@@ -621,7 +623,7 @@
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/blog-hexo/page/2/">2</a><a class="page-number" href="/blog-hexo/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="extend next" rel="next" href="/blog-hexo/page/2/">weiter &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/blog-hexo/page/2/">2</a><a class="page-number" href="/blog-hexo/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/7/">7</a><a class="extend next" rel="next" href="/blog-hexo/page/2/">weiter &raquo;</a>
   </nav>
 
 </section>
@@ -661,7 +663,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archiv</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
   </div>
 
@@ -672,6 +674,10 @@
     <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2018/07/02/Laravel数据库表连接查询中添加外表字段查询条件/">Laravel数据库表连接查询中添加外表字段查询条件</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2018/06/30/Laravel命令php-artisan-key-generate的作用/">Laravel命令php artisan key:generate的作用</a>
@@ -687,10 +693,6 @@
         
           <li>
             <a href="/blog-hexo/2018/05/31/Laravel-migration添加column使用Sqlite可能遇到的错误/">Laravel migration添加column使用Sqlite可能遇到的错误</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/">Git克隆项目时SSH/HTTP方式的区别</a>
           </li>
         
       </ul>
