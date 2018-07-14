@@ -65,6 +65,84 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Vue在自定义组件上使用v-model的方法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/07/14/Vue在自定义组件上使用v-model的方法/" class="article-date">
+  <time datetime="2018-07-14T08:25:54.000Z" itemprop="datePublished">2018-07-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/07/14/Vue在自定义组件上使用v-model的方法/">Vue在自定义组件上使用v-model的方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在前端项目中经常会使用到这样一种控件：它是一个选择器 <code>select</code> ，它的候选列表是需要从后台服务器获取的，这种时候每次使用它时，都需要调用一次后台接口获取数据，并用于它的候选列表。<br>在这种情况下，通常会将其封装成一个组件，这样将调用后台接口等相同操作封装到统一的地方进行。外部代码只需要进行调用即可。<br>在这种情况下，就需要实现外部代码与子组件的数据通信。在Vue组件中，要实现父组件和子组件的数据双向绑定，有许多种方法。</p>
+<h2 id="之前的方案"><a href="#之前的方案" class="headerlink" title="之前的方案"></a>之前的方案</h2><p>此前对于Vue不熟悉，使用的是事件通信的方案。基本思路是：</p>
+<p>在父组件中</p>
+<ul>
+<li>通过 <code>prop</code> 将初始值传入子组件</li>
+<li>在父组件中设置 <code>v-on</code> 方法监听事件，并完成对父组件数据的修改。</li>
+</ul>
+<p>在子组件中</p>
+<ul>
+<li>根据 <code>prop</code> 的值初始化变量</li>
+<li>使用 <code>watch</code> 监听，确保变量数据保持与父组件同步</li>
+<li>变量值发生改变时，通过通过 <code>$emit</code> 方式发送事件</li>
+</ul>
+<p>此前的基本代码逻辑如下：</p>
+<h4 id="父组件"><a href="#父组件" class="headerlink" title="父组件"></a>父组件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">    ...</div><div class="line">    &lt;sub-component :initVariable=&quot;variable&quot; v-on:selectVariable=&quot;onSelectVariable&quot;&gt;&lt;/sub-component&gt;</div><div class="line">    ...</div><div class="line">&lt;/template&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    export default &#123;</div><div class="line">        data()&#123;</div><div class="line">            return &#123;</div><div class="line">                variable: &apos;&apos;,</div><div class="line">            &#125;</div><div class="line">        &#125;,</div><div class="line">        methods: &#123;</div><div class="line">            onSelectVariable: function (val) &#123;</div><div class="line">                this.variable = val</div><div class="line">            &#125;,</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<h4 id="子组件"><a href="#子组件" class="headerlink" title="子组件"></a>子组件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">    &lt;el-select v-model=&quot;variable&quot; v-on:change=&quot;selectVariable&quot;&gt;</div><div class="line">        &lt;el-option</div><div class="line">          v-for=&quot;item in list&quot;</div><div class="line">          :key=&quot;item.value&quot;</div><div class="line">          :label=&quot;item.label&quot;</div><div class="line">          :value=&quot;item.value&quot;&gt;</div><div class="line">        &lt;/el-option&gt;</div><div class="line">    &lt;/el-select&gt;</div><div class="line">&lt;/template&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    export default &#123;</div><div class="line">        props:[</div><div class="line">            &apos;initVariable&apos;,</div><div class="line">        ],</div><div class="line">        data() &#123;</div><div class="line">            return &#123;</div><div class="line">                &apos;list&apos;: [],</div><div class="line">                &apos;variable&apos;: this.initVariable,</div><div class="line">            &#125;</div><div class="line">        &#125;,</div><div class="line">        watch:&#123;</div><div class="line">            initVariable(val) &#123;</div><div class="line">                this.variable= val;</div><div class="line">            &#125;,</div><div class="line">        &#125;,</div><div class="line">        methods:&#123;</div><div class="line">            selectVariable()&#123;</div><div class="line">                this.$emit(&apos;selectVariable&apos;, this.variable)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<p>这种情况下，父组件和子组件都需要添加许多监听函数，确保双方的数据能够得到相互同步。</p>
+<h2 id="正确方式：使用v-model"><a href="#正确方式：使用v-model" class="headerlink" title="正确方式：使用v-model"></a>正确方式：使用v-model</h2><p>后来发现，正确的方式应该是使用组件的 <code>v-model</code>方法，官方文档在<a href="https://cn.vuejs.org/v2/guide/components.html#在组件上使用-v-model" target="_blank" rel="external">这里</a>。</p>
+<p>由于下面两种语法等价：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;input v-model=&quot;searchText&quot;&gt;</div></pre></td></tr></table></figure></p>
+<p>等价于<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;input</div><div class="line">  v-bind:value=&quot;searchText&quot;</div><div class="line">  v-on:input=&quot;searchText = $event.target.value&quot;</div><div class="line">&gt;</div></pre></td></tr></table></figure></p>
+<p>当用在组件上时，<code>v-model</code> 实质上等价下以下代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;custom-input</div><div class="line">  v-bind:value=&quot;searchText&quot;</div><div class="line">  v-on:input=&quot;searchText = $event&quot;</div><div class="line">&gt;&lt;/custom-input&gt;</div></pre></td></tr></table></figure></p>
+<p>为了让它正常工作，这个子组件 <code>custom-input</code> 内的 <code>&lt;input&gt;</code> 必须实现：</p>
+<ul>
+<li>将其 <code>value</code> 特性绑定到一个名叫 <code>value</code> 的 prop 上</li>
+<li>在其 input 事件被触发时，将新的值通过自定义的 <code>input</code> 事件抛出</li>
+</ul>
+<p>因此，写成代码之后是这样的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Vue.component(&apos;custom-input&apos;, &#123;</div><div class="line">  props: [&apos;value&apos;],</div><div class="line">  template: `</div><div class="line">    &lt;input</div><div class="line">      v-bind:value=&quot;value&quot;</div><div class="line">      v-on:input=&quot;$emit(&apos;input&apos;, $event.target.value)&quot;</div><div class="line">    &gt;</div><div class="line">  `</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>在这个基础上，<code>v-model</code> 就应该可以在这个组件上完美地工作起来了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;custom-input v-model=&quot;searchText&quot;&gt;&lt;/custom-input&gt;</div></pre></td></tr></table></figure></p>
+<p>可以看出，基本思路与此前的方法是类似的，但是通过Vue的一些语法糖，使代码更加简洁。</p>
+<p>根据这份教程，我们可以重构之前的父子组件撰写方案，使之更简洁，高效。</p>
+<h2 id="使用样例"><a href="#使用样例" class="headerlink" title="使用样例"></a>使用样例</h2><h4 id="父组件-1"><a href="#父组件-1" class="headerlink" title="父组件"></a>父组件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">    ...</div><div class="line">    &lt;sub-component v-model=&quot;variable&quot;&gt;&lt;/sub-component&gt;</div><div class="line">    ...</div><div class="line">&lt;/template&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    export default &#123;</div><div class="line">        data()&#123;</div><div class="line">            return &#123;</div><div class="line">                variable: &apos;&apos;,</div><div class="line">            &#125;</div><div class="line">        &#125;,</div><div class="line">    &#125;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<p>可以看出，父组件只需要定义数据变量，并使用 <code>v-model</code> 绑定到子组件即可，不再需要显式地指定监听函数。</p>
+<h4 id="子组件-1"><a href="#子组件-1" class="headerlink" title="子组件"></a>子组件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">    &lt;el-select v-model=&quot;value&quot; v-on:input=&quot;$emit(&apos;input&apos;, $event)&quot;&gt;</div><div class="line">        &lt;el-option</div><div class="line">          v-for=&quot;item in list&quot;</div><div class="line">          :key=&quot;item.value&quot;</div><div class="line">          :label=&quot;item.label&quot;</div><div class="line">          :value=&quot;item.value&quot;&gt;</div><div class="line">        &lt;/el-option&gt;</div><div class="line">    &lt;/el-select&gt;</div><div class="line">&lt;/template&gt;</div><div class="line"></div><div class="line">&lt;script&gt;</div><div class="line">    export default &#123;</div><div class="line">        props:[</div><div class="line">            &apos;value&apos;,</div><div class="line">        ],</div><div class="line">        data() &#123;</div><div class="line">            return &#123;</div><div class="line">                &apos;list&apos;: [],</div><div class="line">                &apos;variable&apos;: this.initVariable,</div><div class="line">            &#125;</div><div class="line">        &#125;,</div><div class="line">    &#125;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<p>可以看出，子组件只需要定义数据变量，并设置 <code>v-on:input</code> 的值即可（取代原来的 <code>$emit</code> 功效），不再需要 <code>watch</code> 初始值。</p>
+<p>这里需要注意的两点，一是<code>v-model=&quot;value&quot;</code>这里的<code>value</code>，一定需要是这个名称，不能修改；二是<code>v-on:input=&quot;$emit(&#39;input&#39;, $event)&quot;</code>与官方文档中不同，后面括号内的参数不再是<code>$event.target.value</code>，但名称一定要是<code>$event</code>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>写多了发现，许多同类的代码都可以抽象为一个自定义组件，相关属性都使用prop值从父组件传入即可。原始的v-model绑定数据，就通过上述方式与父组件数据进行绑定。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/07/14/Vue在自定义组件上使用v-model的方法/" data-id="cjjl5m148004a7f8tr67kuqa3" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Element-UI的Tooltip对disabled的按钮无效的问题" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2018/07/06/Element-UI的Tooltip对disabled的按钮无效的问题/" class="article-date">
@@ -101,7 +179,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/07/06/Element-UI的Tooltip对disabled的按钮无效的问题/" data-id="cjj9rkp4l000i5v8tmw06foqe" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/07/06/Element-UI的Tooltip对disabled的按钮无效的问题/" data-id="cjjl5m0zv000r7f8thnqqp6jt" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -153,7 +231,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/07/03/Javascript模拟浏览器全屏行为并管理全屏状态/" data-id="cjj9rkp5p001x5v8tkaoatv52" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/07/03/Javascript模拟浏览器全屏行为并管理全屏状态/" data-id="cjjl5m11u001s7f8to74tpkm5" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -204,7 +282,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/07/02/Laravel数据库表连接查询中添加外表字段查询条件/" data-id="cjj9rkp65002r5v8tk2wlofo3" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/07/02/Laravel数据库表连接查询中添加外表字段查询条件/" data-id="cjjl5m12m002n7f8tul14epkc" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -253,7 +331,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/06/30/Laravel命令php-artisan-key-generate的作用/" data-id="cjj9rkp62002k5v8th9shbi8z" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/06/30/Laravel命令php-artisan-key-generate的作用/" data-id="cjjl5m12u002x7f8t6d1bqrg1" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -315,7 +393,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/" data-id="cjj9rkp7f004l5v8tcp0bxvnq" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/" data-id="cjjl5m14l004v7f8ts74xsv0g" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -393,7 +471,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/06/11/一个简单的中国大陆身份证号码验证工具/" data-id="cjj9rkp7d004h5v8tzccrzgko" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/06/11/一个简单的中国大陆身份证号码验证工具/" data-id="cjjl5m14n00527f8tpl2ykuiv" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -441,7 +519,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/31/Laravel-migration添加column使用Sqlite可能遇到的错误/" data-id="cjj9rkp5u00265v8tgh4meqfq" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/05/31/Laravel-migration添加column使用Sqlite可能遇到的错误/" data-id="cjjl5m12500237f8tjqmsl3p4" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -488,7 +566,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/" data-id="cjj9rkp5100125v8t2hno1ste" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/" data-id="cjjl5m10i000z7f8t307d53vo" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -541,69 +619,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/" data-id="cjj9rkp7h004o5v8t7b9efn05" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/" data-id="cjjl5m14m004z7f8t9e19dszp" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Crontab中可能遇到的php版本问题" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2018/04/24/Crontab中可能遇到的php版本问题/" class="article-date">
-  <time datetime="2018-04-24T03:55:26.000Z" itemprop="datePublished">2018-04-24</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2018/04/24/Crontab中可能遇到的php版本问题/">Crontab中可能遇到的php版本问题</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在工作中遇到需要添加定时任务的问题， Laravel 框架提供了特性 <a href="https://laravel.com/docs/5.5/scheduling" target="_blank" rel="external">Task Schedule</a> 。</p>
-<p>参考文档可知，其实 Laravel 的 <code>Scheduler</code> 是基于系统定时任务的，因此需要添加如下代码至系统的定时任务列表中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">* * * * * php /path-to-your-project/artisan schedule:run &gt;&gt; /dev/null 2&gt;&amp;1</div></pre></td></tr></table></figure></p>
-<p>在 Linux 操作系统中，通常可以通过 <code>crontab -e</code> 命令编辑定时任务列表，编辑完成后，使用 <code>crontab -l</code> 查看当前存在的定时任务。</p>
-<p>然而在实现过程中遇到了一些问题，设定了相关 <code>crontab</code> 任务，却貌似没有真正执行。</p>
-<p>将上述代码中的 <code>&gt;&gt; /dev/null 2&gt;&amp;1</code> 替换为重定向到错误日志文件，可以看到内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Parse error: parse error in /path-to-your-projectl/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php on line 233</div></pre></td></tr></table></figure></p>
-<p>查看对应文件的 <code>233</code> 行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if (is_string($arguments[0])) &#123;</div><div class="line">    return app(&apos;cache&apos;)-&gt;get($arguments[0], $arguments[1] ?? null);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>大概是因为其中使用了符号 <code>??</code> ，这是 <code>PHP7</code> 的特性，在 <code>PHP5</code> 中是会报错的。</p>
-<p>此时大概定位了问题大概在于PHP的版本。</p>
-<p>使用 <code>which php</code> 可以查看当前可执行文件 <code>php</code> 命令的真实指向：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/usr/local/bin/php</div></pre></td></tr></table></figure></p>
-<p>使用 <code>where php</code> 可以查看所有所有命令 <code>php</code> 的内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/usr/local/bin/php</div><div class="line">/usr/bin/php</div></pre></td></tr></table></figure></p>
-<p>使用 <code>whereis php</code> 可以查看命令 <code>php</code>的指向是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">usr/bin/php</div></pre></td></tr></table></figure></p>
-<p>可以看出，系统中的 php 版本是很混乱的。</p>
-<p>使用命令 <code>ls -la /usr/local/bin/php</code> 可得：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lrwxr-xr-x  1 admin  admin  33 11 22 20:32 /usr/local/bin/php -&gt; ../Cellar/php70/7.0.25_17/bin/php</div></pre></td></tr></table></figure></p>
-<p>使用命令 <code>ls -la /usr/bin/php</code> 可得：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-rwxr-xr-x  1 root  wheel  10577264  7  9  2016 /usr/bin/php</div></pre></td></tr></table></figure></p>
-<p>不一样。</p>
-<p>说明 <code>crontab</code> 调用的可能是 <code>/usr/bin/php</code> 命令。</p>
-<p>修复方式是，将定时任务脚本中的命令 <code>php</code> 替换为绝对路径 <code>/usr/local/bin/php</code> ，就可以正常调用了。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/04/24/Crontab中可能遇到的php版本问题/" data-id="cjj9rkp4t000s5v8t4cw3dvqs" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
 
     </footer>
   </div>
@@ -647,7 +666,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 12.86px;">Angular</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 12.86px;">C#</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 11.43px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 11.43px;">Command Line</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 11.43px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15.71px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 14.29px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.14px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.57px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 12.86px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 11.43px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 11.43px;">PowerShell</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 14.29px;">Vue</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 12.86px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 12.5px;">Angular</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 12.5px;">C#</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 11.25px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 11.25px;">Command Line</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 11.25px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Git/" style="font-size: 16.25px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 13.75px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.5px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.75px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 12.5px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 11.25px;">PowerShell</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15px;">Vue</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 12.5px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
     </div>
   </div>
 
@@ -669,6 +688,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2018/07/14/Vue在自定义组件上使用v-model的方法/">Vue在自定义组件上使用v-model的方法</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2018/07/06/Element-UI的Tooltip对disabled的按钮无效的问题/">Element UI的Tooltip对disabled的按钮无效的问题</a>
           </li>
         
@@ -682,10 +705,6 @@
         
           <li>
             <a href="/blog-hexo/2018/06/30/Laravel命令php-artisan-key-generate的作用/">Laravel命令php artisan key:generate的作用</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/">使用Element-UI组件Pagination遇到的一个坑</a>
           </li>
         
       </ul>
