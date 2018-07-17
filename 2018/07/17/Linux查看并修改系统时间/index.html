@@ -5,14 +5,19 @@
   
 
   
-  <title>Tag: VisualStudio | 不止是一位程序员</title>
+  <title>Linux查看并修改系统时间 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="不止是一位程序员">
-<meta property="og:url" content="http://ckmessi.github.io/tags/VisualStudio/index.html">
+  <meta name="description" content="Linux时间相关概念首先，Linux操作系统有两上关键的时间概念：系统时钟和硬件时钟，两个时钟有可能是不同步的。系统时钟（System Clock）是指当前Linux Kernel中的时钟，而硬件时钟（Real Time Clock，RTC）是指主板上由电池供电的时钟在系统关闭时，系统将同步系统时钟到硬件时钟；在系统启动时，会从硬件时钟读取时间更新到系统时钟。这两个步骤都会根据相关文件中的UTC">
+<meta name="keywords" content="Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux查看并修改系统时间">
+<meta property="og:url" content="http://ckmessi.github.io/2018/07/17/Linux查看并修改系统时间/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="Linux时间相关概念首先，Linux操作系统有两上关键的时间概念：系统时钟和硬件时钟，两个时钟有可能是不同步的。系统时钟（System Clock）是指当前Linux Kernel中的时钟，而硬件时钟（Real Time Clock，RTC）是指主板上由电池供电的时钟在系统关闭时，系统将同步系统时钟到硬件时钟；在系统启动时，会从硬件时钟读取时间更新到系统时钟。这两个步骤都会根据相关文件中的UTC">
+<meta property="og:updated_time" content="2018-07-17T10:02:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="不止是一位程序员">
+<meta name="twitter:title" content="Linux查看并修改系统时间">
+<meta name="twitter:description" content="Linux时间相关概念首先，Linux操作系统有两上关键的时间概念：系统时钟和硬件时钟，两个时钟有可能是不同步的。系统时钟（System Clock）是指当前Linux Kernel中的时钟，而硬件时钟（Real Time Clock，RTC）是指主板上由电池供电的时钟在系统关闭时，系统将同步系统时钟到硬件时钟；在系统启动时，会从硬件时钟读取时间更新到系统时钟。这两个步骤都会根据相关文件中的UTC">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -63,40 +68,67 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog-hexo/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/08/18/Solution-sln-File-in-Visual-Studio/" class="archive-article-date">
-  <time datetime="2017-08-18T13:34:32.000Z" itemprop="datePublished">Aug 18</time>
+        <section id="main"><article id="post-Linux查看并修改系统时间" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/07/17/Linux查看并修改系统时间/" class="article-date">
+  <time datetime="2018-07-17T09:59:36.000Z" itemprop="datePublished">2018-07-17</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/08/18/Solution-sln-File-in-Visual-Studio/">Solution(.sln) File in Visual Studio</a>
+    <h1 class="article-title" itemprop="name">
+      Linux查看并修改系统时间
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Linux时间相关概念"><a href="#Linux时间相关概念" class="headerlink" title="Linux时间相关概念"></a>Linux时间相关概念</h2><p>首先，Linux操作系统有两上关键的时间概念：<code>系统时钟</code>和<code>硬件时钟</code>，两个时钟有可能是不同步的。<br>系统时钟（System Clock）是指当前Linux Kernel中的时钟，而硬件时钟（Real Time Clock，RTC）是指主板上由电池供电的时钟<br>在系统关闭时，系统将同步系统时钟到硬件时钟；在系统启动时，会从硬件时钟读取时间更新到系统时钟。这两个步骤都会根据相关文件中的UTC参数来设置时区转换。<br>在Linux中的所有命令（包括函数）都是采用的系统时钟进行设置的。</p>
+<h2 id="查看时间"><a href="#查看时间" class="headerlink" title="查看时间"></a>查看时间</h2><h4 id="查看系统时间"><a href="#查看系统时间" class="headerlink" title="查看系统时间"></a>查看系统时间</h4><p>查看当前时间<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">date</div></pre></td></tr></table></figure></p>
+<p>添加参数<code>-R</code>可以查看当前时间及时区：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">date -R</div></pre></td></tr></table></figure></p>
+<h4 id="查看硬件时间"><a href="#查看硬件时间" class="headerlink" title="查看硬件时间"></a>查看硬件时间</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hwclock --show</div></pre></td></tr></table></figure>
+<h2 id="修改时间"><a href="#修改时间" class="headerlink" title="修改时间"></a>修改时间</h2><h4 id="修改系统时间"><a href="#修改系统时间" class="headerlink" title="修改系统时间"></a>修改系统时间</h4><p>以下命令设置系统时间为2009年12月31日17:55:55<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">date --set 12/31/2009 17:55:55</div></pre></td></tr></table></figure></p>
+<h4 id="修改时区"><a href="#修改时区" class="headerlink" title="修改时区"></a>修改时区</h4><p>有个命令是<code>tzselect</code>，这个命令会引导你选择时区，最后告诉你将某些内容添加到个人的<code>.profile</code>文件中完成时区修改。<br>更直接的方式是用时区文件替换系统时区文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</div></pre></td></tr></table></figure></p>
+<h4 id="修改硬件时间"><a href="#修改硬件时间" class="headerlink" title="修改硬件时间"></a>修改硬件时间</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hwclock --set --date=&quot;12/31/2009 10:59:50&quot;</div></pre></td></tr></table></figure>
+<h4 id="系统时间与硬件时间的同步"><a href="#系统时间与硬件时间的同步" class="headerlink" title="系统时间与硬件时间的同步"></a>系统时间与硬件时间的同步</h4><p>使用硬件时钟同步系统时钟：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hwclock --hctosys</div></pre></td></tr></table></figure></p>
+<p>使用系统时钟同步硬件时钟：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hwclock --systohc</div></pre></td></tr></table></figure></p>
+<p>参考链接：<br><a href="https://www.cnblogs.com/onephp/p/6225013.html" target="_blank" rel="external">https://www.cnblogs.com/onephp/p/6225013.html</a><br><a href="http://codingstandards.iteye.com/blog/834280" target="_blank" rel="external">http://codingstandards.iteye.com/blog/834280</a><br><a href="https://blog.csdn.net/fanwenyuan_fwy/article/details/79035424" target="_blank" rel="external">https://blog.csdn.net/fanwenyuan_fwy/article/details/79035424</a></p>
 
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/07/17/Linux查看并修改系统时间/" data-id="cjjpj3s3l002tpi8tctbio8jz" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog-hexo/2018/07/14/Vue在自定义组件上使用v-model的方法/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Vue在自定义组件上使用v-model的方法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
 
 </section>
         
