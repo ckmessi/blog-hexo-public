@@ -5,19 +5,19 @@
   
 
   
-  <title>Swiper插件的使用 | 不止是一位程序员</title>
+  <title>Element-UI表格标题使用render-header函数 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="近年来许多网页的风格流行一屏一屏滑动的特效，这是一个比较常规的方案，应该有许多现成的组件可供使用。之前尝试过许多前端组件，不知道是我的技术不行还是查找能力差，总之没有特别满意的。直到最近发现Swiper插件，代码相对简洁易懂，可供配制的参数选项较丰富。    一个简单的demo窗口如下：                                     Slide1">
-<meta name="keywords" content="Javascript,前端">
+  <meta name="description" content="背景在使用 Element-UI 组件 el-table 时，可能希望表头具有 tooltip 的效果，即鼠标hover的时候能够显示一些提示信息， el-table 的表头是无法直接通过包裹 el-tooltip 的方式完成，此时需要用到 Table-column Attributes 的 render-header 函数。 方法在 el-table 的某一列添加属性如下： 1234567&amp;lt">
+<meta name="keywords" content="Javascript,ElementUI,Vue">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Swiper插件的使用">
-<meta property="og:url" content="http://ckmessi.github.io/2017/06/17/Swiper插件的使用/index.html">
+<meta property="og:title" content="Element-UI表格标题使用render-header函数">
+<meta property="og:url" content="http://ckmessi.github.io/2018/08/03/Element-UI表格标题使用render-header函数/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
-<meta property="og:description" content="近年来许多网页的风格流行一屏一屏滑动的特效，这是一个比较常规的方案，应该有许多现成的组件可供使用。之前尝试过许多前端组件，不知道是我的技术不行还是查找能力差，总之没有特别满意的。直到最近发现Swiper插件，代码相对简洁易懂，可供配制的参数选项较丰富。    一个简单的demo窗口如下：                                     Slide1">
-<meta property="og:updated_time" content="2017-06-17T13:58:48.000Z">
+<meta property="og:description" content="背景在使用 Element-UI 组件 el-table 时，可能希望表头具有 tooltip 的效果，即鼠标hover的时候能够显示一些提示信息， el-table 的表头是无法直接通过包裹 el-tooltip 的方式完成，此时需要用到 Table-column Attributes 的 render-header 函数。 方法在 el-table 的某一列添加属性如下： 1234567&amp;lt">
+<meta property="og:updated_time" content="2018-08-03T10:12:46.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Swiper插件的使用">
-<meta name="twitter:description" content="近年来许多网页的风格流行一屏一屏滑动的特效，这是一个比较常规的方案，应该有许多现成的组件可供使用。之前尝试过许多前端组件，不知道是我的技术不行还是查找能力差，总之没有特别满意的。直到最近发现Swiper插件，代码相对简洁易懂，可供配制的参数选项较丰富。    一个简单的demo窗口如下：                                     Slide1">
+<meta name="twitter:title" content="Element-UI表格标题使用render-header函数">
+<meta name="twitter:description" content="背景在使用 Element-UI 组件 el-table 时，可能希望表头具有 tooltip 的效果，即鼠标hover的时候能够显示一些提示信息， el-table 的表头是无法直接通过包裹 el-tooltip 的方式完成，此时需要用到 Table-column Attributes 的 render-header 函数。 方法在 el-table 的某一列添加属性如下： 1234567&amp;lt">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -68,12 +68,16 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-Swiper插件的使用" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Element-UI表格标题使用render-header函数" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog-hexo/2017/06/17/Swiper插件的使用/" class="article-date">
-  <time datetime="2017-06-17T13:14:20.000Z" itemprop="datePublished">2017-06-17</time>
+    <a href="/blog-hexo/2018/08/03/Element-UI表格标题使用render-header函数/" class="article-date">
+  <time datetime="2018-08-03T10:12:00.000Z" itemprop="datePublished">2018-08-03</time>
 </a>
     
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
   </div>
   <div class="article-inner">
     
@@ -82,7 +86,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Swiper插件的使用
+      Element-UI表格标题使用render-header函数
     </h1>
   
 
@@ -90,37 +94,24 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>近年来许多网页的风格流行一屏一屏滑动的特效，这是一个比较常规的方案，应该有许多现成的组件可供使用。<br>之前尝试过许多前端组件，不知道是我的技术不行还是查找能力差，总之没有特别满意的。直到最近发现Swiper插件，代码相对简洁易懂，可供配制的参数选项较丰富。   </p>
-<p>一个简单的demo窗口如下：</p>
-<div id="main" style="width: 850px;"><br>    <!-- Swiper --><br>    <div class="swiper-container" style="background-color: #f5f5f5; height: 300px;"><br>      <div class="swiper-wrapper"><br>          <div class="swiper-slide"><br>            Slide1<br>          </div><br>          <div class="swiper-slide"><br>            Slide2<br>          </div><br>          <div class="swiper-slide"><br>            Slide3<br>          </div><br>      </div><br>      <!-- Add Pagination --><br>      <div class="swiper-pagination">…</div><br>    </div><br>  </div><br>
-
-
-<p><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.1/css/swiper.css"></p>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.1/js/swiper.min.js"></script>
-<script>
-var swiper = new Swiper('.swiper-container', {
-    pagination: '.swiper-pagination',
-    direction: 'vertical',
-    slidesPerView: 1,
-    paginationClickable: true,
-    spaceBetween: 0,
-    mousewheelControl: true,
-    speed: 1000,
-    loop: false,
-    freeMode: false,
-});    
-</script>
-
-<p>可通过修改swiper初始化的javascript代码修改配置项：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var swiper = new Swiper(&apos;.swiper-container&apos;, &#123;</div><div class="line">    pagination: &apos;.swiper-pagination&apos;,   // 导航的三个点</div><div class="line">    direction: &apos;horizontal&apos;,            // 垂直|水平方向</div><div class="line">    slidesPerView: 1,                   // 每屏滑片数量</div><div class="line">    paginationClickable: true,          // 导航是否可点击</div><div class="line">    spaceBetween: 0,                    // 滑片之间的间距</div><div class="line">    mousewheelControl: true,            // 鼠标滚轮是否有效</div><div class="line">    speed: 1000,                        // 切换速度 </div><div class="line">    loop: false,                        // 是否循环</div><div class="line">    freeMode: false,                    // 是否可以自由地移动（取消自动贴合）</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-<p>更多内容可直接参考<a href="http://www.swiper.com.cn/" target="_blank" rel="external">Swiper中文网</a>。</p>
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在使用 <code>Element-UI</code> 组件 <code>el-table</code> 时，可能希望表头具有 <code>tooltip</code> 的效果，即鼠标hover的时候能够显示一些提示信息， <code>el-table</code> 的表头是无法直接通过包裹 <code>el-tooltip</code> 的方式完成，此时需要用到 <code>Table-column Attributes</code> 的 <code>render-header</code> 函数。</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>在 <code>el-table</code> 的某一列添加属性如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;el-table-column</div><div class="line">    :render-header=&quot;renderFunction&quot;</div><div class="line">    label=&quot;表头标题&quot;</div><div class="line">    prop=&quot;id&quot;</div><div class="line">    width=&quot;170&quot;</div><div class="line">    align=&quot;center&quot;&gt;</div><div class="line">&lt;/el-table-column&gt;</div></pre></td></tr></table></figure>
+<p>撰写 <code>renderFunction</code> 如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">methods:&#123;</div><div class="line">    // ...</div><div class="line">    renderFunction(h, data)&#123;</div><div class="line">        return (</div><div class="line">            &lt;el-tooltip class=&quot;item&quot; effect=&quot;dark&quot; content=&quot;鼠标悬停时显示的文字内容&quot; placement=&quot;top&quot;&gt;</div><div class="line">                &lt;span&gt;&#123;data.column.label&#125;&lt;/span&gt;</div><div class="line">            &lt;/el-tooltip&gt;</div><div class="line">        );</div><div class="line">    &#125;,</div><div class="line">    // ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>相当于重写了一下表格标题的渲染函数，在原本 <code>&lt;span&gt;{data.column.label}&lt;/span&gt;</code> 之外包了一个 <code>&lt;el-tooltip&gt;</code> 。</p>
+<p>这里用到了 <code>vue</code> 中的 <a href="https://cn.vuejs.org/v2/guide/render-function.html" target="_blank" rel="external">渲染函数</a></p>
+<blockquote>
+<p>Vue 推荐在绝大多数情况下使用 template 来创建你的 HTML。然而在一些场景中，你真的需要 JavaScript 的完全编程的能力，这就是 render 函数，它比 template 更接近编译器。</p>
+</blockquote>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://segmentfault.com/q/1010000014973813" target="_blank" rel="external">https://segmentfault.com/q/1010000014973813</a><br><a href="https://cn.vuejs.org/v2/guide/render-function.html" target="_blank" rel="external">https://cn.vuejs.org/v2/guide/render-function.html</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/17/Swiper插件的使用/" data-id="cjkdtz3dv004dnu8t7lxqxjs6" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/08/03/Element-UI表格标题使用render-header函数/" data-id="cjkdtz3au000rnu8tc31svxi6" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
 
     </footer>
   </div>
@@ -128,19 +119,10 @@ var swiper = new Swiper('.swiper-container', {
     
 <nav id="article-nav">
   
-    <a href="/blog-hexo/2017/06/21/Hexo配合Github-Pages部署个人博客/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Hexo配合Github Pages部署个人博客
-        
-      </div>
-    </a>
   
-  
-    <a href="/blog-hexo/2017/06/16/随机游走/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/blog-hexo/2018/08/02/在Windows上使用PHP-CGI的一个重要参数/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">随机游走</div>
+      <div class="article-nav-title">在Windows上使用PHP-CGI的一个重要参数</div>
     </a>
   
 </nav>
