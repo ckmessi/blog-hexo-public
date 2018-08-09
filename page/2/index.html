@@ -65,6 +65,68 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-使用Element-UI组件Pagination遇到的一个坑" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/" class="article-date">
+  <time datetime="2018-06-27T12:20:00.000Z" itemprop="datePublished">2018-06-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/">使用Element-UI组件Pagination遇到的一个坑</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近在使用 <a href="http://element.eleme.io/#/zh-CN/component/pagination" target="_blank" rel="external">Elment UI Pagination</a> 时遇到一个问题。</p>
+<h2 id="业务逻辑"><a href="#业务逻辑" class="headerlink" title="业务逻辑"></a>业务逻辑</h2><p>通常使用 <code>ElPagination</code> 是结合表格进行使用的，即表格内的数据为分页数据，当用户点击不同分页按钮时，对应获取特定页的数据，加载到表格中。</p>
+<p>为了实现这个逻辑，采用的方案是使用变量 <code>current_page</code> 保存当前 <code>Vue</code> 页面所在的页数，并实现以下逻辑：</p>
+<ul>
+<li>在组件 <code>ElPagination</code> 的 <code>prop</code> 定义中，设置 <code>:current-page=current_page</code>，即将分页器的当前页码绑定为本地变量 <code>current_page</code> 的值。</li>
+<li>初始进入页面时，用 <code>路由参数值</code> 初始化 <code>current_page</code> 的值，并获取数据；</li>
+<li>点击分页按钮切换页面时，触发事件响应 <code>@current-change</code> 的回调函数 ，将 <code>current_page</code> 设置为对应的值，并修改<code>路由参数值</code> ，并获取数据；</li>
+<li>获取数据的逻辑：获取<code>路由参数值</code> ，并以此调用API获取数据。</li>
+</ul>
+<p>之所以每次 <code>current_page</code> 的值发生变化，需要同时修改 <code>路由参数对应值</code> ，是希望将这个状态变化信息添加到路由参数中，反应在页面URL里。这样当页面发生跳转，执行返回时，能够保留此前的页面状态。</p>
+<p>举例而言，操作如下：</p>
+<ol>
+<li>打开第 <code>1</code> 页，此时路由参数中没有 <code>current_page</code> 值，默认变量 <code>current_page</code> 值为 <code>1</code> ，获取第 <code>1</code> 页数据，组件 <code>ElPagination</code> 中 <code>prop</code> 的 <code>currentPage</code> 值为 <code>1</code> ；</li>
+<li>点击分页按钮切换到第 <code>2</code> 页，此时触发事件响应 <code>@current-change</code> 的回调函数 ，将 <code>current_page</code> 设置为 <code>2</code> ，并修改<code>路由参数值</code>，获取数据时获取到第 <code>2</code> 页数据，组件 <code>ElPagination</code> 中 <code>prop</code> 的 <code>currentPage</code> 值为 <code>2</code> ；</li>
+<li>点击页面中某个按钮进入详情页；</li>
+<li>点击返回，此时URL回到第2步的状态，保留了<code>路由参数值</code>为 <code>2</code> ，获取数据，获取第 <code>2</code> 页数据。</li>
+</ol>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>然而，这里问题出现了，尽管获取到的第 <code>2</code> 页数据，但组件 <code>ElPagination</code> 却停留在第 <code>1</code> 页的状态。<br>仔细查看发现，是它的子组件 <code>ElPager</code>的 <code>prop</code> 中的 <code>currentPage</code> 还停留在 <code>1</code> ，为什么会这样呢？</p>
+<p>排查了半天，发现终极原因是组件 <code>ElPagination</code> 在更新时，会自动修改这个值，导致我们通过<code>路由参数值</code>设置的 <code>current_page</code> 值被覆盖了。</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>最后发现罪魁祸首是因为组件 <code>ElPagination</code> 的其中一个 <code>prop</code> 项 <code>total</code> 影响的。<br>组件 <code>ElPagination</code> 有一个逻辑，当 <code>total</code> 的值小于 <code>page-size</code> 值时，页码属性 <code>current-page</code> 会强行重置为 <code>1</code> 。<br>因此，解决方案是使用<code>路由参数值</code>初始化 <code>current_page</code> 的值时，要同时设置 <code>total</code> 的值为 <code>page-size * current_page</code> 这样能够使 <code>current-page</code> 属性不会被重置。<br>而获取数据完成后，自然会获取到准确的 <code>total</code> 值，此后不会再受到影响。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/" data-id="cjkmj1lg60058to8tyflv09me" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-一个简单的中国大陆身份证号码验证工具" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2018/06/11/一个简单的中国大陆身份证号码验证工具/" class="article-date">
@@ -131,7 +193,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/06/11/一个简单的中国大陆身份证号码验证工具/" data-id="cjkdtz3eb0050nu8tgxtqmmas" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/06/11/一个简单的中国大陆身份证号码验证工具/" data-id="cjkmj1lfu004uto8tyfr4wnlh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -179,7 +241,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/31/Laravel-migration添加column使用Sqlite可能遇到的错误/" data-id="cjkdtz3cg002cnu8tamn37nnq" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/05/31/Laravel-migration添加column使用Sqlite可能遇到的错误/" data-id="cjkmj1ldn001zto8t0xdssgxb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -226,7 +288,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/" data-id="cjkdtz3b70011nu8t75tfr8dc" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/" data-id="cjkmj1lcs0015to8twg4n7sot" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -279,7 +341,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/" data-id="cjkdtz3ee0057nu8tmr73tcd3" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/" data-id="cjkmj1lfx004yto8t1e5rdcr4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -338,7 +400,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/04/24/Crontab中可能遇到的php版本问题/" data-id="cjkdtz3as000onu8tolwlwksa" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/04/24/Crontab中可能遇到的php版本问题/" data-id="cjkmj1lci000rto8t04kt9app" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -384,7 +446,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/27/PHP使用php-ml完成距离计算/" data-id="cjkdtz3dl003znu8tynm2a8y5" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/03/27/PHP使用php-ml完成距离计算/" data-id="cjkmj1lf0003uto8t2fwtnige" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -445,7 +507,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/26/PHP中警惕悬挂引用可能引起的bug/" data-id="cjkdtz3di003snu8txysqyp2b" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/03/26/PHP中警惕悬挂引用可能引起的bug/" data-id="cjkmj1lex003qto8tbtc75glb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -494,7 +556,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/24/Laravel个性化404页面/" data-id="cjkdtz3ch002fnu8tpjh7o74l" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/03/24/Laravel个性化404页面/" data-id="cjkmj1ldq0023to8t0h7lon1j" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -545,65 +607,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/" data-id="cjkdtz3df003qnu8t52cra8h6" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/" data-id="cjkmj1lej003eto8twb2jtpk3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Nginx-PHP上传大文件场景需要注意的配置" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" class="article-date">
-  <time datetime="2018-03-08T11:49:12.000Z" itemprop="datePublished">2018-03-08</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/">Nginx+PHP上传大文件场景需要注意的配置</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在使用nginx+php作为后台服务器时，如果遇到需要上传文件的业务逻辑，需要注意两者对文件的限制大小。</p>
-<h2 id="Ngnix配置"><a href="#Ngnix配置" class="headerlink" title="Ngnix配置"></a>Ngnix配置</h2><p>首先，有可能遇到的情况是，前端网页上传文件时报错了；而后台服务器没有接到访问请求。这是由于nginx对客户端的body大小的限制，请求会中断在nginx，无法到达php。默认情况下，上传大文件可能造成错误<code>413 Request Entity Too Large</code>的情况。</p>
-<p>在<code>nginx.conf</code>中，添加一行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">client_max_body_size 20m</div></pre></td></tr></table></figure></p>
-<p><code>client_max_body_size</code>的默认值为<code>1m</code>，上述语句表示客户端可以上传的最大body大小为20Mb。</p>
-<p>至于在哪个层级下设置，查找到一篇博客是这样说的：</p>
-<blockquote>
-<p>可以选择在http{ }中设置：client_max_body_size 20m;<br>也可以选择在server{ }中设置：client_max_body_size 20m;<br>还可以选择在location{ }中设置：client_max_body_size 20m;<br>三者到区别是：http{} 中控制着所有nginx收到的请求。而报文大小限制设置在server｛｝中，则控制该server收到的请求报文大小，同理，如果配置在location中，则报文大小限制，只对匹配了location 路由规则的请求生效。</p>
-</blockquote>
-<h2 id="PHP配置"><a href="#PHP配置" class="headerlink" title="PHP配置"></a>PHP配置</h2><p>解决nginx的配置问题后，还有可能在php代码中出现获取不到提交文件的问题。这是由于php对于文件大小也有限制。</p>
-<p>在<code>php.ini</code>中，相关需要考虑的参数在<code>File Uploads</code>区域，有如下几个：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">file_uploads = On</div><div class="line">upload_max_filesize = 2M</div><div class="line">post_max_size = 8M</div></pre></td></tr></table></figure></p>
-<p>其中<code>file_uploads</code>表示开启文件上传，<code>upload_max_filesize</code>限制最大文件大小，<code>post_max_size</code>限制了一次POST请求数据的大小。   </p>
-<p>某篇博客中提，一般来说，设置好上述参数后，在网络正常的情况下，上传小于8M的文件是不成问题的。但如果上传大文件的话，只设置上述还不一定能行的通，因为还有响应时间的限制。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">max_execution_time 600 每个PHP页面运行的最大时间值(秒)，默认30秒 </div><div class="line">max_input_time 600 每个PHP页面接收数据所需的最大时间，默认60秒 </div><div class="line">memory_limit 8m 每个PHP页面所吃掉的最大内存，默认8M</div></pre></td></tr></table></figure></p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://blog.csdn.net/li396864285/article/details/53522828" target="_blank" rel="external">http://blog.csdn.net/li396864285/article/details/53522828</a><br><a href="http://blog.csdn.net/webnoties/article/details/17266651" target="_blank" rel="external">http://blog.csdn.net/webnoties/article/details/17266651</a><br><a href="https://www.jianshu.com/p/9a4a423e1ca6" target="_blank" rel="external">https://www.jianshu.com/p/9a4a423e1ca6</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" data-id="cjkdtz3d8003lnu8t4bq9ge1a" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
 
     </footer>
   </div>
@@ -669,6 +676,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2018/08/09/PHP使用ZipArchive完成后台文件压缩/">PHP使用ZipArchive完成后台文件压缩</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2018/08/03/Element-UI表格标题使用render-header函数/">Element-UI表格标题使用render-header函数</a>
           </li>
         
@@ -682,10 +693,6 @@
         
           <li>
             <a href="/blog-hexo/2018/07/17/Linux查看并修改系统时间/">Linux查看并修改系统时间</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/07/14/Vue在自定义组件上使用v-model的方法/">Vue在自定义组件上使用v-model的方法</a>
           </li>
         
       </ul>

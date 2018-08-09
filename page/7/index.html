@@ -65,6 +65,63 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Hexo个人博客使用流程" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/06/28/Hexo个人博客使用流程/" class="article-date">
+  <time datetime="2017-06-28T02:11:19.000Z" itemprop="datePublished">2017-06-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/06/28/Hexo个人博客使用流程/">Hexo个人博客使用流程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这一段时间一直在使用Hexo搭建个人博客，此前研究了Hexo配合Github-Pages进行部署、Hexo添加图片、Hexo进行版本控制等相关内容。这篇文章主要总结一下Hexo个人博客的整体流程使用规范。   </p>
+<p>首先，我们把个人博客部分划分为三部分：</p>
+<ol>
+<li>【仓库1】Hexo源文件，保存着博客内容的原生内容及Hexo项目自身的配置信息</li>
+<li>【仓库2】Hexo生成文件，保存着根据主题模板生成的静态网页内容。</li>
+<li>【仓库3】Github-Pages个人主页，用于使用[username].github.io域名访问</li>
+</ol>
+<p>其中【仓库3】中可能不只包含【仓库2】的内容，使用Git的submodule方法添加【仓库2】作为其子目录。</p>
+<p>基于上述划分，我们可以得出个人博客使用时的基本流程：</p>
+<ol>
+<li>撰写Hexo源文件，完成后提交到【仓库1】</li>
+<li>在确认生成内容无误后，使用<code>Hexo generate</code>生成<code>public</code>目录（可修改名称），提交至【仓库2】</li>
+<li>在【仓库3】中的【仓库2】目录下拉取最新内容，然后合并到【仓库3】中，提交。</li>
+</ol>
+<p>此时【仓库3】中的【仓库2】内容保存着最新生成的静态网页内容，可使用<code>[username].github.io/[blog-project]</code>域名访问到。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/06/28/Hexo个人博客使用流程/" data-id="cjkmj1ldb001mto8ta1k50dyi" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Hexo项目的Git版本控制" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2017/06/23/Hexo项目的Git版本控制/" class="article-date">
@@ -130,7 +187,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/23/Hexo项目的Git版本控制/" data-id="cjkdtz3by001wnu8tymz6dvod" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/06/23/Hexo项目的Git版本控制/" data-id="cjkmj1lg00051to8t5a4v74tn" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li></ul>
@@ -187,7 +244,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/22/Hexo博客正文添加图片/" data-id="cjkdtz3bs001qnu8tf36dcytg" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/06/22/Hexo博客正文添加图片/" data-id="cjkmj1lgb005jto8thhfdv3ap" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li></ul>
@@ -270,7 +327,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/21/Hexo配合Github-Pages部署个人博客/" data-id="cjkdtz3bv001tnu8tvi29zssp" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/06/21/Hexo配合Github-Pages部署个人博客/" data-id="cjkmj1lg20055to8tys0cwx7h" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li></ul>
@@ -331,7 +388,7 @@ var swiper = new Swiper('.swiper-container', {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/17/Swiper插件的使用/" data-id="cjkdtz3dv004dnu8t7lxqxjs6" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/06/17/Swiper插件的使用/" data-id="cjkmj1lfe0048to8tce4nzhzu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li></ul>
@@ -402,7 +459,7 @@ var swiper = new Swiper('.swiper-container', {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/16/随机游走/" data-id="cjkdtz3ev005tnu8t1k7smmxl" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/06/16/随机游走/" data-id="cjkmj1lgh005uto8t502hw3e5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li></ul>
@@ -449,7 +506,7 @@ var swiper = new Swiper('.swiper-container', {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/15/hello-world/" data-id="cjkdtz3e4004tnu8temrw9g8o" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/06/15/hello-world/" data-id="cjkmj1lfm004kto8tb4ol9ulm" class="article-share-link">Share</a>
       
       
     </footer>
@@ -494,7 +551,7 @@ var swiper = new Swiper('.swiper-container', {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/05/22/Ubuntu修改Mysql数据库连接端口号/" data-id="cjkdtz3dz004knu8tlzjfxyco" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/05/22/Ubuntu修改Mysql数据库连接端口号/" data-id="cjkmj1lfi004dto8tulzn9gd7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li></ul>
@@ -557,7 +614,7 @@ var swiper = new Swiper('.swiper-container', {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/05/16/Hashids的使用/" data-id="cjkdtz3bo001jnu8tp7hu7l3o" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/05/16/Hashids的使用/" data-id="cjkmj1ld6001jto8t0eya6eyl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li></ul>
@@ -626,6 +683,10 @@ var swiper = new Swiper('.swiper-container', {
       <ul>
         
           <li>
+            <a href="/blog-hexo/2018/08/09/PHP使用ZipArchive完成后台文件压缩/">PHP使用ZipArchive完成后台文件压缩</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2018/08/03/Element-UI表格标题使用render-header函数/">Element-UI表格标题使用render-header函数</a>
           </li>
         
@@ -639,10 +700,6 @@ var swiper = new Swiper('.swiper-container', {
         
           <li>
             <a href="/blog-hexo/2018/07/17/Linux查看并修改系统时间/">Linux查看并修改系统时间</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/07/14/Vue在自定义组件上使用v-model的方法/">Vue在自定义组件上使用v-model的方法</a>
           </li>
         
       </ul>
