@@ -65,6 +65,55 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Mysql导出数据库表结构到Excel" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/11/21/Mysql导出数据库表结构到Excel/" class="article-date">
+  <time datetime="2017-11-21T14:07:09.000Z" itemprop="datePublished">2017-11-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/11/21/Mysql导出数据库表结构到Excel/">Mysql导出数据库表结构到Excel</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在工作中遇到这样一个问题，希望能够将Mysql数据库的表结构导出，方便进行分析。<br>通常情况下，可以使用<code>mysqldump</code>命令，添加只导出数据库结构的选项，得到sql文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysqldump --opt --host [db_host] -d [db_name] -u [user_name] -p &gt; output.sql</div></pre></td></tr></table></figure></p>
+<p>然而得到的结果文件是sql语法的，尽管能够用于再次导入，但可读性较差。  </p>
+<img src="/blog-hexo/2017/11/21/Mysql导出数据库表结构到Excel/1.png" alt="输出的sql文件内容" title="输出的sql文件内容">
+<p>后来发现一种方式，能够直接在可视化数据库连接应用（如<code>Navicat</code>, <code>Sequel Pro</code>）中获取数据库表结构。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">SELECT</div><div class="line">  TABLE_NAME 表名,</div><div class="line">  COLUMN_NAME 列名,</div><div class="line">  COLUMN_TYPE 数据类型,</div><div class="line">    DATA_TYPE 字段类型,</div><div class="line">  CHARACTER_MAXIMUM_LENGTH 长度,</div><div class="line">  IS_NULLABLE 是否为空,</div><div class="line">  COLUMN_DEFAULT 默认值,</div><div class="line">  COLUMN_COMMENT 备注 </div><div class="line">FROM</div><div class="line"> INFORMATION_SCHEMA.COLUMNS</div><div class="line">WHERE</div><div class="line">table_schema =&apos;[database_name]&apos;</div></pre></td></tr></table></figure></p>
+<p>得到的结果直接全选复制，粘贴到Excel表格中即可。</p>
+<img src="/blog-hexo/2017/11/21/Mysql导出数据库表结构到Excel/2.png" alt="SequelPro中的查询结果" title="SequelPro中的查询结果">
+<p>参考链接：<br>    <a href="http://www.jb51.net/article/28855.htm" target="_blank" rel="external">http://www.jb51.net/article/28855.htm</a><br>    <a href="http://blog.csdn.net/yangshijin1988/article/details/70229473" target="_blank" rel="external">http://blog.csdn.net/yangshijin1988/article/details/70229473</a>     </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/11/21/Mysql导出数据库表结构到Excel/" data-id="cjkozyhd8003bk98tmco2r07c" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Git-Fast-forward的一些常识" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2017/11/18/Git-Fast-forward的一些常识/" class="article-date">
@@ -113,7 +162,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/18/Git-Fast-forward的一些常识/" data-id="cjkmj1lcn000zto8t2hlussjl" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/11/18/Git-Fast-forward的一些常识/" data-id="cjkozyhb2000uk98tc36whllh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -159,7 +208,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/17/Laravel扩展Guzzle-发送HTTP请求/" data-id="cjkmj1le0002lto8tim990rib" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/11/17/Laravel扩展Guzzle-发送HTTP请求/" data-id="cjkozyhcu002qk98t7qxrd9n8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -208,7 +257,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/14/Laravel模拟创建Request/" data-id="cjkmj1le3002qto8truv9asda" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/11/14/Laravel模拟创建Request/" data-id="cjkozyhd30033k98tjzupimh9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -259,7 +308,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/09/PHPUnit测试protected方法/" data-id="cjkmj1lev003oto8tm0010h5l" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/11/09/PHPUnit测试protected方法/" data-id="cjkozyhdj003sk98t2yebckn8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li></ul>
@@ -318,7 +367,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/02/AngularJS中ng-if和ng-show的区别/" data-id="cjkmj1lb80004to8tzlpzi7b8" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/11/02/AngularJS中ng-if和ng-show的区别/" data-id="cjkozyh8x0000k98tt6t5kyze" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -382,7 +431,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/30/Angular1模块间通信方式/" data-id="cjkmj1law0001to8tdzxcnde5" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/10/30/Angular1模块间通信方式/" data-id="cjkozyh9n0004k98tn8a3gjig" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -458,7 +507,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/23/Laravel-Database-Query-Builder-insert的效率问题/" data-id="cjkmj1ldi001tto8tt0y8j5ef" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/10/23/Laravel-Database-Query-Builder-insert的效率问题/" data-id="cjkozyhc5001xk98tczdkk06h" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -504,7 +553,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/21/Angular类的成员变量初始化的问题/" data-id="cjkmj1lbe0005to8tc3ailidt" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/10/21/Angular类的成员变量初始化的问题/" data-id="cjkozyhab0006k98t0gnftdt7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -556,65 +605,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/16/Git分支基本操作/" data-id="cjkmj1lcy0018to8tcqaccx15" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Git-tag的使用" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/10/09/Git-tag的使用/" class="article-date">
-  <time datetime="2017-10-09T13:33:23.000Z" itemprop="datePublished">2017-10-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/10/09/Git-tag的使用/">Git tag的使用</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>Git Tag故名思义是给Git打标签，可以对某一时间点上的版本打上标签。<br>在发布软件版本的时候，常用于标记某个特定版本的提交，方便查找和管理。</p>
-<h2 id="主要命令"><a href="#主要命令" class="headerlink" title="主要命令"></a>主要命令</h2><h4 id="显示标签"><a href="#显示标签" class="headerlink" title="显示标签"></a>显示标签</h4><p><code>git tag</code> 显示所有标签<br><code>git tag -l</code> 对标签名称进行特定过滤，如<br><code>git tag -l &#39;v1.4.2.*&#39;</code> 只显示v1.4.2系列的标签</p>
-<h4 id="新建标签"><a href="#新建标签" class="headerlink" title="新建标签"></a>新建标签</h4><p>Git使用的标签有两种类型：轻量级的（lightweight）和含附注的（annotated）。<br>轻量级标签是指向特定提交对象的引用（类似于一个Alias，方便记忆）；含附注标签实际上是存储在仓库中的独立对象，有自身的检验和信息，包含标签名字、电子邮件地址、日期、说明等，同时还允许使用GNU Privacy Guard(GPG)来签署或验证。<br>通常建议使用含附注标签，以便保留相关信息。</p>
-<h6 id="轻量级标签"><a href="#轻量级标签" class="headerlink" title="轻量级标签"></a>轻量级标签</h6><p>轻量级标签实际上就是一个保存着对应提交对象的校验和信息的文件。创建轻量级标签时，不需要相关选项，直接给出标签名答即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git tag v2.1</div></pre></td></tr></table></figure></p>
-<h6 id="含附注标签"><a href="#含附注标签" class="headerlink" title="含附注标签"></a>含附注标签</h6><p>创建含附注标签的方式使用<code>-a</code>选项指定标签名称，并使用<code>-m</code>选项添加附注说明。<br><code>git tag -a [version] -m &#39;[annotation information]&#39;</code>，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git tag -a v1.2 -m &apos;this version is for publish blablabla&apos;</div></pre></td></tr></table></figure></p>
-<p>类似于<code>git commit</code>时的<code>-m</code>选项，如果没有给出，Git会启动文本编辑软件提供输入标签说明。</p>
-<h4 id="显示特定标签信息"><a href="#显示特定标签信息" class="headerlink" title="显示特定标签信息"></a>显示特定标签信息</h4><p>使用<code>git show [tagname]</code>可以显示特定标签的相关信息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git show v1.2</div></pre></td></tr></table></figure>
-<h4 id="签署标签"><a href="#签署标签" class="headerlink" title="签署标签"></a>签署标签</h4><p>如果有自己的私钥，可以使用GPG来签署标签，只需要把之前的<code>-a</code>改为<code>-s</code>即可<br>`git tag -s [version] -m ‘[annotation information]’，比如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git tag -a v1.2 -m &apos;this version is a signed blablabla&apos;</div></pre></td></tr></table></figure>
-<h4 id="验证标签"><a href="#验证标签" class="headerlink" title="验证标签"></a>验证标签</h4><p>使用<code>git tag -v [tagname]</code>可以验证已经签署的标签，这个命令会调用GPG来验证签名，需要拥有签署者的公钥，存放在keyring中，才能验证。</p>
-<h4 id="后期加注标签"><a href="#后期加注标签" class="headerlink" title="后期加注标签"></a>后期加注标签</h4><p>可以对之前某次提交添加加注标签，方法是在创建标签时添加上提交的md5值<code>git tag -a [version] -m &#39;[annotation information] [commit_id]</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git tag -a v1.2 af98ce0</div></pre></td></tr></table></figure>
-<h4 id="分享标签"><a href="#分享标签" class="headerlink" title="分享标签"></a>分享标签</h4><p>默认情况下，<code>git push</code>不会将标签信息推送到远程服务器，需要显示添加命令<code>git push [branch] [tagname]</code>，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push origin v1.5</div></pre></td></tr></table></figure></p>
-<p>如果要一次性把所有本地新增的标签都推上去，可以使用<code>--tags</code>选项：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push origin --tags</div></pre></td></tr></table></figure></p>
-<h2 id="常用方案"><a href="#常用方案" class="headerlink" title="常用方案"></a>常用方案</h2><p>在产品发布里程碑版本后，给其打上一个标签，以便需要时候查看和快速切换。<br>从本质上讲，就是使用一个<code>tag</code>记录某次提交的语义信息，通过直接用<code>tag</code>而不是<code>commit_id</code>的方法检索到对应的某次提交。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/09/Git-tag的使用/" data-id="cjkmj1lck000uto8tbexh80ul" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/10/16/Git分支基本操作/" data-id="cjkozyhbv001ik98toswgu5ap" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -651,7 +642,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
     </div>
   </div>
 
@@ -661,7 +652,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 12.86px;">Angular</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 12.86px;">C#</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 11.43px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 11.43px;">Command Line</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.86px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15.71px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 14.29px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.14px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.57px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 14.29px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 11.43px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.43px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 11.43px;">PowerShell</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15.71px;">Vue</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 10px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 12.86px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 12.5px;">Angular</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 12.5px;">C#</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 11.25px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 11.25px;">Command Line</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.5px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Git/" style="font-size: 16.25px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 13.75px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.5px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.75px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 11.25px;">PowerShell</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 10px;">SSH</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 10px;">Ubuntu</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 16.25px;">Vue</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 10px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 12.5px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
     </div>
   </div>
 
@@ -683,6 +674,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2018/08/11/Ubuntu禁用SSH密码登录/">Ubuntu禁用SSH密码登录</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2018/08/09/PHP使用ZipArchive完成后台文件压缩/">PHP使用ZipArchive完成后台文件压缩</a>
           </li>
         
@@ -696,10 +691,6 @@
         
           <li>
             <a href="/blog-hexo/2018/07/27/Laravel-SocketIO即时发送消息/">Laravel+SocketIO即时发送消息</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/07/17/Linux查看并修改系统时间/">Linux查看并修改系统时间</a>
           </li>
         
       </ul>
