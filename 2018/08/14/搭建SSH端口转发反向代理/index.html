@@ -5,14 +5,19 @@
   
 
   
-  <title>Category: 后台 | 不止是一位程序员</title>
+  <title>搭建SSH端口转发反向代理 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="不止是一位程序员">
-<meta property="og:url" content="http://ckmessi.github.io/categories/后台/page/2/index.html">
+  <meta name="description" content="在许多情况下，会存在这样一种情况  机器 A1 和机器 A2 处于同一个内网中，能够互相访问 机器 B1 处于外网环境 机器 C1 作为客户端处于外网环境。  在这种情况下：  A1 和 A2 能够互相访问，并且能够访问 B1 ； 但 B1 不能访问 A1 或 A2 ； C1 只能访问 B1 ，不能访问 A1 或 A2 。  最浅显的例子就是 A1 和 A2 是公司内网服务器，B1 是公有云上的服">
+<meta name="keywords" content="SSH">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建SSH端口转发反向代理">
+<meta property="og:url" content="http://ckmessi.github.io/2018/08/14/搭建SSH端口转发反向代理/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="在许多情况下，会存在这样一种情况  机器 A1 和机器 A2 处于同一个内网中，能够互相访问 机器 B1 处于外网环境 机器 C1 作为客户端处于外网环境。  在这种情况下：  A1 和 A2 能够互相访问，并且能够访问 B1 ； 但 B1 不能访问 A1 或 A2 ； C1 只能访问 B1 ，不能访问 A1 或 A2 。  最浅显的例子就是 A1 和 A2 是公司内网服务器，B1 是公有云上的服">
+<meta property="og:updated_time" content="2018-08-14T12:29:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="不止是一位程序员">
+<meta name="twitter:title" content="搭建SSH端口转发反向代理">
+<meta name="twitter:description" content="在许多情况下，会存在这样一种情况  机器 A1 和机器 A2 处于同一个内网中，能够互相访问 机器 B1 处于外网环境 机器 C1 作为客户端处于外网环境。  在这种情况下：  A1 和 A2 能够互相访问，并且能够访问 B1 ； 但 B1 不能访问 A1 或 A2 ； C1 只能访问 B1 ，不能访问 A1 或 A2 。  最浅显的例子就是 A1 和 A2 是公司内网服务器，B1 是公有云上的服">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -63,226 +68,95 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog-hexo/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/04/24/Crontab中可能遇到的php版本问题/" class="archive-article-date">
-  <time datetime="2018-04-24T03:55:26.000Z" itemprop="datePublished">Apr 24</time>
+        <section id="main"><article id="post-搭建SSH端口转发反向代理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/08/14/搭建SSH端口转发反向代理/" class="article-date">
+  <time datetime="2018-08-14T12:27:48.000Z" itemprop="datePublished">2018-08-14</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/04/24/Crontab中可能遇到的php版本问题/">Crontab中可能遇到的php版本问题</a>
+    <h1 class="article-title" itemprop="name">
+      搭建SSH端口转发反向代理
     </h1>
   
 
-    </header>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在许多情况下，会存在这样一种情况</p>
+<ul>
+<li>机器 <code>A1</code> 和机器 <code>A2</code> 处于同一个内网中，能够互相访问</li>
+<li>机器 <code>B1</code> 处于外网环境</li>
+<li>机器 <code>C1</code> 作为客户端处于外网环境。</li>
+</ul>
+<p>在这种情况下：</p>
+<ul>
+<li><code>A1</code> 和 <code>A2</code> 能够互相访问，并且能够访问 <code>B1</code> ；</li>
+<li>但 <code>B1</code> 不能访问 <code>A1</code> 或 <code>A2</code> ；</li>
+<li><code>C1</code> 只能访问 <code>B1</code> ，不能访问 <code>A1</code> 或 <code>A2</code> 。</li>
+</ul>
+<p>最浅显的例子就是 <code>A1</code> 和 <code>A2</code> 是公司内网服务器，<code>B1</code> 是公有云上的服务器，而 <code>C1</code> 是用户的手机。<br>通常情况下 <code>C1</code> 只能访问到 <code>B1</code> 。<br>若希望 <code>C1</code> 能够访问 <code>A1</code> 或 <code>A2</code> ，则可以使用SSH搭建一条代理转发。<br>在 <code>需要被访问</code> 的机器 <code>A1</code> 或 <code>A2</code> 上执行 <code>ssh</code> 命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh -CfgNT server_B [-i ~/.ssh/rsa.id_rsa] -R 0.0.0.0:[server_B_port]:[target_ip]:[target_port]</div></pre></td></tr></table></figure>
+<p>比如中转服务器 <code>B1</code> 的IP地址值为 <code>ip</code> ，则 <code>server_B</code> 的值为 <code>username@ip</code> ，在 <code>B1</code> 使用的端口号设置为 <code>server_B_port</code> 的值；<code>target_ip</code> 和 <code>target_port</code> 则是相对于当前机器（<code>A1</code> 或 <code>A2</code>）而言，因此可以写一个内网地址，比如希望访问本机的 <code>8080</code> 端口，则 <code>target_ip</code> 的值为 <code>127.0.0.1</code> ，而 <code>target_port</code> 的值为 <code>8080</code>。</p>
+<p>综上所述，整体的命令可能是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh -CfgNT 166.111.80.80 -i ~/.ssh/rsa.id_rsa -R 0.0.0.0:8888:127.0.0.1:8080</div></pre></td></tr></table></figure></p>
+<p>此外，如果需要在机器 <code>C1</code> 上访问机器 <code>B1</code>的端口，还需要设置 <code>B1</code> 机器的配置，修改 <code>/etc/ssh/sshd_config</code> 文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">GatewayPorts yes</div></pre></td></tr></table></figure></p>
+<p>在机器 <code>A1</code> 上执行这个命令（注意 <code>A1</code> 需要有访问 <code>B1</code> 的权限）。执行完这个命令后，会运行一个 <code>ssh</code> 服务，此时在机器 <code>C1</code> 可以访问 <code>166.111.80.80:8888</code> 地址，实质上它会被映射到机器 <code>A1</code> 的 <code>127.0.0.1:8080</code> 。</p>
+<p>其中 <code>ssh</code> 命令的参数 <code>-CfgNT</code> 各项的解释如下：</p>
+<ul>
+<li><code>C</code> ：要求进行数据压缩</li>
+<li><code>f</code> ：要求在执行命令前退至后台</li>
+<li><code>g</code> ：允许远端主机连接本地转发的端口</li>
+<li><code>N</code> ：不执行远程命令，用于转发端口</li>
+<li><code>T</code> ：禁止分配伪终端</li>
+</ul>
+<p>还可以有一些参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-o ServerAliveInterval=45 -o TCPKeepAlive=yes -o ExitOnForwardFailure=yes&quot;</div></pre></td></tr></table></figure></p>
+<p>其中 <code>ServerAliveInterval</code> 参数表示设置一个时间间隔（秒），表示当客户端在经过这个时间间隔没有接收到服务器的数据后，将发送一个消息请求服务器返回响应。类似于客户端每隔一段时间给服务器发一个心跳。</p>
+<blockquote>
+<p>ServerAliveInterval Sets a timeout interval in seconds after which if no data has been received from the server, ssh(1) will send a message through the encrypted channel to request a response from the server.</p>
+</blockquote>
+<p>参数 <code>TCPKeepAlive</code> 表示TCP保持连接不断开。</p>
+<p>参数 <code>ExitOnForwardFailure</code> 的含义是，如果它的值被设置为 <code>yes</code> ，那使用 <code>-f</code> 参数启动的客户端将会等待所有远程端口转发成功建立后，才会把自己放到后台运行。反过来讲，如果端口转发过程失败了，这个ssh进程就直接退出。</p>
+<blockquote>
+<p>If the ExitOnForwardFailure configuration option is set to <code>yes</code>, then a client started with -f will wait for all remote port forwards to be successfully established before placing itself in the background.</p>
+</blockquote>
+<p>使用 <code>ssh</code> 命令可以搭建一个基础的端口转发，能够给使用客户端远程调试本地环境带来很多便利。</p>
+<p>参考链接：<br><a href="https://www.cnblogs.com/phpdragon/p/5314650.html" target="_blank" rel="external">https://www.cnblogs.com/phpdragon/p/5314650.html</a><br><a href="http://bluebiu.com/blog/linux-ssh-session-alive.html" target="_blank" rel="external">http://bluebiu.com/blog/linux-ssh-session-alive.html</a><br><a href="http://www.php.cn/php-weizijiaocheng-350329.html" target="_blank" rel="external">http://www.php.cn/php-weizijiaocheng-350329.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/08/14/搭建SSH端口转发反向代理/" data-id="cjktoph6a005wx58trvmc23bs" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li></ul>
+
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog-hexo/2018/08/13/解决iPhone上Safari浏览器滑动比较卡的问题/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">解决iPhone上Safari浏览器滑动比较卡的问题</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/03/27/PHP使用php-ml完成距离计算/" class="archive-article-date">
-  <time datetime="2018-03-27T12:45:04.000Z" itemprop="datePublished">Mar 27</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/03/27/PHP使用php-ml完成距离计算/">PHP使用php-ml完成距离计算</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/03/26/PHP中警惕悬挂引用可能引起的bug/" class="archive-article-date">
-  <time datetime="2018-03-26T11:23:27.000Z" itemprop="datePublished">Mar 26</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/03/26/PHP中警惕悬挂引用可能引起的bug/">PHP中警惕悬挂引用可能引起的bug</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/03/24/Laravel个性化404页面/" class="archive-article-date">
-  <time datetime="2018-03-24T07:27:05.000Z" itemprop="datePublished">Mar 24</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/03/24/Laravel个性化404页面/">Laravel个性化404页面</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/03/19/PHP-unpack-函数的使用/" class="archive-article-date">
-  <time datetime="2018-03-19T12:31:56.000Z" itemprop="datePublished">Mar 19</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/03/19/PHP-unpack-函数的使用/">PHP unpack()函数的使用</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" class="archive-article-date">
-  <time datetime="2018-03-08T11:49:12.000Z" itemprop="datePublished">Mar 8</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/">Nginx+PHP上传大文件场景需要注意的配置</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" class="archive-article-date">
-  <time datetime="2018-02-06T11:52:44.000Z" itemprop="datePublished">Feb 6</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/">Laravel+Vue前后端分离跨域CORS的一点知识</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/02/02/MySQL连接缓慢的情况处理/" class="archive-article-date">
-  <time datetime="2018-02-02T09:50:06.000Z" itemprop="datePublished">Feb 2</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/02/02/MySQL连接缓慢的情况处理/">MySQL连接缓慢的情况处理</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/01/31/Laravel中对OPTIONS请求的批量处理/" class="archive-article-date">
-  <time datetime="2018-01-31T06:05:51.000Z" itemprop="datePublished">Jan 31</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/01/31/Laravel中对OPTIONS请求的批量处理/">Laravel中对OPTIONS请求的原理探索及批量处理方案</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-      
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog-hexo/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/11/21/Mysql导出数据库表结构到Excel/" class="archive-article-date">
-  <time datetime="2017-11-21T14:07:09.000Z" itemprop="datePublished">Nov 21</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/11/21/Mysql导出数据库表结构到Excel/">Mysql导出数据库表结构到Excel</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-
-  <nav id="page-nav">
-    
-    <a class="extend prev" rel="prev" href="/blog-hexo/categories/后台/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/categories/后台/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog-hexo/categories/后台/page/3/">3</a><a class="page-number" href="/blog-hexo/categories/后台/page/4/">4</a><a class="extend next" rel="next" href="/blog-hexo/categories/后台/page/3/">Next &raquo;</a>
-  </nav>
 
 </section>
         
