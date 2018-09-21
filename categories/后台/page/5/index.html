@@ -5,19 +5,14 @@
   
 
   
-  <title>Ubuntu禁用SSH密码登录 | 不止是一位程序员</title>
+  <title>Category: 后台 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="通常我们远程连接Linux服务器都会采用SSH的方案。 对于SHH远程连接来说，实际上是通过SSH（Secure Shell Protocol）协议进行数据的交换。为保证服务器的安全性，需要将登录密码设置的尽量复杂，避免黑客的暴力破解。 一种更为安全的方案是禁用密码登录，只允许通过公钥进行访问。 通常我们会将当前机器的公钥放置到服务器对应用户的~/.ssh/authorizaed_key文件中，这">
-<meta name="keywords" content="Linux,Ubuntu,SSH">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Ubuntu禁用SSH密码登录">
-<meta property="og:url" content="http://ckmessi.github.io/2018/08/11/Ubuntu禁用SSH密码登录/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="不止是一位程序员">
+<meta property="og:url" content="http://ckmessi.github.io/categories/后台/page/5/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
-<meta property="og:description" content="通常我们远程连接Linux服务器都会采用SSH的方案。 对于SHH远程连接来说，实际上是通过SSH（Secure Shell Protocol）协议进行数据的交换。为保证服务器的安全性，需要将登录密码设置的尽量复杂，避免黑客的暴力破解。 一种更为安全的方案是禁用密码登录，只允许通过公钥进行访问。 通常我们会将当前机器的公钥放置到服务器对应用户的~/.ssh/authorizaed_key文件中，这">
-<meta property="og:updated_time" content="2018-08-11T05:45:44.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ubuntu禁用SSH密码登录">
-<meta name="twitter:description" content="通常我们远程连接Linux服务器都会采用SSH的方案。 对于SHH远程连接来说，实际上是通过SSH（Secure Shell Protocol）协议进行数据的交换。为保证服务器的安全性，需要将登录密码设置的尽量复杂，避免黑客的暴力破解。 一种更为安全的方案是禁用密码登录，只允许通过公钥进行访问。 通常我们会将当前机器的公钥放置到服务器对应用户的~/.ssh/authorizaed_key文件中，这">
+<meta name="twitter:title" content="不止是一位程序员">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -68,77 +63,45 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-Ubuntu禁用SSH密码登录" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2018/08/11/Ubuntu禁用SSH密码登录/" class="article-date">
-  <time datetime="2018-08-11T05:45:02.000Z" itemprop="datePublished">2018-08-11</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+        <section id="main">
   
-    <h1 class="article-title" itemprop="name">
-      Ubuntu禁用SSH密码登录
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/blog-hexo/archives/2017" class="archive-year">2017</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/blog-hexo/2017/05/16/Hashids的使用/" class="archive-article-date">
+  <time datetime="2017-05-16T04:06:00.000Z" itemprop="datePublished">May 16</time>
+</a>
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/blog-hexo/2017/05/16/Hashids的使用/">Hashids的使用</a>
     </h1>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>通常我们远程连接Linux服务器都会采用SSH的方案。</p>
-<p>对于SHH远程连接来说，实际上是通过SSH（Secure Shell Protocol）协议进行数据的交换。为保证服务器的安全性，需要将登录密码设置的尽量复杂，避免黑客的暴力破解。</p>
-<p>一种更为安全的方案是禁用密码登录，只允许通过公钥进行访问。</p>
-<p>通常我们会将当前机器的公钥放置到服务器对应用户的<code>~/.ssh/authorizaed_key</code>文件中，这样能够实现免密码登录。</p>
-<p>在此基础上，编辑<code>/etc/ssh/sshd_config</code>文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vim /etc/ssh/sshd_config</div></pre></td></tr></table></figure></p>
-<p>将其中的<code>PasswordAuthentication</code>项由<code>yes</code>修改为<code>no</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">PasswordAuthentication no</div></pre></td></tr></table></figure></p>
-<p>另外要确保RSA认证和公钥认证方式是打开的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">RSAAuthentication yes</div><div class="line">PubkeyAuthentication yes</div></pre></td></tr></table></figure></p>
-<p>如果你希望修改公钥放置位置，也可以取消下面的注释，修改为自己希望的路径：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#AuthorizedKeysFile     %h/.ssh/authorized_keys</div></pre></td></tr></table></figure></p>
-<p>修改完成后，保存退出。（此前最好保留一个空闲的会话，以防万一。）</p>
-<p>重启ssh服务：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo service ssh restart</div></pre></td></tr></table></figure></p>
-<p>重新从一个不含私钥的机器尝试使用账号密码登录时，将显示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Permission denied (publicly)</div></pre></td></tr></table></figure></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/11/Ubuntu禁用SSH密码登录/" data-id="cjmbnbydo004p2r8tvya54p3u" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li></ul>
-
-    </footer>
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/blog-hexo/2018/08/13/解决iPhone上Safari浏览器滑动比较卡的问题/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          解决iPhone上Safari浏览器滑动比较卡的问题
-        
-      </div>
-    </a>
-  
-  
-    <a href="/blog-hexo/2018/08/09/PHP使用ZipArchive完成后台文件压缩/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">PHP使用ZipArchive完成后台文件压缩</div>
-    </a>
-  
-</nav>
-
-  
 </article>
+  
+  
+    </div></section>
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/blog-hexo/categories/后台/page/4/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/categories/后台/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/categories/后台/page/3/">3</a><a class="page-number" href="/blog-hexo/categories/后台/page/4/">4</a><span class="page-number current">5</span>
+  </nav>
 
 </section>
         

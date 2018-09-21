@@ -65,6 +65,53 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Git克隆项目时SSH-HTTP方式的区别" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/" class="article-date">
+  <time datetime="2018-05-08T08:42:25.000Z" itemprop="datePublished">2018-05-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/">Git克隆项目时SSH/HTTP方式的区别</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在使用Git获取仓库中的项目时，通常可以选择用SSH或HTTP方式。<br>两种克隆方式对应的URL也不一样。以Github为例，选择Clone with SSH时，对应的URL为：</p>
+<p>git@github.com:ckmessi/ckmessi.github.io.git<br>而选择Clone with HTTPS时，对应的URL为：</p>
+<p><a href="https://github.com/ckmessi/ckmessi.github.io.git" target="_blank" rel="external">https://github.com/ckmessi/ckmessi.github.io.git</a><br>两种方式的区别在于：</p>
+<p>使用SSH方式时，需要预先配置ssh key相关信息，克隆过程实质上建立了一个SSH连接（就像远程免密登录服务器一样）；如果在配置ssh key时没有设置密码，则每次push时不需要验证密码。<br>使用HTTP方式时，可以不经任何验证克隆该项目的数据，但在每次push的时候，都需要验证用户名和密码。<br>类似于SSH是一项永久性操作，而HTTP只是快速构建临时可读的方案。</p>
+<p>因此，在实际工作中，如果要频繁地获取并提交修改，应该使用SSH方式；如果只是将项目克隆下来随意浏览，不需要提交修改操作，则使用HTTP更方便。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/" data-id="cjmbnby9y00132r8tcl5o0t3v" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-使用Guzzle访问API接口需要登录的解决方案" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/" class="article-date">
@@ -106,7 +153,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/" data-id="cjmbm69en008ni18tuieo6dfo" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/" data-id="cjmbnbye2005f2r8ttv16t58z" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -165,7 +212,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/04/24/Crontab中可能遇到的php版本问题/" data-id="cjmbm6959000ri18tnbc125ds" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/04/24/Crontab中可能遇到的php版本问题/" data-id="cjmbnbyeo006i2r8tdjc6w6nd" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -211,7 +258,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/27/PHP使用php-ml完成距离计算/" data-id="cjmbm69dj007ei18tib4uuygd" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/03/27/PHP使用php-ml完成距离计算/" data-id="cjmbnbyck003w2r8t1gc47pmw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -272,7 +319,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/26/PHP中警惕悬挂引用可能引起的bug/" data-id="cjmbm69d0006ni18tjtw9wkkq" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/03/26/PHP中警惕悬挂引用可能引起的bug/" data-id="cjmbnbycy00492r8t79u0hudo" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -321,7 +368,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/24/Laravel个性化404页面/" data-id="cjmbm6976002ci18t4zltqkau" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/03/24/Laravel个性化404页面/" data-id="cjmbnbyay002a2r8tf8xairh5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -372,7 +419,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/" data-id="cjmbm69cw006ji18tg8xbsgag" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/" data-id="cjmbnbyc4003l2r8t06kdgxuu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -427,7 +474,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" data-id="cjmbm69ci006fi18tsfqqjge7" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" data-id="cjmbnbyc8003p2r8t1gsoqq3c" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -523,7 +570,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/01/初识AIDL/" data-id="cjmbm69eq008qi18td4l5a4ef" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/03/01/初识AIDL/" data-id="cjmbnbyea005u2r8t90pgkx7y" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li></ul>
@@ -618,56 +665,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" data-id="cjmbm696y0029i18txewb97f6" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" data-id="cjmbnbyas00242r8tvnacey17" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-MySQL连接缓慢的情况处理" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2018/02/02/MySQL连接缓慢的情况处理/" class="article-date">
-  <time datetime="2018-02-02T09:50:06.000Z" itemprop="datePublished">2018-02-02</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2018/02/02/MySQL连接缓慢的情况处理/">MySQL连接缓慢的情况处理</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>工作中遇到连接远程的MySQL数据库缓慢的情况，导致每次Ajax请求都需要10秒左右，很奇怪。<br>如果从MySQL数据库所在服务器进行访问则很快。<br>在同事的指导下，了解到可能是MySQL需要进行域名解析的原因。<br>查询<a href="http://www.jb51.net/article/27616.htm" target="_blank" rel="external">这篇文章</a>可知，如果MySQL主机查询DNS很慢或是有很多客户端主机时会导致连接很慢。由于服务器不能够连接外网的，所以DNS解析是不可能完成的，也正是为什么连接这么慢的原因。</p>
-<p>解决方法是在<code>/etc/mysql/mysql.conf.d/mysqld.cnf</code>文件中，添加一行命令使MySQL不进行域名解析。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">skip-name-resolve</div></pre></td></tr></table></figure></p>
-<p>重启MySQL<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo /etc/init.d/mysql restart</div></pre></td></tr></table></figure></p>
-<p>瞬间速度就快了。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="cjmbm69c6006bi18ts2u340j3" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li></ul>
 
     </footer>
   </div>
@@ -733,6 +734,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2018/09/21/Laravel中server-php文件的作用/">Laravel中server.php文件的作用</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2018/09/21/Ubuntu-16-04-升级OpenSSH/">Ubuntu 16.04 升级OpenSSH</a>
           </li>
         
@@ -746,10 +751,6 @@
         
           <li>
             <a href="/blog-hexo/2018/08/14/搭建SSH端口转发反向代理/">搭建SSH端口转发反向代理</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/08/13/解决iPhone上Safari浏览器滑动比较卡的问题/">解决iPhone上Safari浏览器滑动比较卡的问题</a>
           </li>
         
       </ul>

@@ -65,6 +65,57 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-PHPUnit测试protected方法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/11/09/PHPUnit测试protected方法/" class="article-date">
+  <time datetime="2017-11-09T13:26:08.000Z" itemprop="datePublished">2017-11-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/11/09/PHPUnit测试protected方法/">PHPUnit测试protected方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在使用PHPUnit进行单元测试时，可能需要对某个类的保护成员函数进行测试。<br>然而，权限为<code>protected</code>及<code>private</code>的成员函数是无法通过类对象直接访问的。<br>在这种情况下，有两种方法可以对保护及私有方法进行测试。</p>
+<h2 id="使用继承类"><a href="#使用继承类" class="headerlink" title="使用继承类"></a>使用继承类</h2><p>创建一个继承自待测试类的子类，同时在类中定义一个<code>public</code>方法，在方法中调用对应<code>protected</code>方法并返回，这样间接调用了父类的<code>protected</code>方法。<br>首先，创建一个子类继承自待测试类，并创建一个<code>public</code>方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">class Children extends Base</div><div class="line">&#123;</div><div class="line">    public function publicBar($param) </div><div class="line">    &#123;</div><div class="line">        return $this-&gt;protectedBar($param);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后直接使用即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$children = new Children();</div><div class="line">$res = $childen-&gt;publicBar($param);</div></pre></td></tr></table></figure></p>
+<h2 id="使用反射"><a href="#使用反射" class="headerlink" title="使用反射"></a>使用反射</h2><p>可以使用类的反射机制，根据方法名称取出对应方法，设置其访问级别，然后调用。<br>首先，创建一个<code>ReflectionClass</code>，使用<code>getMethod</code>方法获取方法，使用<code>setAccessible</code>方法设置访问权限。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">protected static function getMethod($name) &#123;</div><div class="line">  $class = new \ReflectionClass(&apos;MyClass&apos;);</div><div class="line">  $method = $class-&gt;getMethod($name);</div><div class="line">  $method-&gt;setAccessible(true);</div><div class="line">  return $method;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>使用<code>invokeArgs</code>方法触发方法的调用，第二个参数是对应方法的参数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public function testFoo() &#123;</div><div class="line">  $foo = self::getMethod(&apos;foo&apos;);</div><div class="line">  $obj = new MyClass();</div><div class="line">  $foo-&gt;invokeArgs($obj, array(...));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这里需要注意的是，Myclass会被直接或间接用到两次。第一次用于创建类的反射，第二次用于创建一个对象。</p>
+<p>在测试类中可参考如下写法组织测试：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">$this-&gt;controller_reflection = new \ReflectionClass(&apos;App\Http\Controllers\Controller&apos;);</div><div class="line">$request = new Request();</div><div class="line">$this-&gt;controller = new Controller($request);</div><div class="line"></div><div class="line">protected function getMethod($name) &#123;</div><div class="line">    $method = $this-&gt;controller_reflection-&gt;getMethod($name);</div><div class="line">    $method-&gt;setAccessible(true);</div><div class="line">    return $method;</div><div class="line">&#125;</div><div class="line">protected function callOutputJSON($code, $msg, $data)&#123;</div><div class="line">    $method = $this-&gt;getMethod(&apos;outputJSON&apos;);</div><div class="line">    return $method-&gt;invokeArgs($this-&gt;controller, array($code, $msg, $data));</div><div class="line">&#125;</div><div class="line">public function testOutputJSON()</div><div class="line">&#123;</div><div class="line">    $code = 0;</div><div class="line">    $msg = &apos;msg&apos;;</div><div class="line">    $data = array(&apos;user&apos; =&gt; &apos;abcd&apos;);</div><div class="line">    $response = $this-&gt;callOutputJSON($code, $msg, $data);</div><div class="line">    $this-&gt;assertTrue(true);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>类似的，类的私有方法只能通过反射机制的方案进行测试。</p>
+<p>参考链接：<br><a href="https://stackoverflow.com/questions/249664/best-practices-to-test-protected-methods-with-phpunit" target="_blank" rel="external">https://stackoverflow.com/questions/249664/best-practices-to-test-protected-methods-with-phpunit</a><br><a href="https://stackoverflow.com/questions/42094809/how-to-unit-test-protected-methods" target="_blank" rel="external">https://stackoverflow.com/questions/42094809/how-to-unit-test-protected-methods</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/11/09/PHPUnit测试protected方法/" data-id="cjmbnbycl003z2r8t8lf090f4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-AngularJS中ng-if和ng-show的区别" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2017/11/02/AngularJS中ng-if和ng-show的区别/" class="article-date">
@@ -112,7 +163,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/02/AngularJS中ng-if和ng-show的区别/" data-id="cjmbm693w0004i18txnddojxd" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/11/02/AngularJS中ng-if和ng-show的区别/" data-id="cjmbnby98000b2r8tw5rro398" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -176,7 +227,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/30/Angular1模块间通信方式/" data-id="cjmbm693m0001i18tgqy8ly6w" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/10/30/Angular1模块间通信方式/" data-id="cjmbnby8000002r8t3qgtnumr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -252,7 +303,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/23/Laravel-Database-Query-Builder-insert的效率问题/" data-id="cjmbm696t0023i18tjt92f5bh" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/10/23/Laravel-Database-Query-Builder-insert的效率问题/" data-id="cjmbnbyaj001u2r8tifrw0t28" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -298,7 +349,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/21/Angular类的成员变量初始化的问题/" data-id="cjmbm69430005i18t8oizmoxw" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/10/21/Angular类的成员变量初始化的问题/" data-id="cjmbnby8h00042r8t76u698r2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -350,7 +401,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/16/Git分支基本操作/" data-id="cjmbm695u0018i18t1gn5z39a" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/10/16/Git分支基本操作/" data-id="cjmbnby9q000w2r8tfmrpi04p" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -408,7 +459,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/09/Git-tag的使用/" data-id="cjmbm695j0011i18tkrchlgyh" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/10/09/Git-tag的使用/" data-id="cjmbnby9t00112r8trpj8fpdl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -469,7 +520,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/23/React-Router-v4的使用/" data-id="cjmbm69dh007bi18t3biduxi5" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/09/23/React-Router-v4的使用/" data-id="cjmbnbydg004j2r8tpyrmyy2k" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/React/">React</a></li></ul>
@@ -532,7 +583,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/22/php7新特性中的一些语法糖/" data-id="cjmbm69e30083i18thuf9zwzf" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/09/22/php7新特性中的一些语法糖/" data-id="cjmbnbydx00592r8trse4pde5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -597,57 +648,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/18/开源许可协议简介/" data-id="cjmbm69f7009bi18tpmdpdach" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/09/18/开源许可协议简介/" data-id="cjmbnbyeb005x2r8t2ht5ni4q" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/License/">License</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Access-Control-Allow-Origin实现跨域访问" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/09/12/Access-Control-Allow-Origin实现跨域访问/" class="article-date">
-  <time datetime="2017-09-12T13:26:43.000Z" itemprop="datePublished">2017-09-12</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/09/12/Access-Control-Allow-Origin实现跨域访问/">Access-Control-Allow-Origin实现跨域访问</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在前端使用Ajax请求后台时，如果前端和后台项目是分离的，很容易出现跨域请求访问的错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">XMLHttpRequest cannot load http://localhost/.... The &apos;Access-Control-Allow-Origin&apos; header has a value  that is not equal to the supplied origin. Origin &apos;null&apos; is therefore not allowed access.</div></pre></td></tr></table></figure></p>
-<p>跨域指的是浏览器执行了其他网站的脚本。这是由浏览器的同源策略造成的，是浏览器对javascript施加的安全限制。<br>之前一直为其困扰，最近找到一种便捷的方法实现跨域访问，其基本原理是在服务器端设置Access-Control-Allow-Origin，表示允许浏览器跨域访问，相当于被请求资源给浏览器开了一道绿色通行证。</p>
-<p>客户端正常使用ajax请求资源：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">axios.get(&apos;http://localhost/your/path&apos;).then(function (response) &#123;</div><div class="line">    var data = response.data;</div><div class="line">    if (data.code === 200) &#123;</div><div class="line">        alert(data.data.message)</div><div class="line">    &#125; else &#123;</div><div class="line">        alert(data.data);</div><div class="line">    &#125;</div><div class="line">&#125;).catch(function (error) &#123;</div><div class="line">    alert(error);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-<p>服务器端需要添加以下内容设置<code>header</code>信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// 指定允许其他域名访问  </div><div class="line">header(&apos;Access-Control-Allow-Origin:*&apos;);  </div><div class="line">// 响应类型  </div><div class="line">header(&apos;Access-Control-Allow-Methods:GET&apos;);  </div><div class="line">// 响应头设置  </div><div class="line">header(&apos;Access-Control-Allow-Headers:x-requested-with,content-type&apos;);</div></pre></td></tr></table></figure></p>
-<p>这样前端就不会报浏览器跨域访问的错误了。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/12/Access-Control-Allow-Origin实现跨域访问/" data-id="cjmbm693g0000i18tr6fhftd5" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li></ul>
 
     </footer>
   </div>
@@ -713,6 +717,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2018/09/21/Laravel中server-php文件的作用/">Laravel中server.php文件的作用</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2018/09/21/Ubuntu-16-04-升级OpenSSH/">Ubuntu 16.04 升级OpenSSH</a>
           </li>
         
@@ -726,10 +734,6 @@
         
           <li>
             <a href="/blog-hexo/2018/08/14/搭建SSH端口转发反向代理/">搭建SSH端口转发反向代理</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/08/13/解决iPhone上Safari浏览器滑动比较卡的问题/">解决iPhone上Safari浏览器滑动比较卡的问题</a>
           </li>
         
       </ul>

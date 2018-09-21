@@ -65,6 +65,52 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-MySQL连接缓慢的情况处理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/02/02/MySQL连接缓慢的情况处理/" class="article-date">
+  <time datetime="2018-02-02T09:50:06.000Z" itemprop="datePublished">2018-02-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/02/02/MySQL连接缓慢的情况处理/">MySQL连接缓慢的情况处理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>工作中遇到连接远程的MySQL数据库缓慢的情况，导致每次Ajax请求都需要10秒左右，很奇怪。<br>如果从MySQL数据库所在服务器进行访问则很快。<br>在同事的指导下，了解到可能是MySQL需要进行域名解析的原因。<br>查询<a href="http://www.jb51.net/article/27616.htm" target="_blank" rel="external">这篇文章</a>可知，如果MySQL主机查询DNS很慢或是有很多客户端主机时会导致连接很慢。由于服务器不能够连接外网的，所以DNS解析是不可能完成的，也正是为什么连接这么慢的原因。</p>
+<p>解决方法是在<code>/etc/mysql/mysql.conf.d/mysqld.cnf</code>文件中，添加一行命令使MySQL不进行域名解析。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">skip-name-resolve</div></pre></td></tr></table></figure></p>
+<p>重启MySQL<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo /etc/init.d/mysql restart</div></pre></td></tr></table></figure></p>
+<p>瞬间速度就快了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="cjmbnbybo003a2r8tkwu5p2yx" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Laravel中对OPTIONS请求的批量处理" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2018/01/31/Laravel中对OPTIONS请求的批量处理/" class="article-date">
@@ -128,7 +174,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/31/Laravel中对OPTIONS请求的批量处理/" data-id="cjmbm697i002ii18t41ij5mpu" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/01/31/Laravel中对OPTIONS请求的批量处理/" data-id="cjmbnbyb6002i2r8tdnh1b3u9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -269,7 +315,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/" data-id="cjmbm69et008ui18tnoswpbal" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/" data-id="cjmbnbye5005m2r8tgw0f45m8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li></ul>
@@ -319,7 +365,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="cjmbm6988002zi18t4c0mbpol" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="cjmbnbybb002r2r8t7u2tdnzw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li></ul>
@@ -374,7 +420,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/04/Linux管道和awk实现字符连接/" data-id="cjmbm69bq0068i18t0bdwdxp9" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/01/04/Linux管道和awk实现字符连接/" data-id="cjmbnbybl00372r8tvk5xlp0a" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li></ul>
@@ -422,7 +468,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/02/Mac使用命令行快速生成zip包/" data-id="cjmbm69ct006hi18txhosac5f" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/01/02/Mac使用命令行快速生成zip包/" data-id="cjmbnbybq003c2r8ty99hg5sc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li></ul>
@@ -471,7 +517,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/21/Mysql导出数据库表结构到Excel/" data-id="cjmbm69d2006qi18twpwjktrv" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/11/21/Mysql导出数据库表结构到Excel/" data-id="cjmbnbycf003s2r8t4svfcuu5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li></ul>
@@ -531,7 +577,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/18/Git-Fast-forward的一些常识/" data-id="cjmbm695g000zi18t6s27vr5w" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/11/18/Git-Fast-forward的一些常识/" data-id="cjmbnby9n000t2r8tlokwx3e5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -577,7 +623,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/17/Laravel扩展Guzzle-发送HTTP请求/" data-id="cjmbm6982002ti18t5y645xem" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/11/17/Laravel扩展Guzzle-发送HTTP请求/" data-id="cjmbnbyb9002o2r8tot664nho" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -626,61 +672,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/14/Laravel模拟创建Request/" data-id="cjmbm6986002wi18tjsz2zlhu" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/11/14/Laravel模拟创建Request/" data-id="cjmbnbybf002y2r8thrfxn1cf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-PHPUnit测试protected方法" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/11/09/PHPUnit测试protected方法/" class="article-date">
-  <time datetime="2017-11-09T13:26:08.000Z" itemprop="datePublished">2017-11-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/11/09/PHPUnit测试protected方法/">PHPUnit测试protected方法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在使用PHPUnit进行单元测试时，可能需要对某个类的保护成员函数进行测试。<br>然而，权限为<code>protected</code>及<code>private</code>的成员函数是无法通过类对象直接访问的。<br>在这种情况下，有两种方法可以对保护及私有方法进行测试。</p>
-<h2 id="使用继承类"><a href="#使用继承类" class="headerlink" title="使用继承类"></a>使用继承类</h2><p>创建一个继承自待测试类的子类，同时在类中定义一个<code>public</code>方法，在方法中调用对应<code>protected</code>方法并返回，这样间接调用了父类的<code>protected</code>方法。<br>首先，创建一个子类继承自待测试类，并创建一个<code>public</code>方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">class Children extends Base</div><div class="line">&#123;</div><div class="line">    public function publicBar($param) </div><div class="line">    &#123;</div><div class="line">        return $this-&gt;protectedBar($param);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>然后直接使用即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$children = new Children();</div><div class="line">$res = $childen-&gt;publicBar($param);</div></pre></td></tr></table></figure></p>
-<h2 id="使用反射"><a href="#使用反射" class="headerlink" title="使用反射"></a>使用反射</h2><p>可以使用类的反射机制，根据方法名称取出对应方法，设置其访问级别，然后调用。<br>首先，创建一个<code>ReflectionClass</code>，使用<code>getMethod</code>方法获取方法，使用<code>setAccessible</code>方法设置访问权限。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">protected static function getMethod($name) &#123;</div><div class="line">  $class = new \ReflectionClass(&apos;MyClass&apos;);</div><div class="line">  $method = $class-&gt;getMethod($name);</div><div class="line">  $method-&gt;setAccessible(true);</div><div class="line">  return $method;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>使用<code>invokeArgs</code>方法触发方法的调用，第二个参数是对应方法的参数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public function testFoo() &#123;</div><div class="line">  $foo = self::getMethod(&apos;foo&apos;);</div><div class="line">  $obj = new MyClass();</div><div class="line">  $foo-&gt;invokeArgs($obj, array(...));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>这里需要注意的是，Myclass会被直接或间接用到两次。第一次用于创建类的反射，第二次用于创建一个对象。</p>
-<p>在测试类中可参考如下写法组织测试：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">$this-&gt;controller_reflection = new \ReflectionClass(&apos;App\Http\Controllers\Controller&apos;);</div><div class="line">$request = new Request();</div><div class="line">$this-&gt;controller = new Controller($request);</div><div class="line"></div><div class="line">protected function getMethod($name) &#123;</div><div class="line">    $method = $this-&gt;controller_reflection-&gt;getMethod($name);</div><div class="line">    $method-&gt;setAccessible(true);</div><div class="line">    return $method;</div><div class="line">&#125;</div><div class="line">protected function callOutputJSON($code, $msg, $data)&#123;</div><div class="line">    $method = $this-&gt;getMethod(&apos;outputJSON&apos;);</div><div class="line">    return $method-&gt;invokeArgs($this-&gt;controller, array($code, $msg, $data));</div><div class="line">&#125;</div><div class="line">public function testOutputJSON()</div><div class="line">&#123;</div><div class="line">    $code = 0;</div><div class="line">    $msg = &apos;msg&apos;;</div><div class="line">    $data = array(&apos;user&apos; =&gt; &apos;abcd&apos;);</div><div class="line">    $response = $this-&gt;callOutputJSON($code, $msg, $data);</div><div class="line">    $this-&gt;assertTrue(true);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>类似的，类的私有方法只能通过反射机制的方案进行测试。</p>
-<p>参考链接：<br><a href="https://stackoverflow.com/questions/249664/best-practices-to-test-protected-methods-with-phpunit" target="_blank" rel="external">https://stackoverflow.com/questions/249664/best-practices-to-test-protected-methods-with-phpunit</a><br><a href="https://stackoverflow.com/questions/42094809/how-to-unit-test-protected-methods" target="_blank" rel="external">https://stackoverflow.com/questions/42094809/how-to-unit-test-protected-methods</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/09/PHPUnit测试protected方法/" data-id="cjmbm69d7006xi18tzqz9qmwi" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li></ul>
 
     </footer>
   </div>
@@ -746,6 +741,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2018/09/21/Laravel中server-php文件的作用/">Laravel中server.php文件的作用</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2018/09/21/Ubuntu-16-04-升级OpenSSH/">Ubuntu 16.04 升级OpenSSH</a>
           </li>
         
@@ -759,10 +758,6 @@
         
           <li>
             <a href="/blog-hexo/2018/08/14/搭建SSH端口转发反向代理/">搭建SSH端口转发反向代理</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/08/13/解决iPhone上Safari浏览器滑动比较卡的问题/">解决iPhone上Safari浏览器滑动比较卡的问题</a>
           </li>
         
       </ul>

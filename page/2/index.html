@@ -65,6 +65,83 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Laravel-SocketIO即时发送消息" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/07/27/Laravel-SocketIO即时发送消息/" class="article-date">
+  <time datetime="2018-07-27T12:46:23.000Z" itemprop="datePublished">2018-07-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/07/27/Laravel-SocketIO即时发送消息/">Laravel+SocketIO即时发送消息</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在工作中遇到需求，后台服务器要即时地给客户端推送消息。</p>
+<p>常规的Client-Server模式中，服务器是无法给客户端推送消息的。加上PHP框架Laravel本身不是常驻内存，更增加了难度。</p>
+<p>有一种解决方案能够实现这个需求，使用Laravel的事件广播机制，配合SocketIO服务器完成。</p>
+<p>此前在 <code>Laracast</code> 课程<a href="https://laracasts.com/series/real-time-laravel-with-socket-io" target="_blank" rel="external">Real-time Laravel with Socket.io</a> 中曾学习过（2016-11-27），但当时没有实践，之后就忘记了。</p>
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>这篇文章将介绍如何使用Laravel+SocketIO服务器进行消息即时推送的方案，涉及到的知识点有：</p>
+<ul>
+<li>Laravel的事件广播机制</li>
+<li>SocketIO服务器搭建</li>
+<li>SocketIO客户端撰写</li>
+</ul>
+<p>接下来逐个介绍相关内容。</p>
+<h2 id="Laravel的事件广播"><a href="#Laravel的事件广播" class="headerlink" title="Laravel的事件广播"></a>Laravel的事件广播</h2><p>Laravel 支持<code>事件</code>-<code>监听</code>机制。<br>比如我们需要创建一个开门信号事件，并用一个监听器监听它，可以在<code>app/Providers/EventServiceProvider.php</code>文件中添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&apos;App\Events\OpenDoorSignal&apos; =&gt; [</div><div class="line">    &apos;App\Listeners\OpenDoorSignalListener&apos;,</div><div class="line">],</div></pre></td></tr></table></figure></p>
+<p>执行<code>php artisan event:generate</code>，框架会自动生成<code>app\Events\OpenDoorSignal.php</code>和<code>app\Listeners\OpenDoorSignalListener.php</code>两个文件。</p>
+<h4 id="关于Event类"><a href="#关于Event类" class="headerlink" title="关于Event类"></a>关于Event类</h4><p>在<code>OpenDoorSignal.php</code>文件中，在类名<code>OpenDoorSignal</code>后面加上<code>implements ShouldBroadcast</code>。</p>
+<p>注：只有实现了这个类，才会触发广播的机制，如果没有的话，仅仅会进入到对应监听器<code>OpenDoorSignalListener</code>的<code>handle</code>函数中。</p>
+<p>在<code>OpenDoorSignal.php</code>类中可以定义这个事件所涵盖的一切信息，通过添加成员变量并修改构造函数的方式。</p>
+<p>比如定义开门信号具有门的信息、触发此操作的用户ID、备注消息等，注意，这些成员需要使用 <code>public</code> 等级，如果是 <code>protected</code> ，则广播时取不到相关信息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public $door_id;</div><div class="line">public $user_id;</div><div class="line">public $message;</div></pre></td></tr></table></figure></p>
+<p>在方法 <code>broadcastOn</code> 中，可以选择广播的频道 <code>channel</code> ，通常不同的应用可以通过监听不同频道实现分离。比如 <code>Patronum</code> 后台的事件永远发布在 <code>patronum</code> 频道广播，对应的其它终端只处理这个频道的信息。</p>
+<p>可以添加方法<code>broadcastAs</code>，这个方法如果不定义的话，事件名称默认是类名称，在上述例子中是<code>App\Events\OpenDoorSignal</code>。</p>
+<p>如果添加这个方法，可以个性化定义事件名称：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public function broadcastAs()&#123;</div><div class="line">    return &apos;OpenDoorSignal&apos;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="关于Listener"><a href="#关于Listener" class="headerlink" title="关于Listener"></a>关于Listener</h4><p>在<code>OpenDoorSignalListener.php</code>文件中，主要可能使用的就是<code>handle</code>方法。<br>当<code>OpenDoorSignal</code>事件被触发后，将会触发这个<code>handle</code>函数，所有对事件的处理都可以在这里撰写。（这样能有效地分离事件处理逻辑和事件产生逻辑）</p>
+<p>在这个样例中，使用事件的目标是发布广播消息到SocketIO服务器，因此这里不需要进行任何逻辑处理，只添加一条日志。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * Handle the event.</div><div class="line"> *</div><div class="line"> * @param OpenDoorSignal $event</div><div class="line"> * @return void</div><div class="line"> */</div><div class="line">public function handle(OpenDoorSignal $event)</div><div class="line">&#123;</div><div class="line">    Log::info(json_encode($event));</div><div class="line">    //</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="触发事件"><a href="#触发事件" class="headerlink" title="触发事件"></a>触发事件</h4><p>在项目根目录的<code>.env</code>文件中，修改：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">BROADCAST_DRIVER=log</div></pre></td></tr></table></figure></p>
+<p>手动调用下述方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$door_id = 1;</div><div class="line">$user_id = 2;</div><div class="line">$message = &apos;test open door&apos;;</div><div class="line">event(new OpenDoorSignal($door_id, $user_id, $message)); // 触发事件</div></pre></td></tr></table></figure></p>
+<p>在<code>laravel.log</code>系统默认日志文件中可以看到，这是广播的内容。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[2018-07-26 11:24:07] local.INFO: Broadcasting [OpenDoorSignal] on channels [patronum] with payload:</div><div class="line">&#123;</div><div class="line">    &quot;door_id&quot;: 1,</div><div class="line">    &quot;user_id&quot;: 2,</div><div class="line">    &quot;message&quot;: &quot;test open door&quot;,</div><div class="line">    &quot;socket&quot;: null</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在自定义的事件日志中，可以看到我们在Listener的handle函数中添加的日志：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[2018-07-26 11:24:07] event.INFO: &#123;&quot;door_id&quot;:1,&quot;user_id&quot;:2,&quot;message&quot;:&quot;test open door&quot;,&quot;socket&quot;:null&#125; [] []</div></pre></td></tr></table></figure></p>
+<h4 id="事件小结"><a href="#事件小结" class="headerlink" title="事件小结"></a>事件小结</h4><p>事件的基础是事件Event发生后，会触发监听器Listener的handle函数；如果添加上<code>implements ShouldBroadcast</code>，则会同时发布广播<br>广播的机制Laravel提供了<code>log</code>、<code>redis</code>和<code>pusher</code>三种，调试时可以使用log，接下来与SocketIO服务器的连接会使用<code>redis</code>。</p>
+<h2 id="SocketIO服务器"><a href="#SocketIO服务器" class="headerlink" title="SocketIO服务器"></a>SocketIO服务器</h2><p>Laravel与SocketIO服务器之间的通信是通过Redis的订阅/发布模式实现的。<br>Redis数据库的安装过程不再赘述。<br>在Laravel项目中，首先，将<code>.env</code>中配置项修改为redis，此时广播将发布到Redis的订阅者中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">BROADCAST_DRIVER=redis</div></pre></td></tr></table></figure></p>
+<p>接下来构建SocketIO服务器。在SocketIO服务器中，一方面要监听Redis的订阅事件，获取来自Laravel广播的消息；另一方面建立一个socketIO监听，让客户端连接，在恰当的时机向客户端发送消息。<br>其中SocketIO客户端可以用简单的javascript测试，在具体使用中Android/iOS/Web端皆可成为客户端。</p>
+<p>SocketIO服务器部分代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">var app = require(&apos;http&apos;).createServer(function(req, res)&#123;</div><div class="line">  res.writeHead(200);</div><div class="line">  res.end(&apos;&apos;);</div><div class="line">&#125;);</div><div class="line">var io = require(&apos;socket.io&apos;)(app);</div><div class="line">var Redis = require(&apos;ioredis&apos;);</div><div class="line">var config = require(&apos;./config.js&apos;);</div><div class="line"></div><div class="line">// 连接到Redis</div><div class="line">var redisHost = &apos;127.0.0.1&apos;;</div><div class="line">var redis = new Redis(redisHost);</div><div class="line">redis.psubscribe(&apos;*&apos;, function (err, count) &#123;</div><div class="line">   console.log(&apos;psubscribe to redis...&apos;);</div><div class="line">&#125;);</div><div class="line">redis.on(&apos;pmessage&apos;, function (subscribed, channel, message) &#123;</div><div class="line">  if(channel != &apos;patronum&apos;)&#123;</div><div class="line">    return;</div><div class="line">  &#125;</div><div class="line">  message = JSON.parse(message);</div><div class="line">  let channelName = channel + &apos;:&apos; + message.event;</div><div class="line">  io.emit(channelName, message.data);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">// 开启SocketIo监听</div><div class="line">var listenPort = &apos;6001&apos;;</div><div class="line">app.listen(listenPort, function () &#123;</div><div class="line">  console.log(&apos;listening on *:&apos; + listenPort);</div><div class="line">&#125;);</div><div class="line">io.on(&apos;connection&apos;, function (socket) &#123;</div><div class="line">  // 测试与客户端的通信</div><div class="line">  socket.emit(&apos;hello&apos;, &#123;str: &apos;hello&apos;&#125;);</div><div class="line">  socket.on(&apos;hello-response&apos;, function(data)&#123;</div><div class="line">    console.log(&apos;receive hello response&apos;);</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">  socket.on(&apos;message&apos;, function (data) &#123;</div><div class="line">    console.log(&apos;receive message&apos;, data);</div><div class="line">  &#125;)</div><div class="line">  socket.on(&apos;disconnect&apos;, function () &#123;</div><div class="line">     console.log(&apos;client disconnect&apos;);</div><div class="line">  &#125;)</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>基本思想就是建立两个监听，将订阅Redis的信息发送到与自己建立连接的SocketIO客户端处。</p>
+<p>客户端代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">var io = require(&apos;socket.io-client&apos;);</div><div class="line">var socket = io(&quot;ws://localhost:6002&quot;);</div><div class="line">socket.on(&apos;connect&apos;, function()&#123;</div><div class="line">    console.log(&quot;connected to server.&quot;);</div><div class="line">&#125;);</div><div class="line">socket.on(&apos;hello&apos;, function(data) &#123;</div><div class="line">    console.log(data);</div><div class="line">    socket.emit(&apos;hello-response&apos;, &#123;str: &quot;fine, thank you&quot;&#125;);</div><div class="line">&#125;)</div><div class="line">socket.on(&quot;patronum:OpenDoorSignal&quot;, function(data)&#123;</div><div class="line">    console.log(&apos;received message!!!&apos;);</div><div class="line">    console.log(data);</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>客户端的逻辑比较简单：建立与SocketIO服务器的连接，监听某个事件，撰写相关的回调函数即可。</p>
+<p>在此基础上，根据项目需要可能还要有一些授权验证机制，这部分内容SocketIO的服务器与客户端之间协商完成即可。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Laravel要实现即时推送，需要借助Redis将事件进行广播。<br>此外搭建一个SocketIO服务器，订阅Redis发布的事件，并即时发送消息给SocketIO客户端。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/07/27/Laravel-SocketIO即时发送消息/" data-id="cjmbnbyam001x2r8t2xbzxrn0" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Linux查看并修改系统时间" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2018/07/17/Linux查看并修改系统时间/" class="article-date">
@@ -105,7 +182,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/07/17/Linux查看并修改系统时间/" data-id="cjmbm698e0033i18tc9j229n6" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/07/17/Linux查看并修改系统时间/" data-id="cjmbnbybh00312r8trwj5qej5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li></ul>
@@ -183,7 +260,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/07/14/Vue在自定义组件上使用v-model的方法/" data-id="cjmbm69e9008ci18tya4z8csk" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/07/14/Vue在自定义组件上使用v-model的方法/" data-id="cjmbnbydr004y2r8tgdz4orwe" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -231,7 +308,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/07/06/Element-UI的Tooltip对disabled的按钮无效的问题/" data-id="cjmbm6955000oi18tiabdicjh" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/07/06/Element-UI的Tooltip对disabled的按钮无效的问题/" data-id="cjmbnbyeq006l2r8t0k1radax" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -283,7 +360,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/07/03/Javascript模拟浏览器全屏行为并管理全屏状态/" data-id="cjmbm696p001zi18tbb1g9xab" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/07/03/Javascript模拟浏览器全屏行为并管理全屏状态/" data-id="cjmbnbyad001m2r8tbfkm28lf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -334,7 +411,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/07/02/Laravel数据库表连接查询中添加外表字段查询条件/" data-id="cjmbm69bk0065i18tkjz9ww4s" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/07/02/Laravel数据库表连接查询中添加外表字段查询条件/" data-id="cjmbnbybc002u2r8tudjdhzfb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -383,7 +460,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/06/30/Laravel命令php-artisan-key-generate的作用/" data-id="cjmbm6980002ri18tpqy7w8c6" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/06/30/Laravel命令php-artisan-key-generate的作用/" data-id="cjmbnbyb8002m2r8todft6uh8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -445,7 +522,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/" data-id="cjmbm69e7008ai18ti31i3ob6" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/" data-id="cjmbnbye3005i2r8tzsdsho31" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -523,7 +600,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/06/11/一个简单的中国大陆身份证号码验证工具/" data-id="cjmbm69ei008ji18the92753y" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/06/11/一个简单的中国大陆身份证号码验证工具/" data-id="cjmbnbydy005b2r8tt83cc6iy" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -571,57 +648,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/31/Laravel-migration添加column使用Sqlite可能遇到的错误/" data-id="cjmbm6979002fi18tzznowv9y" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/05/31/Laravel-migration添加column使用Sqlite可能遇到的错误/" data-id="cjmbnbyao00202r8t52qwgxk4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Git克隆项目时SSH-HTTP方式的区别" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/" class="article-date">
-  <time datetime="2018-05-08T08:42:25.000Z" itemprop="datePublished">2018-05-08</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/">Git克隆项目时SSH/HTTP方式的区别</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在使用Git获取仓库中的项目时，通常可以选择用SSH或HTTP方式。<br>两种克隆方式对应的URL也不一样。以Github为例，选择Clone with SSH时，对应的URL为：</p>
-<p>git@github.com:ckmessi/ckmessi.github.io.git<br>而选择Clone with HTTPS时，对应的URL为：</p>
-<p><a href="https://github.com/ckmessi/ckmessi.github.io.git" target="_blank" rel="external">https://github.com/ckmessi/ckmessi.github.io.git</a><br>两种方式的区别在于：</p>
-<p>使用SSH方式时，需要预先配置ssh key相关信息，克隆过程实质上建立了一个SSH连接（就像远程免密登录服务器一样）；如果在配置ssh key时没有设置密码，则每次push时不需要验证密码。<br>使用HTTP方式时，可以不经任何验证克隆该项目的数据，但在每次push的时候，都需要验证用户名和密码。<br>类似于SSH是一项永久性操作，而HTTP只是快速构建临时可读的方案。</p>
-<p>因此，在实际工作中，如果要频繁地获取并提交修改，应该使用SSH方式；如果只是将项目克隆下来随意浏览，不需要提交修改操作，则使用HTTP更方便。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/" data-id="cjmbm695r0015i18thjwpdhnl" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
 
     </footer>
   </div>
@@ -687,6 +717,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2018/09/21/Laravel中server-php文件的作用/">Laravel中server.php文件的作用</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2018/09/21/Ubuntu-16-04-升级OpenSSH/">Ubuntu 16.04 升级OpenSSH</a>
           </li>
         
@@ -700,10 +734,6 @@
         
           <li>
             <a href="/blog-hexo/2018/08/14/搭建SSH端口转发反向代理/">搭建SSH端口转发反向代理</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/08/13/解决iPhone上Safari浏览器滑动比较卡的问题/">解决iPhone上Safari浏览器滑动比较卡的问题</a>
           </li>
         
       </ul>
