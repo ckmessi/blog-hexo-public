@@ -5,19 +5,19 @@
   
 
   
-  <title>Azure Application Insights入门 | 不止是一位程序员</title>
+  <title>Ubuntu 16.04 升级OpenSSH | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Application Insights是微软Azure平台的一项服务，声称能够全面监控和了解服务的行为、可靠性和性能。可以这样理解，当一项应用添加了Application Insights插件后，相当于给自己的应用添加了许多监控机制，可以通过Azure平台页面直接监测服务的运行状况。类似于阿里云平台查看云主机吞吐量，或自行使用tail -f x.log命令监控日志信息。 基本概念首先需要理解以下">
-<meta name="keywords" content="C#,Azure">
+  <meta name="description" content="Ubuntu 16.04 系统默认安装的 OpenSSH 版本为 7.2 ，这个版本存在许多安全漏洞。 在一些安全扫描过程中，有可能抛出相关的警告。 为了避免系统处于危险，可以对 OpenSSH 进行升级。 使用 ssh -V 可以查看当前 OpenSSH 的版本：12➜ ~ ssh -VOpenSSH_7.2p2 Ubuntu-4ubuntu2.2, OpenSSL 1.0.2g 1 Mar 2">
+<meta name="keywords" content="Linux,Ubuntu,OpenSSH">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Azure Application Insights入门">
-<meta property="og:url" content="http://ckmessi.github.io/2017/09/11/Azure-Application-Insights入门/index.html">
+<meta property="og:title" content="Ubuntu 16.04 升级OpenSSH">
+<meta property="og:url" content="http://ckmessi.github.io/2018/09/21/Ubuntu-16-04-升级OpenSSH/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
-<meta property="og:description" content="Application Insights是微软Azure平台的一项服务，声称能够全面监控和了解服务的行为、可靠性和性能。可以这样理解，当一项应用添加了Application Insights插件后，相当于给自己的应用添加了许多监控机制，可以通过Azure平台页面直接监测服务的运行状况。类似于阿里云平台查看云主机吞吐量，或自行使用tail -f x.log命令监控日志信息。 基本概念首先需要理解以下">
-<meta property="og:updated_time" content="2017-09-11T14:52:18.000Z">
+<meta property="og:description" content="Ubuntu 16.04 系统默认安装的 OpenSSH 版本为 7.2 ，这个版本存在许多安全漏洞。 在一些安全扫描过程中，有可能抛出相关的警告。 为了避免系统处于危险，可以对 OpenSSH 进行升级。 使用 ssh -V 可以查看当前 OpenSSH 的版本：12➜ ~ ssh -VOpenSSH_7.2p2 Ubuntu-4ubuntu2.2, OpenSSL 1.0.2g 1 Mar 2">
+<meta property="og:updated_time" content="2018-09-21T06:18:13.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Azure Application Insights入门">
-<meta name="twitter:description" content="Application Insights是微软Azure平台的一项服务，声称能够全面监控和了解服务的行为、可靠性和性能。可以这样理解，当一项应用添加了Application Insights插件后，相当于给自己的应用添加了许多监控机制，可以通过Azure平台页面直接监测服务的运行状况。类似于阿里云平台查看云主机吞吐量，或自行使用tail -f x.log命令监控日志信息。 基本概念首先需要理解以下">
+<meta name="twitter:title" content="Ubuntu 16.04 升级OpenSSH">
+<meta name="twitter:description" content="Ubuntu 16.04 系统默认安装的 OpenSSH 版本为 7.2 ，这个版本存在许多安全漏洞。 在一些安全扫描过程中，有可能抛出相关的警告。 为了避免系统处于危险，可以对 OpenSSH 进行升级。 使用 ssh -V 可以查看当前 OpenSSH 的版本：12➜ ~ ssh -VOpenSSH_7.2p2 Ubuntu-4ubuntu2.2, OpenSSL 1.0.2g 1 Mar 2">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -68,10 +68,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-Azure-Application-Insights入门" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Ubuntu-16-04-升级OpenSSH" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog-hexo/2017/09/11/Azure-Application-Insights入门/" class="article-date">
-  <time datetime="2017-09-11T14:32:06.000Z" itemprop="datePublished">2017-09-11</time>
+    <a href="/blog-hexo/2018/09/21/Ubuntu-16-04-升级OpenSSH/" class="article-date">
+  <time datetime="2018-09-21T06:11:39.000Z" itemprop="datePublished">2018-09-21</time>
 </a>
     
   <div class="article-category">
@@ -86,7 +86,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Azure Application Insights入门
+      Ubuntu 16.04 升级OpenSSH
     </h1>
   
 
@@ -94,28 +94,21 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Application Insights是微软Azure平台的一项服务，声称能够全面监控和了解服务的行为、可靠性和性能。<br>可以这样理解，当一项应用添加了Application Insights插件后，相当于给自己的应用添加了许多监控机制，可以通过Azure平台页面直接监测服务的运行状况。类似于阿里云平台查看云主机吞吐量，或自行使用<code>tail -f x.log</code>命令监控日志信息。</p>
-<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>首先需要理解以下几个概念：</p>
-<ul>
-<li>Azure Application Insights：微软推出的服务监控插件，可自行配置安装到应用中。</li>
-<li>Microsoft Azure：微软推出的云平台，用于监控配置了Application Insights的服务资源。</li>
-<li>InstrumentationKey：检测密钥，一项Azure上的Application Insights资源对应唯一的密钥，当项目配置密钥后，将直接将该项目应用绑定到密钥所标识的Azure资源上。</li>
-</ul>
-<h2 id="Application-Insights在ASP-NET中的使用"><a href="#Application-Insights在ASP-NET中的使用" class="headerlink" title="Application Insights在ASP.NET中的使用"></a>Application Insights在ASP.NET中的使用</h2><h4 id="设置InstrumentationKey"><a href="#设置InstrumentationKey" class="headerlink" title="设置InstrumentationKey"></a>设置<code>InstrumentationKey</code></h4><p>Application Insights的基本使用方法可以参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-asp-net" target="_blank" rel="external">微软官方文档</a>。<br>主要包括安装相关SDK，初始化Application Insights配置等流程。<br>最重要的步骤是添加<code>InstrumentationKey</code>，事实证明所有流程的最终结果本质上是在<code>ApplicationInsights.config</code>文件中添加该配置项，这样应用就能够连上Azure监控平台。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;InstrumentationKey&gt;Your Key&lt;/InstrumentationKey&gt;</div></pre></td></tr></table></figure></p>
-<p>由于不同部署平台可能需要使用不同的<code>InstrumentationKey</code>，比较好的方案是在程序启动后执行的代码中读取配置文件动态添加。<br>参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-configuration-with-applicationinsights-config#instrumentationkey" target="_blank" rel="external">文档</a>，可以在项目的启动添加中动态添加<code>InstrumentationKey</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">protected void Application_Start()</div><div class="line">&#123;</div><div class="line">	Microsoft.ApplicationInsights.Extensibility.</div><div class="line">		TelemetryConfiguration.Active.InstrumentationKey =</div><div class="line">          // - for example -</div><div class="line">        WebConfigurationManager.Settings[&quot;ikey&quot;];</div><div class="line">    //...</div></pre></td></tr></table></figure>
-<h4 id="设置cloud-RoleName"><a href="#设置cloud-RoleName" class="headerlink" title="设置cloud_RoleName"></a>设置<code>cloud_RoleName</code></h4><p><code>cloud_RoleName</code>的作用是区分使用同一个<code>InstrumentationKey</code>的不同组件（Components）。例如，在同一个应用下，可能有多个组件组成，此时如果希望对一些性能指标、日志记录进行筛选，则需要给每个组件添加唯一的<code>cloud_RoleName</code>，在Azure监控平台上的”搜索”中可以添加<code>cloud_RoleName</code>的筛选条件。</p>
-<p>参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-monitor-multi-role-apps" target="_blank" rel="external">官方文档1</a>和<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-api-filtering-sampling#add-properties-itelemetryinitializer" target="_blank" rel="external">cloud_RoleName的覆写方法</a>，可以在程序启动时为应用配置特殊的<code>cloud_RoleName</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">private class MyTelemetryInitializer : ITelemetryInitializer</div><div class="line">&#123;</div><div class="line">	public void Initialize(ITelemetry telemetry)</div><div class="line">	&#123;</div><div class="line">		telemetry.Context.Cloud.RoleName = &quot;TEST_ROLE_NAME&quot;;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">TelemetryConfiguration.Active.TelemetryInitializers.Add(new MyTelemetryInitializer());</div></pre></td></tr></table></figure></p>
-<h4 id="添加遥测追踪"><a href="#添加遥测追踪" class="headerlink" title="添加遥测追踪"></a>添加遥测追踪</h4><p>参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-asp-net-trace-logs" target="_blank" rel="external">文档</a>可以添加日志记录，最基础的方案是手动添加一项遥测数据。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var telemetry = new Microsoft.ApplicationInsights.TelemetryClient();</div><div class="line">telemetry.TrackTrace(&quot;Slow database response&quot;,</div><div class="line">               SeverityLevel.Warning,</div><div class="line">               new Dictionary&lt;string,string&gt; &#123; &#123;&quot;database&quot;, db.ID&#125; &#125;);</div></pre></td></tr></table></figure></p>
-<p>当包含上述代码的代码段运行后，在监控平台上可以找到相关追踪的日志记录。</p>
+        <p>Ubuntu 16.04 系统默认安装的 <code>OpenSSH</code> 版本为 <code>7.2</code> ，这个版本存在许多安全漏洞。</p>
+<p>在一些安全扫描过程中，有可能抛出相关的警告。</p>
+<p>为了避免系统处于危险，可以对 <code>OpenSSH</code> 进行升级。</p>
+<p>使用 <code>ssh -V</code> 可以查看当前 <code>OpenSSH</code> 的版本：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜ ~ ssh -V</div><div class="line">OpenSSH_7.2p2 Ubuntu-4ubuntu2.2, OpenSSL 1.0.2g 1 Mar 2016</div></pre></td></tr></table></figure></p>
+<p>使用如下命令升级 <code>OpenSSH</code> 。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">sudo apt install -y build-essential libssl-dev zlib1g-dev</div><div class="line">wget &quot;http://mirrors.evowise.com/pub/OpenBSD/OpenSSH/portable/openssh-7.4p1.tar.gz&quot;</div><div class="line">tar xfz openssh-7.4p1.tar.gz</div><div class="line">cd openssh-7.4p1</div><div class="line">./configure</div><div class="line">make</div><div class="line">sudo make install</div></pre></td></tr></table></figure></p>
+<p>然后重新打开终端，再次查看，可以看到 <code>OpenSSH</code> 的版本已经升级到 <code>7.4</code> 了。</p>
+<p>参考资料：<br><a href="https://gist.github.com/techgaun/df66d37379df37838482c4c3470bc48e" target="_blank" rel="external">https://gist.github.com/techgaun/df66d37379df37838482c4c3470bc48e</a><br><a href="https://my.oschina.net/u/1177171/blog/1862530" target="_blank" rel="external">https://my.oschina.net/u/1177171/blog/1862530</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/11/Azure-Application-Insights入门/" data-id="cjmbm694e0009i18tex3djfnw" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/09/21/Ubuntu-16-04-升级OpenSSH/" data-id="cjmbm69e50086i18tot0non01" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C#</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li></ul>
 
     </footer>
   </div>
@@ -123,19 +116,10 @@
     
 <nav id="article-nav">
   
-    <a href="/blog-hexo/2017/09/12/Access-Control-Allow-Origin实现跨域访问/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Access-Control-Allow-Origin实现跨域访问
-        
-      </div>
-    </a>
   
-  
-    <a href="/blog-hexo/2017/08/19/Laravel中Collection排序函数的使用/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/blog-hexo/2018/09/17/Linux用户免密码sudo执行命令/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Laravel中Collection排序函数的使用</div>
+      <div class="article-nav-title">Linux用户免密码sudo执行命令</div>
     </a>
   
 </nav>
