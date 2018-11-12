@@ -52,9 +52,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -64,6 +64,161 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Git-Fast-forward的一些常识" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/11/18/Git-Fast-forward的一些常识/" class="article-date">
+  <time datetime="2017-11-18T03:22:17.000Z" itemprop="datePublished">2017-11-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/11/18/Git-Fast-forward的一些常识/">Git Fast-forward的一些常识</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在Git分支合并时，通常可以选择是否采用<code>Fast-forward</code>形式，本文探索一下不同选择造成的差异，以及Git中关于Fast-forward相关知识。</p>
+<h2 id="分支单向前进的情况"><a href="#分支单向前进的情况" class="headerlink" title="分支单向前进的情况"></a>分支单向前进的情况</h2><p>假定两个分支<code>master</code>和<code>develop</code>，其中<code>master</code>分支保持不变，而<code>develop</code>在<code>master</code>基础上添加了若干次修改。</p>
+<img src="/blog-hexo/2017/11/18/Git-Fast-forward的一些常识/1.PNG" alt="Develop分支单向前进" title="Develop分支单向前进">
+<h4 id="使用Fast-forward形式"><a href="#使用Fast-forward形式" class="headerlink" title="使用Fast-forward形式"></a>使用<code>Fast-forward</code>形式</h4><p>此时使用<code>Fast-forward</code>形式进行合并分支，执行<code>git merge develop</code>或<code>git merge develop --fast-forward</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">git merge develop</div><div class="line">Updating 7e991e4..4c07f51</div><div class="line">Fast-forward</div><div class="line"> develop.txt | Bin 0 -&gt; 50 bytes</div><div class="line"> 1 file changed, 0 insertions(+), 0 deletions(-)</div><div class="line"> create mode 100644 develop.txt</div></pre></td></tr></table></figure></p>
+<p>由于此时分支单向前进，<code>develop</code>分支中的内容相比较于<code>master</code>分支上增量是“纯粹”的，因此Git会默认使用<code>Fast-forward</code>形式。<br>在使用<code>Fast-forward</code>形式时，会自动合并提交，最后在<code>git log</code>的操作记录中，不会出现这一次合并操作。从图中也可以看出，<code>Fast-forward</code>形式就是直接将HEAD指针指向了最新提交处。</p>
+<img src="/blog-hexo/2017/11/18/Git-Fast-forward的一些常识/2.PNG" alt="使用Fast-forward方式合并分支" title="使用Fast-forward方式合并分支">
+<h4 id="禁用Fast-forward形式"><a href="#禁用Fast-forward形式" class="headerlink" title="禁用Fast-forward形式"></a>禁用<code>Fast-forward</code>形式</h4><p>在上述情况下，依然可以选择禁用<code>Fast-forward</code>进行合并，此时将产生一个合并提交<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">git merge develop --no-ff</div><div class="line">Merge made by the &apos;recursive&apos; strategy.</div><div class="line"> develop.txt | Bin 0 -&gt; 50 bytes</div><div class="line"> 1 file changed, 0 insertions(+), 0 deletions(-)</div><div class="line"> create mode 100644 develop.txt</div></pre></td></tr></table></figure></p>
+<p>在禁用<code>Fast-forward</code>形式时，这次合并会将本次合并新建为一个commit，能够在<code>git log</code>操作记录中体现此次合并操作历史。<br>这样能够保留原来分支记录的完整性。</p>
+<img src="/blog-hexo/2017/11/18/Git-Fast-forward的一些常识/3.PNG" alt="禁用Fast-forward方式合并分支" title="禁用Fast-forward方式合并分支">
+<h2 id="分支双向前进的情况"><a href="#分支双向前进的情况" class="headerlink" title="分支双向前进的情况"></a>分支双向前进的情况</h2><p>假定两个分支<code>master</code>和<code>develop</code>，其中<code>develop</code>以<code>master</code>为基础上添加了若干次修改，同时<code>master</code>分支也添加了若干次修改。</p>
+<img src="/blog-hexo/2017/11/18/Git-Fast-forward的一些常识/4.PNG" alt="master分支与develop分支双向前进" title="master分支与develop分支双向前进">
+<p>此时希望将<code>develop</code>分支合并到<code>master</code>分支上，是无法使用<code>Fast-forward</code>形式的。<br>在<code>master</code>分支执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git merge develop --ff-only</div><div class="line">fatal: Not possible to fast-forward, aborting.</div></pre></td></tr></table></figure></p>
+<p>此时只能执行<code>git merge develop</code>或<code>git merge develop --no-ff</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">git merge develop</div><div class="line">Merge made by the &apos;recursive&apos; strategy.</div><div class="line"> develop.txt | Bin 0 -&gt; 50 bytes</div><div class="line"> 1 file changed, 0 insertions(+), 0 deletions(-)</div><div class="line"> create mode 100644 develop.txt</div></pre></td></tr></table></figure></p>
+<p>由于此时分支双向前进，<code>develop</code>分支和<code>master</code>分支上的变化有“交叉”，因此Git会默认禁用<code>Fast-forward</code>形式，Git会自动使用<code>recursive</code>的策略进行合并，如果有冲突则生成冲突文件，否则产生一个新的合并提交。</p>
+<img src="/blog-hexo/2017/11/18/Git-Fast-forward的一些常识/5.PNG" alt="禁用Fast-forward方式合并分支" title="禁用Fast-forward方式合并分支">
+<p>注意，有些版本的Git会自动完成这个合并提交，并为其添加注释为”Merge branch ‘develop’”；有些版本的Git会弹出一个Vim编辑框，提示用户输入相关注释，按<code>:wq</code>保存退出即可。</p>
+<h2 id="Fast-forward和Git-Rebase"><a href="#Fast-forward和Git-Rebase" class="headerlink" title="Fast-forward和Git Rebase"></a>Fast-forward和Git Rebase</h2><p>还有一个比较容易混淆和困惑的点是<code>Fast-forward</code>和<code>Git Rebase</code>的区别。</p>
+<p><code>Rebase</code>能够比<code>Fast-forward</code>完成更多事情。<code>Fast-forward</code>是很简单的一件事，而<code>Rebase</code>更复杂。有些时候在特殊的场景下，<code>Rebase</code>的效果恰好与<code>Fast-forward</code>相同，但并不意味着它与<code>Fast-forward</code>的合并是一样的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/11/18/Git-Fast-forward的一些常识/" data-id="cjoe3yzjy0018yb8tz7ubegjz" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Laravel扩展Guzzle-发送HTTP请求" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/11/17/Laravel扩展Guzzle-发送HTTP请求/" class="article-date">
+  <time datetime="2017-11-17T14:05:41.000Z" itemprop="datePublished">2017-11-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/11/17/Laravel扩展Guzzle-发送HTTP请求/">Laravel扩展Guzzle：发送HTTP请求</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在后台代码中，通常会遇到需要发送第三方HTTP请求的需求。在Laravel框架中，可以安装<a href="http://guzzle.readthedocs.io/en/latest/index.html" target="_blank" rel="external">Guzzle</a>进行便捷的HTTP请求。</p>
+<p>在命令行中输入以下命令，使用<code>composer</code>进行安装。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer.phar require guzzlehttp/guzzle:~6.0</div></pre></td></tr></table></figure></p>
+<p>在使用的代码处，使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">use GuzzleHttp\Client;</div><div class="line">$response = $client-&gt;request(&apos;GET&apos;, &apos;http://example.com&apos;, [</div><div class="line">    &apos;query&apos; =&gt; [</div><div class="line">        &apos;param1&apos; =&gt; &apos;v1&apos;,</div><div class="line">        &apos;param2&apos; =&gt; &apos;v2&apos;,</div><div class="line">    ]</div><div class="line">]);</div><div class="line">$code = $response-&gt;getStatusCode();</div><div class="line">$reason = $response-&gt;getReasonPhrase();</div><div class="line">$content = $response-&gt;getBody()-&gt;getContents()</div></pre></td></tr></table></figure></p>
+<p>相关配置选项可参考文档：<a href="http://guzzle.readthedocs.io/en/latest/request-options.html。" target="_blank" rel="external">http://guzzle.readthedocs.io/en/latest/request-options.html。</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/11/17/Laravel扩展Guzzle-发送HTTP请求/" data-id="cjoe3yzlb002uyb8t9j0ylzap" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Laravel模拟创建Request" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/11/14/Laravel模拟创建Request/" class="article-date">
+  <time datetime="2017-11-14T14:00:53.000Z" itemprop="datePublished">2017-11-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/11/14/Laravel模拟创建Request/">Laravel模拟创建Request</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在使用Laravel框架时，有的Unit Test可能希望模拟一个HTTP请求，方便地对特定组件的各个功能进行测试。比如，如果要测试一个中间件对于IP地址黑名单的屏蔽，对于白名单API的通过，对于白名单账号的判断等等。<br>此时，如何在代码中模拟创建一个自定义的Request，就是非常重要的步骤。</p>
+<p>通过查询文档，知道可以使用<code>Request::create()</code>方法创建，具体使用方式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$request = Request::create(&apos;/api/index&apos;, &apos;GET&apos;);</div></pre></td></tr></table></figure></p>
+<p>当我们需要模拟IP地址等信息时，就需要更加清晰地了解<code>create()</code>静态方法的具体内容。<br><code>Request</code>类实质是继承自<code>vendor/symfony/http-foundation/Request.php</code>，打开这个文件，查找到<code>create()</code>函数所在的位置，可以看到这个函数的原型：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public static function create($uri, $method = &apos;GET&apos;, $parameters = array(), $cookies = array(), $files = array(), $server = array(), $content = null)</div><div class="line">&#123;</div><div class="line">    $server = array_replace(array(</div><div class="line">        &apos;SERVER_NAME&apos; =&gt; &apos;localhost&apos;,</div><div class="line">        &apos;SERVER_PORT&apos; =&gt; 80,</div><div class="line">        &apos;HTTP_HOST&apos; =&gt; &apos;localhost&apos;,</div><div class="line">        &apos;HTTP_USER_AGENT&apos; =&gt; &apos;Symfony/3.X&apos;,</div><div class="line">        &apos;HTTP_ACCEPT&apos; =&gt; &apos;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&apos;,</div><div class="line">        &apos;HTTP_ACCEPT_LANGUAGE&apos; =&gt; &apos;en-us,en;q=0.5&apos;,</div><div class="line">        &apos;HTTP_ACCEPT_CHARSET&apos; =&gt; &apos;ISO-8859-1,utf-8;q=0.7,*;q=0.7&apos;,</div><div class="line">        &apos;REMOTE_ADDR&apos; =&gt; &apos;127.0.0.1&apos;,</div><div class="line">        &apos;SCRIPT_NAME&apos; =&gt; &apos;&apos;,</div><div class="line">        &apos;SCRIPT_FILENAME&apos; =&gt; &apos;&apos;,</div><div class="line">        &apos;SERVER_PROTOCOL&apos; =&gt; &apos;HTTP/1.1&apos;,</div><div class="line">        &apos;REQUEST_TIME&apos; =&gt; time(),</div><div class="line">    ), $server);</div><div class="line">    $server[&apos;PATH_INFO&apos;] = &apos;&apos;;</div><div class="line">    $server[&apos;REQUEST_METHOD&apos;] = strtoupper($method);</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>依据参数列表的格式，通过配置不同的参数可以模拟提交方式<code>GET</code>或<code>POST</code>，传递的参数<code>parameter</code>等。</p>
+<p>注意到函数中首先使用了一个<code>array_replace</code>函数对参数<code>$server</code>进行操作，<code>array_replace</code>函数的含义是：如果第二个参数中的相关键值，则将其取代第一个参数中的对应键值。因此，如果要模拟一个IP地址的访问，我们可以构建一个包含<code>REMOTE_ADDR</code>的<code>$server</code>参数，传入<code>create</code>函数中即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"> $server = array(</div><div class="line">    &apos;REMOTE_ADDR&apos; =&gt; &apos;127.0.0.123&apos;</div><div class="line">);</div><div class="line">$request = Request::create(&apos;/index&apos;, &apos;GET&apos;, array(), array(), array(), $server, null);</div></pre></td></tr></table></figure></p>
+<p>模拟<code>POST</code>传递某些参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$request = Request::create(&apos;/index&apos;, &apos;POST&apos;, array(&apos;user_id&apos; =&gt; &apos;user1861&apos;));</div></pre></td></tr></table></figure></p>
+<p>使用代码模拟创建Request的方法大抵如此。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/11/14/Laravel模拟创建Request/" data-id="cjoe3yzlh003ayb8tv81szhug" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-PHPUnit测试protected方法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -104,7 +259,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/09/PHPUnit测试protected方法/" data-id="cjmbnbycl003z2r8t8lf090f4" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/11/09/PHPUnit测试protected方法/" data-id="cjoe3yzm10040yb8tabklzrhq" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li></ul>
@@ -163,7 +318,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/02/AngularJS中ng-if和ng-show的区别/" data-id="cjmbnby98000b2r8tw5rro398" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/11/02/AngularJS中ng-if和ng-show的区别/" data-id="cjoe3yzi20000yb8t1w1uu31g" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -227,7 +382,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/30/Angular1模块间通信方式/" data-id="cjmbnby8000002r8t3qgtnumr" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/10/30/Angular1模块间通信方式/" data-id="cjoe3yzi80001yb8t80voq7o0" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -303,7 +458,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/23/Laravel-Database-Query-Builder-insert的效率问题/" data-id="cjmbnbyaj001u2r8tifrw0t28" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/10/23/Laravel-Database-Query-Builder-insert的效率问题/" data-id="cjoe3yzku0024yb8t4wpt6ixs" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -349,7 +504,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/21/Angular类的成员变量初始化的问题/" data-id="cjmbnby8h00042r8t76u698r2" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/10/21/Angular类的成员变量初始化的问题/" data-id="cjoe3yzii0005yb8tvhd852ms" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -401,7 +556,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/16/Git分支基本操作/" data-id="cjmbnby9q000w2r8tfmrpi04p" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/10/16/Git分支基本操作/" data-id="cjoe3yzjs0011yb8txprlyb94" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -459,199 +614,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/09/Git-tag的使用/" data-id="cjmbnby9t00112r8trpj8fpdl" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2017/10/09/Git-tag的使用/" data-id="cjoe3yzju0015yb8trmkkw2op" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-React-Router-v4的使用" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/09/23/React-Router-v4的使用/" class="article-date">
-  <time datetime="2017-09-23T11:12:33.000Z" itemprop="datePublished">2017-09-23</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/09/23/React-Router-v4的使用/">React Router v4的使用</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近在入门React，学习的过程中发现一些样例的Router不好使用。经过摸索后发现，react-router版本不是向下兼容的，react-router v2和v4有着截然不同的使用方法。网上许多样例都使用的是react-router@2.<em>，因此在依赖包为react-router@4.</em>时无法正确运行。</p>
-<p>根据<code>react-router@4.*</code>的一些参考教程，简单描述撰写一个能够使用的React Router的步骤。</p>
-<p>首先要说明的是，React路由相关的组件有许多，包括<code>react-router</code>，<code>react-router-dom</code>和<code>react-dom</code>。在这种情况下，应该使用npm安装<code>react-router-dom</code>。</p>
-<pre><code>You should almost never have to install react-router directly. That package provides the core routing components and functions for React Router applications. The other two provide environment specific (browser and react-native) components, but they both also re-export all of react-router&apos;s exports.
-</code></pre><h4 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h4><p>创建一个全新的React项目<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">create-react-app react-router-v4-sample</div></pre></td></tr></table></figure></p>
-<p>进入项目，使用<code>npm start</code>命令，检查项目是否能正常运行。</p>
-<p>安装<code>react-router-dom</code>插件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install react-router-dom -S</div></pre></td></tr></table></figure></p>
-<p>打开<code>package.json</code>，会发现<code>react-router-dom</code>和<code>react-dom</code>都已经安装了。</p>
-<p>修改<code>index.js</code>文件，将<code>&lt;App /&gt;</code>元素放置到<code>&lt;BrowserRouter&gt;</code>元素中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">import React from &apos;react&apos;;</div><div class="line">import ReactDOM from &apos;react-dom&apos;;</div><div class="line">import Main from &apos;./Main&apos;;</div><div class="line">import &apos;./index.css&apos;;</div><div class="line">import registerServiceWorker from &apos;./registerServiceWorker&apos;;</div><div class="line">import &#123; BrowserRouter &#125; from &apos;react-router-dom&apos;;</div><div class="line"></div><div class="line">ReactDOM.render((</div><div class="line">  &lt;BrowserRouter&gt;</div><div class="line">    &lt;Main /&gt;</div><div class="line">  &lt;/BrowserRouter&gt;</div><div class="line"> ), document.getElementById(&apos;root&apos;));</div><div class="line">registerServiceWorker();</div></pre></td></tr></table></figure></p>
-<p>此时项目应该不受影响，正常运行。</p>
-<h4 id="添加根据路由显示的内容"><a href="#添加根据路由显示的内容" class="headerlink" title="添加根据路由显示的内容"></a>添加根据路由显示的内容</h4><p>接下来要进行较多的改动，首先在<code>App.js</code>文件中添加一个<code>Switch</code>区域，表示根据路由选择不同的组件，并引入相关组件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">import React, &#123; Component &#125; from &apos;react&apos;;</div><div class="line">import &#123; Route, Switch &#125; from &apos;react-router-dom&apos;;</div><div class="line">import Home from &apos;./Home&apos;;</div><div class="line">import About from &apos;./About&apos;;</div><div class="line">import Blog from &apos;./Blog&apos;;</div><div class="line"></div><div class="line">class App extends Component &#123;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;div className=&quot;App&quot;&gt;</div><div class="line">        &lt;div&gt;</div><div class="line">            Here is common area</div><div class="line">        &lt;/div&gt;</div><div class="line">        &lt;Switch&gt;</div><div class="line">          &lt;Route exact path=&apos;/&apos; component=&#123;Home&#125;/&gt;</div><div class="line">          &lt;Route path=&apos;/about&apos; component=&#123;About&#125;/&gt;</div><div class="line">          &lt;Route path=&apos;/blog&apos; component=&#123;Blog&#125;/&gt;</div><div class="line">        &lt;/Switch&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">export default App;</div></pre></td></tr></table></figure></p>
-<p>在<code>src</code>目录添加三个新文件<code>Home.js</code>，<code>About.js</code>和<code>Blog.js</code>，并按照如下模板添加内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">import React, &#123; Component &#125; from &apos;react&apos;;</div><div class="line">class Home extends Component &#123;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;div&gt;</div><div class="line">        Here is Home page.</div><div class="line">      &lt;/div&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">export default Home;</div></pre></td></tr></table></figure></p>
-<p>运行，此时网页应该有两行文字，上面一行永远是<code>Here is common area</code>，下面一行则根据不同的路由显示对应的文字，如<code>Here is Home page</code></p>
-<h4 id="添加导航链接"><a href="#添加导航链接" class="headerlink" title="添加导航链接"></a>添加导航链接</h4><p>在<code>App.js</code>文件中，添加<code>Here is common area</code>所在的代码段，添加导航链接：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;header&gt;</div><div class="line">  &lt;nav&gt;</div><div class="line">	&lt;ul&gt;</div><div class="line">	  &lt;li&gt;&lt;Link to=&apos;/&apos;&gt;Home&lt;/Link&gt;&lt;/li&gt;</div><div class="line">	  &lt;li&gt;&lt;Link to=&apos;/about&apos;&gt;About&lt;/Link&gt;&lt;/li&gt;</div><div class="line">	  &lt;li&gt;&lt;Link to=&apos;blog&apos;&gt;Blog&lt;/Link&gt;&lt;/li&gt;</div><div class="line">	&lt;/ul&gt;</div><div class="line">  &lt;/nav&gt;</div><div class="line">&lt;/header&gt;</div></pre></td></tr></table></figure></p>
-<p>注意添加<code>Link</code>的引用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import &#123; Route, Switch, Link &#125; from &apos;react-router-dom&apos;;</div></pre></td></tr></table></figure></p>
-<p>打开网页，此时应该能够出现三个选择，点击不同的链接，下面<code>Switch</code>区域的文字内容将根据路由规则进行切换。</p>
-<p>基本的React Router v4使用方法就是这些。</p>
-<hr>
-<p>参考资料：<br><a href="https://medium.com/@pshrmn/a-simple-react-router-v4-tutorial-7f23ff27adf" target="_blank" rel="external">https://medium.com/@pshrmn/a-simple-react-router-v4-tutorial-7f23ff27adf</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/23/React-Router-v4的使用/" data-id="cjmbnbydg004j2r8tpyrmyy2k" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/React/">React</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-php7新特性中的一些语法糖" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/09/22/php7新特性中的一些语法糖/" class="article-date">
-  <time datetime="2017-09-22T12:54:22.000Z" itemprop="datePublished">2017-09-22</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/09/22/php7新特性中的一些语法糖/">php7新特性中的一些语法糖</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>php7相比于php5有许多新特性，通过常用的语法糖，能够使撰写的代码更加优雅、简洁。</p>
-<h4 id="运算符"><a href="#运算符" class="headerlink" title="??运算符"></a>??运算符</h4><p><code>??</code>运算符称作null合并运算符。若运算符的左操作数不为<code>null</code>，则返回左操作数；否则返回右操作数。<br>举例而言：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$a = $b ?? &quot;default&quot;;</div></pre></td></tr></table></figure></p>
-<p>若<code>$b</code>不为<code>null</code>则<code>$a</code>的值为<code>$b</code>，否则<code>$a</code>被赋值字符串”default”。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$name = $_GET[&apos;name&apos;] ?? &apos;Leo&apos;;</div><div class="line">//相当于：</div><div class="line">$name = isset($_GET[&apos;name&apos;]) ? $_GET[&apos;name&apos;] : &apos;Leo&apos;;</div></pre></td></tr></table></figure>
-<p>使用<code>??</code>运算符能够使代码更加简洁。</p>
-<h4 id="太空船操作符-lt-gt"><a href="#太空船操作符-lt-gt" class="headerlink" title="太空船操作符&lt;=&gt;"></a>太空船操作符&lt;=&gt;</h4><p>太空船操作符用于比较两个表达式，当运算符的左操作数小于、等于或大于右操作数时，分别返回-1、0或1<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">// 整数</div><div class="line">echo 1 &lt;=&gt; 1; // 0</div><div class="line">echo 1 &lt;=&gt; 2; // -1</div><div class="line">echo 2 &lt;=&gt; 1; // 1</div><div class="line"></div><div class="line">// 浮点数</div><div class="line">echo 1.5 &lt;=&gt; 1.5; // 0</div><div class="line">echo 1.5 &lt;=&gt; 2.5; // -1</div><div class="line">echo 2.5 &lt;=&gt; 1.5; // 1</div><div class="line"> </div><div class="line">// 字符串</div><div class="line">echo &quot;a&quot; &lt;=&gt; &quot;a&quot;; // 0</div><div class="line">echo &quot;a&quot; &lt;=&gt; &quot;b&quot;; // -1</div><div class="line">echo &quot;b&quot; &lt;=&gt; &quot;a&quot;; // 1</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
-<p>此前一些自定义排序函数<code>sort</code>中的代码可以更加简洁了。</p>
-<h4 id="通过define-定义常量数组"><a href="#通过define-定义常量数组" class="headerlink" title="通过define()定义常量数组"></a>通过<code>define()</code>定义常量数组</h4><p><code>Array</code>类型的常量可以通过<code>define()</code>来定义了，这对于一些全局通用固定信息来说更加便捷。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">define(&apos;ANIMALS&apos;, [</div><div class="line">    &apos;dog&apos;,</div><div class="line">    &apos;cat&apos;,</div><div class="line">    &apos;bird&apos;</div><div class="line">]);</div><div class="line">echo ANIMALS[1]; // 输出 &quot;cat&quot;</div><div class="line">?&gt;</div></pre></td></tr></table></figure>
-<h4 id="匿名类"><a href="#匿名类" class="headerlink" title="匿名类"></a>匿名类</h4><p>可以使用<code>new class</code>来声明一个匿名类，这在一些一次性使用的地方可能会比较方便。</p>
-<h4 id="Unicode-codepoint-转译语法"><a href="#Unicode-codepoint-转译语法" class="headerlink" title="Unicode codepoint 转译语法"></a>Unicode codepoint 转译语法</h4><p>可以接受一个以十六进制形式的Unicode Codepoint，打印出一个双引号或heredoc包围的<code>UTF-8</code>编码格式的字符串。 可以接受任何有效的 codepoint，并且开头的<code>0</code>是可以省略的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">echo &quot;\u&#123;aa&#125;&quot;;</div><div class="line">echo &quot;\u&#123;0000aa&#125;&quot;;</div><div class="line">echo &quot;\u&#123;9999&#125;&quot;;</div></pre></td></tr></table></figure></p>
-<h4 id="Closure-call"><a href="#Closure-call" class="headerlink" title="Closure::call()"></a>Closure::call()</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">class A &#123;private $x = 1;&#125;</div><div class="line">// PHP 7 之前</div><div class="line">$getXCB = function() &#123;return $this-&gt;x;&#125;;</div><div class="line">$getX = $getXCB-&gt;bindTo(new A, &apos;A&apos;); // intermediate closure</div><div class="line">echo $getX();</div><div class="line">// PHP 7 之后</div><div class="line">$getX = function() &#123;return $this-&gt;x;&#125;;</div><div class="line">echo $getX-&gt;call(new A);</div></pre></td></tr></table></figure>
-<h4 id="为unserialize-提供过滤"><a href="#为unserialize-提供过滤" class="headerlink" title="为unserialize()提供过滤"></a>为<code>unserialize()</code>提供过滤</h4><p>这个特性旨在提供更安全的方式解包不可靠的数据。它通过白名单的方式来防止潜在的代码注入。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">// 将所有的对象都转换为 __PHP_Incomplete_Class 对象</div><div class="line">$data = unserialize($foo, [&quot;allowed_classes&quot; =&gt; false]);</div><div class="line"></div><div class="line">// 将除 MyClass 和 MyClass2 之外的所有对象都转换为 __PHP_Incomplete_Class 对象</div><div class="line">$data = unserialize($foo, [&quot;allowed_classes&quot; =&gt; [&quot;MyClass&quot;, &quot;MyClass2&quot;]);</div><div class="line"></div><div class="line">// 默认情况下所有的类都是可接受的，等同于省略第二个参数</div><div class="line">$data = unserialize($foo, [&quot;allowed_classes&quot; =&gt; true]);</div></pre></td></tr></table></figure></p>
-<h4 id="Group-use-declarations"><a href="#Group-use-declarations" class="headerlink" title="Group use declarations"></a>Group use declarations</h4><p>从同一 namespace 导入的类、函数和常量现在可以通过单个 use 语句 一次性导入了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">// PHP 7 之前的代码</div><div class="line">use some\namespace\ClassA;</div><div class="line">use some\namespace\ClassB;</div><div class="line">use some\namespace\ClassC as C;</div><div class="line"></div><div class="line">use function some\namespace\fn_a;</div><div class="line">use function some\namespace\fn_b;</div><div class="line">use function some\namespace\fn_c;</div><div class="line"></div><div class="line">use const some\namespace\ConstA;</div><div class="line">use const some\namespace\ConstB;</div><div class="line">use const some\namespace\ConstC;</div><div class="line"></div><div class="line">// PHP 7+ 及更高版本的代码</div><div class="line">use some\namespace\&#123;ClassA, ClassB, ClassC as C&#125;;</div><div class="line">use function some\namespace\&#123;fn_a, fn_b, fn_c&#125;;</div><div class="line">use const some\namespace\&#123;ConstA, ConstB, ConstC&#125;;</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
-<h4 id="标量类型声明"><a href="#标量类型声明" class="headerlink" title="标量类型声明"></a>标量类型声明</h4><p>此前PHP语言重要的特点就是弱类型，使代码编写者不用关心变量的具体类型，但也可能留下很多隐患。<br>PHP7开始支持变量类型的定义，引入一个开关指令<code>declare(strict_type=1);</code><br>如果进行了参数和返回值的类型声明，在不开启strict_type时，PHP将尝试帮你转换成要求的类型；在开启strict_type时，如果类型不匹配就抛出错误。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">declare(strict_types=1);</div><div class="line">function add(int $a, int $b): int &#123;</div><div class="line">    return $a + $b;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>注意只是在传参和返回值上不允许隐式类型转换，在使用内置函数时还是会转换，并且在变量声明的时候也不是强类型严格要求。</p>
-<p>Referrence: </p>
-<ul>
-<li><a href="http://php.net/manual/zh/migration70.new-features.php" target="_blank" rel="external">http://php.net/manual/zh/migration70.new-features.php</a></li>
-<li><a href="http://blog.csdn.net/black_ox/article/details/50354619" target="_blank" rel="external">http://blog.csdn.net/black_ox/article/details/50354619</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/22/php7新特性中的一些语法糖/" data-id="cjmbnbydx00592r8trse4pde5" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-开源许可协议简介" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/09/18/开源许可协议简介/" class="article-date">
-  <time datetime="2017-09-18T14:22:23.000Z" itemprop="datePublished">2017-09-18</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/09/18/开源许可协议简介/">开源许可协议简介</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>开源许可协议简介</p>
-<p>此前经常在别人的Github仓库中看到采用某某开源许可协议，这里进行总结概括，使对开源许可协议的理解更加清晰。</p>
-<p>通常来讲，开源界5大许可协议包括：</p>
-<ul>
-<li>GPL</li>
-<li>LGPL</li>
-<li>BSD</li>
-<li>MIT</li>
-<li>Apache</li>
-</ul>
-<p>此外还有Mozilla License等协议。</p>
-<h4 id="GPL"><a href="#GPL" class="headerlink" title="GPL"></a>GPL</h4><p>GPL(GNU General Public License)，称为GNU通用公共授权许可证。<br>GPL是鼓励开源自由的，因此它唯一的限制是，如果软件产品中包含或修改了使用GPL的代码，那么项目必须是GPL协议。<br>这一点主要约束了将免费代码进行修改后闭源的谋利。<br>GPL协议的约束可以概括为：自由，并且使用了该产品的软件也必须是GPL协议。</p>
-<p>由于GPL严格要求使用了GPL类库的软件产品必须使用GPL协议，对于使用GPL协议的开源代码，商业软件或者对代码有保密要求的部门就不适合集成/采用作为类库和二次开发的基础。</p>
-<h4 id="LGPL"><a href="#LGPL" class="headerlink" title="LGPL"></a>LGPL</h4><p>LGPL(GNU Lesser General Public License)，称为GNU宽通用公共许可证。<br>LGPL通常用于一些(但不是全部)GNU程序库，之前曾被称为GNU库通用公共许可证，LGPL是GPL的一个为主要为类库使用设计的开源协议。和GPL要求任何使用/修改/衍生之GPL类库的的软件必须采用GPL协议不同。LGPL 允许商业软件通过类库引用(link)方式使用LGPL类库而不需要开源商业软件的代码。这使得采用LGPL协议的开源代码可以被商业软件作为类库引用并发布和销售。<br>LGPL协议的约束可以概括为：如果是引用包但没有使用代码，就不受GPL的限制。</p>
-<p>公司在使用自由软件之前应该保证在LGPL或其它GPL变种的授权下，而不能是GPL。</p>
-<h4 id="BSD"><a href="#BSD" class="headerlink" title="BSD"></a>BSD</h4><p>BSD(Berkeley Software Distribution)，也称为伯克利软件发行版许可证。<br>BSD开源协议给于使用者很大的自由。可以自由的使用，修改源代码，也可以将修改后的代码作为开源或者专有软件再发布。当发布使用了BSD协议的代码，或则以BSD协议代码为基础做二次开发自己的产品时，需要满足三个条件：<br>1.如果再发布的产品中包含源代码，则在源代码中必须带有原来代码中的BSD协议。<br>2.如果再发布的只是二进制类库/软件，则需要在类库/软件的文档和版权声明中包含原来代码中的BSD协议。<br>3.不可以用开源代码的作者/机构名字和原来产品的名字做市场推广。<br>BSD协议的约束可以概括为：你可以自由地使用代码，只需要保留代码原有的协议。</p>
-<p>BSD代码鼓励代码共享，但需要尊重代码作者的著作权。BSD由于允许使用者修改和重新发布代码，也允许使用或在BSD代码上开发商业软件发布和销售，因此是对商业集成很友好的协议。<br>很多的公司企业在选用开源产品的时候都首选BSD协议，因为可以完全控制这些第三方的代码，在必要的时候可以修改或者二次开发。</p>
-<h4 id="MIT"><a href="#MIT" class="headerlink" title="MIT"></a>MIT</h4><p>MIT是和BSD一样宽范的许可协议，作者只想保留版权，而无任何其他的限制。<br>只需要在发行版里包含原许可协议的声明，无论你是以二进制发布的还是以源代码发布的。<br>另外，相比于BSD协议更加宽松的一点是，可以使用开源代码的作者/机构名字和原来产品的名字做市场推广。</p>
-<h4 id="Apache"><a href="#Apache" class="headerlink" title="Apache"></a>Apache</h4><p>Apache Licence是著名的非盈利开源组织Apache采用的协议。该协议和BSD类似，同样鼓励代码共享和尊重原作者的著作权，同样允许代码修改，再发布（作为开源或商业软件）。需要条件和BSD类似：<br>1.需要给代码的用户一份Apache Licence<br>2.如果你修改了代码，需要再被修改的文件中说明。<br>3.在延伸的代码中（修改和有源代码衍生的代码中）需要带有原来代码中的协议，商标，专利声明和其他原来作者规定需要包含的说明。<br>4.如果再发布的产品中包含一个Notice文件，则在Notice文件中需要带有Apache Licence。你可以在Notice中增加自己的许可，但不可以表现为对Apache Licence构成更改。</p>
-<p>Apache Licence也是对商业应用友好的许可。使用者也可以在需要的时候修改代码来满足需要并作为开源或商业产品发布/销售。</p>
-<hr>
-<img src="/blog-hexo/2017/09/18/开源许可协议简介/license.PNG" alt="开源许可协议示意图" title="开源许可协议示意图">
-<p>总结：通常来讲，商业使用通常闭源，因此只能选择BSD、MIT和Apache；如果只是引用，可以使用LGPL和Mozilla。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/18/开源许可协议简介/" data-id="cjmbnbyeb005x2r8t2ht5ni4q" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/License/">License</a></li></ul>
 
     </footer>
   </div>
@@ -664,7 +630,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/page/4/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="page-number" href="/blog-hexo/page/7/">7</a><a class="page-number" href="/blog-hexo/page/8/">8</a><a class="extend next" rel="next" href="/blog-hexo/page/6/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/4/">&laquo; Précédent</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="page-number" href="/blog-hexo/page/7/">7</a><a class="page-number" href="/blog-hexo/page/8/">8</a><a class="extend next" rel="next" href="/blog-hexo/page/6/">Suivant &raquo;</a>
   </nav>
 
 </section>
@@ -673,9 +639,9 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
+    <h3 class="widget-title">Catégories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
   </div>
 
@@ -683,9 +649,9 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
+    <h3 class="widget-title">Mot-clés</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oh-My-Zsh/">Oh-My-Zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Visual-Studio/">Visual Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/libfacedetection/">libfacedetection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
     </div>
   </div>
 
@@ -693,9 +659,9 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
+    <h3 class="widget-title">Nuage de mot-clés</h3>
     <div class="widget tagcloud">
-      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 12.5px;">Angular</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 12.5px;">C#</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 11.25px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 11.25px;">Command Line</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.5px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 13.75px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.5px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.75px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 16.25px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 11.25px;">PowerShell</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 11.25px;">SSH</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 12.5px;">Ubuntu</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15px;">Vue</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 11.25px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 12.5px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 12.5px;">Angular</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 12.5px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 11.25px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 11.25px;">Command Line</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.5px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 13.75px;">Hexo</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.5px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.75px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 16.25px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 11.25px;">PowerShell</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 11.25px;">SSH</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 12.5px;">Ubuntu</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15px;">Vue</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12.5px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 12.5px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
     </div>
   </div>
 
@@ -704,7 +670,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
   </div>
 
@@ -712,9 +678,21 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2018/11/12/Oracle数据库创建表并添加自增字段/">Oracle数据库创建表并添加自增字段</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2018/10/31/在Visual-Studio使用libfacedetection检测人脸关键点/">在Visual Studio使用libfacedetection检测人脸关键点</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2018/09/30/Oh-My-Zsh配合agnoster主题及Solarized配色/">Oh-My-Zsh配合agnoster主题及Solarized配色</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2018/09/21/Laravel中server-php文件的作用/">Laravel中server.php文件的作用</a>
@@ -722,18 +700,6 @@
         
           <li>
             <a href="/blog-hexo/2018/09/21/Ubuntu-16-04-升级OpenSSH/">Ubuntu 16.04 升级OpenSSH</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/09/17/Linux用户免密码sudo执行命令/">Linux用户免密码sudo执行命令</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/09/13/Windows-Ubuntu-Mac-OS查看文件md5值的命令/">Windows/Ubuntu/Mac OS查看文件md5值的命令</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/08/14/搭建SSH端口转发反向代理/">搭建SSH端口转发反向代理</a>
           </li>
         
       </ul>
@@ -749,7 +715,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2018 ckmessi<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Propulsé par <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
