@@ -65,6 +65,101 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Laravel-Vue前后端分离跨域CORS的一点知识" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" class="article-date">
+  <time datetime="2018-02-06T11:52:44.000Z" itemprop="datePublished">2018-02-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/">Laravel+Vue前后端分离跨域CORS的一点知识</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>CORS（Cross-Origin Resource Sharing）是一种允许一个网页访问其它域资源的方式。<br>在前后端分离的Web应用中，这个知识非常关键，它是允许前端跨域访问后台API接口的关键。</p>
+<p>此前一直没有弄得非常明白，在网络上查询得到的答案基本都是特定情况下的解决方案，不求甚解，令人很头痛。<br>这次稍微弄清楚了一些。</p>
+<h2 id="0-CORS的概念"><a href="#0-CORS的概念" class="headerlink" title="0. CORS的概念"></a>0. CORS的概念</h2><p>根据MDN官方文档中<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS" target="_blank" rel="external">HTTP访问控制（CORS）</a>的解说，可以了解CORS概念的基本知识。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">当一个资源从与该资源本身所在的服务器不同的域或端口请求一个资源时，资源会发起一个跨域 HTTP 请求。</div><div class="line">比如，站点 http://domain-a.com 的某 HTML 页面通过 &lt;img&gt; 的 src 请求 http://domain-b.com/image.jpg。网络上的许多页面都会加载来自不同域的CSS样式表，图像和脚本等资源。</div><div class="line">出于安全原因，浏览器限制从脚本内发起的跨源HTTP请求。 例如，XMLHttpRequest和Fetch API遵循同源策略。 </div><div class="line">这意味着使用这些API的Web应用程序只能从加载应用程序的同一个域请求HTTP资源，除非使用CORS头文件。</div><div class="line">跨域资源共享（ CORS ）机制允许 Web 应用服务器进行跨域访问控制，从而使跨域数据传输得以安全进行。浏览器支持在 API 容器中（例如 XMLHttpRequest 或 Fetch ）使用 CORS，以降低跨域 HTTP 请求所带来的风险。</div></pre></td></tr></table></figure></p>
+<p>此外，CORS标准还规定了请求的两种不同类型：<code>简单请求</code>和<code>非简单请求</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">跨域资源共享标准的规范要求，对那些可能对服务器数据产生副作用的 HTTP 请求方法（特别是 GET 以外的 HTTP 请求，或者搭配某些 MIME 类型的 POST 请求），浏览器必须首先使用 OPTIONS 方法发起一个预检请求（preflight request），从而获知服务端是否允许该跨域请求。服务器确认允许之后，才发起实际的 HTTP 请求。在预检请求的返回中，服务器端也可以通知客户端，是否需要携带身份凭证（包括 Cookies 和 HTTP 认证相关数据）。</div></pre></td></tr></table></figure></p>
+<p>在实际操作过程中，针对两种不同类型的请求，需要进行的操作也是不同的。</p>
+<h4 id="简单请求"><a href="#简单请求" class="headerlink" title="简单请求"></a>简单请求</h4><p>某些请求不会触发 CORS 预检请求，这样的请求归纲为“简单请求”。“简单请求”的请求有以下限制：<br>请求方式必须是下列方法之一：</p>
+<ul>
+<li>GET</li>
+<li>HEAD</li>
+<li>POST</li>
+</ul>
+<p><code>Content-Type</code>的值仅限于下列三者之一：</p>
+<ul>
+<li>text/plain</li>
+<li>multipart/form-data</li>
+<li>application/x-www-form-urlencoded</li>
+</ul>
+<p>更多限制可参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS#Preflighted_requests" target="_blank" rel="external">简单请求</a>。</p>
+<h4 id="非简单请求"><a href="#非简单请求" class="headerlink" title="非简单请求"></a>非简单请求</h4><p>如果一个请求不是<code>简单请求</code>，那就是<code>非简单请求</code>。<br><code>非简单请求</code>会首先执行一个类型为<code>OPTIONS</code>的预检请求，预检请求完成之后，发送实际请求。</p>
+<h2 id="1-CORS代码实例"><a href="#1-CORS代码实例" class="headerlink" title="1. CORS代码实例"></a>1. CORS代码实例</h2><p>在这份代码实例中，后台使用<code>php</code>+<code>Laravel</code>框架，前端使用<code>Vue</code>框架，通过<code>axios</code>执行ajax请求。</p>
+<h4 id="1-1-基础样例"><a href="#1-1-基础样例" class="headerlink" title="1.1 基础样例"></a>1.1 基础样例</h4><p>首先，后台需要声明允许访问<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">header(&quot;Access-Control-Allow-Origin: *&quot;);</div><div class="line">header(&quot;Access-Control-Allow-Credentials: true&quot;);</div></pre></td></tr></table></figure></p>
+<p>更多的设置还有（但貌似没有什么影响）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">header(&apos;Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE&apos;);</div><div class="line">header(&apos;Access-Control-Allow-Headers: Origin, Access-Control-Request-Headers, SERVER_NAME, Access-Control-Allow-Headers, cache-control, token, X-Requested-With, Content-Type, Accept, Connection, User-Agent, Cookie&apos;);</div></pre></td></tr></table></figure></p>
+<p>前端使用了<code>axios</code>插件执行ajax访问：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">axios.get(url).</div><div class="line">    then(function (response) &#123;</div><div class="line">        console.log(response)</div><div class="line">    &#125;)</div><div class="line">    .catch(function (error) &#123;</div><div class="line">        console.log(error)</div><div class="line">    &#125;);</div></pre></td></tr></table></figure></p>
+<p>这样最基础的跨域GET请求就可以访问了。</p>
+<h4 id="1-2-跨域Session的问题"><a href="#1-2-跨域Session的问题" class="headerlink" title="1.2 跨域Session的问题"></a>1.2 跨域Session的问题</h4><p>上述代码有可能遇到一个问题，即跨域时每次<code>axios</code>发送的ajax请求的Session的ID会变，这样无法保留登录信息。</p>
+<p>查询<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS" target="_blank" rel="external">文档</a>可知：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">一般而言，对于跨域 XMLHttpRequest 或 Fetch 请求，浏览器不会发送身份凭证信息。如果要发送凭证信息，需要设置 XMLHttpRequest 的某个特殊标志位。</div></pre></td></tr></table></figure></p>
+<p>这是由于前端使用axios调用ajax请求时，不带Cookie导致的。查找<a href="https://segmentfault.com/a/1190000009208644" target="_blank" rel="external">解决方案</a>发现需要添加设置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">axios.defaults.withCredentials=true;</div></pre></td></tr></table></figure></p>
+<p>即可使客户端在发送请求时带上Cookie信息。<br>但此时又会报错，查找<a href="https://segmentfault.com/q/1010000008671922" target="_blank" rel="external">解决方案</a>可知当这个选项开启时，服务器的<code>Access-Control-Allow-Origin</code>选项不能为<code>*</code>，而需要指定客户端的地址。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">设置 withCredentials = true 也是需要服务器支持的，这个选项的作用是跨域的情况接收服务器response的set-cookies，当启用这个选项的时候，服务器不能设置 Access-Control-Allow-Origin 为 *，如果是nginx可以使用$http_origin，否则写成你真实请求的origin地址。</div></pre></td></tr></table></figure></p>
+<p>在Laravel中可以使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$origin = $request-&gt;header(&apos;ORIGIN&apos;, &apos;*&apos;);</div><div class="line">header(&quot;Access-Control-Allow-Origin: $origin&quot;);</div><div class="line">header(&quot;Access-Control-Allow-Credentials: true&quot;);</div></pre></td></tr></table></figure></p>
+<p>完成相关设置，至此可以实现跨域请求保留Session信息。</p>
+<h4 id="1-3-前端POST简单请求的可选方案"><a href="#1-3-前端POST简单请求的可选方案" class="headerlink" title="1.3 前端POST简单请求的可选方案"></a>1.3 前端POST简单请求的可选方案</h4><p>上述内容完成了简单的GET请求，然而前端使用<code>axios</code>执行带参数的POST请求时，容易遇到错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Response to preflight request doesn&apos;t pass access control check: No &apos;Access-Control-Allow-Origin&apos; header is present on the requested resource. Origin &apos;http://localhost:8082&apos; is therefore not allowed access.</div></pre></td></tr></table></figure></p>
+<p>这是由于<code>axios</code>默认的方式是<code>application/json</code>，并不是简单请求限制<code>Content-Type</code>的三个值之一，这将导致请求成为一个<code>非简单请求</code>。<br>此时，客户端将先发送一个类型为<code>OPTIONS</code>的预检请求，要求服务器允许正式请求。在服务器端未能正确处理预检请求时，访问将报上述错误。</p>
+<p>假定当前<code>POST</code>请求的参数为变量<code>data</code>保存的键值对。</p>
+<p>有几个野路子：</p>
+<ol>
+<li>显示设置request中header的<code>Content-Type</code>为<code>application/x-www-form-urlencoded</code>，抛弃参数<code>data</code>的作用，将参数添加在url中。<br>提交的数据按照<code>key1=val1&amp;key2=val2</code>的方式进行编码，key和val都进行URL转码。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">return axios.post(baseUrl + &apos;api/login?account=admin&amp;password=admin&apos;, data, &#123;</div><div class="line">          headers: &#123;</div><div class="line">              &apos;Content-Type&apos;: &apos;application/x-www-form-urlencoded&apos;</div><div class="line">          &#125;</div><div class="line">      &#125;);</div></pre></td></tr></table></figure>
+<p>这种方式的原理是将<code>Content-Type</code>手动设置为<code>application/x-www-form-urlencoded</code>，以确保请求的类型是简单请求。<br>这个比较坑的是，参数只能手动加在url里，传入的参数data毫无用处。</p>
+<ol>
+<li>将参数JSON.stringfy化<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">return axios.post(baseUrl + &apos;api/login&apos;, JSON.stringify(data));</div><div class="line">return axios.post(baseUrl + &apos;api/login&apos;, &apos;a=1&amp;b=2&apos;);</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这种方式的原理与前两种类似，使用字符串作为参数，这将使<code>Content-Type</code>自动 为<code>application/x-www-form-urlencoded</code>类型，<code>data</code>字符串参数的格式保证了服务器端接收的正确性<br>这个比较坑的是，需要按格式组织好参数。</p>
+<ol>
+<li>将参数转为FormData提交 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var form = new FormData()</div><div class="line">form.append(&apos;account&apos;, data.account)</div><div class="line">form.append(&apos;password&apos;, data.password)</div><div class="line">axios.post(baseUrl + &apos;api/login&apos;, form);</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这种方式的原理与上一种类似，使用<code>FormData</code>类作为参数，将自动设置<code>Content-Type</code>为<code>multipart/form-data</code>类型，以确保请求的类型是简单请求。<br>这个比较坑的是，每次都需要手动逐个添加form的key-value键值，好处是可以处理文件类型。</p>
+<p>上述三个方案都是通过将问题转化为<code>简单请求</code>以完成跨域访问。</p>
+<h4 id="1-4-非简单请求代码"><a href="#1-4-非简单请求代码" class="headerlink" title="1.4 非简单请求代码"></a>1.4 非简单请求代码</h4><p>如果一定要是<code>非简单请求</code>，前端直接将<code>Object</code>类型的变量作为参数传入，此时打开浏览器可以看到Request的<code>header</code>内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Content-Type:application/json;charset=UTF-8</div></pre></td></tr></table></figure></p>
+<p>在这种情况下，如果服务器对<code>OPTIONS</code>请求没有正确响应，则会报错。<br>至于Laravel如何处理OPTIONS请求，可参考<a href="http://ckmessi.github.io/blog-hexo/2018/01/31/Laravel%E4%B8%AD%E5%AF%B9OPTIONS%E8%AF%B7%E6%B1%82%E7%9A%84%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86/">Laravel中对OPTIONS请求的批量处理</a>。</p>
+<p>此时前端的代码就显得非常简单而优雅了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">return axios.post(baseUrl + &apos;api/login&apos;, data);</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" data-id="cjraags1d002dwm8tcud6ru03" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-MySQL连接缓慢的情况处理" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2018/02/02/MySQL连接缓慢的情况处理/" class="article-date">
@@ -99,7 +194,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="cjr90fa6p003ql48tzqkgy9ls" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="cjraags2d003lwm8t54p46kng" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li></ul>
@@ -174,7 +269,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/31/Laravel中对OPTIONS请求的批量处理/" data-id="cjr90fa5r002ml48telhvzr9k" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/31/Laravel中对OPTIONS请求的批量处理/" data-id="cjraags1l002owm8t577nyb3h" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -315,7 +410,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/" data-id="cjr90fa84006pl48t8wr7cc8o" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/" data-id="cjraags3x006kwm8t7iy8vavs" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li></ul>
@@ -365,7 +460,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="cjr90fa6e003bl48t4bc14fpy" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="cjraags250036wm8t7mmyh3nw" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li></ul>
@@ -420,7 +515,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/04/Linux管道和awk实现字符连接/" data-id="cjr90fa6s003sl48tkyb23otn" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/04/Linux管道和awk实现字符连接/" data-id="cjraags2a003hwm8t2bbjg3e1" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li></ul>
@@ -468,7 +563,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/02/Mac使用命令行快速生成zip包/" data-id="cjr90fa6k003jl48te50u1bfo" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/02/Mac使用命令行快速生成zip包/" data-id="cjraags29003ewm8thkmrfxeo" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li></ul>
@@ -517,7 +612,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/21/Mysql导出数据库表结构到Excel/" data-id="cjr90fa6w0040l48tpescld8v" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/21/Mysql导出数据库表结构到Excel/" data-id="cjraags2h003qwm8t3lq7zclh" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li></ul>
@@ -577,7 +672,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/18/Git-Fast-forward的一些常识/" data-id="cjr90fa4d000zl48tg0z3e4t4" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/18/Git-Fast-forward的一些常识/" data-id="cjraags0a000zwm8tynxfqgoj" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -623,56 +718,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/17/Laravel扩展Guzzle-发送HTTP请求/" data-id="cjr90fa5x002wl48t6zw4t71r" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Laravel模拟创建Request" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/11/14/Laravel模拟创建Request/" class="article-date">
-  <time datetime="2017-11-14T14:00:53.000Z" itemprop="datePublished">2017-11-14</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/11/14/Laravel模拟创建Request/">Laravel模拟创建Request</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在使用Laravel框架时，有的Unit Test可能希望模拟一个HTTP请求，方便地对特定组件的各个功能进行测试。比如，如果要测试一个中间件对于IP地址黑名单的屏蔽，对于白名单API的通过，对于白名单账号的判断等等。<br>此时，如何在代码中模拟创建一个自定义的Request，就是非常重要的步骤。</p>
-<p>通过查询文档，知道可以使用<code>Request::create()</code>方法创建，具体使用方式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$request = Request::create(&apos;/api/index&apos;, &apos;GET&apos;);</div></pre></td></tr></table></figure></p>
-<p>当我们需要模拟IP地址等信息时，就需要更加清晰地了解<code>create()</code>静态方法的具体内容。<br><code>Request</code>类实质是继承自<code>vendor/symfony/http-foundation/Request.php</code>，打开这个文件，查找到<code>create()</code>函数所在的位置，可以看到这个函数的原型：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public static function create($uri, $method = &apos;GET&apos;, $parameters = array(), $cookies = array(), $files = array(), $server = array(), $content = null)</div><div class="line">&#123;</div><div class="line">    $server = array_replace(array(</div><div class="line">        &apos;SERVER_NAME&apos; =&gt; &apos;localhost&apos;,</div><div class="line">        &apos;SERVER_PORT&apos; =&gt; 80,</div><div class="line">        &apos;HTTP_HOST&apos; =&gt; &apos;localhost&apos;,</div><div class="line">        &apos;HTTP_USER_AGENT&apos; =&gt; &apos;Symfony/3.X&apos;,</div><div class="line">        &apos;HTTP_ACCEPT&apos; =&gt; &apos;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&apos;,</div><div class="line">        &apos;HTTP_ACCEPT_LANGUAGE&apos; =&gt; &apos;en-us,en;q=0.5&apos;,</div><div class="line">        &apos;HTTP_ACCEPT_CHARSET&apos; =&gt; &apos;ISO-8859-1,utf-8;q=0.7,*;q=0.7&apos;,</div><div class="line">        &apos;REMOTE_ADDR&apos; =&gt; &apos;127.0.0.1&apos;,</div><div class="line">        &apos;SCRIPT_NAME&apos; =&gt; &apos;&apos;,</div><div class="line">        &apos;SCRIPT_FILENAME&apos; =&gt; &apos;&apos;,</div><div class="line">        &apos;SERVER_PROTOCOL&apos; =&gt; &apos;HTTP/1.1&apos;,</div><div class="line">        &apos;REQUEST_TIME&apos; =&gt; time(),</div><div class="line">    ), $server);</div><div class="line">    $server[&apos;PATH_INFO&apos;] = &apos;&apos;;</div><div class="line">    $server[&apos;REQUEST_METHOD&apos;] = strtoupper($method);</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>依据参数列表的格式，通过配置不同的参数可以模拟提交方式<code>GET</code>或<code>POST</code>，传递的参数<code>parameter</code>等。</p>
-<p>注意到函数中首先使用了一个<code>array_replace</code>函数对参数<code>$server</code>进行操作，<code>array_replace</code>函数的含义是：如果第二个参数中的相关键值，则将其取代第一个参数中的对应键值。因此，如果要模拟一个IP地址的访问，我们可以构建一个包含<code>REMOTE_ADDR</code>的<code>$server</code>参数，传入<code>create</code>函数中即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"> $server = array(</div><div class="line">    &apos;REMOTE_ADDR&apos; =&gt; &apos;127.0.0.123&apos;</div><div class="line">);</div><div class="line">$request = Request::create(&apos;/index&apos;, &apos;GET&apos;, array(), array(), array(), $server, null);</div></pre></td></tr></table></figure></p>
-<p>模拟<code>POST</code>传递某些参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$request = Request::create(&apos;/index&apos;, &apos;POST&apos;, array(&apos;user_id&apos; =&gt; &apos;user1861&apos;));</div></pre></td></tr></table></figure></p>
-<p>使用代码模拟创建Request的方法大抵如此。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/14/Laravel模拟创建Request/" data-id="cjr90fa6f003dl48tapipb5wc" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/17/Laravel扩展Guzzle-发送HTTP请求/" data-id="cjraags1r002wwm8tej9encaf" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -709,7 +755,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mybatis/">Mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oh-My-Zsh/">Oh-My-Zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring-Boot/">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Visual-Studio/">Visual Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastjson/">fastjson</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/libfacedetection/">libfacedetection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/vim/">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mybatis/">Mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oh-My-Zsh/">Oh-My-Zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring-Boot/">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Visual-Studio/">Visual Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastjson/">fastjson</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/interact-js/">interact.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/libfacedetection/">libfacedetection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/vim/">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
     </div>
   </div>
 
@@ -719,7 +765,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 12.22px;">Angular</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 12.22px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 11.11px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 11.11px;">Command Line</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.22px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15.56px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 13.33px;">Hexo</a> <a href="/blog-hexo/tags/Java/" style="font-size: 11.11px;">Java</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.78px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.89px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 16.67px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 11.11px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 11.11px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.11px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 11.11px;">Oracle</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 11.11px;">PowerShell</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 11.11px;">SSH</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 12.22px;">Ubuntu</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 14.44px;">Vue</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12.22px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 12.22px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 12.22px;">Angular</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 12.22px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 11.11px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 11.11px;">Command Line</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.22px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15.56px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 13.33px;">Hexo</a> <a href="/blog-hexo/tags/Java/" style="font-size: 11.11px;">Java</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.78px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.89px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 16.67px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 11.11px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 11.11px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.11px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 11.11px;">Oracle</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 11.11px;">PowerShell</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 11.11px;">SSH</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 12.22px;">Ubuntu</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 14.44px;">Vue</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12.22px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 12.22px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
     </div>
   </div>
 
@@ -741,11 +787,15 @@
       <ul>
         
           <li>
-            <a href="/blog-hexo/2019/01/23/Mybatis-Oracle-批量添加或更新/">Mybatis Oracle 批量添加或更新</a>
+            <a href="/blog-hexo/2019/01/24/拖拽组件interact-js的使用/">拖拽组件interact.js的使用</a>
           </li>
         
           <li>
             <a href="/blog-hexo/2019/01/22/使用fastjson将对象转换为HashMap遇到的问题/">使用fastjson将对象转换为HashMap遇到的问题</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2019/01/16/Mybatis-Oracle-批量添加或更新/">Mybatis Oracle 批量添加或更新</a>
           </li>
         
           <li>
@@ -754,10 +804,6 @@
         
           <li>
             <a href="/blog-hexo/2018/12/27/Mybatis使用多个参数进行查询的方式/">Mybatis使用多个参数进行查询的方式</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/12/17/部署-Spring-Boot-项目到服务器上/">部署 Spring Boot 项目到服务器上</a>
           </li>
         
       </ul>
