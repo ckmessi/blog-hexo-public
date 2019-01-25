@@ -54,7 +54,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -64,6 +64,102 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-初识AIDL" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/03/01/初识AIDL/" class="article-date">
+  <time datetime="2018-03-01T12:01:01.000Z" itemprop="datePublished">2018-03-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/03/01/初识AIDL/">初识AIDL</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>AIDL（Android Interface Definition Language），称为Android接口定义语言，目的是为了实现Android的进程间通信，尤其是涉及到多进程并发情况下的进程间通信。</p>
+<p>宏观上讲，可以将两个需要通信的进程分别视为客户端和服务端，双方定义一份<code>aidl</code>文件，作为通信协议约定。<br>服务端需要保存<code>xxx.aidl</code>文件，并实现其中定义的方法；客户端需要保存<code>xxx.aidl</code>文件，并以此尝试与服务端建立连接，调用其相关方法。<br>AIDL的使用过程主要可划分为以下几个步骤：</p>
+<ul>
+<li>创建一份<code>aidl</code>文件，在其中定义接口；</li>
+<li>将进程间通信的被动端作为服务端，在服务端创建Service，实现<code>aidl</code>文件中的接口所定义的方法逻辑，用于处理客户端的调用请求；</li>
+<li>将主动调用端作为客户端，与服务端建立连接，并调用相关方法获取结果。</li>
+</ul>
+<p>下面将以一份实现样例进行说明，代码可参考：<a href="https://github.com/ckmessi/AIDLDemo/" target="_blank" rel="external">https://github.com/ckmessi/AIDLDemo/</a></p>
+<h2 id="实例：实现服务端-amp-客户端"><a href="#实例：实现服务端-amp-客户端" class="headerlink" title="实例：实现服务端&amp;客户端"></a>实例：实现服务端&amp;客户端</h2><p>在实际使用过程中，往往根据需求只需要将自己的程序作为服务端或客户端使用，但在学习过程中，需要两者之间的配合才能跑通。因此，首先从自己实现服务端和客户端开始。</p>
+<p>使用<code>Android Studio</code>创建两个项目：<code>AIDLServer</code>和<code>AIDLClient</code>。</p>
+<h4 id="（1）撰写AIDLServer项目"><a href="#（1）撰写AIDLServer项目" class="headerlink" title="（1）撰写AIDLServer项目"></a>（1）撰写<code>AIDLServer</code>项目</h4><h6 id="step1-1-创建一个aidl文件"><a href="#step1-1-创建一个aidl文件" class="headerlink" title="step1.1 创建一个aidl文件"></a>step1.1 创建一个aidl文件</h6><p>在<code>Android Studio</code>中，可以通过在<code>Project</code>视图中右键点击<code>app/src/main</code>，选择<code>New-&gt;AIDL-&gt;AIDL File</code>进行创建。</p>
+<img src="/blog-hexo/2018/03/01/初识AIDL/1.png" alt="示例图" title="示例图">
+<img src="/blog-hexo/2018/03/01/初识AIDL/2.png" alt="示例图" title="示例图">
+<p>生成默认名称<code>IMyAidlInterface</code>的<code>aidl</code>文件如下：</p>
+<img src="/blog-hexo/2018/03/01/初识AIDL/3.png" alt="示例图" title="示例图">
+<p>将其中的方法修改为一个简单的加法运算。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">// IMyAidlInterface.aidl</div><div class="line">package com.ckmessi.aidlserver;</div><div class="line">// Declare any non-default types here with import statements</div><div class="line">interface IMyAidlInterface &#123;</div><div class="line">    /**</div><div class="line">     * Demonstrates some basic types that you can use as parameters</div><div class="line">     * and return values in AIDL.</div><div class="line">     */</div><div class="line">    int add(int a, int b);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<img src="/blog-hexo/2018/03/01/初识AIDL/4.png" alt="示例图" title="示例图">
+<p>至此，<code>aidl</code>文件在服务端就准备完毕了。</p>
+<h6 id="step1-2-编译项目"><a href="#step1-2-编译项目" class="headerlink" title="step1.2 编译项目"></a>step1.2 编译项目</h6><p>在创建Service之前需要编译一下项目，目的是为了之后能够正确resolve关键字<code>IMyAidInterface</code>。<br>点击菜单栏的<code>Build-&gt;Make Project</code>按钮：</p>
+<img src="/blog-hexo/2018/03/01/初识AIDL/5.png" alt="示例图" title="示例图">
+<h6 id="step1-3-创建Service："><a href="#step1-3-创建Service：" class="headerlink" title="step1.3 创建Service："></a>step1.3 创建Service：</h6><p>在<code>Android Studio</code>中，可以通过右键点击包名称，选择<code>New-&gt;Service-&gt;Serivce</code>创建一个Service。</p>
+<img src="/blog-hexo/2018/03/01/初识AIDL/6.png" alt="示例图" title="示例图">
+<p>按照默认配置执行即可。</p>
+<img src="/blog-hexo/2018/03/01/初识AIDL/7.png" alt="示例图" title="示例图">
+<p>修改Service内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public class MyService extends Service &#123;</div><div class="line">    private static final String TAG = &quot;AIDLService&quot;;</div><div class="line">    private Binder mBinder = new IMyAidlInterface.Stub() &#123;</div><div class="line">        @Override</div><div class="line">        public int add(int a, int b) throws RemoteException &#123;</div><div class="line">            Log.d(TAG, &quot;add: a=&quot; + a + &quot;, b=&quot; + b);</div><div class="line">            return a + b;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">    @Override</div><div class="line">    public IBinder onBind(Intent intent) &#123;</div><div class="line">        return mBinder;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<img src="/blog-hexo/2018/03/01/初识AIDL/8.png" alt="示例图" title="示例图">
+<h6 id="step1-4-查看并修改AndroidManifest-xml文件，确保服务被正确注册。"><a href="#step1-4-查看并修改AndroidManifest-xml文件，确保服务被正确注册。" class="headerlink" title="step1.4 查看并修改AndroidManifest.xml文件，确保服务被正确注册。"></a>step1.4 查看并修改<code>AndroidManifest.xml</code>文件，确保服务被正确注册。</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;service</div><div class="line">    android:name=&quot;.MyService&quot;</div><div class="line">    android:enabled=&quot;true&quot;</div><div class="line">    android:exported=&quot;true&quot;&gt;</div><div class="line">    &lt;intent-filter&gt;</div><div class="line">        &lt;action android:name=&quot;com.ckmessi.aidlserver.myservice&quot;/&gt;</div><div class="line">    &lt;/intent-filter&gt;</div><div class="line">&lt;/service&gt;</div></pre></td></tr></table></figure>
+<img src="/blog-hexo/2018/03/01/初识AIDL/9.png" alt="示例图" title="示例图">
+<h6 id="step1-5-运行，即可启动Serivce"><a href="#step1-5-运行，即可启动Serivce" class="headerlink" title="step1.5 运行，即可启动Serivce"></a>step1.5 运行，即可启动Serivce</h6><img src="/blog-hexo/2018/03/01/初识AIDL/10.png" alt="示例图" title="示例图">
+<h4 id="（2）撰写AIDLClient项目"><a href="#（2）撰写AIDLClient项目" class="headerlink" title="（2）撰写AIDLClient项目"></a>（2）撰写<code>AIDLClient</code>项目</h4><h6 id="step2-1-存储aidl文件"><a href="#step2-1-存储aidl文件" class="headerlink" title="step2.1 存储aidl文件"></a>step2.1 存储<code>aidl</code>文件</h6><p>将刚刚服务端的<code>aidl</code>文件在客户端存储一份，注意包名称要与服务器端完全相同。</p>
+<img src="/blog-hexo/2018/03/01/初识AIDL/11.png" alt="示例图" title="示例图">
+<h6 id="step2-2-创建服务管理类"><a href="#step2-2-创建服务管理类" class="headerlink" title="step2.2 创建服务管理类"></a>step2.2 创建服务管理类</h6><p>首先注意先<code>Make Project</code>，然后在<code>app/src/main/java/com.ckmessi.aidlclient</code>包中添加一个服务管理器<code>MyServiceManager</code>，用于处理相关逻辑。</p>
+<img src="/blog-hexo/2018/03/01/初识AIDL/12.png" alt="示例图" title="示例图">
+<p>其中主要逻辑是创建<code>myConnection</code>以及通过<code>bindService</code>建立连接后绑定<code>myService</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">private void bindMyService()&#123;</div><div class="line">    myConnection = new ServiceConnection() &#123;</div><div class="line">        @Override</div><div class="line">        public void onServiceConnected(ComponentName name, IBinder service) &#123;</div><div class="line">            Log.d(TAG, &quot;connected to service&quot;);</div><div class="line">            myService = IMyAidlInterface.Stub.asInterface(service);</div><div class="line">            mConnecting = true;</div><div class="line">        &#125;</div><div class="line">        @Override</div><div class="line">        public void onServiceDisconnected(ComponentName name) &#123;</div><div class="line">            Log.d(TAG, &quot;disconnected&quot;);</div><div class="line">            myService = null;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">    Intent intent = new Intent();</div><div class="line">    intent.setAction(ACTION_NAME);</div><div class="line">    intent.setPackage(PACKAGE_NAME);</div><div class="line">    context.bindService(intent, myConnection, context.BIND_AUTO_CREATE);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>此外，对外提供一个调用服务端<code>add</code>功能的方法<code>callServiceAdd</code>，其中逻辑就是通过<code>this.myService.add</code>调用服务端的方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"> public int callServiceAdd(int a, int b)&#123;</div><div class="line">    try &#123;</div><div class="line">        return this.myService.add(a, b);</div><div class="line">    &#125; catch (RemoteException e) &#123;</div><div class="line">        e.printStackTrace();</div><div class="line">        return 0;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h6 id="step2-3-主活动添加相关逻辑"><a href="#step2-3-主活动添加相关逻辑" class="headerlink" title="step2.3 主活动添加相关逻辑"></a>step2.3 主活动添加相关逻辑</h6><p>在主活动<code>MainActivity</code>类中，创建一个类型为<code>MyServiceManager</code>的成员变量，在<code>onCreate</code>函数中初始化它，建立与服务端的连接。<br>在页面中添加一个按钮：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">    android:layout_width=&quot;match_parent&quot;</div><div class="line">    android:layout_height=&quot;match_parent&quot;</div><div class="line">    android:orientation=&quot;vertical&quot;</div><div class="line">    &gt;</div><div class="line">    &lt;Button</div><div class="line">        android:id=&quot;@+id/button&quot;</div><div class="line">        android:text=&quot;call service&quot;</div><div class="line">        android:layout_width=&quot;match_parent&quot;</div><div class="line">        android:layout_height=&quot;wrap_content&quot; /&gt;</div><div class="line">&lt;/LinearLayout&gt;</div></pre></td></tr></table></figure></p>
+<p>设置其点击事件为，调用<code>myServiceManager</code>函数，调用服务端的加法运算，返回结果并显示。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">public class MainActivity extends AppCompatActivity &#123;</div><div class="line">    private MyServiceManager myServiceManager;</div><div class="line">    @Override</div><div class="line">    protected void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">        super.onCreate(savedInstanceState);</div><div class="line">        setContentView(R.layout.activity_main);</div><div class="line">        myServiceManager = new MyServiceManager(this);</div><div class="line">        Button button = (Button) findViewById(R.id.button);</div><div class="line">        button.setOnClickListener(new View.OnClickListener() &#123;</div><div class="line">            @Override</div><div class="line">            public void onClick(View view) &#123;</div><div class="line">                int result = myServiceManager.callServiceAdd(1, 3);</div><div class="line">                Toast.makeText(MainActivity.this, String.valueOf(result), Toast.LENGTH_SHORT).show();</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<img src="/blog-hexo/2018/03/01/初识AIDL/13.png" alt="示例图" title="示例图">
+<h6 id="step2-4-运行"><a href="#step2-4-运行" class="headerlink" title="step2.4 运行"></a>step2.4 运行</h6><p>运行，可以看到弹出一个<code>Toast</code>显示加法结果为<code>4</code>（4 = 1 + 3）。</p>
+<img src="/blog-hexo/2018/03/01/初识AIDL/14.png" alt="示例图" title="示例图">
+<p>至此，完成了利用AIDL完成客户端调用服务端加法服务的实例。</p>
+<h2 id="客户端常用流程概括"><a href="#客户端常用流程概括" class="headerlink" title="客户端常用流程概括"></a>客户端常用流程概括</h2><p>在现实场景中，最可能发生的是当前程序需要通过AIDL调用其它进程的某项服务。<br>在这种情况下，可以将自己的程序视为<code>客户端</code>，将假定存在的服务所在的进程视为<code>服务端</code>，使用AIDL的目标是完成调用。<br>项目中需要用到的已知信息如下：</p>
+<ul>
+<li>目标服务的包名称，如<code>com.x.example</code></li>
+<li>AIDL文件<code>XService.aidl</code>，对应接口名称为<code>IXService</code></li>
+</ul>
+<p>对于客户端来说，所需要进行的流程为以下几点：</p>
+<ul>
+<li>将AIDL文件添加到项目中</li>
+<li>在项目中定义一个连接<code>XConnection</code>和一个服务<code>XService</code>，使用<code>bindServce</code>方法，将连接与对应的目标服务绑定，将绑定结果存储到<code>XService</code>中</li>
+<li>通过获取到的服务<code>XService</code>调用对应的接口</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本篇文章简单介绍了AIDL的概念和功能，并用一个简单的实例完成AIDL的调用。<br>在实际工作中，调用<code>Service</code>的方式可能会有一些变化，但总之目标都是完成绑定。<br>作为客户端，向服务端索要的信息包括<code>包名称</code>、<code>aidl</code>文件和<code>绑定Service的方式（可能需要知道对应的ACTION名称等）</code>。<br>之后会介绍更为高级的内容，比如AIDL能够定义的接口返回值类型限制等。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://zhuanlan.zhihu.com/p/31460556" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/31460556</a><br><a href="http://blog.csdn.net/luoyanglizi/article/details/51980630" target="_blank" rel="external">http://blog.csdn.net/luoyanglizi/article/details/51980630</a><br><a href="http://blog.csdn.net/man_help/article/details/51173450" target="_blank" rel="external">http://blog.csdn.net/man_help/article/details/51173450</a><br><a href="http://blog.csdn.net/p106786860/article/details/17733223" target="_blank" rel="external">http://blog.csdn.net/p106786860/article/details/17733223</a><br><a href="http://blog.csdn.net/qian520ao/article/details/78072250#%E5%AE%A2%E6%88%B7%E7%AB%AF" target="_blank" rel="external">http://blog.csdn.net/qian520ao/article/details/78072250#%E5%AE%A2%E6%88%B7%E7%AB%AF</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/03/01/初识AIDL/" data-id="cjrbpgy5a006vc18t460nlgux" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Laravel-Vue前后端分离跨域CORS的一点知识" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -148,7 +244,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" data-id="cjraags1d002dwm8tcud6ru03" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" data-id="cjrbpgy2i002cc18tgesr5iid" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -194,7 +290,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="cjraags2d003lwm8t54p46kng" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="cjrbpgy3a003nc18tk43lbent" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li></ul>
@@ -269,7 +365,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/31/Laravel中对OPTIONS请求的批量处理/" data-id="cjraags1l002owm8t577nyb3h" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/31/Laravel中对OPTIONS请求的批量处理/" data-id="cjrbpgy2v002rc18tj7bvkeyt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -410,7 +506,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/" data-id="cjraags3x006kwm8t7iy8vavs" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/" data-id="cjrbpgy57006rc18t9ro12t6d" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li></ul>
@@ -460,7 +556,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="cjraags250036wm8t7mmyh3nw" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="cjrbpgy330039c18t5xsje4f2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li></ul>
@@ -515,7 +611,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/04/Linux管道和awk实现字符连接/" data-id="cjraags2a003hwm8t2bbjg3e1" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/04/Linux管道和awk实现字符连接/" data-id="cjrbpgy36003hc18tdvoamtgq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li></ul>
@@ -563,7 +659,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/02/Mac使用命令行快速生成zip包/" data-id="cjraags29003ewm8thkmrfxeo" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/02/Mac使用命令行快速生成zip包/" data-id="cjrbpgy38003lc18twon2zplk" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li></ul>
@@ -612,7 +708,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/21/Mysql导出数据库表结构到Excel/" data-id="cjraags2h003qwm8t3lq7zclh" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/21/Mysql导出数据库表结构到Excel/" data-id="cjrbpgy3i003wc18tf5jp86jb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li></ul>
@@ -672,56 +768,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/18/Git-Fast-forward的一些常识/" data-id="cjraags0a000zwm8tynxfqgoj" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/18/Git-Fast-forward的一些常识/" data-id="cjrbpgy1p0011c18tl1j3ccar" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Laravel扩展Guzzle-发送HTTP请求" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/11/17/Laravel扩展Guzzle-发送HTTP请求/" class="article-date">
-  <time datetime="2017-11-17T14:05:41.000Z" itemprop="datePublished">2017-11-17</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/11/17/Laravel扩展Guzzle-发送HTTP请求/">Laravel扩展Guzzle：发送HTTP请求</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在后台代码中，通常会遇到需要发送第三方HTTP请求的需求。在Laravel框架中，可以安装<a href="http://guzzle.readthedocs.io/en/latest/index.html" target="_blank" rel="external">Guzzle</a>进行便捷的HTTP请求。</p>
-<p>在命令行中输入以下命令，使用<code>composer</code>进行安装。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer.phar require guzzlehttp/guzzle:~6.0</div></pre></td></tr></table></figure></p>
-<p>在使用的代码处，使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">use GuzzleHttp\Client;</div><div class="line">$response = $client-&gt;request(&apos;GET&apos;, &apos;http://example.com&apos;, [</div><div class="line">    &apos;query&apos; =&gt; [</div><div class="line">        &apos;param1&apos; =&gt; &apos;v1&apos;,</div><div class="line">        &apos;param2&apos; =&gt; &apos;v2&apos;,</div><div class="line">    ]</div><div class="line">]);</div><div class="line">$code = $response-&gt;getStatusCode();</div><div class="line">$reason = $response-&gt;getReasonPhrase();</div><div class="line">$content = $response-&gt;getBody()-&gt;getContents()</div></pre></td></tr></table></figure></p>
-<p>相关配置选项可参考文档：<a href="http://guzzle.readthedocs.io/en/latest/request-options.html。" target="_blank" rel="external">http://guzzle.readthedocs.io/en/latest/request-options.html。</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/17/Laravel扩展Guzzle-发送HTTP请求/" data-id="cjraags1r002wwm8tej9encaf" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
 
     </footer>
   </div>
@@ -734,7 +784,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/page/4/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="page-number" href="/blog-hexo/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/9/">9</a><a class="extend next" rel="next" href="/blog-hexo/page/6/">weiter &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/4/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="page-number" href="/blog-hexo/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/9/">9</a><a class="extend next" rel="next" href="/blog-hexo/page/6/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -743,7 +793,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -772,7 +822,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -782,9 +832,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2019/01/25/Git修改远程仓库链接/">Git修改远程仓库链接</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2019/01/24/拖拽组件interact-js的使用/">拖拽组件interact.js的使用</a>
@@ -800,10 +854,6 @@
         
           <li>
             <a href="/blog-hexo/2018/12/29/Spring-Boot-使用事务约束/">Spring Boot 使用事务约束</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/12/27/Mybatis使用多个参数进行查询的方式/">Mybatis使用多个参数进行查询的方式</a>
           </li>
         
       </ul>

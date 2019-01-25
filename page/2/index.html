@@ -54,7 +54,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -64,6 +64,63 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-在Visual-Studio使用libfacedetection检测人脸关键点" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/10/31/在Visual-Studio使用libfacedetection检测人脸关键点/" class="article-date">
+  <time datetime="2018-10-31T10:37:16.000Z" itemprop="datePublished">2018-10-31</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/10/31/在Visual-Studio使用libfacedetection检测人脸关键点/">在Visual Studio使用libfacedetection检测人脸关键点</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><code>libfacedetection</code> 是一个用于人脸检测和人脸 landmark 关键点检测的工具。<br>Github仓库地址：<a href="https://github.com/ShiqiYu/libfacedetection" target="_blank" rel="external">https://github.com/ShiqiYu/libfacedetection</a></p>
+<p>首先，在 <code>Windows</code> 环境中，使用 <code>Visual Studio</code> 运行 <code>libfacedetection</code> 需要配置 <code>OpenCV</code> 环境。<br>首先在 <a href="https://opencv.org/" target="_blank" rel="external">OpenCV官网</a> 下载 <code>OpenCV</code> 的相关代码，假定其根目录为 <code>OPENCV_DIR</code> 。<br>进入项目的【属性】设置：</p>
+<p>1.【配置属性】-&gt;【VC++目录】-&gt;【包含目录】：添加 <code>OpenCV</code> 的 <code>include</code> 文件夹。<br>例如 <code>D:\SDK\opencv-3.4.0-vc14_vc15\opencv\build\include;</code> ，理论上在这个 <code>include</code> 文件夹下有两个子文件夹 <code>opencv</code> 和 <code>opencv2</code> 。有些网络上的文章建议将这两个文件夹的路径也添加到包含目录中，实质上是不需要的，在代码中通过 <code>opencv/highgui.hpp</code> 或 <code>opencv2/highgui.hpp</code> 进行区分即可。</p>
+<p>2.【配置属性】-&gt;【VC++目录】-&gt;【库目录】：添加 <code>OpenCV</code> 的 <code>lib</code> 文件夹。<br>例如 <code>D:\SDK\opencv-3.4.0-vc14_vc15\opencv\build\x64\vc15\lib;</code> ，理论上这个 <code>lib</code> 文件夹下会有相关的 <code>.lib</code> 文件。</p>
+<p>3.【配置属性】-&gt;【链接器】-&gt;【输入】-&gt;【附加依赖项】：添加 <code>OpenCV</code> 的 <code>lib</code> 文件夹中对应 <code>.lib</code> 文件名称列表。<br>例如 <code>opencv_world340d.lib</code> ，注意这里要根据当前属性页的配置是 <code>Release</code> 还是 <code>Debug</code> 来确定使用是否带 <code>d</code> 后缀的 <code>.lib</code> 文件，不要选错，也不要都添加上。此前遇到过使用 <code>imshow</code> 显示的图片是一片灰色或一闪而过的情况，都是由于在这里多添加了不相符的 <code>.lib</code> 文件导致的。</p>
+<p>4.拷贝 opencv 的bin文件夹下的dll文件至当前目录。</p>
+<p>如果完成了1和2，没有进行3，会在编译时抛错无法解析的外部符号<br>如果没有完成4，会在运行时抛出缺少dll的错误</p>
+<p>使用libfacedetection的方式也是上述几步：</p>
+<ol>
+<li>添加include文件夹</li>
+<li>添加lib文件夹</li>
+<li>添加.lib文件列表</li>
+<li>拷贝.dll文件</li>
+</ol>
+<p><a href="https://blog.csdn.net/mono_1032290547/article/details/78912548" target="_blank" rel="external">这篇博客</a>的流程很清晰。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/10/31/在Visual-Studio使用libfacedetection检测人脸关键点/" data-id="cjrbpgy5c006zc18tm57dj91u" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Visual-Studio/">Visual Studio</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/libfacedetection/">libfacedetection</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Oh-My-Zsh配合agnoster主题及Solarized配色" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -117,7 +174,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/30/Oh-My-Zsh配合agnoster主题及Solarized配色/" data-id="cjraags2p0045wm8te3vxbahg" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/09/30/Oh-My-Zsh配合agnoster主题及Solarized配色/" data-id="cjrbpgy3p0045c18th96ixb1t" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Oh-My-Zsh/">Oh-My-Zsh</a></li></ul>
@@ -173,7 +230,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/21/Laravel中server-php文件的作用/" data-id="cjraags1j002lwm8tv8w6iygq" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/09/21/Laravel中server-php文件的作用/" data-id="cjrbpgy2t002oc18to33aho85" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -222,7 +279,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/21/Ubuntu-16-04-升级OpenSSH/" data-id="cjraags3d005cwm8tkb0bxxt7" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/09/21/Ubuntu-16-04-升级OpenSSH/" data-id="cjrbpgy4j005cc18t2wg15m29" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li></ul>
@@ -285,7 +342,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/17/Linux用户免密码sudo执行命令/" data-id="cjraags27003bwm8to4n4fk4w" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/09/17/Linux用户免密码sudo执行命令/" data-id="cjrbpgy35003ec18tij15ryyb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li></ul>
@@ -335,7 +392,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/13/Windows-Ubuntu-Mac-OS查看文件md5值的命令/" data-id="cjraags3h005mwm8trjbw6849" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/09/13/Windows-Ubuntu-Mac-OS查看文件md5值的命令/" data-id="cjrbpgy4r005pc18tl47gqj3t" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li></ul>
@@ -415,7 +472,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/14/搭建SSH端口转发反向代理/" data-id="cjraags490079wm8tcjrhtjor" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/08/14/搭建SSH端口转发反向代理/" data-id="cjrbpgy5r007cc18t1wft7hhw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li></ul>
@@ -472,7 +529,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/13/解决iPhone上Safari浏览器滑动比较卡的问题/" data-id="cjraags4b007cwm8tkb13x5hg" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/08/13/解决iPhone上Safari浏览器滑动比较卡的问题/" data-id="cjrbpgy5t007fc18tjnftmint" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -525,7 +582,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/11/Ubuntu禁用SSH密码登录/" data-id="cjraags3e005gwm8t6ua61pb1" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/08/11/Ubuntu禁用SSH密码登录/" data-id="cjrbpgy4m005jc18tu9hztdei" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li></ul>
@@ -576,62 +633,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/09/PHP使用ZipArchive完成后台文件压缩/" data-id="cjraags2v004dwm8t5a90lwwn" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/08/09/PHP使用ZipArchive完成后台文件压缩/" data-id="cjrbpgy44004kc18tnbv2fxc7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Element-UI表格标题使用render-header函数" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2018/08/03/Element-UI表格标题使用render-header函数/" class="article-date">
-  <time datetime="2018-08-03T10:12:00.000Z" itemprop="datePublished">2018-08-03</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2018/08/03/Element-UI表格标题使用render-header函数/">Element-UI表格标题使用render-header函数</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在使用 <code>Element-UI</code> 组件 <code>el-table</code> 时，可能希望表头具有 <code>tooltip</code> 的效果，即鼠标hover的时候能够显示一些提示信息， <code>el-table</code> 的表头是无法直接通过包裹 <code>el-tooltip</code> 的方式完成，此时需要用到 <code>Table-column Attributes</code> 的 <code>render-header</code> 函数。</p>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>在 <code>el-table</code> 的某一列添加属性如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;el-table-column</div><div class="line">    :render-header=&quot;renderFunction&quot;</div><div class="line">    label=&quot;表头标题&quot;</div><div class="line">    prop=&quot;id&quot;</div><div class="line">    width=&quot;170&quot;</div><div class="line">    align=&quot;center&quot;&gt;</div><div class="line">&lt;/el-table-column&gt;</div></pre></td></tr></table></figure>
-<p>撰写 <code>renderFunction</code> 如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">methods:&#123;</div><div class="line">    // ...</div><div class="line">    renderFunction(h, data)&#123;</div><div class="line">        return (</div><div class="line">            &lt;el-tooltip class=&quot;item&quot; effect=&quot;dark&quot; content=&quot;鼠标悬停时显示的文字内容&quot; placement=&quot;top&quot;&gt;</div><div class="line">                &lt;span&gt;&#123;data.column.label&#125;&lt;/span&gt;</div><div class="line">            &lt;/el-tooltip&gt;</div><div class="line">        );</div><div class="line">    &#125;,</div><div class="line">    // ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>相当于重写了一下表格标题的渲染函数，在原本 <code>&lt;span&gt;{data.column.label}&lt;/span&gt;</code> 之外包了一个 <code>&lt;el-tooltip&gt;</code> 。</p>
-<p>这里用到了 <code>vue</code> 中的 <a href="https://cn.vuejs.org/v2/guide/render-function.html" target="_blank" rel="external">渲染函数</a></p>
-<blockquote>
-<p>Vue 推荐在绝大多数情况下使用 template 来创建你的 HTML。然而在一些场景中，你真的需要 JavaScript 的完全编程的能力，这就是 render 函数，它比 template 更接近编译器。</p>
-</blockquote>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://segmentfault.com/q/1010000014973813" target="_blank" rel="external">https://segmentfault.com/q/1010000014973813</a><br><a href="https://cn.vuejs.org/v2/guide/render-function.html" target="_blank" rel="external">https://cn.vuejs.org/v2/guide/render-function.html</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/03/Element-UI表格标题使用render-header函数/" data-id="cjraags05000rwm8tlw0in61v" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
 
     </footer>
   </div>
@@ -644,7 +649,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/9/">9</a><a class="extend next" rel="next" href="/blog-hexo/page/3/">weiter &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/9/">9</a><a class="extend next" rel="next" href="/blog-hexo/page/3/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -653,7 +658,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -682,7 +687,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -692,9 +697,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2019/01/25/Git修改远程仓库链接/">Git修改远程仓库链接</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2019/01/24/拖拽组件interact-js的使用/">拖拽组件interact.js的使用</a>
@@ -710,10 +719,6 @@
         
           <li>
             <a href="/blog-hexo/2018/12/29/Spring-Boot-使用事务约束/">Spring Boot 使用事务约束</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2018/12/27/Mybatis使用多个参数进行查询的方式/">Mybatis使用多个参数进行查询的方式</a>
           </li>
         
       </ul>
