@@ -5,17 +5,19 @@
   
 
   
-  <title>Archiv: 2019 | 不止是一位程序员</title>
+  <title>在Java中添加一个针对整数类型的枚举类 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Lionel的技术笔记总结">
-<meta property="og:type" content="website">
-<meta property="og:title" content="不止是一位程序员">
-<meta property="og:url" content="http://ckmessi.github.io/archives/2019/index.html">
+  <meta name="description" content="在 Java 中，可以参考以下代码创建一个带有具体业务含义的整数类型枚举类。123456789101112131415161718192021222324import java.util.Map;import java.util.function.Function;import java.util.stream.Collectors;import java.util.stream.Stream;p">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在Java中添加一个针对整数类型的枚举类">
+<meta property="og:url" content="http://ckmessi.github.io/2019/02/25/在Java中添加一个针对整数类型的枚举类/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
-<meta property="og:description" content="Lionel的技术笔记总结">
+<meta property="og:description" content="在 Java 中，可以参考以下代码创建一个带有具体业务含义的整数类型枚举类。123456789101112131415161718192021222324import java.util.Map;import java.util.function.Function;import java.util.stream.Collectors;import java.util.stream.Stream;p">
+<meta property="og:updated_time" content="2019-02-25T09:43:22.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="不止是一位程序员">
-<meta name="twitter:description" content="Lionel的技术笔记总结">
+<meta name="twitter:title" content="在Java中添加一个针对整数类型的枚举类">
+<meta name="twitter:description" content="在 Java 中，可以参考以下代码创建一个带有具体业务含义的整数类型枚举类。123456789101112131415161718192021222324import java.util.Map;import java.util.function.Function;import java.util.stream.Collectors;import java.util.stream.Stream;p">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -66,211 +68,62 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog-hexo/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2019/02/25/在Java中添加一个针对整数类型的枚举类/" class="archive-article-date">
-  <time datetime="2019-02-25T09:42:26.000Z" itemprop="datePublished">Feb 25</time>
+        <section id="main"><article id="post-在Java中添加一个针对整数类型的枚举类" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/02/25/在Java中添加一个针对整数类型的枚举类/" class="article-date">
+  <time datetime="2019-02-25T09:42:26.000Z" itemprop="datePublished">2019-02-25</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2019/02/25/在Java中添加一个针对整数类型的枚举类/">在Java中添加一个针对整数类型的枚举类</a>
+    <h1 class="article-title" itemprop="name">
+      在Java中添加一个针对整数类型的枚举类
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2019/02/18/初识Anime-js/" class="archive-article-date">
-  <time datetime="2019-02-18T08:16:36.000Z" itemprop="datePublished">Feb 18</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2019/02/18/初识Anime-js/">初识Anime.js</a>
-    </h1>
-  
+        <p>在 Java 中，可以参考以下代码创建一个带有具体业务含义的整数类型枚举类。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">import java.util.Map;</div><div class="line">import java.util.function.Function;</div><div class="line">import java.util.stream.Collectors;</div><div class="line">import java.util.stream.Stream;</div><div class="line">public enum EnumExample &#123;</div><div class="line">    EMPTY(0),</div><div class="line">    ONE(1),</div><div class="line">    TWO(2),</div><div class="line">    THREE(3);</div><div class="line">    private int value;</div><div class="line">    public int getValue()&#123;</div><div class="line">        return this.value;</div><div class="line">    &#125;</div><div class="line">    private static Map&lt;Integer, EnumExample&gt; map;</div><div class="line">    EnumExample(int v)&#123;</div><div class="line">        this.value = v;</div><div class="line">    &#125;</div><div class="line">    static &#123;</div><div class="line">        map = Stream.of(EnumExample.values()).collect(Collectors.toMap(EnumExample::getValue, Function.identity()));</div><div class="line">    &#125;</div><div class="line">    public static EnumExample of(Integer value) &#123;</div><div class="line">        return map.getOrDefault(value, EnumExample.EMPTY);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>枚举类中的可能值就是整数类型的 <code>0</code>、<code>1</code>、<code>2</code> 等，但可以通过枚举类为其赋予带有业务含义的名称 <code>EMPTY</code> 、<code>ONE</code> 、 <code>TWO</code> 。<br>类中的 <code>of</code> 方法，能够对传入参数进行标准化操作，如果遇到不在范围内的值则将其设置为 <code>EMPTY</code> 。<br>类中的静态方法 <code>static</code> 则表示初始化全局静态变量 <code>map</code> ，这个哈希表收集了所有可选的枚举值，将 <code>Integer</code> 类型的变量映射到枚举类的成员变量中。</p>
+<p>使用代码示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class Main &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        EnumExample value = EnumExample.of(1);</div><div class="line">        System.out.println(value);</div><div class="line">        EnumExample value2 = EnumExample.TWO;</div><div class="line">        System.out.println(value2.getValue());</div><div class="line">        System.out.println(&quot;Hello World!&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>输出结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ONE</div><div class="line">2</div><div class="line">Hello World!</div></pre></td></tr></table></figure></p>
+<p>这样，在实际使用时，可以方便地通过枚举类表达更确切的业务含义，避免出现 Magic Number；同时约束了值的范围，避免非法数值进入后续流程中。</p>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2019/02/14/使用hexdump输出文件的十六进制编码/" class="archive-article-date">
-  <time datetime="2019-02-14T06:35:55.000Z" itemprop="datePublished">Feb 14</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2019/02/14/使用hexdump输出文件的十六进制编码/">使用hexdump输出文件的十六进制编码</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2019/02/13/使用SSH搭建端口转发的两个应用场景/" class="archive-article-date">
-  <time datetime="2019-02-13T06:15:55.000Z" itemprop="datePublished">Feb 13</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/02/25/在Java中添加一个针对整数类型的枚举类/" data-id="cjsk5mun1007f1s8tfuaavuhj" class="article-share-link">Teilen</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2019/02/13/使用SSH搭建端口转发的两个应用场景/">使用SSH搭建端口转发的两个应用场景</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2019/01/30/终端使用base64进行编码解码/" class="archive-article-date">
-  <time datetime="2019-01-30T06:10:52.000Z" itemprop="datePublished">Jan 30</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2019/01/30/终端使用base64进行编码解码/">终端使用base64进行编码解码</a>
-    </h1>
-  
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
 
-    </header>
+    </footer>
   </div>
-</article>
   
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2019/01/28/初识Drools/" class="archive-article-date">
-  <time datetime="2019-01-28T09:41:14.000Z" itemprop="datePublished">Jan 28</time>
-</a>
-      
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2019/01/28/初识Drools/">初识Drools</a>
-    </h1>
   
+    <a href="/blog-hexo/2019/02/18/初识Anime-js/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">初识Anime.js</div>
+    </a>
+  
+</nav>
 
-    </header>
-  </div>
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2019/01/25/Git修改远程仓库链接/" class="archive-article-date">
-  <time datetime="2019-01-25T07:06:38.000Z" itemprop="datePublished">Jan 25</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2019/01/25/Git修改远程仓库链接/">Git修改远程仓库链接</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2019/01/24/拖拽组件interact-js的使用/" class="archive-article-date">
-  <time datetime="2019-01-24T07:20:24.000Z" itemprop="datePublished">Jan 24</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2019/01/24/拖拽组件interact-js的使用/">拖拽组件interact.js的使用</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2019/01/22/使用fastjson将对象转换为HashMap遇到的问题/" class="archive-article-date">
-  <time datetime="2019-01-22T09:33:41.000Z" itemprop="datePublished">Jan 22</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2019/01/22/使用fastjson将对象转换为HashMap遇到的问题/">使用fastjson将对象转换为HashMap遇到的问题</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2019/01/16/Mybatis-Oracle-批量添加或更新/" class="archive-article-date">
-  <time datetime="2019-01-16T09:51:15.000Z" itemprop="datePublished">Jan 16</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2019/01/16/Mybatis-Oracle-批量添加或更新/">Mybatis Oracle 批量添加或更新</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
 
 </section>
         
