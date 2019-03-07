@@ -5,17 +5,19 @@
   
 
   
-  <title>Archiv: 2018 | 不止是一位程序员</title>
+  <title>Java使用反射测试私用方法 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Lionel的技术笔记总结">
-<meta property="og:type" content="website">
-<meta property="og:title" content="不止是一位程序员">
-<meta property="og:url" content="http://ckmessi.github.io/archives/2018/page/2/index.html">
+  <meta name="description" content="在单元测试中，如果希望对某个类的私有方法进行测试，则需要使用反射的方式进行。假设存在某个类的代码如下：12345public class A &amp;#123;    private String privateMethodF(String str)&amp;#123;        return str;    &amp;#125;&amp;#125; 测试代码的基本逻辑如下：12345678910public class">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java使用反射测试私用方法">
+<meta property="og:url" content="http://ckmessi.github.io/2019/03/07/Java使用反射测试私用方法/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
-<meta property="og:description" content="Lionel的技术笔记总结">
+<meta property="og:description" content="在单元测试中，如果希望对某个类的私有方法进行测试，则需要使用反射的方式进行。假设存在某个类的代码如下：12345public class A &amp;#123;    private String privateMethodF(String str)&amp;#123;        return str;    &amp;#125;&amp;#125; 测试代码的基本逻辑如下：12345678910public class">
+<meta property="og:updated_time" content="2019-03-07T09:18:32.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="不止是一位程序员">
-<meta name="twitter:description" content="Lionel的技术笔记总结">
+<meta name="twitter:title" content="Java使用反射测试私用方法">
+<meta name="twitter:description" content="在单元测试中，如果希望对某个类的私有方法进行测试，则需要使用反射的方式进行。假设存在某个类的代码如下：12345public class A &amp;#123;    private String privateMethodF(String str)&amp;#123;        return str;    &amp;#125;&amp;#125; 测试代码的基本逻辑如下：12345678910public class">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -66,216 +68,62 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog-hexo/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/09/17/Linux用户免密码sudo执行命令/" class="archive-article-date">
-  <time datetime="2018-09-17T10:55:46.000Z" itemprop="datePublished">Sep 17</time>
+        <section id="main"><article id="post-Java使用反射测试私用方法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/03/07/Java使用反射测试私用方法/" class="article-date">
+  <time datetime="2019-03-07T09:16:27.000Z" itemprop="datePublished">2019-03-07</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/09/17/Linux用户免密码sudo执行命令/">Linux用户免密码sudo执行命令</a>
+    <h1 class="article-title" itemprop="name">
+      Java使用反射测试私用方法
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/09/13/Windows-Ubuntu-Mac-OS查看文件md5值的命令/" class="archive-article-date">
-  <time datetime="2018-09-13T08:14:01.000Z" itemprop="datePublished">Sep 13</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/09/13/Windows-Ubuntu-Mac-OS查看文件md5值的命令/">Windows/Ubuntu/Mac OS查看文件md5值的命令</a>
-    </h1>
-  
+        <p>在单元测试中，如果希望对某个类的私有方法进行测试，则需要使用反射的方式进行。<br>假设存在某个类的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public class A &#123;</div><div class="line">    private String privateMethodF(String str)&#123;</div><div class="line">        return str;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>测试代码的基本逻辑如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class UnitTest &#123;</div><div class="line">    ClassA objectA;</div><div class="line">    @Test</div><div class="line">    public void testPrivateMethod()&#123;</div><div class="line">        Method methodF = objectA.getClass().getDeclaredMethod(“privateMethodF”, String.class);</div><div class="line">        methodF.setAccessible(true);</div><div class="line">        String result = (String)methodF.invoke(objectA, “parameterString”);</div><div class="line">        // TODO: assert something</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>基本思路是使用 <code>getDeclaredMethod</code> 获取私有方法，并通过 <code>setAccessible</code> 设置其可访问。<br>调用接口的方式是通过 <code>invoke</code> 方法，其中第一个参数是目标类，第二个参数是调用方法中需要传递的参数。<br>如果私有方法有多个参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public class A &#123;</div><div class="line">    private String privateMethodF2(ClassB objB, List&lt;String&gt; strList, Integer num)&#123;</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>则测试代码应该对应修改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class UnitTest &#123;</div><div class="line">    ClassA objectA;</div><div class="line">    @Test</div><div class="line">    public void testPrivateMethod()&#123;</div><div class="line">        Method methodF2 = objectA.getClass().getDeclaredMethod(“privateMethodF2”, new Class[]&#123;ClassB.class, List.class, Integer.class);</div><div class="line">        methodF2.setAccessible(true);</div><div class="line">        ClassB objB = new ClassB();</div><div class="line">        List&lt;String&gt; strList = new ArrayList&lt;String&gt;();</div><div class="line">        String result = (String)methodF2.invoke(objectA, new Object[]&#123;objB, strList, 1&#125;);</div><div class="line">        // TODO: assert something</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://blog.csdn.net/qq_36688928/article/details/84337765" target="_blank" rel="external">https://blog.csdn.net/qq_36688928/article/details/84337765</a><br><a href="https://www.cnblogs.com/freedommovie/p/5731636.html" target="_blank" rel="external">https://www.cnblogs.com/freedommovie/p/5731636.html</a><br><a href="https://blog.csdn.net/caib1109/article/details/51338743" target="_blank" rel="external">https://blog.csdn.net/caib1109/article/details/51338743</a></p>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/08/14/搭建SSH端口转发反向代理/" class="archive-article-date">
-  <time datetime="2018-08-14T12:27:48.000Z" itemprop="datePublished">Aug 14</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/08/14/搭建SSH端口转发反向代理/">搭建SSH端口转发反向代理</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/08/13/解决iPhone上Safari浏览器滑动比较卡的问题/" class="archive-article-date">
-  <time datetime="2018-08-13T11:43:20.000Z" itemprop="datePublished">Aug 13</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/03/07/Java使用反射测试私用方法/" data-id="cjsyf5fl70026bv8t8wgxjpqa" class="article-share-link">Teilen</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/08/13/解决iPhone上Safari浏览器滑动比较卡的问题/">解决iPhone上Safari浏览器滑动比较卡的问题</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/08/11/Ubuntu禁用SSH密码登录/" class="archive-article-date">
-  <time datetime="2018-08-11T05:45:02.000Z" itemprop="datePublished">Aug 11</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/08/11/Ubuntu禁用SSH密码登录/">Ubuntu禁用SSH密码登录</a>
-    </h1>
-  
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
 
-    </header>
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog-hexo/2019/03/06/Java使用stream处理列表/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">Java使用stream处理列表</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/08/09/PHP使用ZipArchive完成后台文件压缩/" class="archive-article-date">
-  <time datetime="2018-08-09T12:13:12.000Z" itemprop="datePublished">Aug 9</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/08/09/PHP使用ZipArchive完成后台文件压缩/">PHP使用ZipArchive完成后台文件压缩</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/08/03/Element-UI表格标题使用render-header函数/" class="archive-article-date">
-  <time datetime="2018-08-03T10:12:00.000Z" itemprop="datePublished">Aug 3</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/08/03/Element-UI表格标题使用render-header函数/">Element-UI表格标题使用render-header函数</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/08/02/在Windows上使用PHP-CGI的一个重要参数/" class="archive-article-date">
-  <time datetime="2018-08-02T06:35:44.000Z" itemprop="datePublished">Aug 2</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/08/02/在Windows上使用PHP-CGI的一个重要参数/">在Windows上使用PHP-CGI的一个重要参数</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/07/27/Laravel-SocketIO即时发送消息/" class="archive-article-date">
-  <time datetime="2018-07-27T12:46:23.000Z" itemprop="datePublished">Jul 27</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/07/27/Laravel-SocketIO即时发送消息/">Laravel+SocketIO即时发送消息</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/07/17/Linux查看并修改系统时间/" class="archive-article-date">
-  <time datetime="2018-07-17T09:59:36.000Z" itemprop="datePublished">Jul 17</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/07/17/Linux查看并修改系统时间/">Linux查看并修改系统时间</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-
-  <nav id="page-nav">
-    
-    <a class="extend prev" rel="prev" href="/blog-hexo/archives/2018/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/archives/2018/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog-hexo/archives/2018/page/3/">3</a><a class="page-number" href="/blog-hexo/archives/2018/page/4/">4</a><a class="page-number" href="/blog-hexo/archives/2018/page/5/">5</a><a class="extend next" rel="next" href="/blog-hexo/archives/2018/page/3/">weiter &raquo;</a>
-  </nav>
 
 </section>
         
