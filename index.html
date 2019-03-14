@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -67,6 +67,69 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-初识Rust" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/03/14/初识Rust/" class="article-date">
+  <time datetime="2019-03-14T09:08:32.000Z" itemprop="datePublished">2019-03-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/03/14/初识Rust/">初识Rust</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Rust是一门系统编程语言，专注于安全，尤其是并发安全，支持函数式和命令式以及泛型等编程范式的多范式语言。Rust在语法上和C++类似，但是设计者想要在保证性能的同时提供更好的内存安全。<br>Rust最初是由Mozilla研究院的Graydon Hoare设计创造，然后在Dave Herman, Brendan Eich以及很多其他人的贡献下逐步完善的。<br>Rust的设计者们通过在研发Servo网站浏览器布局引擎过程中积累的经验优化了Rust语言和Rust编译器。</p>
+<h2 id="安装-rust"><a href="#安装-rust" class="headerlink" title="安装 rust"></a>安装 rust</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl https://sh.rustup.rs -sSf | sh</div></pre></td></tr></table></figure>
+<p>命令行中出现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">  stable installed - rustc 1.33.0 (2aa4c46cf 2019-02-28)</div><div class="line">Rust is installed now. Great!</div><div class="line">To get started you need Cargo&apos;s bin directory ($HOME/.cargo/bin) in your PATH</div><div class="line">environment variable. Next time you log in this will be done automatically.</div><div class="line">To configure your current shell run source $HOME/.cargo/env</div></pre></td></tr></table></figure></p>
+<p>表示 Rust 安装成功了。<br>根据提示执行 <code>source ~/.cargo/env</code> 命令，将 <code>~/.cargo/bin</code> 添加到环境变量中。<br>这个 <code>source ~/.cargo/env</code> 文件中的代码其实是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export PATH=&quot;$HOME/.cargo/bin:$PATH&quot;</div></pre></td></tr></table></figure></p>
+<p>为了测试 <code>Rust</code> 和 <code>Cargo</code> 是否成功安装，可以在命令行中输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cargo —version</div></pre></td></tr></table></figure></p>
+<p>显示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜ Code cargo --version</div><div class="line">cargo 1.33.0 (f099fe94b 2019-02-12)</div></pre></td></tr></table></figure></p>
+<p>或者也可以使用 <code>rustc</code> 命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜ Code rustc --version</div><div class="line">rustc 1.33.0 (2aa4c46cf 2019-02-28)</div></pre></td></tr></table></figure></p>
+<p>安装 rustup 完成后，你同时得到了最新版本的 Rust 构建工具和包管理器 <code>Cargo</code> ，它有以下功能：</p>
+<ul>
+<li>使用 <code>cargo build</code> 构建你的项目</li>
+<li>使用 <code>cargo run</code> 运行你的项目</li>
+<li>使用 <code>cargo test</code> 测试你的项目</li>
+<li>使用 <code>cargo doc</code> 为项目构建文档</li>
+<li>使用 <code>cargo publish</code> 发布一个库</li>
+</ul>
+<h2 id="Rust的Hello-World"><a href="#Rust的Hello-World" class="headerlink" title="Rust的Hello World"></a>Rust的Hello World</h2><p>执行命令以下命令将自动创建一个目录：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cargo new hello-rust</div></pre></td></tr></table></figure></p>
+<p>目录结构如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">hello-rust</div><div class="line">|- Cargo.toml</div><div class="line">|- src</div><div class="line">  |- main.rs</div></pre></td></tr></table></figure></p>
+<p>其中 <code>Cargo.toml</code> 文件是 <code>Rust</code> 的配置文件，在这里将保存一些 metadata 信息及依赖信息。<br>注：可以理解为 <code>npm</code> 使用的 <code>package.json</code> 文件，以及 <code>composer</code> 使用的 <code>composer.json</code> 文件。<br>其中 <code>src/main.rs</code> 文件就是我们要撰写代码的地方。<br><code>cargo new</code> 命令已经为我们的项目生成了一段 <code>&quot;Hello, world!&quot;</code> 代码。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fn main() &#123;</div><div class="line">    println!(&quot;Hello, world!&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以直接进入这个新的目录，运行代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">➜ hello-rust git:(master) ✗ cargo run</div><div class="line">   Compiling hello-rust v0.1.0 (/Users/chenkai/Lionel/Code/Rust/hello-rust)</div><div class="line">    Finished dev [unoptimized + debuginfo] target(s) in 0.85s</div><div class="line">     Running `target/debug/hello-rust`</div><div class="line">Hello, world!</div><div class="line">➜ hello-rust git:(master) ✗</div></pre></td></tr></table></figure></p>
+<p>执行后项目目录下多出了一个 <code>Cargo.lock</code> 文件和 <code>target</code> 文件夹。<br>其中 <code>Cargo.lock</code> 文件是用于版本锁定功能的，类似于 <code>package.lock</code> 和 <code>composer.lock</code> 文件； <code>target</code> 文件夹中大概是编译生成的相关内容。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="https://www.rust-lang.org/tools/install" target="_blank" rel="external">https://www.rust-lang.org/tools/install</a><br><a href="https://www.ibm.com/developerworks/cn/opensource/os-know-rust/index.html" target="_blank" rel="external">https://www.ibm.com/developerworks/cn/opensource/os-know-rust/index.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/03/14/初识Rust/" data-id="cjt8f75mp007gl78tzarwfus7" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Rust/">Rust</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Java使用反射测试私用方法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -103,7 +166,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/03/07/Java使用反射测试私用方法/" data-id="cjsyf5fl70026bv8t8wgxjpqa" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/03/07/Java使用反射测试私用方法/" data-id="cjt8f75en0026l78t7su33rfj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -149,7 +212,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/03/06/Java使用stream处理列表/" data-id="cjsyf5flb0029bv8tdfv974fn" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/03/06/Java使用stream处理列表/" data-id="cjt8f75du001yl78t1t1eov7r" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -213,7 +276,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/03/01/使用gem-install过程中遇到的SSL抛错/" data-id="cjsyf5fpi006ybv8t4xi2i40x" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/03/01/使用gem-install过程中遇到的SSL抛错/" data-id="cjt8f75lv006sl78tyo9xbaxj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Gem/">Gem</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ruby/">Ruby</a></li></ul>
@@ -283,7 +346,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/27/搭建virtualenv的简单流程/" data-id="cjsyf5fqk0085bv8ts38n34he" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/02/27/搭建virtualenv的简单流程/" data-id="cjt8f75na0085l78telf6cfq6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/pip/">pip</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/virtualenv/">virtualenv</a></li></ul>
@@ -330,7 +393,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/25/在Java中添加一个针对整数类型的枚举类/" data-id="cjsyf5fq5007jbv8thqrtomw2" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/02/25/在Java中添加一个针对整数类型的枚举类/" data-id="cjt8f75mr007jl78tpg6okvpf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -387,7 +450,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/18/初识Anime-js/" data-id="cjsyf5fq2007ebv8tsc4wr3lf" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/02/18/初识Anime-js/" data-id="cjt8f75mm007dl78tdja3kjh1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Anime-js/">Anime.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li></ul>
@@ -453,7 +516,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/14/使用hexdump输出文件的十六进制编码/" data-id="cjsyf5fpl0072bv8tzdzt3qfz" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/02/14/使用hexdump输出文件的十六进制编码/" data-id="cjt8f75m20073l78tf5mw5uxu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/hexdump/">hexdump</a></li></ul>
@@ -531,7 +594,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/13/使用SSH搭建端口转发的两个应用场景/" data-id="cjsyf5fpa006obv8tpcdb1811" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/02/13/使用SSH搭建端口转发的两个应用场景/" data-id="cjt8f75lf006bl78t17nu8lc4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li></ul>
@@ -580,71 +643,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/01/30/终端使用base64进行编码解码/" data-id="cjsyf5fqm0089bv8tr3h7wmo8" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/01/30/终端使用base64进行编码解码/" data-id="cjt8f75n4007zl78ti5ivfwax" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/base64/">base64</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-初识Drools" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2019/01/28/初识Drools/" class="article-date">
-  <time datetime="2019-01-28T09:41:14.000Z" itemprop="datePublished">2019-01-28</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2019/01/28/初识Drools/">初识Drools</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><a href="https://www.drools.org/" target="_blank" rel="external">Drools</a> 是由 JBoss 公司开发的一款基于 Java 语言的开源规则引擎。<br>规则引擎的用途及价值不再赘述，规则引擎能够使用预定义的语义模块编写业务决策，使业务决策与应用程序代码分离，方便灵活配置。Drools 是一套业务规则管理系统（Business Rules Managemant System，BRMS）解决方案。它不仅提供了核心的业务规则引擎（Business Rules Engine，BRE），还具有页面身份认证及规则管理应用等其他关联支持。</p>
-<h2 id="Drools-的组成"><a href="#Drools-的组成" class="headerlink" title="Drools 的组成"></a>Drools 的组成</h2><p><code>Drools</code> 可以视为一套规则管理系统的生态系统，其由以下几个部分组成：</p>
-<ul>
-<li>Drools Workbench，提供用于身份验证及规则管理的用户交互界面；</li>
-<li>Expert，核心业务规则引擎，是 Drools 的核心和前身，能够通过 Rete 算法实现模式匹配；</li>
-<li>jBPM，工作流的集成；</li>
-<li>Fusion，解决复杂事件处理（Complex Event Processing，CEP）的特性；</li>
-<li>Planner，自动化规划器；</li>
-</ul>
-<p>具体详情可以参考 Drools 的<a href="https://docs.jboss.org/drools/release/7.16.0.Final/drools-docs/html_single/index.html" target="_blank" rel="external">官方文档</a> 。</p>
-<h2 id="在-Maven-项目中使用-Drools"><a href="#在-Maven-项目中使用-Drools" class="headerlink" title="在 Maven 项目中使用 Drools"></a>在 Maven 项目中使用 Drools</h2><p>通过以下几个步骤能够完成一项简单的示例，演示如何在 Maven 项目中使用 Drools 。<br>首先在 <code>pom.xml</code> 文件中引入对应的依赖包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">&lt;dependencies&gt;</div><div class="line">    &lt;dependency&gt;</div><div class="line">        &lt;groupId&gt;org.drools&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;drools-core&lt;/artifactId&gt;</div><div class="line">        &lt;version&gt;6.3.0.Final&lt;/version&gt;</div><div class="line">    &lt;/dependency&gt;</div><div class="line">    &lt;dependency&gt;</div><div class="line">        &lt;groupId&gt;org.drools&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;drools-compiler&lt;/artifactId&gt;</div><div class="line">        &lt;version&gt;6.3.0.Final&lt;/version&gt;</div><div class="line">    &lt;/dependency&gt;</div><div class="line">    &lt;dependency&gt;</div><div class="line">        &lt;groupId&gt;org.drools&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;drools-decisiontables&lt;/artifactId&gt;</div><div class="line">        &lt;version&gt;6.3.0.Final&lt;/version&gt;</div><div class="line">    &lt;/dependency&gt;</div><div class="line">    &lt;dependency&gt;</div><div class="line">        &lt;groupId&gt;junit&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;junit&lt;/artifactId&gt;</div><div class="line">        &lt;version&gt;4.12&lt;/version&gt;</div><div class="line">    &lt;/dependency&gt;</div><div class="line">&lt;/dependencies&gt;</div></pre></td></tr></table></figure></p>
-<p>在 <code>resource</code> 文件夹下新建一个 xml 文件 <code>/META-INF/kmodule.xml</code> 内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</div><div class="line">&lt;kmodule xmlns=&quot;http://jboss.org/kie/6.0.0/kmodule&quot;/&gt;</div></pre></td></tr></table></figure></p>
-<p>创建一个实体类：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 实体类</div><div class="line"> */</div><div class="line">public class Person &#123;</div><div class="line">    private String name;</div><div class="line">    private int age;</div><div class="line">    private boolean valid;</div><div class="line">    public String getName() &#123;</div><div class="line">        return name;</div><div class="line">    &#125;</div><div class="line">    public void setName(String name) &#123;</div><div class="line">        this.name = name;</div><div class="line">    &#125;</div><div class="line">    public int getAge() &#123;</div><div class="line">        return age;</div><div class="line">    &#125;</div><div class="line">    public void setAge(int age) &#123;</div><div class="line">        this.age = age;</div><div class="line">    &#125;</div><div class="line">    public boolean getValid() &#123;</div><div class="line">        return valid;</div><div class="line">    &#125;</div><div class="line">    public void setValid(boolean valid) &#123;</div><div class="line">        this.valid = valid;</div><div class="line">    &#125;</div><div class="line">    public Person(String name, int age) &#123;</div><div class="line">        this.name = name;</div><div class="line">        this.age = age;</div><div class="line">    &#125;</div><div class="line">    public Person()&#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>在 <code>resource</code> 目录下创建一个规则文件 <code>.drl</code> 文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">package com.ckmessi.drools.demo;</div><div class="line">import path.to.entity.person;</div><div class="line">dialect &quot;mvel&quot;</div><div class="line">rule &quot;check valid age&quot;</div><div class="line">    when</div><div class="line">        $a : Person( age &gt;= 18)</div><div class="line">    then</div><div class="line">        $a.setValid(true);</div><div class="line">end</div></pre></td></tr></table></figure></p>
-<p>其中 <code>package</code> 需要声明，但与普通 java 类的包名含义不同，这里仅仅标识一个集合，方便管理；<br>使用 <code>import</code> 导入所需要的类，例如规则中使用了 <code>Person</code> 类，就需要导入对应类所在的文件；<br>接下来就是 drools 的规则语法，<code>when</code> 表示规则需要满足的条件，<code>then</code> 表示满足条件后执行的动作。</p>
-<p>之后可以使用一个简单的单元测试进行验证：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class PersonTest &#123;</div><div class="line">    @Test</div><div class="line">    public void testCheckAgeValid()&#123;</div><div class="line">        KieServices kieService = KieServices.Factory.get();</div><div class="line">        KieContainer kieContainer = kieService.getKieClasspathContainer();</div><div class="line">        StatelessKieSession kieSession = kieContainer.newStatelessKieSession();</div><div class="line">        Person person = new Person( &quot;Lionel&quot;, 28 );</div><div class="line">        Assert.assertFalse(person.getValid());</div><div class="line">        kieSession.execute(person);</div><div class="line">        Assert.assertTrue(person.getValid());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>在 <code>kieSession.execute</code> 语句执行规则后，由于传入的对象 <code>age</code> 属性满足规则条件，因此其对象的 <code>valid</code> 属性被设置为 <code>true</code> 。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>规则引擎能够实现业务决策与应用程序代码的分离，方便灵活配置和修改。<br>Drools 是一套业务规则管理系统解决方案，其提供了规则引擎核心及规则维护界面等周边系统支持。<br>在 Maven 项目中可以通过引入依赖包的方式使用 Drools ，通过定义 <code>.drl</code> 规则文件可以撰写规则条件及决策，实现规则的定义和执行。</p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://www.drools.org/" target="_blank" rel="external">https://www.drools.org/</a><br><a href="https://docs.jboss.org/drools/release/7.16.0.Final/drools-docs/html_single/index.html#_passive_mode" target="_blank" rel="external">https://docs.jboss.org/drools/release/7.16.0.Final/drools-docs/html_single/index.html#_passive_mode</a><br><a href="https://my.oschina.net/amoszhou/blog/654746" target="_blank" rel="external">https://my.oschina.net/amoszhou/blog/654746</a><br><a href="https://gemantic.iteye.com/blog/1212720" target="_blank" rel="external">https://gemantic.iteye.com/blog/1212720</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/01/28/初识Drools/" data-id="cjsyf5fq4007hbv8tl17276ly" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/RuleEngine/">RuleEngine</a></li></ul>
 
     </footer>
   </div>
@@ -657,7 +659,7 @@
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/blog-hexo/page/2/">2</a><a class="page-number" href="/blog-hexo/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/10/">10</a><a class="extend next" rel="next" href="/blog-hexo/page/2/">weiter &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/blog-hexo/page/2/">2</a><a class="page-number" href="/blog-hexo/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/10/">10</a><a class="extend next" rel="next" href="/blog-hexo/page/2/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -666,7 +668,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -678,7 +680,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Anime-js/">Anime.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Gem/">Gem</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mybatis/">Mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oh-My-Zsh/">Oh-My-Zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ruby/">Ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/RuleEngine/">RuleEngine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring-Boot/">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Visual-Studio/">Visual Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/base64/">base64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastjson/">fastjson</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/hexdump/">hexdump</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/interact-js/">interact.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/libfacedetection/">libfacedetection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/pip/">pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/vim/">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/virtualenv/">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Anime-js/">Anime.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Gem/">Gem</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mybatis/">Mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oh-My-Zsh/">Oh-My-Zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ruby/">Ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/RuleEngine/">RuleEngine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Rust/">Rust</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring-Boot/">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Visual-Studio/">Visual Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/base64/">base64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastjson/">fastjson</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/hexdump/">hexdump</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/interact-js/">interact.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/libfacedetection/">libfacedetection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/pip/">pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/vim/">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/virtualenv/">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
     </div>
   </div>
 
@@ -688,14 +690,14 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 12.22px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 12.22px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 11.11px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 11.11px;">Command Line</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.22px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15.56px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 13.33px;">Hexo</a> <a href="/blog-hexo/tags/Java/" style="font-size: 14.44px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.78px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.89px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 16.67px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 11.11px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 11.11px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.11px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 11.11px;">Oracle</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 11.11px;">PowerShell</a> <a href="/blog-hexo/tags/Python/" style="font-size: 10px;">Python</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12.22px;">SSH</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 12.22px;">Ubuntu</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 14.44px;">Vue</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12.22px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 12.22px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 12.22px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 12.22px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 11.11px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 11.11px;">Command Line</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.22px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15.56px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 13.33px;">Hexo</a> <a href="/blog-hexo/tags/Java/" style="font-size: 14.44px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.78px;">Javascript</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.89px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 16.67px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 11.11px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 11.11px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.11px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 11.11px;">Oracle</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 11.11px;">PowerShell</a> <a href="/blog-hexo/tags/Python/" style="font-size: 10px;">Python</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12.22px;">SSH</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 12.22px;">Ubuntu</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 14.44px;">Vue</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12.22px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 12.22px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
     </div>
   </div>
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -705,9 +707,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2019/03/14/初识Rust/">初识Rust</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2019/03/07/Java使用反射测试私用方法/">Java使用反射测试私用方法</a>
@@ -723,10 +729,6 @@
         
           <li>
             <a href="/blog-hexo/2019/02/27/搭建virtualenv的简单流程/">搭建virtualenv的简单流程</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2019/02/25/在Java中添加一个针对整数类型的枚举类/">在Java中添加一个针对整数类型的枚举类</a>
           </li>
         
       </ul>
