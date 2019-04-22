@@ -5,17 +5,19 @@
   
 
   
-  <title>Tag: PHPUnit | 不止是一位程序员</title>
+  <title>Spring中@RestController和@Controller的区别 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Lionel的技术笔记总结">
-<meta property="og:type" content="website">
-<meta property="og:title" content="不止是一位程序员">
-<meta property="og:url" content="http://ckmessi.github.io/tags/PHPUnit/index.html">
+  <meta name="description" content="@Controller 是用于将类标记为 Spring MVC Controller；@RestController 是一种便捷的注解，其实等价于 @Controller 加上 @ResonseBody。  A convenience annotation that is itself annotated with @Controller and @ResponseBody@RestControl">
+<meta name="keywords" content="Spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring中@RestController和@Controller的区别">
+<meta property="og:url" content="http://ckmessi.github.io/2019/04/22/Spring中-RestController和-Controller的区别/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
-<meta property="og:description" content="Lionel的技术笔记总结">
+<meta property="og:description" content="@Controller 是用于将类标记为 Spring MVC Controller；@RestController 是一种便捷的注解，其实等价于 @Controller 加上 @ResonseBody。  A convenience annotation that is itself annotated with @Controller and @ResponseBody@RestControl">
+<meta property="og:updated_time" content="2019-04-22T08:45:48.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="不止是一位程序员">
-<meta name="twitter:description" content="Lionel的技术笔记总结">
+<meta name="twitter:title" content="Spring中@RestController和@Controller的区别">
+<meta name="twitter:description" content="@Controller 是用于将类标记为 Spring MVC Controller；@RestController 是一种便捷的注解，其实等价于 @Controller 加上 @ResonseBody。  A convenience annotation that is itself annotated with @Controller and @ResponseBody@RestControl">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -66,40 +68,64 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog-hexo/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/11/09/PHPUnit测试protected方法/" class="archive-article-date">
-  <time datetime="2017-11-09T13:26:08.000Z" itemprop="datePublished">Nov 9</time>
+        <section id="main"><article id="post-Spring中-RestController和-Controller的区别" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/04/22/Spring中-RestController和-Controller的区别/" class="article-date">
+  <time datetime="2019-04-22T08:44:15.000Z" itemprop="datePublished">2019-04-22</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/11/09/PHPUnit测试protected方法/">PHPUnit测试protected方法</a>
+    <h1 class="article-title" itemprop="name">
+      Spring中@RestController和@Controller的区别
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><code>@Controller</code> 是用于将类标记为 Spring MVC Controller；<br><code>@RestController</code> 是一种便捷的注解，其实等价于 @Controller 加上 @ResonseBody。</p>
+<blockquote>
+<p>A convenience annotation that is itself annotated with @Controller and @ResponseBody<br>@RestController注解相当于@ResponseBody ＋ @Controller合在一起的作用。<br>参考 <a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RestController.html" target="_blank" rel="external">文档</a></p>
+</blockquote>
+<p>因此，以下两种代码是等价的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@Controller</div><div class="line">@ResponseBody</div><div class="line">public class SampleController &#123; &#125;</div><div class="line"></div><div class="line">@RestController</div><div class="line">public class SampleRestController &#123; &#125;</div></pre></td></tr></table></figure></p>
+<p>就使用的效果而言，使用 <code>@RestController</code> 使用的效果是将方法返回的对象直接以JSON格式返回；使用 <code>@Controller</code> 需要配置视图解析器 <code>InternalResourceViewResolver</code> 使用。</p>
+<p>参考链接：<br><a href="https://stackoverflow.com/questions/25242321/difference-between-spring-controller-and-restcontroller-annotation" target="_blank" rel="external">https://stackoverflow.com/questions/25242321/difference-between-spring-controller-and-restcontroller-annotation</a><br><a href="https://blog.csdn.net/gg12365gg/article/details/51345601" target="_blank" rel="external">https://blog.csdn.net/gg12365gg/article/details/51345601</a></p>
 
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/04/22/Spring中-RestController和-Controller的区别/" data-id="cjus48qme005kph8t2x6emmcp" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog-hexo/2019/04/15/Java中关于Integer对象比较的分析/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Java中关于Integer对象比较的分析</div>
+    </a>
+  
+</nav>
+
+  
+</article>
 
 </section>
         
