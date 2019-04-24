@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -67,6 +67,52 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-PHP使用php-ml完成距离计算" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/03/27/PHP使用php-ml完成距离计算/" class="article-date">
+  <time datetime="2018-03-27T12:45:04.000Z" itemprop="datePublished">2018-03-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/03/27/PHP使用php-ml完成距离计算/">PHP使用php-ml完成距离计算</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>众所周知，Python有许多机器学习的插件，如<code>scikit-learn</code>。而在PHP中，如果希望完成一些距离的计算，也有一些现成的库，介绍一个机器学习扩展库<a href="https://github.com/php-ai/php-ml" target="_blank" rel="external">php-ml</a>。</p>
+<p>通过composer安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer require php-ai/php-ml</div></pre></td></tr></table></figure></p>
+<p>然后就可以直接使用各种库函数了，如果要使用欧几里德距离：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">use Phpml\Math\Distance\Euclidean;</div><div class="line"></div><div class="line">$euclidean = new Euclidean();</div><div class="line">$euclidean_ids = $euclidean-&gt;distance($array_1, $array_2);</div></pre></td></tr></table></figure></p>
+<p>其它使用方法可以参考官方文档。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/03/27/PHP使用php-ml完成距离计算/" data-id="cjuv0q9vc004ygm8tp2fm91mk" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-PHP中警惕悬挂引用可能引起的bug" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -117,7 +163,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/26/PHP中警惕悬挂引用可能引起的bug/" data-id="cjus48qlz004sph8tgovcosmr" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/03/26/PHP中警惕悬挂引用可能引起的bug/" data-id="cjuv0q9va004vgm8t41s6uh5y" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -166,7 +212,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/24/Laravel个性化404页面/" data-id="cjus48qk9002oph8tt67qtqsf" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/03/24/Laravel个性化404页面/" data-id="cjuv0q9u6002rgm8tlftt8dxt" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -217,7 +263,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/" data-id="cjus48qlx004mph8tvlyumwmr" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/" data-id="cjuv0q9v8004sgm8to7krjoy9" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -272,7 +318,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" data-id="cjus48qls0049ph8td2n87xj6" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" data-id="cjuv0q9v00048gm8ton5qvhb2" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -368,7 +414,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/01/初识AIDL/" data-id="cjus48qnc007jph8t84u8blle" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/03/01/初识AIDL/" data-id="cjuv0q9wq007igm8tyw8iu6ng" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li></ul>
@@ -463,7 +509,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" data-id="cjus48qkx002tph8thnlczdjw" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" data-id="cjuv0q9tw002cgm8t6nbjs0ml" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -509,7 +555,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="cjus48qlh003uph8t0di1xb0r" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="cjuv0q9ut003ygm8tb2cym5i8" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li></ul>
@@ -584,7 +630,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/31/Laravel中对OPTIONS请求的批量处理/" data-id="cjus48ql20033ph8tbh9fiqu1" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/01/31/Laravel中对OPTIONS请求的批量处理/" data-id="cjuv0q9ub002zgm8tr1huwsed" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -725,60 +771,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/" data-id="cjus48qne007lph8tqwsle7vs" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/" data-id="cjuv0q9wp007fgm8tghd6p6dm" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Linux命令在文件中查找字符串" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2018/01/12/Linux命令在文件中查找字符串/" class="article-date">
-  <time datetime="2018-01-12T05:44:14.000Z" itemprop="datePublished">2018-01-12</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2018/01/12/Linux命令在文件中查找字符串/">Linux命令在文件中查找字符串</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="使用grep命令"><a href="#使用grep命令" class="headerlink" title="使用grep命令"></a>使用<code>grep</code>命令</h2><h4 id="指定文件"><a href="#指定文件" class="headerlink" title="指定文件"></a>指定文件</h4><p>在指定文件中查找相关字符串，可以使用<code>grep</code>命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">grep [target_str] [target_file]</div></pre></td></tr></table></figure></p>
-<p>比如查找后台访问日志中，调用接口<code>v1/user/profile/2</code>的所有记录：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">grep v1/user/profile/2 storage/logs/laravel-2016-11-25.log</div></pre></td></tr></table></figure></p>
-<h4 id="指定文件夹"><a href="#指定文件夹" class="headerlink" title="指定文件夹"></a>指定文件夹</h4><p>在指定文件夹中查找相关字符串，可以使用带参数的<code>grep</code>命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">grep -rnw [target_dir] -e [target_str]</div></pre></td></tr></table></figure></p>
-<p>其中<code>-r</code>或<code>-R</code>表示递归向下搜索，<code>-n</code>是显示匹配行号，<code>-w</code>表示匹配整个字符。</p>
-<h2 id="使用find命令结合grep命令"><a href="#使用find命令结合grep命令" class="headerlink" title="使用find命令结合grep命令"></a>使用<code>find</code>命令结合<code>grep</code>命令</h2><p>在一堆文件中查找相关字符串及其出现的文件，可以使用<code>find</code>命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">find [dir_path] -type f -exec grep -H [target_str] &#123;&#125; \;</div></pre></td></tr></table></figure></p>
-<p>其中<code>find</code>命令是Linux中常用的查找命令，后面接着的<code>-exec grep ... {} \;</code>表示执行<code>grep</code>命令，注意后面的<code>{} \;</code>是必须的。grep</p>
-<p>这类命令还是以实际使用场景为准，具体问题查询具体的参数语法即可。</p>
-<p>参考链接：<a href="https://stackoverflow.com/questions/16956810/how-do-i-find-all-files-containing-specific-text-on-linux" target="_blank" rel="external">https://stackoverflow.com/questions/16956810/how-do-i-find-all-files-containing-specific-text-on-linux</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="cjus48qla003hph8t27wqsjxi" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li></ul>
 
     </footer>
   </div>
@@ -791,7 +787,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/page/5/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/4/">4</a><a class="page-number" href="/blog-hexo/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/blog-hexo/page/7/">7</a><a class="page-number" href="/blog-hexo/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/11/">11</a><a class="extend next" rel="next" href="/blog-hexo/page/7/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/5/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/4/">4</a><a class="page-number" href="/blog-hexo/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/blog-hexo/page/7/">7</a><a class="page-number" href="/blog-hexo/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/11/">11</a><a class="extend next" rel="next" href="/blog-hexo/page/7/">weiter &raquo;</a>
   </nav>
 
 </section>
@@ -800,7 +796,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
+    <h3 class="widget-title">Kategorien</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -829,7 +825,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archiv</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -839,9 +835,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2019/04/24/Laravel使用union进行分页查询/">Laravel使用union进行分页查询</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2019/04/22/Spring中-RestController和-Controller的区别/">Spring中@RestController和@Controller的区别</a>
@@ -857,10 +857,6 @@
         
           <li>
             <a href="/blog-hexo/2019/03/14/初识Rust/">初识Rust</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2019/03/07/Java使用反射测试私用方法/">Java使用反射测试私用方法</a>
           </li>
         
       </ul>

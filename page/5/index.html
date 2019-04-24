@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -67,6 +67,54 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Element-UI的Tooltip对disabled的按钮无效的问题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/07/06/Element-UI的Tooltip对disabled的按钮无效的问题/" class="article-date">
+  <time datetime="2018-07-06T09:13:53.000Z" itemprop="datePublished">2018-07-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/07/06/Element-UI的Tooltip对disabled的按钮无效的问题/">Element UI的Tooltip对disabled的按钮无效的问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近遇到一个问题，将 <a href="http://element.eleme.io" target="_blank" rel="external">Element UI</a>  的组件 <a href="http://element.eleme.io/#/zh-CN/component/tooltip" target="_blank" rel="external">Tooltip 文字提示</a> 添加到按钮上时，当按钮状态为 <code>disabled</code> 的情况下，不会出现提示。</p>
+<p>在Element的Github上有一个 <a href="https://github.com/ElemeFE/element/issues/8557" target="_blank" rel="external">Issue</a> 提到了这个问题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Disabled form elements are not supported for Tooltip, more information can be found at MDN. You need to wrap the disabled form element with a container element for Tooltip to work.</div></pre></td></tr></table></figure></p>
+<p>即，<code>disabled</code> 状态下的表单元素是不支持 <code>Tooltip</code>的，需要在被禁用的元素外面加一个容器，然后将 <code>Tooltip</code> 挂靠在外面这个容器上。</p>
+<p>最简单的方式是在对应的 <code>button</code> 外面添加一个 <code>div</code> ，需要设置好对应的 <code>display</code> 样式。</p>
+<p>这样就可以实现禁用按钮的提示。</p>
+<p>参考链接：<a href="https://github.com/ElemeFE/element/issues/8557" target="_blank" rel="external">https://github.com/ElemeFE/element/issues/8557</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/07/06/Element-UI的Tooltip对disabled的按钮无效的问题/" data-id="cjuv0q9sz000xgm8ta2uop1vv" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Javascript模拟浏览器全屏行为并管理全屏状态" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -108,7 +156,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/07/03/Javascript模拟浏览器全屏行为并管理全屏状态/" data-id="cjus48qjo0026ph8tzgmzbjhx" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/07/03/Javascript模拟浏览器全屏行为并管理全屏状态/" data-id="cjuv0q9ts0026gm8txhygylwp" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -159,7 +207,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/07/02/Laravel数据库表连接查询中添加外表字段查询条件/" data-id="cjus48ql6003bph8tqn1z5zr7" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/07/02/Laravel数据库表连接查询中添加外表字段查询条件/" data-id="cjuv0q9uf0039gm8tegv3qrdz" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -208,7 +256,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/06/30/Laravel命令php-artisan-key-generate的作用/" data-id="cjus48ql30036ph8ta7o9l89n" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/06/30/Laravel命令php-artisan-key-generate的作用/" data-id="cjuv0q9ue0036gm8t1zwg8mlf" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -270,7 +318,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/" data-id="cjus48qmz006sph8tchecj2m9" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/" data-id="cjuv0q9x7008dgm8to45msn2j" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -348,7 +396,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/06/11/一个简单的中国大陆身份证号码验证工具/" data-id="cjus48qmx006pph8ttz00l04r" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/06/11/一个简单的中国大陆身份证号码验证工具/" data-id="cjuv0q9wc006lgm8t2agvryjb" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -396,7 +444,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/31/Laravel-migration添加column使用Sqlite可能遇到的错误/" data-id="cjus48qjz002mph8tqmbm3oml" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/05/31/Laravel-migration添加column使用Sqlite可能遇到的错误/" data-id="cjuv0q9ty002egm8tuqsntc9g" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -443,7 +491,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/" data-id="cjus48qj00018ph8tkgf28o5p" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/" data-id="cjuv0q9t10011gm8tki6g7oty" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -496,7 +544,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/" data-id="cjus48qn1006wph8tfk2gku0p" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/" data-id="cjuv0q9we006rgm8tj5gtwa7e" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -555,56 +603,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/04/24/Crontab中可能遇到的php版本问题/" data-id="cjus48qig000oph8tdb80r9i7" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/04/24/Crontab中可能遇到的php版本问题/" data-id="cjuv0q9sr000mgm8t8l5135dc" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-PHP使用php-ml完成距离计算" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2018/03/27/PHP使用php-ml完成距离计算/" class="article-date">
-  <time datetime="2018-03-27T12:45:04.000Z" itemprop="datePublished">2018-03-27</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2018/03/27/PHP使用php-ml完成距离计算/">PHP使用php-ml完成距离计算</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>众所周知，Python有许多机器学习的插件，如<code>scikit-learn</code>。而在PHP中，如果希望完成一些距离的计算，也有一些现成的库，介绍一个机器学习扩展库<a href="https://github.com/php-ai/php-ml" target="_blank" rel="external">php-ml</a>。</p>
-<p>通过composer安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer require php-ai/php-ml</div></pre></td></tr></table></figure></p>
-<p>然后就可以直接使用各种库函数了，如果要使用欧几里德距离：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">use Phpml\Math\Distance\Euclidean;</div><div class="line"></div><div class="line">$euclidean = new Euclidean();</div><div class="line">$euclidean_ids = $euclidean-&gt;distance($array_1, $array_2);</div></pre></td></tr></table></figure></p>
-<p>其它使用方法可以参考官方文档。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/27/PHP使用php-ml完成距离计算/" data-id="cjus48qm2004wph8tclfrxpib" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
 
     </footer>
   </div>
@@ -617,7 +619,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/page/4/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="page-number" href="/blog-hexo/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/11/">11</a><a class="extend next" rel="next" href="/blog-hexo/page/6/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/4/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="page-number" href="/blog-hexo/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/11/">11</a><a class="extend next" rel="next" href="/blog-hexo/page/6/">weiter &raquo;</a>
   </nav>
 
 </section>
@@ -626,7 +628,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
+    <h3 class="widget-title">Kategorien</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -655,7 +657,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archiv</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -665,9 +667,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2019/04/24/Laravel使用union进行分页查询/">Laravel使用union进行分页查询</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2019/04/22/Spring中-RestController和-Controller的区别/">Spring中@RestController和@Controller的区别</a>
@@ -683,10 +689,6 @@
         
           <li>
             <a href="/blog-hexo/2019/03/14/初识Rust/">初识Rust</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2019/03/07/Java使用反射测试私用方法/">Java使用反射测试私用方法</a>
           </li>
         
       </ul>

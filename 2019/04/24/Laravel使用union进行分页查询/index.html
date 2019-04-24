@@ -5,17 +5,19 @@
   
 
   
-  <title>Tag: Vue | 不止是一位程序员</title>
+  <title>Laravel使用union进行分页查询 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Lionel的技术笔记总结">
-<meta property="og:type" content="website">
-<meta property="og:title" content="不止是一位程序员">
-<meta property="og:url" content="http://ckmessi.github.io/tags/Vue/index.html">
+  <meta name="description" content="在 Laravel 的数据库操作中，可以使用进行 union 进行数据库表的联合查询。 参考 Laravel官方文档 ，可以使用 union 方法将两个查询联合起来，具体操作是在一个初始化的查询的基础上用 union 方法将它和第二个查询连接起来。  The query builder also provides a quick way to “union” two queries togethe">
+<meta name="keywords" content="PHP,Laravel">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Laravel使用union进行分页查询">
+<meta property="og:url" content="http://ckmessi.github.io/2019/04/24/Laravel使用union进行分页查询/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
-<meta property="og:description" content="Lionel的技术笔记总结">
+<meta property="og:description" content="在 Laravel 的数据库操作中，可以使用进行 union 进行数据库表的联合查询。 参考 Laravel官方文档 ，可以使用 union 方法将两个查询联合起来，具体操作是在一个初始化的查询的基础上用 union 方法将它和第二个查询连接起来。  The query builder also provides a quick way to “union” two queries togethe">
+<meta property="og:updated_time" content="2019-04-24T09:33:15.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="不止是一位程序员">
-<meta name="twitter:description" content="Lionel的技术笔记总结">
+<meta name="twitter:title" content="Laravel使用union进行分页查询">
+<meta name="twitter:description" content="在 Laravel 的数据库操作中，可以使用进行 union 进行数据库表的联合查询。 参考 Laravel官方文档 ，可以使用 union 方法将两个查询联合起来，具体操作是在一个初始化的查询的基础上用 union 方法将它和第二个查询连接起来。  The query builder also provides a quick way to “union” two queries togethe">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -66,164 +68,74 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog-hexo/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2019/04/11/Vue中使用ElementUI表格数据更新后没有刷新表格内容的问题/" class="archive-article-date">
-  <time datetime="2019-04-11T09:48:26.000Z" itemprop="datePublished">Apr 11</time>
+        <section id="main"><article id="post-Laravel使用union进行分页查询" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/04/24/Laravel使用union进行分页查询/" class="article-date">
+  <time datetime="2019-04-24T09:27:34.000Z" itemprop="datePublished">2019-04-24</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2019/04/11/Vue中使用ElementUI表格数据更新后没有刷新表格内容的问题/">Vue中使用ElementUI表格数据更新后没有刷新表格内容的问题</a>
+    <h1 class="article-title" itemprop="name">
+      Laravel使用union进行分页查询
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
+    <div class="article-entry" itemprop="articleBody">
       
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog-hexo/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/08/03/Element-UI表格标题使用render-header函数/" class="archive-article-date">
-  <time datetime="2018-08-03T10:12:00.000Z" itemprop="datePublished">Aug 3</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/08/03/Element-UI表格标题使用render-header函数/">Element-UI表格标题使用render-header函数</a>
-    </h1>
-  
+        <p>在 <code>Laravel</code> 的数据库操作中，可以使用进行 <code>union</code> 进行数据库表的联合查询。</p>
+<p>参考 <a href="https://laravel.com/docs/5.5/queries" target="_blank" rel="external">Laravel官方文档</a> ，可以使用 <code>union</code> 方法将两个查询联合起来，具体操作是在一个初始化的查询的基础上用 <code>union</code> 方法将它和第二个查询连接起来。</p>
+<blockquote>
+<p>The query builder also provides a quick way to “union” two queries together. For example, you may create an initial query and use the union method to union it with a second query:</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$first = DB::table(&quot;users&quot;)</div><div class="line">            -&gt;whereNull(&quot;first_name&quot;);</div><div class="line">$users = DB::table(&quot;users&quot;)</div><div class="line">            -&gt;whereNull(&quot;last_name&quot;)</div><div class="line">            -&gt;union($first)</div><div class="line">            -&gt;get();</div></pre></td></tr></table></figure>
+<p>比如在实际中可以这样使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$query_1 = DB::table(&quot;users&quot;)-&gt;where([&quot;admin&quot; =&gt; 0]);</div><div class="line">$query_2 = DB::table(&quot;users&quot;)-&gt;where([&quot;admin&quot; =&gt; 1]);</div><div class="line">$query_union = $query_1-&gt;union($query_2);</div><div class="line">// in fact, $query_1 is already equals to $query_union</div><div class="line">$result = $query_union-&gt;get();</div></pre></td></tr></table></figure>
+<p>但涉及到使用分页相关的操作时，上述方法就不起效果了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$query_1 = DB::table(&quot;users&quot;)-&gt;where([&quot;admin&quot; =&gt; 0]);</div><div class="line">$query_2 = DB::table(&quot;users&quot;)-&gt;where([&quot;admin&quot; =&gt; 1]);</div><div class="line">$query_union = $query_1-&gt;union($query_2);</div><div class="line">$result = $query_union-&gt;paginate(3);</div></pre></td></tr></table></figure></p>
+<p>如果使用上述代码，会报错，大概原因是在paginate的过程中会有相关的 <code>select count(*)</code> 语句。直接使用 <code>-&gt;paginate()</code> 将会导致框架将 <code>union</code> 作用在 <code>select count(*)</code> 和 <code>select *</code> 上：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SQLSTATE[HY000]: General error: 1 SELECTs to the left and right of UNION do not have the same number of result columns (SQL: select * from (select count(*) as aggregate from &quot;users&quot; where (&quot;admin&quot; = 0) and &quot;users&quot;.&quot;deleted_at&quot; is null) union select * from (select * from &quot;users&quot; where (&quot;admin&quot; = 1) and &quot;users&quot;.&quot;deleted_at&quot; is null))</div></pre></td></tr></table></figure></p>
+<p>正确的方式应该参考如下方式使用 <code>union</code> 和 <code>painate</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$query_1 = DB::table(&quot;table_name&quot;)-&gt;where(&quot;column1&quot;, &quot;xxx&quot;)-&gt;select(&quot;column1&quot;, &quot;column2&quot;);</div><div class="line">$query_2 = DB::table(&quot;table_name&quot;)-&gt;where(&quot;column2&quot;, &quot;xxx&quot;)-&gt;select(&quot;column1&quot;, &quot;column2&quot;);</div><div class="line">$query_union = $query_1-&gt;union($query_2);</div><div class="line">$query_sql = $query_union-&gt;toSql(); </div><div class="line">$result = DB::table(DB::raw(&quot;($query_sql) as a&quot;))-&gt;mergeBindings($query_union)-&gt;paginate(10);</div></pre></td></tr></table></figure></p>
+<p>比如将上述样例代码修改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$query_1 = DB::table(&quot;users&quot;)-&gt;where([&quot;admin&quot; =&gt; 0]);</div><div class="line">$query_2 = DB::table(&quot;users&quot;)-&gt;where([&quot;admin&quot; =&gt; 1]);</div><div class="line">$query_union = $query_1-&gt;union($query_2);</div><div class="line">$query_sql = $query_union-&gt;toSql(); </div><div class="line">$result = DB::table(DB::raw(&quot;($query_sql)&quot;))-&gt;mergeBindings($query_union)-&gt;paginate(3);</div></pre></td></tr></table></figure></p>
+<p>注意：</p>
+<p>不能使用 <code>Eloquent Model</code> 进行查询，必须使用 <code>DB::table(&quot;table_name&quot;)</code> ，前者会得到一个 <code>Eloquent\Builder</code>，后者会得到 <code>Query\Builder</code> ，可能出现以下错误 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Type error: Argument 1 passed to Illuminate\Database\Query\Builder::mergeBindings() must be an instance of Illuminate\Database\Query\Builder, instance of Illuminate\Database\Eloquent\Builder given.</div></pre></td></tr></table></figure>
+<p>此外，两个查询结构的列数量一定要一致，才能执行 <code>union</code> 操作。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://laravel.com/docs/5.5/queries" target="_blank" rel="external">https://laravel.com/docs/5.5/queries</a><br><a href="http://www.bcty365.com/content-153-6177-1.html" target="_blank" rel="external">http://www.bcty365.com/content-153-6177-1.html</a></p>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/07/14/Vue在自定义组件上使用v-model的方法/" class="archive-article-date">
-  <time datetime="2018-07-14T08:25:54.000Z" itemprop="datePublished">Jul 14</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/07/14/Vue在自定义组件上使用v-model的方法/">Vue在自定义组件上使用v-model的方法</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/07/06/Element-UI的Tooltip对disabled的按钮无效的问题/" class="archive-article-date">
-  <time datetime="2018-07-06T09:13:53.000Z" itemprop="datePublished">Jul 6</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/04/24/Laravel使用union进行分页查询/" data-id="cjuv0q9u8002ugm8t1m0pies3" class="article-share-link">Teilen</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/07/06/Element-UI的Tooltip对disabled的按钮无效的问题/">Element UI的Tooltip对disabled的按钮无效的问题</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/07/03/Javascript模拟浏览器全屏行为并管理全屏状态/" class="archive-article-date">
-  <time datetime="2018-07-03T06:43:20.000Z" itemprop="datePublished">Jul 3</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/07/03/Javascript模拟浏览器全屏行为并管理全屏状态/">Javascript模拟浏览器全屏行为并管理全屏状态</a>
-    </h1>
-  
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
 
-    </header>
+    </footer>
   </div>
-</article>
   
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/" class="archive-article-date">
-  <time datetime="2018-06-27T12:20:00.000Z" itemprop="datePublished">Jun 27</time>
-</a>
-      
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/">使用Element-UI组件Pagination遇到的一个坑</a>
-    </h1>
   
+    <a href="/blog-hexo/2019/04/22/Spring中-RestController和-Controller的区别/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">Spring中@RestController和@Controller的区别</div>
+    </a>
+  
+</nav>
 
-    </header>
-  </div>
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" class="archive-article-date">
-  <time datetime="2018-02-06T11:52:44.000Z" itemprop="datePublished">Feb 6</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/">Laravel+Vue前后端分离跨域CORS的一点知识</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
 
 </section>
         

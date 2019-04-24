@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -67,6 +67,63 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-初识Anime-js" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/02/18/初识Anime-js/" class="article-date">
+  <time datetime="2019-02-18T08:16:36.000Z" itemprop="datePublished">2019-02-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/02/18/初识Anime-js/">初识Anime.js</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><a href="https://animejs.com/" target="_blank" rel="external">Anime.js</a> 是一个轻量级的 JavaScript 动画库，提供了一些简单但有效的 API 接口，方便对 css 属性、SVG对象、DOM 属性和 JavaScript 对象进行操作。</p>
+<blockquote>
+<p>Anime.js (/ˈæn.ə.meɪ/) is a lightweight JavaScript animation library with a simple, yet powerful API.<br>It works with CSS properties, SVG, DOM attributes and JavaScript Objects.</p>
+</blockquote>
+<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><p>在使用 <code>Anime.js</code> 库前，可以使用 <code>npm</code> 安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install animejs --save</div></pre></td></tr></table></figure></p>
+<p>然后使用 ES6 Module 或 CommonJS 的方式引入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">import anime from &apos;lib/anime.es.js&apos;;</div><div class="line">const anime = require(&apos;lib/anime.js&apos;);</div></pre></td></tr></table></figure></p>
+<p>或者直接使用 CDN 链接：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.js&quot;&gt;&lt;/script&gt;</div></pre></td></tr></table></figure></p>
+<p>然后使用 JavaScript 代码进行操作即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">anime(&#123;</div><div class="line">  targets: &apos;.box&apos;,</div><div class="line">  translateX: 250,</div><div class="line">  backgroundColor: [&apos;#F0F&apos;, &apos;#0FF&apos;],</div><div class="line">  duration: 2000</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>其中 <code>targets</code> 表示操作的目标对象，这里表示选取 <code>class</code> 为 <code>box</code> 的元素；<code>translateX</code> 是平移操作，是动画的目标操作行为；<code>backgroundColor</code> 指定了目标的动画过程中的背影颜色值，这里指定了由 <code>#F0F</code> 变化为 <code>#0FF</code>；而 <code>duration</code> 指定了动画的持续时间。<br>这些关键字都是 <code>Anime.js</code> 库中提供的 API 指定选项，阅读<a href="https://animejs.com/documentation/" target="_blank" rel="external">官方文档</a>可以尝试更多的操作选项。</p>
+<h2 id="简单样例"><a href="#简单样例" class="headerlink" title="简单样例"></a>简单样例</h2><p>在 HTML 代码中，添加一个 <code>class</code> 为 <code>box</code> 的元素：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&quot;box&quot;&gt;</div><div class="line">    box</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure></p>
+<p>在 CSS 代码中，为其添加一份简单的居中样式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">.box&#123;</div><div class="line">    display: flex;</div><div class="line">    justify-content: center;</div><div class="line">    align-items: center;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在 JavaScript 代码中，指定其动画效果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">anime(&#123;</div><div class="line">  targets: &apos;.box&apos;,</div><div class="line">  translateX: 250,</div><div class="line">  backgroundColor: [&apos;#F0F&apos;, &apos;#0FF&apos;],</div><div class="line">  duration: 2000</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<h2 id="完成Demo代码"><a href="#完成Demo代码" class="headerlink" title="完成Demo代码"></a>完成Demo代码</h2><p>使用以下样例代码，可以实现一个最简单的 <code>Anime.js</code> 库的使用演示。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;title&gt;learn-animejs&lt;/title&gt;</div><div class="line">    &lt;style type=&quot;text/css&quot;&gt;</div><div class="line">        .box &#123;</div><div class="line">            width: 50px;</div><div class="line">            height: 50px;</div><div class="line">            display: flex;</div><div class="line">            justify-content:center;</div><div class="line">            align-items: center;</div><div class="line">        &#125;</div><div class="line">    &lt;/style&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">    &lt;div class=&quot;box&quot;&gt;</div><div class="line">        box</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.js&quot;&gt;&lt;/script&gt;</div><div class="line">&lt;script type=&quot;text/javascript&quot;&gt;</div><div class="line">    anime(&#123;</div><div class="line">      targets: &apos;.box&apos;,</div><div class="line">      translateX: 250,</div><div class="line">      backgroundColor: [&apos;#F0F&apos;, &apos;#0FF&apos;],</div><div class="line">      duration: 2000</div><div class="line">    &#125;);</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
+<p>完成之后的效果如图：<br><img src="/blog-hexo/2019/02/18/初识Anime-js/animejs-demo.gif" alt="示例图" title="示例图"></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://github.com/juliangarnier/anime/" target="_blank" rel="external">https://github.com/juliangarnier/anime/</a><br><a href="https://cdnjs.com/libraries/animejs" target="_blank" rel="external">https://cdnjs.com/libraries/animejs</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/02/18/初识Anime-js/" data-id="cjuv0q9wr007mgm8tgrimj9ck" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Anime-js/">Anime.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-使用hexdump输出文件的十六进制编码" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -122,7 +179,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/14/使用hexdump输出文件的十六进制编码/" data-id="cjus48qna007dph8tby196xmo" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/02/14/使用hexdump输出文件的十六进制编码/" data-id="cjuv0q9wm0079gm8tly9fdk0n" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/hexdump/">hexdump</a></li></ul>
@@ -200,7 +257,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/13/使用SSH搭建端口转发的两个应用场景/" data-id="cjus48qn3006zph8t7hyc63qn" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/02/13/使用SSH搭建端口转发的两个应用场景/" data-id="cjuv0q9wg006vgm8tty5dims7" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li></ul>
@@ -249,7 +306,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/01/30/终端使用base64进行编码解码/" data-id="cjus48qnx008oph8t404au405" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/01/30/终端使用base64进行编码解码/" data-id="cjuv0q9xd008qgm8t8ocxza27" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/base64/">base64</a></li></ul>
@@ -310,7 +367,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/01/28/初识Drools/" data-id="cjus48qnk0080ph8tz5ho25nf" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/01/28/初识Drools/" data-id="cjuv0q9wt007pgm8tnw1mgtay" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/RuleEngine/">RuleEngine</a></li></ul>
@@ -368,7 +425,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/01/25/Git修改远程仓库链接/" data-id="cjus48qiy0015ph8ti9y9tfnq" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/01/25/Git修改远程仓库链接/" data-id="cjuv0q9t30013gm8tzmteaoij" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -428,7 +485,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/01/24/拖拽组件interact-js的使用/" data-id="cjus48qns008eph8toaefel3u" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/01/24/拖拽组件interact-js的使用/" data-id="cjuv0q9x50089gm8tuciigusb" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/interact-js/">interact.js</a></li></ul>
@@ -480,7 +537,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/01/22/使用fastjson将对象转换为HashMap遇到的问题/" data-id="cjus48qn70076ph8tg5mq0u9s" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/01/22/使用fastjson将对象转换为HashMap遇到的问题/" data-id="cjuv0q9wj0075gm8t9a8egltq" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/fastjson/">fastjson</a></li></ul>
@@ -528,7 +585,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/01/16/Mybatis-Oracle-批量添加或更新/" data-id="cjus48qll0040ph8tysky3hqo" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/01/16/Mybatis-Oracle-批量添加或更新/" data-id="cjuv0q9ux0041gm8tqavnfjpa" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mybatis/">Mybatis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li></ul>
@@ -589,61 +646,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/12/29/Spring-Boot-使用事务约束/" data-id="cjus48qmb005dph8thj1e1g6v" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2018/12/29/Spring-Boot-使用事务约束/" data-id="cjuv0q9vj005jgm8ti2oeqe0u" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Mybatis使用多个参数进行查询的方式" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2018/12/27/Mybatis使用多个参数进行查询的方式/" class="article-date">
-  <time datetime="2018-12-27T09:26:46.000Z" itemprop="datePublished">2018-12-27</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2018/12/27/Mybatis使用多个参数进行查询的方式/">Mybatis使用多个参数进行查询的方式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在使用 <code>Mybatis</code> 进行简单的查询操作时，发现一个参数与多个参数的差别并不仅仅在于参数数量。</p>
-<h2 id="单参数查询"><a href="#单参数查询" class="headerlink" title="单参数查询"></a>单参数查询</h2><p>举例而言，在 <code>xxxMapper.xml</code> 文件中所写的单参数查询可以是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;sql id=&quot;tableName&quot;&gt;</div><div class="line">    TABLE_NAME</div><div class="line">&lt;/sql&gt;</div><div class="line">&lt;sql id=&quot;baseColumnList&quot;&gt;</div><div class="line">    ID, CODE, NAME, ..., VERSION</div><div class="line">&lt;/sql&gt;</div><div class="line">&lt;select id=&quot;getItemByCode&quot; resultMap=&quot;BaseResultMap&quot;&gt;</div><div class="line">    select</div><div class="line">        &lt;include refid=&quot;baseColumnList&quot; /&gt;</div><div class="line">    from</div><div class="line">        &lt;include refid=&quot;tableName&quot; /&gt;</div><div class="line">    where CODE = #&#123;code&#125;</div><div class="line">&lt;/select&gt;</div></pre></td></tr></table></figure></p>
-<p>在接口文件 <code>xxxMapper.java</code> 中的接口为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">XXX getItemByCode(String code);</div></pre></td></tr></table></figure></p>
-<h3 id="多参数查询"><a href="#多参数查询" class="headerlink" title="多参数查询"></a>多参数查询</h3><p>在需要使用多个参数进行查询的时候，如果单纯添加两个文件中参数数量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;select id=&quot;getItemByCodeAndId&quot; resultMap=&quot;BaseResultMap&quot;&gt;</div><div class="line">    select</div><div class="line">        &lt;include refid=&quot;baseColumnList&quot; /&gt;</div><div class="line">    from</div><div class="line">        &lt;include refid=&quot;tableName&quot; /&gt;</div><div class="line">    where CODE = #&#123;code&#125; and ID = #&#123;id&#125;</div><div class="line">&lt;/select&gt;</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">XXX getItemByCodeAndId(String code, String id);</div></pre></td></tr></table></figure>
-<p>则会抛错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Parameter &apos;id&apos; not found. Available parameters are [arg2, arg1, arg0, param3, param1, param2]或者Parameter &apos;0&apos; not found. Available parameters are [arg2, arg1, arg0, param3, param1, param2]</div></pre></td></tr></table></figure></p>
-<p>问题在于在 <code>MyBatis</code> 中不会识别这样的参数。</p>
-<p>一种方案是修改 <code>Mapper.xml</code> 中的代码，将 <code>#{code}</code> 和 <code>#{id}</code> 修改成#{arg0}，#{arg1}这样的形式。<br>还有一种方式更加优雅，修改 <code>xxxMapper.java</code> 文件内容，添加注解：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">XXX getItemByCodeAndId(@Param(&quot;code&quot;) String code, @Param(&quot;id&quot;) String id);</div></pre></td></tr></table></figure></p>
-<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a href="https://www.cnblogs.com/EasonJim/p/7056256.html" target="_blank" rel="external">https://www.cnblogs.com/EasonJim/p/7056256.html</a><br><a href="https://www.oschina.net/question/1160609_133366" target="_blank" rel="external">https://www.oschina.net/question/1160609_133366</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/12/27/Mybatis使用多个参数进行查询的方式/" data-id="cjus48qlo0043ph8tz3jr8pyg" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mybatis/">Mybatis</a></li></ul>
 
     </footer>
   </div>
@@ -656,7 +662,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/11/">11</a><a class="extend next" rel="next" href="/blog-hexo/page/3/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/11/">11</a><a class="extend next" rel="next" href="/blog-hexo/page/3/">weiter &raquo;</a>
   </nav>
 
 </section>
@@ -665,7 +671,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
+    <h3 class="widget-title">Kategorien</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -694,7 +700,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archiv</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -704,9 +710,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2019/04/24/Laravel使用union进行分页查询/">Laravel使用union进行分页查询</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2019/04/22/Spring中-RestController和-Controller的区别/">Spring中@RestController和@Controller的区别</a>
@@ -722,10 +732,6 @@
         
           <li>
             <a href="/blog-hexo/2019/03/14/初识Rust/">初识Rust</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2019/03/07/Java使用反射测试私用方法/">Java使用反射测试私用方法</a>
           </li>
         
       </ul>
