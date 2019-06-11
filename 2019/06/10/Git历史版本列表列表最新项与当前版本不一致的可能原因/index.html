@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Git历史版本列表列表最新项与当前版本不一致的可能原因 | 不止是一位程序员</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="背景在使用 Git 的过程中，通常来讲分支中一个文件的历史版本中最新的那个版本，将是当前分支的文件当前内容。然而在实际工作中，出现了意外现象：从 GitLab 页面上看，当前 dev 分支中文件A的历史版本按照时间倒序有 v5-v4-v3-v2-v1，然而文件A显示的当前版本却是 v3，实际内容也是版本 v3 提交后的内容。  （GitHub页面上的历史版本只会显示到 v3）这种现象非常令人困惑，">
+<meta name="keywords" content="Git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git历史版本列表列表最新项与当前版本不一致的可能原因">
+<meta property="og:url" content="http://ckmessi.github.io/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/index.html">
+<meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="背景在使用 Git 的过程中，通常来讲分支中一个文件的历史版本中最新的那个版本，将是当前分支的文件当前内容。然而在实际工作中，出现了意外现象：从 GitLab 页面上看，当前 dev 分支中文件A的历史版本按照时间倒序有 v5-v4-v3-v2-v1，然而文件A显示的当前版本却是 v3，实际内容也是版本 v3 提交后的内容。  （GitHub页面上的历史版本只会显示到 v3）这种现象非常令人困惑，">
+<meta property="og:image" content="http://ckmessi.github.io/blog-hexo/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/conflict.png">
+<meta property="og:image" content="http://ckmessi.github.io/blog-hexo/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/mr.png">
+<meta property="og:updated_time" content="2019-06-11T03:28:49.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git历史版本列表列表最新项与当前版本不一致的可能原因">
+<meta name="twitter:description" content="背景在使用 Git 的过程中，通常来讲分支中一个文件的历史版本中最新的那个版本，将是当前分支的文件当前内容。然而在实际工作中，出现了意外现象：从 GitLab 页面上看，当前 dev 分支中文件A的历史版本按照时间倒序有 v5-v4-v3-v2-v1，然而文件A显示的当前版本却是 v3，实际内容也是版本 v3 提交后的内容。  （GitHub页面上的历史版本只会显示到 v3）这种现象非常令人困惑，">
+<meta name="twitter:image" content="http://ckmessi.github.io/blog-hexo/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/conflict.png">
+  
+    <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/blog-hexo/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog-hexo/" id="logo">不止是一位程序员</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog-hexo/" id="subtitle">Lionel的技术空间</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog-hexo/">Home</a>
+        
+          <a class="main-nav-link" href="/blog-hexo/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Git历史版本列表列表最新项与当前版本不一致的可能原因" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/" class="article-date">
+  <time datetime="2019-06-10T09:40:46.000Z" itemprop="datePublished">2019-06-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Git历史版本列表列表最新项与当前版本不一致的可能原因
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在使用 <code>Git</code> 的过程中，通常来讲分支中一个文件的历史版本中最新的那个版本，将是当前分支的文件当前内容。<br>然而在实际工作中，出现了意外现象：从 GitLab 页面上看，当前 <code>dev</code> 分支中文件A的历史版本按照时间倒序有 <code>v5</code>-<code>v4</code>-<code>v3</code>-<code>v2</code>-<code>v1</code>，然而文件A显示的当前版本却是 <code>v3</code>，实际内容也是版本 <code>v3</code> 提交后的内容。  （GitHub页面上的历史版本只会显示到 <code>v3</code>）<br>这种现象非常令人困惑，经过和好朋友的一番推理和测试，推测出可能存在的一种造成该现象的原因。</p>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><h4 id="步骤0：主分支操作"><a href="#步骤0：主分支操作" class="headerlink" title="步骤0：主分支操作"></a>步骤0：主分支操作</h4><p>创建一个空项目并初始化Git仓库：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir git-file-version-not-latest-demo</div><div class="line">cd git-file-version-not-latest-demo</div><div class="line">git init</div></pre></td></tr></table></figure></p>
+<p>创建一些基础文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">echo &quot;content in file a.txt&quot; &gt; a.txt</div><div class="line">echo &quot;content in file b.txt&quot; &gt; b.txt</div><div class="line">echo &quot;content in file common.txt&quot; &gt; common.txt</div></pre></td></tr></table></figure></p>
+<p>执行第一次提交：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git add .</div><div class="line">git commit -m &quot;initial commit&quot;</div></pre></td></tr></table></figure></p>
+<h4 id="步骤1：分支a操作"><a href="#步骤1：分支a操作" class="headerlink" title="步骤1：分支a操作"></a>步骤1：分支a操作</h4><p>从主分支切换到分支a，修改一些文件，本地提交一次 commit ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">git checkout master</div><div class="line">git checkout -b branch-a</div><div class="line">echo &quot;content added by branch-a&quot; &gt;&gt; a.txt</div><div class="line">echo &quot;common content added by branch-a&quot; &gt;&gt; common.txt</div><div class="line">git add .</div><div class="line">git commit -m &quot;modification by branch-a&quot;</div></pre></td></tr></table></figure></p>
+<h4 id="步骤2：分支b操作"><a href="#步骤2：分支b操作" class="headerlink" title="步骤2：分支b操作"></a>步骤2：分支b操作</h4><p>从主分支切换到分支b，修改一些文件，本地提交一次 commit ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">git checkout master</div><div class="line">git checkout -b branch-b</div><div class="line">echo &quot;content added by branch-b&quot; &gt;&gt; b.txt</div><div class="line">echo &quot;common content added by branch-b&quot; &gt;&gt; common.txt</div><div class="line">git add .</div><div class="line">git commit -m &quot;modification by branch-b&quot;</div></pre></td></tr></table></figure></p>
+<h4 id="步骤3：分支b（提交Pull-Request）合并到主分支"><a href="#步骤3：分支b（提交Pull-Request）合并到主分支" class="headerlink" title="步骤3：分支b（提交Pull Request）合并到主分支"></a>步骤3：分支b（提交Pull Request）合并到主分支</h4><p>如果直接合并，可以使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git checkout master</div><div class="line">git merge branch-b</div></pre></td></tr></table></figure></p>
+<p>如果是项目流程，可以使用标准的提交PR-&gt;合并PR的流程，将分支b中的内容合并到主分支。</p>
+<h4 id="步骤4：分支a合并主分支的改动"><a href="#步骤4：分支a合并主分支的改动" class="headerlink" title="步骤4：分支a合并主分支的改动"></a>步骤4：分支a合并主分支的改动</h4><p>由于主分支添加了分支b的内容，分支a无法直接将当前内容合并到主分支上。</p>
+<img src="/blog-hexo/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/conflict.png" alt="Conflict" title="Conflict">
+<p>此时需要同步主分支的修改：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git checkout branch-a</div><div class="line">git merge master</div></pre></td></tr></table></figure></p>
+<p>此时由于分支b的提交也修改了文件 <code>common.txt</code>，因此一定会产生冲突：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">➜ git-file-version-not-latest-demo git:(branch-a) git merge master</div><div class="line">自动合并 common.txt</div><div class="line">冲突（内容）：合并冲突于 common.txt</div><div class="line">自动合并失败，修正冲突然后提交修正的结果。</div><div class="line">➜ git-file-version-not-latest-demo git:(branch-a) ✗ git status</div><div class="line">位于分支 branch-a</div><div class="line">您的分支与上游分支 &apos;origin/branch-a&apos; 一致。</div><div class="line">您有尚未合并的路径。</div><div class="line">  （解决冲突并运行 &quot;git commit&quot;）</div><div class="line">  （使用 &quot;git merge --abort&quot; 终止合并）</div><div class="line">要提交的变更：</div><div class="line"> 修改： b.txt</div><div class="line">未合并的路径：</div><div class="line">  （使用 &quot;git add &lt;文件&gt;...&quot; 标记解决方案）</div><div class="line"> 双方修改： common.txt</div><div class="line">➜ git-file-version-not-latest-demo git:(branch-a) ✗</div></pre></td></tr></table></figure></p>
+<p>根据正常的处理流程，我们应该编辑 <code>common.txt</code> 文件，解决冲突，然后提交。<br>将以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">content in file common.txt</div><div class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</div><div class="line">common content added by branch-a</div><div class="line">=======</div><div class="line">common content added by branch-b</div><div class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; master</div></pre></td></tr></table></figure></p>
+<p>修改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">content in file common.txt</div><div class="line">common content added by branch-a</div><div class="line">common content added by branch-b</div></pre></td></tr></table></figure></p>
+<p>在提交前 Git 仓库的状态是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜ git-file-version-not-latest-demo git:(branch-a) ✗ git status</div><div class="line">位于分支 branch-a</div><div class="line">您的分支与上游分支 &apos;origin/branch-a&apos; 一致。</div><div class="line">您有尚未合并的路径。</div><div class="line">  （解决冲突并运行 &quot;git commit&quot;）</div><div class="line">  （使用 &quot;git merge --abort&quot; 终止合并）</div><div class="line">要提交的变更：</div><div class="line"> 修改： b.txt</div><div class="line">未合并的路径：</div><div class="line">  （使用 &quot;git add &lt;文件&gt;...&quot; 标记解决方案）</div><div class="line"> 双方修改： common.txt</div><div class="line">➜ git-file-version-not-latest-demo git:(branch-a) ✗</div></pre></td></tr></table></figure></p>
+<p>我们应该将解决冲突的文件 <code>common.txt</code> 添加到暂存区 <code>git add common.txt</code> ，然后执行 <code>git commit</code> 或 <code>git merge --continue</code> 完成这次合并。<br>然而，如果意外地将改动 <code>b.txt</code> 移出了暂存区：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git add common.txt</div><div class="line">git reset HEAD b.txt</div><div class="line">git status</div></pre></td></tr></table></figure></p>
+<p>此时 Git 目录的状态将是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜ git-file-version-not-latest-demo git:(branch-a) ✗ git status</div><div class="line">位于分支 branch-a</div><div class="line">您的分支与上游分支 &apos;origin/branch-a&apos; 一致。</div><div class="line">所有冲突已解决但您仍处于合并中。</div><div class="line">  （使用 &quot;git commit&quot; 结束合并）</div><div class="line">要提交的变更：</div><div class="line"> 修改： common.txt</div><div class="line">尚未暂存以备提交的变更：</div><div class="line">  （使用 &quot;git add &lt;文件&gt;...&quot; 更新要提交的内容）</div><div class="line">  （使用 &quot;git checkout -- &lt;文件&gt;...&quot; 丢弃工作区的改动）</div><div class="line"> 修改： b.txt</div><div class="line">➜ git-file-version-not-latest-demo git:(branch-a) ✗</div></pre></td></tr></table></figure></p>
+<p>在这种情况下完成这次合并，执行 <code>git commit --continue</code> ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜ git-file-version-not-latest-demo git:(branch-a) ✗ git merge --continue</div><div class="line">[branch-a 43d5d69] Merge branch &apos;master&apos; into branch-a</div></pre></td></tr></table></figure></p>
+<h4 id="步骤5：分支a（提交Pull-Request）合并到主分支"><a href="#步骤5：分支a（提交Pull-Request）合并到主分支" class="headerlink" title="步骤5：分支a（提交Pull Request）合并到主分支"></a>步骤5：分支a（提交Pull Request）合并到主分支</h4><p>由分支 a 向主分支提交 Pull Request。</p>
+<img src="/blog-hexo/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/mr.png" alt="Pull Request" title="Pull Request">
+<p>此时，可以从 PR 的改动中看到相关的变动情况：分支 a 的改动除了在 <code>a.txt</code> 和 <code>common.txt</code> 文件中添加内容，还使 <code>b.txt</code> 的文件内容减少了。</p>
+<h4 id="步骤6：合并分支a的PR"><a href="#步骤6：合并分支a的PR" class="headerlink" title="步骤6：合并分支a的PR"></a>步骤6：合并分支a的PR</h4><p>如果此时将这个 PR 合并到了主分支内，就可以看到一个神奇的现象。<br>文件 <code>b.txt</code> 显示的版本是 <code>initial commit</code> 那次提交的版本。<br>这对于分支 b 的开发人员来说是很一脸蒙蔽的，因为分支 b 的提交不知道在什么时候被吞了。<br>单纯从文件 <code>b.txt</code> 的角度出发，是无法知道哪个改动将自己的提交删除了，很难找到相关责任人。</p>
+<p>另外一个值得注意的现象是 <code>git log</code> 命令添加 <code>--follow</code> 选项的功能。<br>使用 <code>git log b.txt</code> 查看也只有一个版本信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">commit aa61d9a12a8b8d9f3f382bdd7913bafa40745702</div><div class="line">Author: ckmessi &lt;ckmessi@163.com&gt;</div><div class="line">Date: Fri May 17 09:53:33 2019 +0800</div><div class="line">    initial commit</div></pre></td></tr></table></figure></p>
+<p>使用 <code>git log --follow b.txt</code> 可以看到分支b提交的信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">commit 8fca98d7e28de1b25eb390ac70bebf2a18bc70e0 (origin/branch-b, branch-b)</div><div class="line">Author: ckmessi &lt;ckmessi@163.com&gt;</div><div class="line">Date: Fri May 17 10:08:05 2019 +0800</div><div class="line">    modification by branch-b</div><div class="line"></div><div class="line">commit aa61d9a12a8b8d9f3f382bdd7913bafa40745702</div><div class="line">Author: ckmessi &lt;ckmessi@163.com&gt;</div><div class="line">Date: Fri May 17 09:53:33 2019 +0800</div><div class="line">    initial commit</div></pre></td></tr></table></figure></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://github.com/ckmessi/git-file-version-not-latest-demo/" target="_blank" rel="external">https://github.com/ckmessi/git-file-version-not-latest-demo/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/" data-id="cjwq6unoj002lm28t7a7ot5fn" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog-hexo/2019/06/05/SpringBoot运行jar包提示没有主清单属性的问题/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">SpringBoot运行jar包提示没有主清单属性的问题</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Kategorien</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Anime-js/">Anime.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Composer/">Composer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Gem/">Gem</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JdbcTemplate/">JdbcTemplate</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mybatis/">Mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oh-My-Zsh/">Oh-My-Zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ruby/">Ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/RuleEngine/">RuleEngine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Rust/">Rust</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring-Boot/">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SpringCloud/">SpringCloud</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Visual-Studio/">Visual Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/base64/">base64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastjson/">fastjson</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/hexdump/">hexdump</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/interact-js/">interact.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/libfacedetection/">libfacedetection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/pip/">pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/vim/">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/virtualenv/">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 12px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 12px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 11px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 11px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 16px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/blog-hexo/tags/Java/" style="font-size: 15px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 18px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 19px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 17px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 11px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 11px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 11px;">Oracle</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 11px;">PowerShell</a> <a href="/blog-hexo/tags/Python/" style="font-size: 10px;">Python</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12px;">SSH</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 12px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 12px;">Ubuntu</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 14px;">Vue</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 12px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog-hexo/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/">Git历史版本列表列表最新项与当前版本不一致的可能原因</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2019/06/05/SpringBoot运行jar包提示没有主清单属性的问题/">SpringBoot运行jar包提示没有主清单属性的问题</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2019/06/04/Composer管理依赖包限制PHP版本/">Composer管理依赖包限制PHP版本</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2019/05/29/SpringCloud使用JdbcTemplate配置多数据源/">SpringCloud使用JdbcTemplate配置多数据源</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2019/05/10/PHP中is-numeric和is-int的区别/">PHP中is_numeric和is_int的区别</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 ckmessi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog-hexo/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog-hexo/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/blog-hexo/fancybox/jquery.fancybox.css">
+  <script src="/blog-hexo/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/blog-hexo/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
