@@ -5,17 +5,19 @@
   
 
   
-  <title>Tag: npm | 不止是一位程序员</title>
+  <title>Java中String类的split方法 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Lionel的技术笔记总结">
-<meta property="og:type" content="website">
-<meta property="og:title" content="不止是一位程序员">
-<meta property="og:url" content="http://ckmessi.github.io/tags/npm/index.html">
+  <meta name="description" content="在 Java 语言中，字符串类 String 提供了方法 split 用于分割字符串。 split 方法的原型为：12public String[] split(String regex)public String[] split(String regex, int limit) 其中，只有一个参数的方法的实际逻辑，就是调用两个参数的方法，并将参数 limit 赋值为 0 传入：123public">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java中String类的split方法">
+<meta property="og:url" content="http://ckmessi.github.io/2019/07/08/Java中String类的split方法/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
-<meta property="og:description" content="Lionel的技术笔记总结">
+<meta property="og:description" content="在 Java 语言中，字符串类 String 提供了方法 split 用于分割字符串。 split 方法的原型为：12public String[] split(String regex)public String[] split(String regex, int limit) 其中，只有一个参数的方法的实际逻辑，就是调用两个参数的方法，并将参数 limit 赋值为 0 传入：123public">
+<meta property="og:updated_time" content="2019-07-08T08:20:07.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="不止是一位程序员">
-<meta name="twitter:description" content="Lionel的技术笔记总结">
+<meta name="twitter:title" content="Java中String类的split方法">
+<meta name="twitter:description" content="在 Java 语言中，字符串类 String 提供了方法 split 用于分割字符串。 split 方法的原型为：12public String[] split(String regex)public String[] split(String regex, int limit) 其中，只有一个参数的方法的实际逻辑，就是调用两个参数的方法，并将参数 limit 赋值为 0 传入：123public">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -66,40 +68,67 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog-hexo/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2017/07/19/npm的package-json一些使用常识/" class="archive-article-date">
-  <time datetime="2017-07-19T14:28:56.000Z" itemprop="datePublished">Jul 19</time>
+        <section id="main"><article id="post-Java中String类的split方法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/07/08/Java中String类的split方法/" class="article-date">
+  <time datetime="2019-07-08T08:18:58.000Z" itemprop="datePublished">2019-07-08</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2017/07/19/npm的package-json一些使用常识/">npm的package.json一些使用常识</a>
+    <h1 class="article-title" itemprop="name">
+      Java中String类的split方法
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在 <code>Java</code> 语言中，字符串类 <code>String</code> 提供了方法 <code>split</code> 用于分割字符串。</p>
+<p><code>split</code> 方法的原型为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">public String[] split(String regex)</div><div class="line">public String[] split(String regex, int limit)</div></pre></td></tr></table></figure></p>
+<p>其中，只有一个参数的方法的实际逻辑，就是调用两个参数的方法，并将参数 <code>limit</code> 赋值为 <code>0</code> 传入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public String[] split(String regex) &#123;</div><div class="line">    return split(regex, 0);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>对于 <code>split</code> 方法的第一个参数，含义比较明确，表示的是 <code>分割符正则表达式</code>，即按照什么特殊字符对字符串进行分割：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">* @param regex</div><div class="line">* the delimiting regular expression</div></pre></td></tr></table></figure></p>
+<p>对于 <code>split</code> 方法的第二个参数，含义就比较丰富了，概括地讲是 <code>结果阀值</code> ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">* @param limit</div><div class="line">* the result threshold, as described above</div></pre></td></tr></table></figure></p>
+<p>这个参数在实际用途是控制分割模式被使用的次数，最终效果会影响结果数组的长度。<br>如果 <code>limit</code> 比 <code>0</code> 大，则表示分割模式最多被使用 <code>n</code> 次，因此结果数组的长度不会大于 <code>n</code>，且数组的最后一项将包含最后一个匹配到的分割符后的所有内容。比如对于 <code>&quot;1,2,3,4,5,&quot;</code> ，如果使用 <code>split(&quot;,&quot;, 3)</code> ，得到的结果会是 <code>[&quot;1&quot;,&quot;2&quot;,&quot;3,4,5,&quot;]</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">String str = &quot;1,2,3,4,5,&quot;;</div><div class="line">String[] array = str.split(&quot;,&quot;, 3);    // [&quot;1&quot;,&quot;2&quot;,&quot;3,4,5,&quot;]</div></pre></td></tr></table></figure></p>
+<p>如果 <code>limit</code> 是一个负数，则模式将被尽可能多次地被匹配，因此数组可能有任意长度。比如对于 <code>&quot;1,2,3,4,5,&quot;</code> ，如果使用 <code>split(&quot;,&quot;, -1)</code> ，得到的结果会是 <code>[&quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,&quot;5&quot;,&quot;&quot;]</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">String str = &quot;1,2,3,4,5,&quot;;</div><div class="line">String[] array = str.split(&quot;,&quot;, -1);    // [&quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,&quot;5&quot;,&quot;&quot;]</div></pre></td></tr></table></figure></p>
+<p>如果 <code>limit</code> 是 <code>0</code> ，模式也会尽可能多次地被匹配，但最后结尾的空字符串会被丢弃。比如对于 <code>&quot;1,2,3,4,5,&quot;</code> ，如果使用 <code>split(&quot;,&quot;, 0)</code> 或 <code>split(&quot;,&quot;)</code>，得到的结果会是 <code>[&quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,&quot;5&quot;]</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">String str = &quot;1,2,3,4,5,&quot;;</div><div class="line">String[] array = str.split(&quot;,&quot;, 0);    // [&quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,&quot;5&quot;]</div></pre></td></tr></table></figure></p>
+<p>具体可参考 Java 源码中的相关文档：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">* &lt;p&gt; The &#123;@code limit&#125; parameter controls the number of times the</div><div class="line">* pattern is applied and therefore affects the length of the resulting</div><div class="line">* array. If the limit &lt;i&gt;n&lt;/i&gt; is greater than zero then the pattern</div><div class="line">* will be applied at most &lt;i&gt;n&lt;/i&gt;&amp;nbsp;-&amp;nbsp;1 times, the array&apos;s</div><div class="line">* length will be no greater than &lt;i&gt;n&lt;/i&gt;, and the array&apos;s last entry</div><div class="line">* will contain all input beyond the last matched delimiter. If &lt;i&gt;n&lt;/i&gt;</div><div class="line">* is non-positive then the pattern will be applied as many times as</div><div class="line">* possible and the array can have any length. If &lt;i&gt;n&lt;/i&gt; is zero then</div><div class="line">* the pattern will be applied as many times as possible, the array can</div><div class="line">* have any length, and trailing empty strings will be discarded.</div></pre></td></tr></table></figure></p>
+<p>话说文档中使用 <code>non-positive</code> 感觉让文档的结构复杂化了，如果使用 <code>less than zero</code> 层次上会更清晰。</p>
 
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/07/08/Java中String类的split方法/" data-id="cjxu477j50028h18t2bglxmhy" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog-hexo/2019/07/04/Axios发送Ajax请求至SpringBoot后台时参数匹配的一个问题/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Axios发送Ajax请求至SpringBoot后台时参数匹配的一个问题</div>
+    </a>
+  
+</nav>
+
+  
+</article>
 
 </section>
         
