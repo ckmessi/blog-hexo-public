@@ -68,6 +68,71 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Git设置本地分支关联的远程分支" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/07/11/Git设置本地分支关联的远程分支/" class="article-date">
+  <time datetime="2019-07-11T09:20:25.000Z" itemprop="datePublished">2019-07-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/07/11/Git设置本地分支关联的远程分支/">Git设置本地分支关联的远程分支</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在使用 Git 的过程中，经常会遇到本地分支与远程分支相关联的问题。<br>这篇笔记总结一下相关的现象和使用的命令。</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>通常在执行 <code>git push</code> 或 <code>git pull</code> 时遇到如下错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">There is no tracking information for the current branch.</div><div class="line">Please specify which branch you want to merge with.</div><div class="line">See git-pull(1) for details.</div><div class="line">git pull &lt;remote&gt; &lt;branch&gt;</div><div class="line">If you wish to set tracking information for this branch you can do so with:</div><div class="line">git branch --set-upstream-to=origin/&lt;branch&gt; release</div></pre></td></tr></table></figure></p>
+<p>这是由于当前分支没有与远程分支相关联引起的。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>解决方案是，将本地分支与远程分支关联起来。</p>
+<h4 id="查看关联情况"><a href="#查看关联情况" class="headerlink" title="查看关联情况"></a>查看关联情况</h4><p>可以使用命令 <code>git branch -vv</code> 查看分支与远程的关联关系：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git branch -vv</div><div class="line">* dev 1149894 [origin/dev: 领先 11] xxx</div><div class="line">  master 2c9a70b Initial Commit</div></pre></td></tr></table></figure></p>
+<p>可以看出，当前 <code>dev</code> 分支关联的是 <code>origin/dev</code> 分支，而 <code>master</code> 分支没有关联的相关分支。<br>如果在 <code>master</code> 分支下执行 <code>git pull</code> 操作，一定会返回错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">当前分支没有跟踪信息。</div><div class="line">请指定您要合并哪一个分支。</div><div class="line">详见 git-pull(1)。</div><div class="line">    git pull &lt;远程&gt; &lt;分支&gt;</div><div class="line">如果您想要为此分支创建跟踪信息，您可以执行：</div><div class="line">    git branch --set-upstream-to=origin/&lt;分支&gt; master</div></pre></td></tr></table></figure></p>
+<h4 id="方式一：直接push执行关联"><a href="#方式一：直接push执行关联" class="headerlink" title="方式一：直接push执行关联"></a>方式一：直接push执行关联</h4><p>一种直接的关联方式，是使用 `git push –set-upstream [remote] [remote_branch] 为上游创建分支，并将本地分支自动关联到上游分支。<br>比如以下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">git checkout -b test</div><div class="line">git push --set-upstream origin test</div><div class="line">...</div><div class="line"> * [new branch] test -&gt; test</div><div class="line">分支 &apos;test&apos; 设置为跟踪来自 &apos;origin&apos; 的远程分支 &apos;test&apos;。</div></pre></td></tr></table></figure></p>
+<p>其中 <code>--set-upstream</code> 与参数 <code>-u</code> 含义是相同的。</p>
+<h4 id="方式二：显式设置关联"><a href="#方式二：显式设置关联" class="headerlink" title="方式二：显式设置关联"></a>方式二：显式设置关联</h4><p>参考上述错误信息提示，还有一种方式是使用命令 <code>git branch --set-upstream-to=[remote]/[remote_branch] [local_branch]</code> 关联分支。<br>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git checkout test</div><div class="line">git branch --set-upstream-to=origin/dev</div></pre></td></tr></table></figure></p>
+<p>这时将本地的 <code>test</code> 分支与远程的 <code>dev</code> 分支关联，更加灵活。</p>
+<p>从功能上讲，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push -u origin branchName</div></pre></td></tr></table></figure></p>
+<p>等价于以下两个语句的合成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git push origin branchName</div><div class="line">git branch --set-upstream-to=origin/branchName branchName</div></pre></td></tr></table></figure></p>
+<h4 id="关于push的参数"><a href="#关于push的参数" class="headerlink" title="关于push的参数"></a>关于push的参数</h4><p>通常在使用 <code>git push</code> 命令时，根据默认缺省参数的不同，可以有许多种形式，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git push </div><div class="line">git push origin</div><div class="line">git push origin branchName</div></pre></td></tr></table></figure></p>
+<p>使用 <code>git push --help</code> 查看文档可知，这是有两个不带 <code>-</code> 符号的可选参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push [&lt;repository&gt; [&lt;refspec&gt;...]]</div></pre></td></tr></table></figure></p>
+<p>当命令没有使用 <code>&lt;repository&gt;</code> 参数指定往哪 push 的时候，会根据当前分支的 <code>branch.*.remote</code> 配置确定往哪推代码；如果没有配置的话，默认值为 <code>origin</code> 。</p>
+<blockquote>
+<p>When the command line does not specify where to push with the <repository> argument, branch.*.remote configuration for the current branch is consulted to determine where to push. If the configuration is missing, it defaults to origin.</repository></p>
+</blockquote>
+<p>当命令没有使用 <code>&lt;refspec&gt;</code> 参数或者 <code>--all</code>，<code>--mirror</code>，<code>--tags</code> 选项时，会根据 <code>remote.*.push</code> 配置查找默认的推送项，如果没找着的话，<code>push.default</code> 配置项会被用于决定推送什么。</p>
+<blockquote>
+<p>When the command line does not specify what to push with <refspec>… arguments or –all, –mirror, –tags options, the command finds the default <refspec> by consulting remote.*.push configuration, and if it is not found, honors push.default configuration to decide what to push (See git-config(1) for the meaning of push.default).</refspec></refspec></p>
+</blockquote>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://www.jianshu.com/p/403d6ad11e30" target="_blank" rel="external">https://www.jianshu.com/p/403d6ad11e30</a><br><a href="https://blog.csdn.net/haoaiqian/article/details/76586895" target="_blank" rel="external">https://blog.csdn.net/haoaiqian/article/details/76586895</a><br><a href="https://www.zhihu.com/question/20019419" target="_blank" rel="external">https://www.zhihu.com/question/20019419</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/07/11/Git设置本地分支关联的远程分支/" data-id="cjxygtrj8001qjn8tow0z2fjh" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Java中String类的split方法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2019/07/08/Java中String类的split方法/" class="article-date">
@@ -108,7 +173,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/07/08/Java中String类的split方法/" data-id="cjxu477j50028h18t2bglxmhy" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/07/08/Java中String类的split方法/" data-id="cjxygtrjo002ijn8tu54npkh5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -162,7 +227,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/07/04/Axios发送Ajax请求至SpringBoot后台时参数匹配的一个问题/" data-id="cjxu477h00005h18t3fkmqvbi" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/07/04/Axios发送Ajax请求至SpringBoot后台时参数匹配的一个问题/" data-id="cjxygtri60009jn8tsthhbe90" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/axios/">axios</a></li></ul>
@@ -214,7 +279,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/07/01/使用JSONServer快速搭建API服务器/" data-id="cjxu477mh008dh18toqobqe71" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/07/01/使用JSONServer快速搭建API服务器/" data-id="cjxygtrmd0086jn8twnaukmts" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JSON/">JSON</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li></ul>
@@ -263,7 +328,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/26/SpringBoot简单读取注解内容的方式/" data-id="cjxu477ll006gh18tntpume1n" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/06/26/SpringBoot简单读取注解内容的方式/" data-id="cjxygtrlr006jjn8t2rezmycw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
@@ -320,7 +385,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/24/SpringBoot使用-Async实现异步调用/" data-id="cjxu477lo006nh18t2qp7aqoy" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/06/24/SpringBoot使用-Async实现异步调用/" data-id="cjxygtrlp006fjn8tbumh1umb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
@@ -372,7 +437,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/15/Oracle数据库幂等性创建数据库表语句/" data-id="cjxu477kv0055h18tgm4dc7pr" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/06/15/Oracle数据库幂等性创建数据库表语句/" data-id="cjxygtrl0005ajn8toehqclj5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li></ul>
@@ -439,7 +504,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/" data-id="cjxu477ie001oh18tyspe8t4j" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/" data-id="cjxygtrj6001njn8tinn24ykm" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -492,7 +557,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/05/SpringBoot运行jar包提示没有主清单属性的问题/" data-id="cjxu477ln006jh18thi8k8nmv" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/06/05/SpringBoot运行jar包提示没有主清单属性的问题/" data-id="cjxygtrlt006mjn8tutsxxfcu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
@@ -551,60 +616,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/04/Composer管理依赖包限制PHP版本/" data-id="cjxu477i50018h18t60v4pwka" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/06/04/Composer管理依赖包限制PHP版本/" data-id="cjxygtrim000sjn8tydy5d2cs" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Composer/">Composer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-SpringCloud使用JdbcTemplate配置多数据源" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2019/05/29/SpringCloud使用JdbcTemplate配置多数据源/" class="article-date">
-  <time datetime="2019-05-29T09:17:24.000Z" itemprop="datePublished">2019-05-29</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2019/05/29/SpringCloud使用JdbcTemplate配置多数据源/">SpringCloud使用JdbcTemplate配置多数据源</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在工作中遇到可能需要使用 <code>JdbcTemplate</code> 配置多数据源进行数据库查询的操作，将配置数据源的关键步骤记录如下。</p>
-<p>在常量文件 <code>DateSourceConstant.java</code> 文件中，添加两个常量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">public static final String DB1_JDBC_TEMPLATE = &quot;DB1&quot; + &quot;_JdbcTemplate&quot;;</div><div class="line">public static final String DB2_JDBC_TEMPLATE = &quot;DB2&quot; + &quot;_JdbcTemplate&quot;;</div></pre></td></tr></table></figure></p>
-<p>在 <code>Database1DataSourceConfig.java</code> 配置文件中，添加一个 <code>Bean</code> 的声明：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@Configuration</div><div class="line">public class Database1DataSourceConfig&#123;</div><div class="line"> @Bean(name = DataSourceConstant.DB1_JDBC_TEMPLATE)</div><div class="line"> public JdbcTemplate hqStdJdbcTemplate(</div><div class="line">   @SuppressWarnings(&quot;SpringJavaInjectionPointsAutowiringInspection&quot;)</div><div class="line">   @Qualifier(DateSourceConstant.DB1_DATASOURCE) DataSource dataSource)&#123;</div><div class="line">  return new JdbcTemplate(dataSource);</div><div class="line"> &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>即使用名称为 <code>DateSourceConstant.DB1_DATASOURCE</code> 的 <code>DataSource</code>，初始化新的 <code>JdbcTemplate</code> 并返回生成 <code>Bean</code>。</p>
-<p>类似的，在另外一个数据源 <code>Database2DataSourceConfig.java</code> 配置文件中，也添加一个 <code>Bean</code> 的声明：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@Configuration</div><div class="line">public class Database2DataSourceConfig&#123;</div><div class="line"> @Bean(name = DataSourceConstant.DB2_JDBC_TEMPLATE)</div><div class="line"> public JdbcTemplate hqWbJdbcTemplate(</div><div class="line">   @SuppressWarnings(&quot;SpringJavaInjectionPointsAutowiringInspection&quot;)</div><div class="line">   @Qualifier(DateSourceConstant.DB2_DATASOURCE) DataSource dataSource)&#123;</div><div class="line">  return new JdbcTemplate(dataSource);</div><div class="line"> &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>其中配置 <code>Bean</code> 的方法名称无关紧要，可以取任何形式的名称。</p>
-<p>在具体的使用代码中，通过如下代码指定操作的数据源：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@Autowired</div><div class="line">@Qualifier(AceDataSource.DB1_JDBC_TEMPLATE)</div><div class="line">private JdbcTemplate jdbcTemplateForDB1;</div><div class="line"></div><div class="line">@Autowired</div><div class="line">@Qualifier(AceDataSource.DB2_JDBC_TEMPLATE)</div><div class="line">private JdbcTemplate jdbcTemplateForDB2;</div><div class="line"></div><div class="line">public void query()&#123;</div><div class="line"> String sql = &quot;select * from users&quot;;</div><div class="line"> List result1 = jdbcTemplateForDB1.queryForList(sql);</div><div class="line"> // 获取的是 DB1 数据源的数据</div><div class="line"> List result2 = jdbcTemplateForDB2.queryForList(sql);</div><div class="line"> // 获取的是 DB2 数据源的数据</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://www.cnblogs.com/tangzekai/p/7782773.html" target="_blank" rel="external">https://www.cnblogs.com/tangzekai/p/7782773.html</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/05/29/SpringCloud使用JdbcTemplate配置多数据源/" data-id="cjxu477lp006qh18ththgrx3m" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JdbcTemplate/">JdbcTemplate</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SpringCloud/">SpringCloud</a></li></ul>
 
     </footer>
   </div>
@@ -648,7 +663,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 12px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 12px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 11px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 11px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 16px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 16px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 11px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 18px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 19px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 17px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 11px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 11px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 12px;">Oracle</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 11px;">PowerShell</a> <a href="/blog-hexo/tags/Python/" style="font-size: 10px;">Python</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12px;">SSH</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 14px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 12px;">Ubuntu</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15px;">Vue</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 10px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 12px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 12px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 12px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 11px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 11px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 17px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 16px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 11px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 18px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 19px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 17px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 11px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 11px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 12px;">Oracle</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 11px;">PowerShell</a> <a href="/blog-hexo/tags/Python/" style="font-size: 10px;">Python</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12px;">SSH</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 14px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 12px;">Ubuntu</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15px;">Vue</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 10px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 12px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
     </div>
   </div>
 
@@ -670,6 +685,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2019/07/11/Git设置本地分支关联的远程分支/">Git设置本地分支关联的远程分支</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2019/07/08/Java中String类的split方法/">Java中String类的split方法</a>
           </li>
         
@@ -683,10 +702,6 @@
         
           <li>
             <a href="/blog-hexo/2019/06/26/SpringBoot简单读取注解内容的方式/">SpringBoot简单读取注解内容的方式</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2019/06/24/SpringBoot使用-Async实现异步调用/">SpringBoot使用@Async实现异步调用</a>
           </li>
         
       </ul>
