@@ -68,6 +68,52 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Java使用stream处理列表" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/03/06/Java使用stream处理列表/" class="article-date">
+  <time datetime="2019-03-06T07:24:15.000Z" itemprop="datePublished">2019-03-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/03/06/Java使用stream处理列表/">Java使用stream处理列表</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>对于 Java 中的列表，可以使用 <code>stream()</code> 将其转化为流，进行筛选或映射操作。</p>
+<h2 id="使用-map-映射每个元素的结果"><a href="#使用-map-映射每个元素的结果" class="headerlink" title="使用 .map 映射每个元素的结果"></a>使用 <code>.map</code> 映射每个元素的结果</h2><p>如果希望将列表中所有元素的某项属性单独列出组成一个数组，可以使用 <code>.map</code> 方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">List&lt;ClassA&gt; aList = new ArrayList&lt;ClassA&gt;();</div><div class="line">List&lt;String&gt; propertyXList = aList.stream().map(ClassA::getPropertyX).collect(Collectors.toList());</div></pre></td></tr></table></figure></p>
+<h2 id="使用-filter-按条件筛选元素"><a href="#使用-filter-按条件筛选元素" class="headerlink" title="使用 .filter 按条件筛选元素"></a>使用 <code>.filter</code> 按条件筛选元素</h2><p>如果对于一个列表，希望根据每项元素的属性进行筛选，可以使用 <code>.filter</code> 方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">List&lt;ClassA&gt; aList = new ArrayList&lt;ClassA&gt;();</div><div class="line">List&lt;ClassA&gt; result = aList.stream().filter(o -&gt; o.getPropertyA().equals(&quot;something&quot;)).collect(Collectors.toList());</div></pre></td></tr></table></figure></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://www.runoob.com/java/java8-streams.html" target="_blank" rel="external">http://www.runoob.com/java/java8-streams.html</a><br><a href="https://blog.csdn.net/qq_40820862/article/details/81974016" target="_blank" rel="external">https://blog.csdn.net/qq_40820862/article/details/81974016</a><br><a href="https://blog.csdn.net/Mint6/article/details/78798191/" target="_blank" rel="external">https://blog.csdn.net/Mint6/article/details/78798191/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/03/06/Java使用stream处理列表/" data-id="cjzi33nh30032q98tjfz3htlp" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-使用gem-install过程中遇到的SSL抛错" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2019/03/01/使用gem-install过程中遇到的SSL抛错/" class="article-date">
@@ -120,7 +166,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/03/01/使用gem-install过程中遇到的SSL抛错/" data-id="cjzdthc0w00961p8tjpwmrvyv" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/03/01/使用gem-install过程中遇到的SSL抛错/" data-id="cjzi33nju0096q98tk6rhavys" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Gem/">Gem</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ruby/">Ruby</a></li></ul>
@@ -190,7 +236,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/27/搭建virtualenv的简单流程/" data-id="cjzdthc4600am1p8t7rxwi1q1" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/02/27/搭建virtualenv的简单流程/" data-id="cjzi33nki00awq98tqj1842s0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/pip/">pip</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/virtualenv/">virtualenv</a></li></ul>
@@ -237,7 +283,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/25/在Java中添加一个针对整数类型的枚举类/" data-id="cjzdthc2700a81p8tgzoavou5" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/02/25/在Java中添加一个针对整数类型的枚举类/" data-id="cjzi33nk600a8q98tn04ttr83" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -294,7 +340,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/18/初识Anime-js/" data-id="cjzdthc1b009r1p8te68vub0o" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/02/18/初识Anime-js/" data-id="cjzi33njz009pq98t23vlmlde" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Anime-js/">Anime.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li></ul>
@@ -360,7 +406,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/14/使用hexdump输出文件的十六进制编码/" data-id="cjzdthc11009d1p8t068yz7g0" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/02/14/使用hexdump输出文件的十六进制编码/" data-id="cjzi33njv009aq98ti1qafqnt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/hexdump/">hexdump</a></li></ul>
@@ -438,7 +484,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/13/使用SSH搭建端口转发的两个应用场景/" data-id="cjzdthc0q008w1p8tpkqt9sld" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/02/13/使用SSH搭建端口转发的两个应用场景/" data-id="cjzi33njp008pq98ttse2s79b" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li></ul>
@@ -487,7 +533,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/01/30/终端使用base64进行编码解码/" data-id="cjzdthc4q00av1p8twh9xeft8" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/01/30/终端使用base64进行编码解码/" data-id="cjzi33nkk00azq98t0xwqg3id" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/base64/">base64</a></li></ul>
@@ -548,7 +594,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/01/28/初识Drools/" data-id="cjzdthc1h009v1p8to70rji3c" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/01/28/初识Drools/" data-id="cjzi33nk1009vq98ttsno4k0b" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/RuleEngine/">RuleEngine</a></li></ul>
@@ -606,70 +652,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/01/25/Git修改远程仓库链接/" data-id="cjzdthbt8001e1p8tzkmree43" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/01/25/Git修改远程仓库链接/" data-id="cjzi33ng8001eq98tnjq8bxln" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-拖拽组件interact-js的使用" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2019/01/24/拖拽组件interact-js的使用/" class="article-date">
-  <time datetime="2019-01-24T07:20:24.000Z" itemprop="datePublished">2019-01-24</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2019/01/24/拖拽组件interact-js的使用/">拖拽组件interact.js的使用</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在前端页面自由地拖动组件，可以使用一个开源库 <a href="http://interactjs.io/" target="_blank" rel="external">interact.js</a> 。</p>
-<h2 id="安装方式"><a href="#安装方式" class="headerlink" title="安装方式"></a>安装方式</h2><p>可以通过 <code>npm</code> 安装的方式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">npm install --save interactjs</div><div class="line">const interact = require(&apos;interactjs&apos;);</div></pre></td></tr></table></figure></p>
-<p>也可直接引用CDN链接：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;script src=&quot;https://cdn.jsdelivr.net/npm/interactjs@1.3.4/dist/interact.min.js&quot;&gt;&lt;/script&gt;</div><div class="line">&lt;!-- or --&gt;</div><div class="line">&lt;script src=&quot;https://unpkg.com/interactjs@1.3.4/dist/interact.min.js&quot;&gt;&lt;/script&gt;</div></pre></td></tr></table></figure></p>
-<h2 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h2><p>在官网有一个简单的示例代码，其主要组成内容如下：</p>
-<h4 id="HTML部分"><a href="#HTML部分" class="headerlink" title="HTML部分"></a>HTML部分</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&quot;parent-class&quot;&gt;</div><div class="line">    &lt;div id=&quot;drag-1&quot; class=&quot;draggable&quot;&gt;</div><div class="line">      &lt;p&gt; element 1 &lt;/p&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">    &lt;div id=&quot;drag-2&quot; class=&quot;draggable&quot;&gt;</div><div class="line">      &lt;p&gt; element 2 &lt;/p&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
-<p>在 <code>HTML</code> 元素部分，只需要绘制两个 <code>div</code> 元素，将其类属性 <code>class</code> 设置为 <code>draggable</code> ，这个类属性名称会在具体的 JavaScript 代码中用到。</p>
-<h4 id="CSS部分"><a href="#CSS部分" class="headerlink" title="CSS部分"></a>CSS部分</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">#drag-1, #drag-2 &#123;</div><div class="line">          width: 25%;</div><div class="line">          height: 100%;</div><div class="line">          min-height: 6.5em;</div><div class="line">          margin: 10%;</div><div class="line">          background-color: #29e;</div><div class="line">          color: white;</div><div class="line">          border-radius: 0.75em;</div><div class="line">          padding: 4%;</div><div class="line">          user-select: none;</div><div class="line">          -webkit-transform: translate(0px, 0px);</div><div class="line">                  transform: translate(0px, 0px);</div><div class="line">        &#125;</div></pre></td></tr></table></figure>
-<p>在 <code>CSS</code> 部分，只是简单地设置了元素的宽高信息、背景色等信息。</p>
-<h4 id="JS部分"><a href="#JS部分" class="headerlink" title="JS部分"></a>JS部分</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">// target elements with the &quot;draggable&quot; class</div><div class="line">interact(&apos;.draggable&apos;)</div><div class="line">  .draggable(&#123;</div><div class="line">    // enable inertial throwing</div><div class="line">    inertia: true,</div><div class="line">    // keep the element within the area of it&apos;s parent</div><div class="line">    restrict: &#123;</div><div class="line">      restriction: &quot;parent&quot;,</div><div class="line">      endOnly: true,</div><div class="line">      elementRect: &#123; top: 0, left: 0, bottom: 1, right: 1 &#125;</div><div class="line">    &#125;,</div><div class="line">    // enable autoScroll</div><div class="line">    autoScroll: true,</div><div class="line">    // call this function on every dragmove event</div><div class="line">    onmove: dragMoveListener,</div><div class="line">    // call this function on every dragend event</div><div class="line">    onend: function (event) &#123;</div><div class="line">      var textEl = event.target.querySelector(&apos;p&apos;);</div><div class="line">      textEl &amp;&amp; (textEl.textContent =</div><div class="line">        &apos;moved a distance of &apos;</div><div class="line">        + (Math.sqrt(Math.pow(event.pageX - event.x0, 2) +</div><div class="line">                     Math.pow(event.pageY - event.y0, 2) | 0))</div><div class="line">            .toFixed(2) + &apos;px&apos;);</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line">  function dragMoveListener (event) &#123;</div><div class="line">    var target = event.target,</div><div class="line">        // keep the dragged position in the data-x/data-y attributes</div><div class="line">        x = (parseFloat(target.getAttribute(&apos;data-x&apos;)) || 0) + event.dx,</div><div class="line">        y = (parseFloat(target.getAttribute(&apos;data-y&apos;)) || 0) + event.dy;</div><div class="line">    // translate the element</div><div class="line">    target.style.webkitTransform =</div><div class="line">    target.style.transform =</div><div class="line">      &apos;translate(&apos; + x + &apos;px, &apos; + y + &apos;px)&apos;;</div><div class="line">    // update the posiion attributes</div><div class="line">    target.setAttribute(&apos;data-x&apos;, x);</div><div class="line">    target.setAttribute(&apos;data-y&apos;, y);</div><div class="line">  &#125;</div><div class="line">  // this is used later in the resizing and gesture demos</div><div class="line">  window.dragMoveListener = dragMoveListener;</div></pre></td></tr></table></figure>
-<p>对于 <code>JS</code> 代码，主要可划分为三个部分。<br>第一部分，使用 <code>interact(&#39;.draggable&#39;).draggable({...})</code> 语句创建了一个 <code>draggable</code> 的操作对象，其中绑定了类名称 <code>draggable</code> ；类似的，如果希望创建一个类名称为 <code>class1</code> 的拖拽区域，则可以使用 <code>interact(&#39;.class1&#39;).dragzone({...})</code> 语句。<br>可以看出，对于 <code>interact.js</code> 库的主要使用语句可以抽象成以下语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">interact(&apos;.className&apos;).[action]</div></pre></td></tr></table></figure></p>
-<p>其中 <code>action</code> 可以是许多，除了 <code>draggable</code> 指定可拖拽对象内容，<code>dragzone</code> 指定拖拽区域属性，还可以使用 <code>resizable</code> 指定拖拽元素放大缩小属性，以及 <code>on</code> 指定各种监听函数。</p>
-<p>第二部分，声明了一个函数 <code>dragMoveListener</code> ，函数的操作主要是根据目标元素 <code>event.target</code> 当前的坐标属性 <code>data-x</code> 和 <code>data-y</code> ，加上当前拖动的偏移量 <code>event.dx</code> 和 <code>event.dy</code> ，更新目标元素的新坐标属性，并通过 <code>translate</code> 语句设置目标的实际显示位置 <code>target.style.webkitTransform</code> 和 <code>target.style.transform</code> 。其中 <code>webkitTransform</code> 对应的 css 属性实际是 <code>-webkit-transform</code> ，表示对 safari 浏览器的支持。<br>这个函数 <code>dragMoveListener</code> 将作为 <code>draggable</code> 对象属性中 <code>onmove</code> 的回调函数，这样每个拖拽元素都将根据 <code>dragMoveListener</code> 中的操作，也是最终拖拽效果体现的原因。</p>
-<p>第三部分，设置 <code>window.dragMoveListener = dragMoveListener;</code> 。 这个语句设置全局的 <code>dragMoveListener</code> ，通过注释可以看出，是为了后续 <code>resizing</code> 和 <code>gesture</code> 示例代码中会使用到的。</p>
-<h2 id="完整示例代码"><a href="#完整示例代码" class="headerlink" title="完整示例代码"></a>完整示例代码</h2><p>新建一个空白的 html 文件，将下面的代码拷贝到文件中，使用浏览器打开这个文件。（使用了CDN链接，需要联网）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;title&gt;demo of interact.js&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">    &lt;style type=&quot;text/css&quot;&gt;</div><div class="line">        #drag-1, #drag-2 &#123;</div><div class="line">          width: 25%;</div><div class="line">          height: 100%;</div><div class="line">          min-height: 6.5em;</div><div class="line">          margin: 20px;</div><div class="line">          background-color: #29e;</div><div class="line">          color: white;</div><div class="line">          border-radius: 0.75em;</div><div class="line">          padding: 20px;</div><div class="line">          user-select: none;</div><div class="line">          -webkit-transform: translate(0px, 0px);</div><div class="line">                  transform: translate(0px, 0px);</div><div class="line">        &#125;</div><div class="line">        .parent-class &#123;</div><div class="line">            padding: 20px;</div><div class="line">            background-color: #dfdfdf;</div><div class="line">        &#125;</div><div class="line">    &lt;/style&gt;</div><div class="line">&lt;body&gt;</div><div class="line">    &lt;p&gt;Title&lt;/p&gt;</div><div class="line">    &lt;div class=&quot;parent-class&quot;&gt;</div><div class="line">        &lt;div id=&quot;drag-1&quot; class=&quot;draggable&quot;&gt;</div><div class="line">          &lt;p&gt; element 1 &lt;/p&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">        &lt;div id=&quot;drag-2&quot; class=&quot;draggable&quot;&gt;</div><div class="line">          &lt;p&gt; element 2 &lt;/p&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/body&gt;</div><div class="line"></div><div class="line">&lt;script src=&quot;https://unpkg.com/interactjs@1.3.4/dist/interact.min.js&quot;&gt;&lt;/script&gt;</div><div class="line">&lt;script type=&quot;text/javascript&quot;&gt;</div><div class="line">    // target elements with the &quot;draggable&quot; class</div><div class="line">    interact(&apos;.draggable&apos;)</div><div class="line">        .draggable(&#123;</div><div class="line">        // enable inertial throwing</div><div class="line">        inertia: true,</div><div class="line">        // keep the element within the area of it&apos;s parent</div><div class="line">        restrict: &#123;</div><div class="line">          restriction: &quot;parent&quot;,</div><div class="line">          endOnly: true,</div><div class="line">          elementRect: &#123; top: 0, left: 0, bottom: 1, right: 1 &#125;</div><div class="line">        &#125;,</div><div class="line">        // enable autoScroll</div><div class="line">        autoScroll: true,</div><div class="line">        // call this function on every dragmove event</div><div class="line">        onmove: dragMoveListener,</div><div class="line">        // call this function on every dragend event</div><div class="line">        onend: function (event) &#123;</div><div class="line">          var textEl = event.target.querySelector(&apos;p&apos;);</div><div class="line">          textEl &amp;&amp; (textEl.textContent =</div><div class="line">            &apos;moved a distance of &apos;</div><div class="line">            + (Math.sqrt(Math.pow(event.pageX - event.x0, 2) +</div><div class="line">                         Math.pow(event.pageY - event.y0, 2) | 0))</div><div class="line">                .toFixed(2) + &apos;px&apos;);</div><div class="line">        &#125;</div><div class="line">      &#125;);</div><div class="line">      function dragMoveListener (event) &#123;</div><div class="line">        var target = event.target,</div><div class="line">            // keep the dragged position in the data-x/data-y attributes</div><div class="line">            x = (parseFloat(target.getAttribute(&apos;data-x&apos;)) || 0) + event.dx,</div><div class="line">            y = (parseFloat(target.getAttribute(&apos;data-y&apos;)) || 0) + event.dy;</div><div class="line">        // translate the element</div><div class="line">        target.style.webkitTransform =</div><div class="line">        target.style.transform =</div><div class="line">          &apos;translate(&apos; + x + &apos;px, &apos; + y + &apos;px)&apos;;</div><div class="line">        // update the posiion attributes</div><div class="line">        target.setAttribute(&apos;data-x&apos;, x);</div><div class="line">        target.setAttribute(&apos;data-y&apos;, y);</div><div class="line">      &#125;</div><div class="line">      // this is used later in the resizing and gesture demos</div><div class="line">      window.dragMoveListener = dragMoveListener;</div><div class="line">&lt;/script&gt;</div><div class="line"></div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>可以看出，使用 <code>interact.js</code> 的方法主要是通过 <code>interact().action</code> 语句指定目标元素，并通过 <code>interact.js</code> 提供的许多API设置拖动中的各种属性。<br>通过修改 <code>dragMoveListener</code> 方法，可以控制多个元素同时拖拽（例如拖动父节点时，子节点跟随移动）。</p>
-<h2 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h2><ul>
-<li><a href="http://interactjs.io/" target="_blank" rel="external">http://interactjs.io/</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/01/24/拖拽组件interact-js的使用/" data-id="cjzdthc3u00aj1p8tbutx4fsg" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/interact-js/">interact.js</a></li></ul>
 
     </footer>
   </div>
@@ -713,7 +699,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 12.22px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 12.22px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 11.11px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 11.11px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.22px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Flyway/" style="font-size: 10px;">Flyway</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 16.67px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Go/" style="font-size: 10px;">Go</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 13.33px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 17.78px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 11.11px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.78px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.89px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 16.67px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/blog-hexo/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/blog-hexo/tags/MyBatisPlus/" style="font-size: 10px;">MyBatisPlus</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 11.11px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 11.11px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.11px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 12.22px;">Oracle</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 11.11px;">PowerShell</a> <a href="/blog-hexo/tags/Python/" style="font-size: 10px;">Python</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12.22px;">SSH</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 14.44px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 12.22px;">Ubuntu</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15.56px;">Vue</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12.22px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 10px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 12.22px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 12.22px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 12.22px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 11.11px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 11.11px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.22px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Flyway/" style="font-size: 10px;">Flyway</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 16.67px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Go/" style="font-size: 11.11px;">Go</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 13.33px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 17.78px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 11.11px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.78px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.89px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 16.67px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/blog-hexo/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/blog-hexo/tags/MyBatisPlus/" style="font-size: 10px;">MyBatisPlus</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 11.11px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 11.11px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.11px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 12.22px;">Oracle</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 11.11px;">PowerShell</a> <a href="/blog-hexo/tags/Python/" style="font-size: 10px;">Python</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12.22px;">SSH</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 14.44px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 12.22px;">Ubuntu</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15.56px;">Vue</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12.22px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 10px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 12.22px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
     </div>
   </div>
 
@@ -735,6 +721,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2019/08/19/最简单的Go测试代码样例/">最简单的Go测试代码样例</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2019/08/16/初识Docker/">初识Docker</a>
           </li>
         
@@ -748,10 +738,6 @@
         
           <li>
             <a href="/blog-hexo/2019/08/10/Go语言开发环境配置/">Go语言开发环境配置</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2019/08/07/初识Flyway/">初识Flyway</a>
           </li>
         
       </ul>
