@@ -5,17 +5,19 @@
   
 
   
-  <title>Tag: Maven | 不止是一位程序员</title>
+  <title>Laravel使用Nginx作为代理服务器时的两点注意事项 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Lionel的技术笔记总结">
-<meta property="og:type" content="website">
-<meta property="og:title" content="不止是一位程序员">
-<meta property="og:url" content="http://ckmessi.github.io/tags/Maven/index.html">
+  <meta name="description" content="如果使用 nginx 作为代理服务器，将 Laravel 项目部署在内网服务器，有两点需要注意的事项 。 内网HOST为公网HOST有时候内网后台服务器返回资源路径时，会将自己的 HOST 拼接到相对路径上返回给前端。在这种情况下，如果经过了 nginx 转发，则这个资源全路径将是内网路径，无法在外网访问。这时候需要注意在 nginx 的代理转发过程中，将当前的 HOST 带过去。在 nginx">
+<meta name="keywords" content="PHP,Laravel">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Laravel使用Nginx作为代理服务器时的两点注意事项">
+<meta property="og:url" content="http://ckmessi.github.io/2019/08/28/Laravel使用Nginx作为代理服务器时的两点注意事项/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
-<meta property="og:description" content="Lionel的技术笔记总结">
+<meta property="og:description" content="如果使用 nginx 作为代理服务器，将 Laravel 项目部署在内网服务器，有两点需要注意的事项 。 内网HOST为公网HOST有时候内网后台服务器返回资源路径时，会将自己的 HOST 拼接到相对路径上返回给前端。在这种情况下，如果经过了 nginx 转发，则这个资源全路径将是内网路径，无法在外网访问。这时候需要注意在 nginx 的代理转发过程中，将当前的 HOST 带过去。在 nginx">
+<meta property="og:updated_time" content="2019-08-28T08:20:49.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="不止是一位程序员">
-<meta name="twitter:description" content="Lionel的技术笔记总结">
+<meta name="twitter:title" content="Laravel使用Nginx作为代理服务器时的两点注意事项">
+<meta name="twitter:description" content="如果使用 nginx 作为代理服务器，将 Laravel 项目部署在内网服务器，有两点需要注意的事项 。 内网HOST为公网HOST有时候内网后台服务器返回资源路径时，会将自己的 HOST 拼接到相对路径上返回给前端。在这种情况下，如果经过了 nginx 转发，则这个资源全路径将是内网路径，无法在外网访问。这时候需要注意在 nginx 的代理转发过程中，将当前的 HOST 带过去。在 nginx">
   
     <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
   
@@ -66,40 +68,74 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog-hexo/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog-hexo/2019/08/14/Maven项目pom-xml文件中packaging配置/" class="archive-article-date">
-  <time datetime="2019-08-14T07:37:43.000Z" itemprop="datePublished">Aug 14</time>
+        <section id="main"><article id="post-Laravel使用Nginx作为代理服务器时的两点注意事项" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/08/28/Laravel使用Nginx作为代理服务器时的两点注意事项/" class="article-date">
+  <time datetime="2019-08-28T08:18:50.000Z" itemprop="datePublished">2019-08-28</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog-hexo/2019/08/14/Maven项目pom-xml文件中packaging配置/">Maven项目pom.xml文件中packaging配置</a>
+    <h1 class="article-title" itemprop="name">
+      Laravel使用Nginx作为代理服务器时的两点注意事项
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>如果使用 nginx 作为代理服务器，将 Laravel 项目部署在内网服务器，有两点需要注意的事项 。</p>
+<h2 id="内网HOST为公网HOST"><a href="#内网HOST为公网HOST" class="headerlink" title="内网HOST为公网HOST"></a>内网HOST为公网HOST</h2><p>有时候内网后台服务器返回资源路径时，会将自己的 HOST 拼接到相对路径上返回给前端。<br>在这种情况下，如果经过了 nginx 转发，则这个资源全路径将是内网路径，无法在外网访问。<br>这时候需要注意在 nginx 的代理转发过程中，将当前的 HOST 带过去。<br>在 nginx 配置中，添加 <code>proxy_set_heaer Host $http_host</code> ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    ...</div><div class="line">    location / &#123;</div><div class="line">                proxy_set_header Host $http_host;</div><div class="line">                proxy_pass http://192.168.0.38:8001;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这样在 Laravel 项目中，使用 <code>HTTP_HOST</code> 获取到的就是公网 IP + 端口的形式。</p>
+<h2 id="后台获取真实的客户端IP"><a href="#后台获取真实的客户端IP" class="headerlink" title="后台获取真实的客户端IP"></a>后台获取真实的客户端IP</h2><p>默认情况下，在内网服务器后台获取到的客户端地址将会是代理服务器主机地址。<br>为了得到真实的客户端 IP 地址，需要执行以下两步操作：</p>
+<p>第一，需要修改 nginx 的配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    ...</div><div class="line">    location / &#123;</div><div class="line">                proxy_set_header Host $http_host;</div><div class="line">                proxy_set_header x-forwarded-for $remote_addr;</div><div class="line">                proxy_pass http://192.168.0.38:8001;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这个语句能够在 HEADER 中添加一项 X-FORWARDED-FOR，对应在 Laravel 项目中可以使用的 $_SERVER[‘HTTP_X-FORWARDED-FOR’] 获取到直实的客户端IP。</p>
+<p>第二，在 Laravel 需要在使用 <code>$request-&gt;ip</code> 之前，调用 <code>setTrustedProxies([&#39;xxx.xxx.xxx.xxx])</code> 方法设置信赖的代理服务器地址。如果没有设置的话， <code>$request-&gt;ip</code> 得到的是 <code>$_SERVER[&#39;REMOTE_ADDR&#39;]</code> 变量，即代理服务器相对于内网服务器的地址（比如 <code>192.168.0.244</code>）。</p>
+<p>参考 <code>Symfony\Component\HttpFoundation\Request</code> 的 <code>getClientIp</code> 源码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">     * Returns the client IP address.</div><div class="line">     *</div><div class="line">     * This method can read the client IP address from the &quot;X-Forwarded-For&quot; header</div><div class="line">     * when trusted proxies were set via &quot;setTrustedProxies()&quot;. The &quot;X-Forwarded-For&quot;</div><div class="line">     * header value is a comma+space separated list of IP addresses, the left-most</div><div class="line">     * being the original client, and each successive proxy that passed the request</div><div class="line">     * adding the IP address where it received the request from.</div><div class="line">     *</div><div class="line">     * If your reverse proxy uses a different header name than &quot;X-Forwarded-For&quot;,</div><div class="line">     * (&quot;Client-Ip&quot; for instance), configure it via the $trustedHeaderSet</div><div class="line">     * argument of the Request::setTrustedProxies() method instead.</div><div class="line">     *</div><div class="line">     * @return string|null The client IP address</div><div class="line">     *</div><div class="line">     * @see getClientIps()</div><div class="line">     * @see http://en.wikipedia.org/wiki/X-Forwarded-For</div><div class="line">     */</div><div class="line">    public function getClientIp()</div><div class="line">    &#123;</div><div class="line">        $ipAddresses = $this-&gt;getClientIps();</div><div class="line">        return $ipAddresses[0];</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>可以看到 Doc 中提到，如果通过 <code>setTrustedProxies</code> 方法设置了依赖的代理服务器，这个方法将从 <code>X-Forwarded-For</code> 请求头信息中读取客户端 IP 地址。 <code>X-Forwarded-For</code> 值通常是逗号+空格分隔的 IP 地址列表，最左侧是最初的客户端，每一个传递请求的代理都将它们收到请求的客户端地址逐个添加。</p>
+<p>再阅读 <code>Symfony\Component\HttpFoundation\Request</code> 的 <code>getClientIps</code> 源码可知，默认会使用 <code>REMOTE_ADDR</code> 作为客户端的IP地址，如果不是从依赖的代理服务器而来，则直接返回了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public function getClientIps()</div><div class="line">    &#123;</div><div class="line">        $ip = $this-&gt;server-&gt;get(&apos;REMOTE_ADDR&apos;);</div><div class="line">        if (!$this-&gt;isFromTrustedProxy()) &#123;</div><div class="line">            return array($ip);</div><div class="line">        &#125;</div><div class="line">        return $this-&gt;getTrustedValues(self::HEADER_CLIENT_IP, $ip) ?: array($ip);</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>后续获到数据方法的第一个参数 <code>self::HEADER_CLIENT_IP</code> 的值，就是 <code>X_FORWARDED_FOR</code> ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">protected static $trustedHeaders = array(</div><div class="line">    self::HEADER_FORWARDED =&gt; &apos;FORWARDED&apos;,</div><div class="line">    self::HEADER_CLIENT_IP =&gt; &apos;X_FORWARDED_FOR&apos;,</div><div class="line">    self::HEADER_CLIENT_HOST =&gt; &apos;X_FORWARDED_HOST&apos;,</div><div class="line">    self::HEADER_CLIENT_PROTO =&gt; &apos;X_FORWARDED_PROTO&apos;,</div><div class="line">    self::HEADER_CLIENT_PORT =&gt; &apos;X_FORWARDED_PORT&apos;,</div><div class="line">);</div></pre></td></tr></table></figure></p>
+<p>添加上述两步后，使用 <code>$request-&gt;ip()</code> 得到的就是真实的客户端地址。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://stackoverflow.com/questions/33268683/how-to-get-client-ip-address-in-laravel-5" target="_blank" rel="external">https://stackoverflow.com/questions/33268683/how-to-get-client-ip-address-in-laravel-5</a></li>
+<li><a href="https://imququ.com/post/x-forwarded-for-header-in-http.html" target="_blank" rel="external">https://imququ.com/post/x-forwarded-for-header-in-http.html</a></li>
+<li><a href="https://learnku.com/laravel/t/2763/about-request-getclientips-to-get-some-real-ip-questions" target="_blank" rel="external">https://learnku.com/laravel/t/2763/about-request-getclientips-to-get-some-real-ip-questions</a></li>
+</ul>
 
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/08/28/Laravel使用Nginx作为代理服务器时的两点注意事项/" data-id="cjzuzpcys003ynj8t4n6omvsl" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog-hexo/2019/08/19/最简单的Go测试代码样例/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">最简单的Go测试代码样例</div>
+    </a>
+  
+</nav>
+
+  
+</article>
 
 </section>
         
