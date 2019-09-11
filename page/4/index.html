@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -67,6 +67,55 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Spring中-RestController和-Controller的区别" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/04/22/Spring中-RestController和-Controller的区别/" class="article-date">
+  <time datetime="2019-04-22T08:44:15.000Z" itemprop="datePublished">2019-04-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/04/22/Spring中-RestController和-Controller的区别/">Spring中@RestController和@Controller的区别</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><code>@Controller</code> 是用于将类标记为 Spring MVC Controller；<br><code>@RestController</code> 是一种便捷的注解，其实等价于 @Controller 加上 @ResonseBody。</p>
+<blockquote>
+<p>A convenience annotation that is itself annotated with @Controller and @ResponseBody<br>@RestController注解相当于@ResponseBody ＋ @Controller合在一起的作用。<br>参考 <a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RestController.html" target="_blank" rel="external">文档</a></p>
+</blockquote>
+<p>因此，以下两种代码是等价的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@Controller</div><div class="line">@ResponseBody</div><div class="line">public class SampleController &#123; &#125;</div><div class="line"></div><div class="line">@RestController</div><div class="line">public class SampleRestController &#123; &#125;</div></pre></td></tr></table></figure></p>
+<p>就使用的效果而言，使用 <code>@RestController</code> 使用的效果是将方法返回的对象直接以JSON格式返回；使用 <code>@Controller</code> 需要配置视图解析器 <code>InternalResourceViewResolver</code> 使用。</p>
+<p>参考链接：<br><a href="https://stackoverflow.com/questions/25242321/difference-between-spring-controller-and-restcontroller-annotation" target="_blank" rel="external">https://stackoverflow.com/questions/25242321/difference-between-spring-controller-and-restcontroller-annotation</a><br><a href="https://blog.csdn.net/gg12365gg/article/details/51345601" target="_blank" rel="external">https://blog.csdn.net/gg12365gg/article/details/51345601</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/04/22/Spring中-RestController和-Controller的区别/" data-id="ck0f6v2cm007h8u8t4giuhje6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Java中关于Integer对象比较的分析" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -142,7 +191,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/04/15/Java中关于Integer对象比较的分析/" data-id="ck07ylmmp002xq68t3qvcvg9r" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/04/15/Java中关于Integer对象比较的分析/" data-id="ck0f6v28j00318u8tukc3dwvl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -190,7 +239,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/04/11/Vue中使用ElementUI表格数据更新后没有刷新表格内容的问题/" data-id="ck07ylmsf007nq68tusfjsnzt" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/04/11/Vue中使用ElementUI表格数据更新后没有刷新表格内容的问题/" data-id="ck0f6v2d1007y8u8teqp499hj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -253,7 +302,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/03/14/初识Rust/" data-id="ck07ylmtq00a7q68tupty9bob" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/03/14/初识Rust/" data-id="ck0f6v2gu00af8u8tdc8vl73q" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Rust/">Rust</a></li></ul>
@@ -300,7 +349,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/03/07/Java使用反射测试私用方法/" data-id="ck07ylmmy0034q68t3r9fwc53" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/03/07/Java使用反射测试私用方法/" data-id="ck0f6v28n00388u8tiyf97ljo" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -346,7 +395,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/03/06/Java使用stream处理列表/" data-id="ck07ylmmt0030q68tkscia754" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/03/06/Java使用stream处理列表/" data-id="ck0f6v28k00348u8tjm2n45uc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -410,7 +459,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/03/01/使用gem-install过程中遇到的SSL抛错/" data-id="ck07ylmt9009aq68tsfy1y6l8" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/03/01/使用gem-install过程中遇到的SSL抛错/" data-id="ck0f6v2fn009e8u8t9dy8buxh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Gem/">Gem</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ruby/">Ruby</a></li></ul>
@@ -480,7 +529,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/27/搭建virtualenv的简单流程/" data-id="ck07ylmua00b7q68thzq143j4" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/02/27/搭建virtualenv的简单流程/" data-id="ck0f6v2hz00b78u8tr0727qo7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/pip/">pip</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/virtualenv/">virtualenv</a></li></ul>
@@ -527,7 +576,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/25/在Java中添加一个针对整数类型的枚举类/" data-id="ck07ylmtt00adq68te0zc9jok" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/02/25/在Java中添加一个针对整数类型的枚举类/" data-id="ck0f6v2iq00bo8u8t7xpf9su7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -584,76 +633,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/18/初识Anime-js/" data-id="ck07ylmth009pq68t2b8vfpjt" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/02/18/初识Anime-js/" data-id="ck0f6v2gd009w8u8ttgc42959" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Anime-js/">Anime.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-使用hexdump输出文件的十六进制编码" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2019/02/14/使用hexdump输出文件的十六进制编码/" class="article-date">
-  <time datetime="2019-02-14T06:35:55.000Z" itemprop="datePublished">2019-02-14</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2019/02/14/使用hexdump输出文件的十六进制编码/">使用hexdump输出文件的十六进制编码</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在Linux命令行中，可以使用 <code>hexdump</code> 命令输出文件的十六进制编码。</p>
-<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><p><code>hexdump</code> 命令主要用来查看二进制文件的十六进制编码，但不限于二进制文件。</p>
-<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><p>命令的基本使用方式为：<code>hexdump [选项] [文件]</code> 。<br>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexdump -C filename.txt</div></pre></td></tr></table></figure></p>
-<h2 id="参数选项"><a href="#参数选项" class="headerlink" title="参数选项"></a>参数选项</h2><p>主要可选参数选项如下：</p>
-<ul>
-<li>-n length：格式化输出文件的前length个字节</li>
-<li>-C：输出规范的十六进制和ASCII码</li>
-<li>-b：单字节八进制显示</li>
-<li>-c：单字节字符显示</li>
-<li>-d：双字节十进制显示</li>
-<li>-o：双字节八进制显示</li>
-<li>-x：双字节十六进制显示</li>
-<li>-s：从偏移量开始输出</li>
-<li>-v：避免省略重复字符时显示的<code>*</code>字符</li>
-</ul>
-<p>比如对于一个简单的文本文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">abc</div><div class="line">d</div><div class="line">123</div><div class="line">4</div></pre></td></tr></table></figure></p>
-<p>使用不带参数选项的命令可以输出其十六进制编码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜ ~ hexdump file.txt</div><div class="line">0000000 61 62 63 0a 64 0a 31 32 33 0a 34 0a</div><div class="line">000000c</div></pre></td></tr></table></figure></p>
-<p>可以看出，其中的 <code>61</code>、<code>62</code>、<code>63</code> 就是字符 <code>a</code>、<code>b</code>、<code>c</code> 的ASCII编码 <code>65</code>、<code>66</code>、<code>67</code> 的十六进制表示；而 <code>0a</code> 转换为十进制的值是 <code>10</code> ，正是换行符在ASCII字符中的表示。</p>
-<p>如果带上 <code>-c</code> 参数，则输出结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜ ~ hexdump -c file.txt</div><div class="line">0000000 a b c \n d \n 1 2 3 \n 4 \n</div><div class="line">000000c</div></pre></td></tr></table></figure></p>
-<p>可以看出，以单字节字符显示后，能够更加具备可读性。</p>
-<p>使用 <code>-Cv</code> 参数，能够更加直观地查看其规范的十六进制和ASCII码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜ ~ hexdump -Cv file.txt</div><div class="line">00000000 61 62 63 0a 64 0a 31 32 33 0a 34 0a |abc.d.123.4.|</div><div class="line">0000000c</div></pre></td></tr></table></figure></p>
-<p>当然，比较酷炫的可以直接显示图片的十六进制编码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexdump messi.jpg</div></pre></td></tr></table></figure></p>
-<p>显示结果为：<br><img src="/blog-hexo/2019/02/14/使用hexdump输出文件的十六进制编码/hexdumpmessi.png" alt="示例图" title="示例图"></p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://blog.csdn.net/yzhang6_10/article/details/81588282" target="_blank" rel="external">https://blog.csdn.net/yzhang6_10/article/details/81588282</a><br><a href="https://www.cnblogs.com/mayou18/p/9558440.html" target="_blank" rel="external">https://www.cnblogs.com/mayou18/p/9558440.html</a><br><a href="https://blog.csdn.net/huanhuanq1209/article/details/80900289" target="_blank" rel="external">https://blog.csdn.net/huanhuanq1209/article/details/80900289</a><br><a href="https://www.cnblogs.com/dplearning/p/6860067.html" target="_blank" rel="external">https://www.cnblogs.com/dplearning/p/6860067.html</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/14/使用hexdump输出文件的十六进制编码/" data-id="ck07ylmtb009dq68t8ns0w72r" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/hexdump/">hexdump</a></li></ul>
 
     </footer>
   </div>
@@ -666,7 +649,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/page/3/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><a class="page-number" href="/blog-hexo/page/2/">2</a><a class="page-number" href="/blog-hexo/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/blog-hexo/page/5/">5</a><a class="page-number" href="/blog-hexo/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/14/">14</a><a class="extend next" rel="next" href="/blog-hexo/page/5/">weiter &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/3/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><a class="page-number" href="/blog-hexo/page/2/">2</a><a class="page-number" href="/blog-hexo/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/blog-hexo/page/5/">5</a><a class="page-number" href="/blog-hexo/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/14/">14</a><a class="extend next" rel="next" href="/blog-hexo/page/5/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -675,7 +658,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -704,7 +687,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -714,9 +697,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2019/09/11/Laravel读写YAML格式文件/">Laravel读写YAML格式文件</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2019/09/06/Vue使用proxyTable解决跨域问题/">Vue使用proxyTable解决跨域问题</a>
@@ -732,10 +719,6 @@
         
           <li>
             <a href="/blog-hexo/2019/08/28/Laravel使用Nginx作为代理服务器时的两点注意事项/">Laravel使用Nginx作为代理服务器时的两点注意事项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2019/08/19/最简单的Go测试代码样例/">最简单的Go测试代码样例</a>
           </li>
         
       </ul>

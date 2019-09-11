@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -67,6 +67,58 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Oracle数据库幂等性创建数据库表语句" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/06/15/Oracle数据库幂等性创建数据库表语句/" class="article-date">
+  <time datetime="2019-06-15T07:20:54.000Z" itemprop="datePublished">2019-06-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/06/15/Oracle数据库幂等性创建数据库表语句/">Oracle数据库幂等性创建数据库表语句</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在 Oracle 数据库中，一条最基础的创建数据库表的语句通常是如下形式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">CREATE TABLE &quot;[table_name]&quot; (</div><div class="line">    &quot;[primary_id]&quot; VARCHAR2(18 BYTE) NOT NULL,</div><div class="line">    &quot;[field_name]&quot; VARCHAR2(128 BYTE) NOT NULL</div><div class="line">);</div></pre></td></tr></table></figure></p>
+<p>这条语句没有问题，但只能执行一次，如果多执行一次的话，会抛出 <code>数据库表已存在</code> 的错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[Err] ORA-00955: 名称已由现有对象使用</div></pre></td></tr></table></figure></p>
+<p>这样的话，在作为部署脚本使用的话可能比较麻烦，最好能够使创建数据库表的语句 <code>幂等化</code> ，即执行一次和执行多次达到的效果相同。   </p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>在 Mysql 数据库中，通常会在创建数据库表之前使用 <code>DROP TABLE IF EXISTS [table_name]</code> 的语句，先删除这张可能存在的数据库表，为之后的创建工作作好铺垫。而其中的 <code>IF EXISTS</code> 语句则避免了数据库表不存在时误报错误。</p>
+<p>然而在 Oracle 数据库中，没有 <code>DROP TABLE IF EXISTS</code> 语句，直接使用 <code>DROP TABLE [table_name]</code> 在数据库表不存在时，将抛出 <code>表或视图不存在</code> 的错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[Err] ORA-00942: 表或视图不存在</div></pre></td></tr></table></figure></p>
+<p>查询一些资料发现，可以使用 <code>BEGIN...EXCEPTION...END</code> 语句来避免这个错误的抛出。类似于在代码中使用 <code>try...catch</code> 语句。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">BEGIN</div><div class="line">    EXECUTE IMMEDIATE &apos;DROP TABLE [table_name]&apos;;</div><div class="line">EXCEPTION</div><div class="line">    WHEN OTHERS THEN</div><div class="line">         IF SQLCODE != -942 THEN</div><div class="line">            RAISE;</div><div class="line">        END IF;</div><div class="line">END;</div></pre></td></tr></table></figure></p>
+<p>可以看出语句很好理解，尝试执行 <code>DROP TABLE [table_name]</code> 语句，如果有抛出异常，判断错误码是否等于 <code>-942</code> ，在错误码为 <code>-942</code> 的情况下不抛出异常，不影响后续语句的使用，否则抛出异常。</p>
+<p>这样，结合上述删除数据库表和创建数据库表的语句，可以得到综合的幂等性创建数据库表语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">BEGIN</div><div class="line">    EXECUTE IMMEDIATE &apos;DROP TABLE [table_name]&apos;;</div><div class="line">EXCEPTION</div><div class="line">    WHEN OTHERS THEN</div><div class="line">         IF SQLCODE != -942 THEN</div><div class="line">            RAISE;</div><div class="line">        END IF;</div><div class="line">END;</div><div class="line">/</div><div class="line">CREATE TABLE &quot;[table_name]&quot; (</div><div class="line">    &quot;[primary_id]&quot; VARCHAR2(18 BYTE) NOT NULL,</div><div class="line">    &quot;[field_name]&quot; VARCHAR2(128 BYTE) NOT NULL</div><div class="line">);</div></pre></td></tr></table></figure></p>
+<h2 id="一个深坑"><a href="#一个深坑" class="headerlink" title="一个深坑"></a>一个深坑</h2><p>注意上一节解决方案中的 SQL 代码，在前一段 <code>BEGIN...EXCEPTION...END</code> 后的那个斜线 <code>/</code> 不可缺少，否则会抛出错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[Err] ORA-06550: 第11行，第1列：</div><div class="line">PLS-00103: 出现符号 &quot;CREATE&quot;</div></pre></td></tr></table></figure></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://stackoverflow.com/questions/1008248/how-do-i-use-create-or-replace" target="_blank" rel="external">https://stackoverflow.com/questions/1008248/how-do-i-use-create-or-replace</a><br><a href="https://stackoverflow.com/questions/1799128/oracle-if-table-exists" target="_blank" rel="external">https://stackoverflow.com/questions/1799128/oracle-if-table-exists</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/06/15/Oracle数据库幂等性创建数据库表语句/" data-id="ck0f6v2b8005z8u8tcclxiupz" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Git历史版本列表列表最新项与当前版本不一致的可能原因" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -123,7 +175,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/" data-id="ck07ylmka001qq68ttx6siniu" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/" data-id="ck0f6v26s001p8u8t7192670h" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -176,7 +228,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/05/SpringBoot运行jar包提示没有主清单属性的问题/" data-id="ck07ylmrt006vq68trcvmu1ca" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/06/05/SpringBoot运行jar包提示没有主清单属性的问题/" data-id="ck0f6v2ch007a8u8tf1n24us6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
@@ -235,7 +287,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/04/Composer管理依赖包限制PHP版本/" data-id="ck07ylmh8000sq68tnn16ywsy" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/06/04/Composer管理依赖包限制PHP版本/" data-id="ck0f6v255000q8u8t4e82y51e" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Composer/">Composer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -285,7 +337,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/05/29/SpringCloud使用JdbcTemplate配置多数据源/" data-id="ck07ylmry0072q68tsqaztvqh" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/05/29/SpringCloud使用JdbcTemplate配置多数据源/" data-id="ck0f6v2cj007d8u8tofnaeo9r" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JdbcTemplate/">JdbcTemplate</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SpringCloud/">SpringCloud</a></li></ul>
@@ -343,7 +395,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/05/10/PHP中is-numeric和is-int的区别/" data-id="ck07ylmrv006zq68tww9mnn1g" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/05/10/PHP中is-numeric和is-int的区别/" data-id="ck0f6v2bf00658u8tnxkt4bxv" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -394,7 +446,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/05/09/Laravel使用ProgressBar在控制台中显示进度条/" data-id="ck07ylmoe0046q68tf322wkij" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/05/09/Laravel使用ProgressBar在控制台中显示进度条/" data-id="ck0f6v29k00448u8t9ub47g7h" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -459,7 +511,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/05/05/Javascript中数组splice函数的简单使用/" data-id="ck07ylmmi002qq68t48vcdm0j" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/05/05/Javascript中数组splice函数的简单使用/" data-id="ck0f6v283002l8u8tmcbii5wl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -547,7 +599,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/04/28/Java的final关键字/" data-id="ck07ylmn10037q68tioiu3kqg" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/04/28/Java的final关键字/" data-id="ck0f6v28o003b8u8t34y8htcn" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -606,59 +658,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/04/24/Laravel使用union进行分页查询/" data-id="ck07ylmok0049q68t9g6gn82t" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/04/24/Laravel使用union进行分页查询/" data-id="ck0f6v29p004a8u8taigubxes" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Spring中-RestController和-Controller的区别" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2019/04/22/Spring中-RestController和-Controller的区别/" class="article-date">
-  <time datetime="2019-04-22T08:44:15.000Z" itemprop="datePublished">2019-04-22</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2019/04/22/Spring中-RestController和-Controller的区别/">Spring中@RestController和@Controller的区别</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><code>@Controller</code> 是用于将类标记为 Spring MVC Controller；<br><code>@RestController</code> 是一种便捷的注解，其实等价于 @Controller 加上 @ResonseBody。</p>
-<blockquote>
-<p>A convenience annotation that is itself annotated with @Controller and @ResponseBody<br>@RestController注解相当于@ResponseBody ＋ @Controller合在一起的作用。<br>参考 <a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RestController.html" target="_blank" rel="external">文档</a></p>
-</blockquote>
-<p>因此，以下两种代码是等价的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@Controller</div><div class="line">@ResponseBody</div><div class="line">public class SampleController &#123; &#125;</div><div class="line"></div><div class="line">@RestController</div><div class="line">public class SampleRestController &#123; &#125;</div></pre></td></tr></table></figure></p>
-<p>就使用的效果而言，使用 <code>@RestController</code> 使用的效果是将方法返回的对象直接以JSON格式返回；使用 <code>@Controller</code> 需要配置视图解析器 <code>InternalResourceViewResolver</code> 使用。</p>
-<p>参考链接：<br><a href="https://stackoverflow.com/questions/25242321/difference-between-spring-controller-and-restcontroller-annotation" target="_blank" rel="external">https://stackoverflow.com/questions/25242321/difference-between-spring-controller-and-restcontroller-annotation</a><br><a href="https://blog.csdn.net/gg12365gg/article/details/51345601" target="_blank" rel="external">https://blog.csdn.net/gg12365gg/article/details/51345601</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/04/22/Spring中-RestController和-Controller的区别/" data-id="ck07ylms20076q68t0r9vk7ch" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
 
     </footer>
   </div>
@@ -671,7 +674,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/page/2/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><a class="page-number" href="/blog-hexo/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/blog-hexo/page/4/">4</a><a class="page-number" href="/blog-hexo/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/14/">14</a><a class="extend next" rel="next" href="/blog-hexo/page/4/">weiter &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/2/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><a class="page-number" href="/blog-hexo/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/blog-hexo/page/4/">4</a><a class="page-number" href="/blog-hexo/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/14/">14</a><a class="extend next" rel="next" href="/blog-hexo/page/4/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -680,7 +683,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -709,7 +712,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -719,9 +722,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2019/09/11/Laravel读写YAML格式文件/">Laravel读写YAML格式文件</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2019/09/06/Vue使用proxyTable解决跨域问题/">Vue使用proxyTable解决跨域问题</a>
@@ -737,10 +744,6 @@
         
           <li>
             <a href="/blog-hexo/2019/08/28/Laravel使用Nginx作为代理服务器时的两点注意事项/">Laravel使用Nginx作为代理服务器时的两点注意事项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2019/08/19/最简单的Go测试代码样例/">最简单的Go测试代码样例</a>
           </li>
         
       </ul>

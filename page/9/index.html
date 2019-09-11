@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -67,6 +67,67 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-PHP中警惕悬挂引用可能引起的bug" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/03/26/PHP中警惕悬挂引用可能引起的bug/" class="article-date">
+  <time datetime="2018-03-26T11:23:27.000Z" itemprop="datePublished">2018-03-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/03/26/PHP中警惕悬挂引用可能引起的bug/">PHP中警惕悬挂引用可能引起的bug</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在PHP中，有一种情况可能由于悬挂引用造成的bug。</p>
+<p>如果希望在遍历过程中操作数组的每个元素，可以在 <a href="http://www.php.net/manual/en/control-structures.foreach.php" target="_blank" rel="external"><code>foreach</code></a> 循环中使用引用。比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$arr = array(1, 2, 3, 4);</div><div class="line">foreach ($arr as &amp;$value) &#123;</div><div class="line">    $value = $value * 2;</div><div class="line">&#125;</div><div class="line">// $arr 变量的值现在是 array(2, 4, 6, 8)</div></pre></td></tr></table></figure>
+<p>问题在于，如果不小心的话，可能造成一些意料之外的副作用和不良后果。在上述样例的代码执行之后， <code>$value</code> 变量将停留在当前作用域中，保持着对数组最后一个元素的引用。因此，后续有关 <code>$value</code> 变量的操作都可能在不经意间修改了数组最后一个元素的值。</p>
+<p>需要记住 <code>foreach</code> 并没有创建一个全新的作用域。上述样例中的 <code>$value</code> 是在脚本代码顶级作用域的一个 <em>引用</em> 。 在 <code>foreach</code> 的每次迭代时，将设置这个引用指向 <code>$array</code> 数组的下一个元素。当循环结束时， <code>$value</code>依然指向着 <code>$array</code> 的最后一个元素，停留在了作用域中。</p>
+<p>下面是一个可能导致模棱两可、令人费解的 bug 的示例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$array = [1, 2, 3];</div><div class="line">echo implode(&apos;,&apos;, $array), &quot;\n&quot;;</div><div class="line"></div><div class="line">foreach ($array as &amp;$value) &#123;&#125;    // 通过引用的方式</div><div class="line">echo implode(&apos;,&apos;, $array), &quot;\n&quot;;</div><div class="line"></div><div class="line">foreach ($array as $value) &#123;&#125;     // 通过值访问（拷贝）</div><div class="line">echo implode(&apos;,&apos;, $array), &quot;\n&quot;;</div></pre></td></tr></table></figure>
+<p>上述代码将输出以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">1,2,3</div><div class="line">1,2,3</div><div class="line">1,2,2</div></pre></td></tr></table></figure>
+<p>没看错，这里并没有拼写错误。最后一行的最后一个元素确实是2，不是3。</p>
+<p>在经历第一个 <code>foreach</code> 循环时， <code>$array</code> 不曾被改变 ，<code>$value</code> 作为一个悬挂的引用被遗留下来，指向了 <code>$array</code> 数组的最后一个元素。（因为这个 <code>foreach</code> 循环通过<em>引用</em>的方式访问 <code>$value</code>）</p>
+<p>结果，当我们经历第二个 <code>foreach</code> 循环时，“奇怪的事情”发生了。由于 <code>$value</code> 现在是通过值访问（即<em>拷贝</em>方式），在循环的每一步， <code>foreach</code> 按顺序<em>拷贝</em> <code>$array</code> 中的每一个元素到 <code>$value</code> 中。因此，以下是第二个 <code>foreach</code> 循环中每一步所发生的事情：</p>
+<ul>
+<li><em>第1步：</em> 拷贝 <code>$array[0]</code> (这个元素的值是”1”) 到 <code>$value</code> （此时是 <code>$array[2]</code> 的引用）, 因此现在 <code>$array[2]</code> 等于1，而 <code>$array</code> 现在包含的元素是 [1, 2, 1]。</li>
+<li><em>第2步：</em> 拷贝 <code>$array[1]</code> (这个元素的值是”2”) 到 <code>$value</code> （此时还是 <code>$array[2]</code> 的引用），因此现在 <code>$array[2]</code> 等于2，而 <code>$array</code> 现在包含的元素是 [1, 2, 2]。</li>
+<li><em>第3步：</em> 拷贝 <code>$array[2]</code> (这个元素的值现在是”2”) 到 <code>$value</code> （此时依然是 <code>$array[2]</code> 的引用）， 因此现在 <code>$array[2]</code> 依然等于2，而 <code>$array</code> 现在包含的元素是 [1, 2, 2]。</li>
+</ul>
+<p>如果既希望拥有在 <code>foreach</code> 循环中使用引用所带来的便利，又不想承担上述这类问题带来的风险，可以在<code>foreach</code> 循环之后立刻对变量调用 <code>unset()</code> 方法，移除引用。举例而言：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$arr = array(1, 2, 3, 4);</div><div class="line">foreach ($arr as &amp;$value) &#123;</div><div class="line">    $value = $value * 2;</div><div class="line">&#125;</div><div class="line">unset($value);   // $value 不再是 $arr[3] 的引用</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/03/26/PHP中警惕悬挂引用可能引起的bug/" data-id="ck0f6v2bo006g8u8t42xbjcdo" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Laravel个性化404页面" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -105,7 +166,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/24/Laravel个性化404页面/" data-id="ck07ylmne003lq68t67ej45tp" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/24/Laravel个性化404页面/" data-id="ck0f6v294003q8u8t5cgrk8nu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -156,7 +217,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/" data-id="ck07ylmuo00bhq68tdwdizcfd" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/" data-id="ck0f6v2bb00628u8tu7hwjy2j" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -211,7 +272,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" data-id="ck07ylmqh005jq68tlloirs61" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" data-id="ck0f6v2au005m8u8tkp0orti1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -307,7 +368,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/01/初识AIDL/" data-id="ck07ylmtf009lq68t3957f9nu" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/01/初识AIDL/" data-id="ck0f6v2gh00a28u8t5y2vn1h6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li></ul>
@@ -402,7 +463,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" data-id="ck07ylmn9003hq68to7ivw1x2" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" data-id="ck0f6v28t003h8u8ty2hljyk2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -448,7 +509,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="ck07ylmq10056q68tzkpr246y" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="ck0f6v2ai00598u8tsa7shu6e" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li></ul>
@@ -523,7 +584,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/31/Laravel中对OPTIONS请求的批量处理/" data-id="ck07ylmnv003yq68tgta13wtp" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/31/Laravel中对OPTIONS请求的批量处理/" data-id="ck0f6v29d003y8u8tdyp4msle" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -664,7 +725,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/" data-id="ck07ylmtd009iq68tt34o2um8" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/" data-id="ck0f6v2gf009z8u8twouue7bd" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li></ul>
@@ -714,65 +775,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="ck07ylmpc004lq68t3ufi1efl" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="ck0f6v2ac004z8u8tvjcnz560" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Linux管道和awk实现字符连接" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2018/01/04/Linux管道和awk实现字符连接/" class="article-date">
-  <time datetime="2018-01-04T11:30:09.000Z" itemprop="datePublished">2018-01-04</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2018/01/04/Linux管道和awk实现字符连接/">Linux管道和awk实现字符连接</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在工作中遇到一个需求，快速将某个目录下的所有文件的完整路径输出，每行一个文件路径。<br>遇到这个需求时，非常直观的两个想法是：</p>
-<ol>
-<li><code>ls</code>命令：在Linux操作系统中，用<code>ls</code>能够列举目录下所有文件的列表</li>
-<li><code>&gt;</code>重定向符号：使用重定向符号能够将输出结果重定向到目标文件中</li>
-</ol>
-<p>然而存在一个问题，<code>ls</code>命令只列出了文件名称，相比于完整目录还缺少目录的路径。</p>
-<h2 id="awk简介"><a href="#awk简介" class="headerlink" title="awk简介"></a><code>awk</code>简介</h2><p><code>awk</code>是Linux一个强大的文本分析工具，使用方法为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">awk &apos;&#123;pattern + action&#125;&apos; &#123;filenames&#125;</div></pre></td></tr></table></figure></p>
-<p>其中<code>pattern</code>表示AWK在数据中查找的内容，而<code>action</code>是找到匹配内容是所执行的命令。花括号<code>{}</code>不需要始终出现，但可以用于根据特定的模式对一系列指令进行分组。<br><code>awk</code>的工作流程是，读入有’\n’换行符分割的记录，然后将记录按指定的域分隔符划分域，填充域。<code>$0</code>表示所有域，<code>$1</code>表示第一个域，<code>$n</code>表示第n个域。默认域分隔符是<code>空白键</code>或<code>tab键</code>。<br>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">awk &apos;&#123;print &quot;1234&quot;$1&quot;6&quot;$2&#125;&apos;</div></pre></td></tr></table></figure></p>
-<p>然后输入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">5 7</div></pre></td></tr></table></figure></p>
-<p>输出结果为<code>1234567</code>。<br>也可以使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo &quot;5 7&quot; | awk &apos;&#123;print &quot;1234&quot;$1&quot;6&quot;$2&#125;&apos;</div></pre></td></tr></table></figure></p>
-<p>同样输出<code>1234567</code>。</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>根据管道和<code>awk</code>工具的特点，我们可以针对问题提出如下解决方案：<br>假设目标目录为<code>path/to/dir</code>，要生成一个文件<code>list.txt</code>，文件中每一行是目录下文件的完整目录名：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ls path/to/dir | awk &apos;&#123;print &quot;path/to/dir&quot;$1&#125;&apos; &gt; list.txt</div></pre></td></tr></table></figure></p>
-<p>即可完成。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/04/Linux管道和awk实现字符连接/" data-id="ck07ylmpr004xq68t83p3bxc5" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li></ul>
 
     </footer>
   </div>
@@ -785,7 +791,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/page/8/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/7/">7</a><a class="page-number" href="/blog-hexo/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/blog-hexo/page/10/">10</a><a class="page-number" href="/blog-hexo/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/14/">14</a><a class="extend next" rel="next" href="/blog-hexo/page/10/">weiter &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/8/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/7/">7</a><a class="page-number" href="/blog-hexo/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/blog-hexo/page/10/">10</a><a class="page-number" href="/blog-hexo/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/14/">14</a><a class="extend next" rel="next" href="/blog-hexo/page/10/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -794,7 +800,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -823,7 +829,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -833,9 +839,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2019/09/11/Laravel读写YAML格式文件/">Laravel读写YAML格式文件</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2019/09/06/Vue使用proxyTable解决跨域问题/">Vue使用proxyTable解决跨域问题</a>
@@ -851,10 +861,6 @@
         
           <li>
             <a href="/blog-hexo/2019/08/28/Laravel使用Nginx作为代理服务器时的两点注意事项/">Laravel使用Nginx作为代理服务器时的两点注意事项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2019/08/19/最简单的Go测试代码样例/">最简单的Go测试代码样例</a>
           </li>
         
       </ul>
