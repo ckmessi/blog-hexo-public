@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -67,6 +67,53 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Java使用反射测试私用方法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/03/07/Java使用反射测试私用方法/" class="article-date">
+  <time datetime="2019-03-07T09:16:27.000Z" itemprop="datePublished">2019-03-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/03/07/Java使用反射测试私用方法/">Java使用反射测试私用方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在单元测试中，如果希望对某个类的私有方法进行测试，则需要使用反射的方式进行。<br>假设存在某个类的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public class A &#123;</div><div class="line">    private String privateMethodF(String str)&#123;</div><div class="line">        return str;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>测试代码的基本逻辑如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class UnitTest &#123;</div><div class="line">    ClassA objectA;</div><div class="line">    @Test</div><div class="line">    public void testPrivateMethod()&#123;</div><div class="line">        Method methodF = objectA.getClass().getDeclaredMethod(“privateMethodF”, String.class);</div><div class="line">        methodF.setAccessible(true);</div><div class="line">        String result = (String)methodF.invoke(objectA, “parameterString”);</div><div class="line">        // TODO: assert something</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>基本思路是使用 <code>getDeclaredMethod</code> 获取私有方法，并通过 <code>setAccessible</code> 设置其可访问。<br>调用接口的方式是通过 <code>invoke</code> 方法，其中第一个参数是目标类，第二个参数是调用方法中需要传递的参数。<br>如果私有方法有多个参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public class A &#123;</div><div class="line">    private String privateMethodF2(ClassB objB, List&lt;String&gt; strList, Integer num)&#123;</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>则测试代码应该对应修改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class UnitTest &#123;</div><div class="line">    ClassA objectA;</div><div class="line">    @Test</div><div class="line">    public void testPrivateMethod()&#123;</div><div class="line">        Method methodF2 = objectA.getClass().getDeclaredMethod(“privateMethodF2”, new Class[]&#123;ClassB.class, List.class, Integer.class);</div><div class="line">        methodF2.setAccessible(true);</div><div class="line">        ClassB objB = new ClassB();</div><div class="line">        List&lt;String&gt; strList = new ArrayList&lt;String&gt;();</div><div class="line">        String result = (String)methodF2.invoke(objectA, new Object[]&#123;objB, strList, 1&#125;);</div><div class="line">        // TODO: assert something</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://blog.csdn.net/qq_36688928/article/details/84337765" target="_blank" rel="external">https://blog.csdn.net/qq_36688928/article/details/84337765</a><br><a href="https://www.cnblogs.com/freedommovie/p/5731636.html" target="_blank" rel="external">https://www.cnblogs.com/freedommovie/p/5731636.html</a><br><a href="https://blog.csdn.net/caib1109/article/details/51338743" target="_blank" rel="external">https://blog.csdn.net/caib1109/article/details/51338743</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/03/07/Java使用反射测试私用方法/" data-id="ck21rq7un0039ed8t4b6r69gh" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Java使用stream处理列表" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -102,7 +149,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/03/06/Java使用stream处理列表/" data-id="ck204lqfb0037n38twihj0hls" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/03/06/Java使用stream处理列表/" data-id="ck21rq7ul0036ed8tngrbizio" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -166,7 +213,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/03/01/使用gem-install过程中遇到的SSL抛错/" data-id="ck204lqi2009xn38tlfqiwcjd" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/03/01/使用gem-install过程中遇到的SSL抛错/" data-id="ck21rq7zf009ved8tuvgolur0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Gem/">Gem</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ruby/">Ruby</a></li></ul>
@@ -236,7 +283,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/27/搭建virtualenv的简单流程/" data-id="ck204lqis00brn38ttp5lppvr" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/02/27/搭建virtualenv的简单流程/" data-id="ck21rq80g00boed8t2pfwesux" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/pip/">pip</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/virtualenv/">virtualenv</a></li></ul>
@@ -283,7 +330,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/25/在Java中添加一个针对整数类型的枚举类/" data-id="ck204lqil00b7n38tvez931ox" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/02/25/在Java中添加一个针对整数类型的枚举类/" data-id="ck21rq80400b3ed8ttfsd7f6b" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -340,7 +387,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/18/初识Anime-js/" data-id="ck204lqib00aln38t1v7qigll" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/02/18/初识Anime-js/" data-id="ck21rq7zo00aded8t34va74x5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Anime-js/">Anime.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li></ul>
@@ -406,7 +453,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/14/使用hexdump输出文件的十六进制编码/" data-id="ck204lqi300a0n38ts00zwsok" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/02/14/使用hexdump输出文件的十六进制编码/" data-id="ck21rq7zi009zed8tt8emseog" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/hexdump/">hexdump</a></li></ul>
@@ -484,7 +531,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/13/使用SSH搭建端口转发的两个应用场景/" data-id="ck204lqhz009mn38tlw8r6ghb" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/02/13/使用SSH搭建端口转发的两个应用场景/" data-id="ck21rq7zb009led8t0x9ojlyb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li></ul>
@@ -533,7 +580,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/01/30/终端使用base64进行编码解码/" data-id="ck204lqiy00byn38t2897a2hu" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/01/30/终端使用base64进行编码解码/" data-id="ck21rq80q00c0ed8tti3gk6xo" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/base64/">base64</a></li></ul>
@@ -594,68 +641,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/01/28/初识Drools/" data-id="ck204lqie00aon38tbnnng7eh" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/01/28/初识Drools/" data-id="ck21rq7zu00aked8tocew0k3t" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/RuleEngine/">RuleEngine</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Git修改远程仓库链接" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2019/01/25/Git修改远程仓库链接/" class="article-date">
-  <time datetime="2019-01-25T07:06:38.000Z" itemprop="datePublished">2019-01-25</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2019/01/25/Git修改远程仓库链接/">Git修改远程仓库链接</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在使用 git 的过程中，有时候需要修改远程仓库链接。<br>可能是由于该 git 项目一开始是使用HTTPS的方式clone的，但后来发现经常需要push和pull，每次都要输入用户名密码很烦。<br>可能是由于临时在外网中，通过SSH转发远程能访问到内网的 git 仓库，但对应的url发生了变化。<br>可能是存在多个上游（fork的项目），需要额外添加一个上游链接的。</p>
-<h2 id="修改方式"><a href="#修改方式" class="headerlink" title="修改方式"></a>修改方式</h2><p>通常修改远程仓库链接可以有两种方式：</p>
-<ul>
-<li>删除原链接，添加新链接</li>
-<li>直接修改原链接</li>
-</ul>
-<p>使用命令 <code>git remote -v</code> 可以查看远程仓库地址。<br>使用命令 <code>git remote rm origin</code> 可以删除远程仓库地址，此时再使用<code>git remote -v</code>查看应该显示为空。<br>使用命令 <code>git remote add origin [ssh url]</code> 命令添加新的远程仓库地址：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git remote add origin git@github.com:username/project.git</div></pre></td></tr></table></figure></p>
-<p>这时使用 <code>git pull</code> 时可能会提示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">There is no tracking information for the current branch.</div><div class="line">Please specify which branch you want to merge with.</div><div class="line">See git-pull(1) for details.</div><div class="line">git pull &lt;remote&gt; &lt;branch&gt;</div><div class="line">If you wish to set tracking information for this branch you can do so with:</div><div class="line">git branch --set-upstream-to=origin/&lt;branch&gt; master</div></pre></td></tr></table></figure></p>
-<p>这时输入命令指定本地分支与上游分支的对应关系即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git branch --set-upstream-to=origin/develop develop</div></pre></td></tr></table></figure></p>
-<p>再次使用 <code>git pull</code> ，成功拉取到上游仓库的最新代码。</p>
-<p>当然，上述使用git ssh 方法的前提是，已经将本机公钥添加到git仓库的设置中。</p>
-<h2 id="附：远程SSH转发样例"><a href="#附：远程SSH转发样例" class="headerlink" title="附：远程SSH转发样例"></a>附：远程SSH转发样例</h2><p>通过以下命令可以建立一个SSH转发：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh -L 0.0.0.0:3344:192.168.1.11:3344 username@serverIp -p 10233</div></pre></td></tr></table></figure></p>
-<p>其中 <code>username@serverIp</code> 可能是一个云服务器，搭建了通过端口 <code>10233</code> 转发至内网某服务器的链接，即平时可以通过 <code>ssh username@serverIp -p 10233</code> 远程登录内网某服务器。<br>加上 <code>-L</code> 参数进行转发后，设定 <code>192.168.1.11:3344</code> 是内网访问 git 仓库的地址，可以端口转发到本地的 <code>0.0.0.0:3344</code> ，此时通过 <code>127.0.0.1:3344</code> 可以访问git仓库。<br>对应将项目的 remote 信息进行修改即可。</p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
-<li><a href="https://www.cnblogs.com/likwo/p/6102428.html" target="_blank" rel="external">https://www.cnblogs.com/likwo/p/6102428.html</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/01/25/Git修改远程仓库链接/" data-id="ck204lqe8001fn38tz802ftxv" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
 
     </footer>
   </div>
@@ -668,7 +657,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/page/4/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="page-number" href="/blog-hexo/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/14/">14</a><a class="extend next" rel="next" href="/blog-hexo/page/6/">weiter &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/4/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="page-number" href="/blog-hexo/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/14/">14</a><a class="extend next" rel="next" href="/blog-hexo/page/6/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -677,7 +666,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -699,14 +688,14 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 12px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 12px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 11px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 11px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/FFMpeg/" style="font-size: 10px;">FFMpeg</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Flyway/" style="font-size: 10px;">Flyway</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 16px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Go/" style="font-size: 11px;">Go</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 17px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 11px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 18px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 19px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 16px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/blog-hexo/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/blog-hexo/tags/MyBatisPlus/" style="font-size: 10px;">MyBatisPlus</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 11px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 11px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 12px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 12px;">Oracle</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 11px;">PowerShell</a> <a href="/blog-hexo/tags/Python/" style="font-size: 12px;">Python</a> <a href="/blog-hexo/tags/Pythonenv/" style="font-size: 10px;">Pythonenv</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12px;">SSH</a> <a href="/blog-hexo/tags/Shell/" style="font-size: 10px;">Shell</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 14px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 12px;">Ubuntu</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15px;">Vue</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/YAML/" style="font-size: 10px;">YAML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 10px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/sed/" style="font-size: 10px;">sed</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 12px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 12px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 12px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 11px;">CSharp</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 11px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/FFMpeg/" style="font-size: 10px;">FFMpeg</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Flyway/" style="font-size: 10px;">Flyway</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 16px;">Git</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Go/" style="font-size: 11px;">Go</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 17px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 11px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 18px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 19px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 16px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/blog-hexo/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/blog-hexo/tags/MyBatisPlus/" style="font-size: 10px;">MyBatisPlus</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 11px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 11px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 12px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 12px;">Oracle</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 11px;">PowerShell</a> <a href="/blog-hexo/tags/Python/" style="font-size: 13px;">Python</a> <a href="/blog-hexo/tags/Pythonenv/" style="font-size: 10px;">Pythonenv</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12px;">SSH</a> <a href="/blog-hexo/tags/Shell/" style="font-size: 10px;">Shell</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 14px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 12px;">Ubuntu</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15px;">Vue</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/YAML/" style="font-size: 10px;">YAML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 10px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/sed/" style="font-size: 10px;">sed</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 12px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
     </div>
   </div>
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -716,9 +705,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2019/10/22/Python使用enumerate处理流数据/">Python使用enumerate处理流数据</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2019/10/21/Python中检查日期时间格式/">Python中检查日期时间格式</a>
@@ -734,10 +727,6 @@
         
           <li>
             <a href="/blog-hexo/2019/09/29/在Shell中执行Pythonenv的激活/">在Shell中执行Pythonenv的激活</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2019/09/18/Python使用pynvml查看显卡信息/">Python使用pynvml查看显卡信息</a>
           </li>
         
       </ul>
