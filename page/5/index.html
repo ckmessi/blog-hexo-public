@@ -68,6 +68,65 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Laravel使用union进行分页查询" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/04/24/Laravel使用union进行分页查询/" class="article-date">
+  <time datetime="2019-04-24T09:27:34.000Z" itemprop="datePublished">2019-04-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/04/24/Laravel使用union进行分页查询/">Laravel使用union进行分页查询</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在 <code>Laravel</code> 的数据库操作中，可以使用进行 <code>union</code> 进行数据库表的联合查询。</p>
+<p>参考 <a href="https://laravel.com/docs/5.5/queries" target="_blank" rel="external">Laravel官方文档</a> ，可以使用 <code>union</code> 方法将两个查询联合起来，具体操作是在一个初始化的查询的基础上用 <code>union</code> 方法将它和第二个查询连接起来。</p>
+<blockquote>
+<p>The query builder also provides a quick way to “union” two queries together. For example, you may create an initial query and use the union method to union it with a second query:</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$first = DB::table(&quot;users&quot;)</div><div class="line">            -&gt;whereNull(&quot;first_name&quot;);</div><div class="line">$users = DB::table(&quot;users&quot;)</div><div class="line">            -&gt;whereNull(&quot;last_name&quot;)</div><div class="line">            -&gt;union($first)</div><div class="line">            -&gt;get();</div></pre></td></tr></table></figure>
+<p>比如在实际中可以这样使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$query_1 = DB::table(&quot;users&quot;)-&gt;where([&quot;admin&quot; =&gt; 0]);</div><div class="line">$query_2 = DB::table(&quot;users&quot;)-&gt;where([&quot;admin&quot; =&gt; 1]);</div><div class="line">$query_union = $query_1-&gt;union($query_2);</div><div class="line">// in fact, $query_1 is already equals to $query_union</div><div class="line">$result = $query_union-&gt;get();</div></pre></td></tr></table></figure>
+<p>但涉及到使用分页相关的操作时，上述方法就不起效果了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$query_1 = DB::table(&quot;users&quot;)-&gt;where([&quot;admin&quot; =&gt; 0]);</div><div class="line">$query_2 = DB::table(&quot;users&quot;)-&gt;where([&quot;admin&quot; =&gt; 1]);</div><div class="line">$query_union = $query_1-&gt;union($query_2);</div><div class="line">$result = $query_union-&gt;paginate(3);</div></pre></td></tr></table></figure></p>
+<p>如果使用上述代码，会报错，大概原因是在paginate的过程中会有相关的 <code>select count(*)</code> 语句。直接使用 <code>-&gt;paginate()</code> 将会导致框架将 <code>union</code> 作用在 <code>select count(*)</code> 和 <code>select *</code> 上：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SQLSTATE[HY000]: General error: 1 SELECTs to the left and right of UNION do not have the same number of result columns (SQL: select * from (select count(*) as aggregate from &quot;users&quot; where (&quot;admin&quot; = 0) and &quot;users&quot;.&quot;deleted_at&quot; is null) union select * from (select * from &quot;users&quot; where (&quot;admin&quot; = 1) and &quot;users&quot;.&quot;deleted_at&quot; is null))</div></pre></td></tr></table></figure></p>
+<p>正确的方式应该参考如下方式使用 <code>union</code> 和 <code>painate</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$query_1 = DB::table(&quot;table_name&quot;)-&gt;where(&quot;column1&quot;, &quot;xxx&quot;)-&gt;select(&quot;column1&quot;, &quot;column2&quot;);</div><div class="line">$query_2 = DB::table(&quot;table_name&quot;)-&gt;where(&quot;column2&quot;, &quot;xxx&quot;)-&gt;select(&quot;column1&quot;, &quot;column2&quot;);</div><div class="line">$query_union = $query_1-&gt;union($query_2);</div><div class="line">$query_sql = $query_union-&gt;toSql(); </div><div class="line">$result = DB::table(DB::raw(&quot;($query_sql) as a&quot;))-&gt;mergeBindings($query_union)-&gt;paginate(10);</div></pre></td></tr></table></figure></p>
+<p>比如将上述样例代码修改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$query_1 = DB::table(&quot;users&quot;)-&gt;where([&quot;admin&quot; =&gt; 0]);</div><div class="line">$query_2 = DB::table(&quot;users&quot;)-&gt;where([&quot;admin&quot; =&gt; 1]);</div><div class="line">$query_union = $query_1-&gt;union($query_2);</div><div class="line">$query_sql = $query_union-&gt;toSql(); </div><div class="line">$result = DB::table(DB::raw(&quot;($query_sql)&quot;))-&gt;mergeBindings($query_union)-&gt;paginate(3);</div></pre></td></tr></table></figure></p>
+<p>注意：</p>
+<p>不能使用 <code>Eloquent Model</code> 进行查询，必须使用 <code>DB::table(&quot;table_name&quot;)</code> ，前者会得到一个 <code>Eloquent\Builder</code>，后者会得到 <code>Query\Builder</code> ，可能出现以下错误 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Type error: Argument 1 passed to Illuminate\Database\Query\Builder::mergeBindings() must be an instance of Illuminate\Database\Query\Builder, instance of Illuminate\Database\Eloquent\Builder given.</div></pre></td></tr></table></figure>
+<p>此外，两个查询结构的列数量一定要一致，才能执行 <code>union</code> 操作。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://laravel.com/docs/5.5/queries" target="_blank" rel="external">https://laravel.com/docs/5.5/queries</a><br><a href="http://www.bcty365.com/content-153-6177-1.html" target="_blank" rel="external">http://www.bcty365.com/content-153-6177-1.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/04/24/Laravel使用union进行分页查询/" data-id="ck2u6a36z004f9t8tgqfar458" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Spring中-RestController和-Controller的区别" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2019/04/22/Spring中-RestController和-Controller的区别/" class="article-date">
@@ -105,7 +164,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/04/22/Spring中-RestController和-Controller的区别/" data-id="ck2pjzj7r007y0u8tguk7mxrb" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/04/22/Spring中-RestController和-Controller的区别/" data-id="ck2u6a38g007x9t8tm1t3tns8" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
@@ -191,7 +250,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/04/15/Java中关于Integer对象比较的分析/" data-id="ck2pjzj5j003b0u8t2t22lanv" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/04/15/Java中关于Integer对象比较的分析/" data-id="ck2u6a36100369t8t2av9m87a" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -239,7 +298,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/04/11/Vue中使用ElementUI表格数据更新后没有刷新表格内容的问题/" data-id="ck2pjzj7x008f0u8tjhowaj4q" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/04/11/Vue中使用ElementUI表格数据更新后没有刷新表格内容的问题/" data-id="ck2u6a38p008i9t8ts60xe7cb" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -302,7 +361,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/03/14/初识Rust/" data-id="ck2pjzj8w00az0u8txj9haso7" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/03/14/初识Rust/" data-id="ck2u6a39s00b59t8tkaazua9l" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Rust/">Rust</a></li></ul>
@@ -349,7 +408,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/03/07/Java使用反射测试私用方法/" data-id="ck2pjzj5l003e0u8t05wze8ad" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/03/07/Java使用反射测试私用方法/" data-id="ck2u6a364003d9t8tm400nhie" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -395,7 +454,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/03/06/Java使用stream处理列表/" data-id="ck2pjzj5i00340u8tic4jtwmo" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/03/06/Java使用stream处理列表/" data-id="ck2u6a365003h9t8t4x2m1tho" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -459,7 +518,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/03/01/使用gem-install过程中遇到的SSL抛错/" data-id="ck2pjzj8f009z0u8t5l5nfzsm" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/03/01/使用gem-install过程中遇到的SSL抛错/" data-id="ck2u6a398009u9t8t6o5w1lfy" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Gem/">Gem</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ruby/">Ruby</a></li></ul>
@@ -529,7 +588,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/27/搭建virtualenv的简单流程/" data-id="ck2pjzj9e00bz0u8t93r707xs" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/02/27/搭建virtualenv的简单流程/" data-id="ck2u6a3a700c19t8tz4y9uskv" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/pip/">pip</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/virtualenv/">virtualenv</a></li></ul>
@@ -576,67 +635,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/25/在Java中添加一个针对整数类型的枚举类/" data-id="ck2pjzj8z00b80u8tatdyym9j" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/02/25/在Java中添加一个针对整数类型的枚举类/" data-id="ck2u6a39z00bk9t8t6ksn4gh7" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-初识Anime-js" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2019/02/18/初识Anime-js/" class="article-date">
-  <time datetime="2019-02-18T08:16:36.000Z" itemprop="datePublished">2019-02-18</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2019/02/18/初识Anime-js/">初识Anime.js</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><a href="https://animejs.com/" target="_blank" rel="external">Anime.js</a> 是一个轻量级的 JavaScript 动画库，提供了一些简单但有效的 API 接口，方便对 css 属性、SVG对象、DOM 属性和 JavaScript 对象进行操作。</p>
-<blockquote>
-<p>Anime.js (/ˈæn.ə.meɪ/) is a lightweight JavaScript animation library with a simple, yet powerful API.<br>It works with CSS properties, SVG, DOM attributes and JavaScript Objects.</p>
-</blockquote>
-<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><p>在使用 <code>Anime.js</code> 库前，可以使用 <code>npm</code> 安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install animejs --save</div></pre></td></tr></table></figure></p>
-<p>然后使用 ES6 Module 或 CommonJS 的方式引入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">import anime from &apos;lib/anime.es.js&apos;;</div><div class="line">const anime = require(&apos;lib/anime.js&apos;);</div></pre></td></tr></table></figure></p>
-<p>或者直接使用 CDN 链接：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.js&quot;&gt;&lt;/script&gt;</div></pre></td></tr></table></figure></p>
-<p>然后使用 JavaScript 代码进行操作即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">anime(&#123;</div><div class="line">  targets: &apos;.box&apos;,</div><div class="line">  translateX: 250,</div><div class="line">  backgroundColor: [&apos;#F0F&apos;, &apos;#0FF&apos;],</div><div class="line">  duration: 2000</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-<p>其中 <code>targets</code> 表示操作的目标对象，这里表示选取 <code>class</code> 为 <code>box</code> 的元素；<code>translateX</code> 是平移操作，是动画的目标操作行为；<code>backgroundColor</code> 指定了目标的动画过程中的背影颜色值，这里指定了由 <code>#F0F</code> 变化为 <code>#0FF</code>；而 <code>duration</code> 指定了动画的持续时间。<br>这些关键字都是 <code>Anime.js</code> 库中提供的 API 指定选项，阅读<a href="https://animejs.com/documentation/" target="_blank" rel="external">官方文档</a>可以尝试更多的操作选项。</p>
-<h2 id="简单样例"><a href="#简单样例" class="headerlink" title="简单样例"></a>简单样例</h2><p>在 HTML 代码中，添加一个 <code>class</code> 为 <code>box</code> 的元素：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&quot;box&quot;&gt;</div><div class="line">    box</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure></p>
-<p>在 CSS 代码中，为其添加一份简单的居中样式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">.box&#123;</div><div class="line">    display: flex;</div><div class="line">    justify-content: center;</div><div class="line">    align-items: center;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>在 JavaScript 代码中，指定其动画效果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">anime(&#123;</div><div class="line">  targets: &apos;.box&apos;,</div><div class="line">  translateX: 250,</div><div class="line">  backgroundColor: [&apos;#F0F&apos;, &apos;#0FF&apos;],</div><div class="line">  duration: 2000</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-<h2 id="完成Demo代码"><a href="#完成Demo代码" class="headerlink" title="完成Demo代码"></a>完成Demo代码</h2><p>使用以下样例代码，可以实现一个最简单的 <code>Anime.js</code> 库的使用演示。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;title&gt;learn-animejs&lt;/title&gt;</div><div class="line">    &lt;style type=&quot;text/css&quot;&gt;</div><div class="line">        .box &#123;</div><div class="line">            width: 50px;</div><div class="line">            height: 50px;</div><div class="line">            display: flex;</div><div class="line">            justify-content:center;</div><div class="line">            align-items: center;</div><div class="line">        &#125;</div><div class="line">    &lt;/style&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">    &lt;div class=&quot;box&quot;&gt;</div><div class="line">        box</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.js&quot;&gt;&lt;/script&gt;</div><div class="line">&lt;script type=&quot;text/javascript&quot;&gt;</div><div class="line">    anime(&#123;</div><div class="line">      targets: &apos;.box&apos;,</div><div class="line">      translateX: 250,</div><div class="line">      backgroundColor: [&apos;#F0F&apos;, &apos;#0FF&apos;],</div><div class="line">      duration: 2000</div><div class="line">    &#125;);</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
-<p>完成之后的效果如图：<br><img src="/blog-hexo/2019/02/18/初识Anime-js/animejs-demo.gif" alt="示例图" title="示例图"></p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://github.com/juliangarnier/anime/" target="_blank" rel="external">https://github.com/juliangarnier/anime/</a><br><a href="https://cdnjs.com/libraries/animejs" target="_blank" rel="external">https://cdnjs.com/libraries/animejs</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/18/初识Anime-js/" data-id="ck2pjzj8o00al0u8t2yoyj4fi" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Anime-js/">Anime.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li></ul>
 
     </footer>
   </div>
@@ -702,6 +704,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2019/11/11/Laravel批量insert时数组维度的一个坑/">Laravel批量insert时数组维度的一个坑</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2019/11/08/JavaScript中遍历日期及日期格式化/">JavaScript中遍历日期及日期格式化</a>
           </li>
         
@@ -715,10 +721,6 @@
         
           <li>
             <a href="/blog-hexo/2019/10/29/使用heatmap-js生成热力图/">使用heatmap.js生成热力图</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2019/10/22/Python使用enumerate处理流数据/">Python使用enumerate处理流数据</a>
           </li>
         
       </ul>

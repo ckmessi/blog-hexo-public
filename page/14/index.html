@@ -68,6 +68,51 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-npm的package-json一些使用常识" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/07/19/npm的package-json一些使用常识/" class="article-date">
+  <time datetime="2017-07-19T14:28:56.000Z" itemprop="datePublished">2017-07-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/07/19/npm的package-json一些使用常识/">npm的package.json一些使用常识</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="npm-install-–save"><a href="#npm-install-–save" class="headerlink" title="npm install –save"></a>npm install –save</h2><p><code>npm install --save</code> 能够将安装包的信息保存到<code>package.json</code>中<br>但如果一开始没有<code>package.json</code>，它不会创建文件。<br>因此需要先<code>npm init</code>，会自动生成一个<code>package.json</code>文件，之后再执行带<code>--save</code>的安装包操作时就会保存了。</p>
+<h2 id="–save和–save-dev的区别"><a href="#–save和–save-dev的区别" class="headerlink" title="–save和–save-dev的区别"></a>–save和–save-dev的区别</h2><p>使用<code>--save</code>时，会在<code>package.json</code>的<code>dependencies</code>属性中添加相关包的信息<br>使用<code>--save-dev</code>时，会在<code>package.json</code>的<code>devDependencies</code>属性中添加相关包的信息。<br>以上两者是独立的。</p>
+<h2 id="dependencies和devDependencies属性的区别"><a href="#dependencies和devDependencies属性的区别" class="headerlink" title="dependencies和devDependencies属性的区别"></a>dependencies和devDependencies属性的区别</h2><p>使用<code>npm install</code>默认会安装以上两种依赖。<br>使用<code>npm install --production</code>只安装<code>dependencies</code>，不安装<code>devDependencies</code>。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/07/19/npm的package-json一些使用常识/" data-id="ck2u6a38x00929t8tp8cokqpb" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Grunt入门" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2017/07/19/Grunt入门/" class="article-date">
@@ -140,7 +185,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/19/Grunt入门/" data-id="ck2pjzj5100240u8trtmy4ynm" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/19/Grunt入门/" data-id="ck2u6a35g00249t8twv5pnmmb" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -195,7 +240,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/07/使用mysqldump快速拷贝一个数据库/" data-id="ck2pjzj8j00a70u8t1tw8kxbd" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/07/使用mysqldump快速拷贝一个数据库/" data-id="ck2u6a39e00ac9t8tsjayqs3y" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li></ul>
@@ -246,7 +291,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/06/Apache配置php5升级为php7/" data-id="ck2pjzj3k00050u8t5bkh4ex1" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/06/Apache配置php5升级为php7/" data-id="ck2u6a33m00099t8toi17rig5" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -303,7 +348,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/28/Hexo个人博客使用流程/" data-id="ck2pjzj5400280u8tb70l68zc" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/28/Hexo个人博客使用流程/" data-id="ck2u6a35l00299t8t6bso60ru" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li></ul>
@@ -380,7 +425,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/23/Hexo项目的Git版本控制/" data-id="ck2pjzj5a002j0u8tteae0ine" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/23/Hexo项目的Git版本控制/" data-id="ck2u6a35o002j9t8t4m9rxkr2" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li></ul>
@@ -437,7 +482,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/22/Hexo博客正文添加图片/" data-id="ck2pjzj57002f0u8t1h8qblrn" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/22/Hexo博客正文添加图片/" data-id="ck2u6a35m002c9t8t4mhnob3g" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li></ul>
@@ -520,7 +565,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/21/Hexo配合Github-Pages部署个人博客/" data-id="ck2pjzj5b002m0u8tgcqvonna" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/21/Hexo配合Github-Pages部署个人博客/" data-id="ck2u6a35n002g9t8twjna6i4o" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li></ul>
@@ -581,7 +626,7 @@ var swiper = new Swiper('.swiper-container', {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/17/Swiper插件的使用/" data-id="ck2pjzj7s00810u8t205afoce" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/17/Swiper插件的使用/" data-id="ck2u6a38m00879t8tmf1ewqcm" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li></ul>
@@ -652,56 +697,11 @@ var swiper = new Swiper('.swiper-container', {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/16/随机游走/" data-id="ck2pjzj9j00ca0u8toed2na73" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/16/随机游走/" data-id="ck2u6a3ae00ck9t8txcbvmqgn" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li></ul>
 
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/06/15/hello-world/" class="article-date">
-  <time datetime="2017-06-15T13:47:21.000Z" itemprop="datePublished">2017-06-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/06/15/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/15/hello-world/" data-id="ck2pjzj83008w0u8tu4vidm0r" class="article-share-link">Teilen</a>
-      
-      
     </footer>
   </div>
   
@@ -766,6 +766,10 @@ var swiper = new Swiper('.swiper-container', {
       <ul>
         
           <li>
+            <a href="/blog-hexo/2019/11/11/Laravel批量insert时数组维度的一个坑/">Laravel批量insert时数组维度的一个坑</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2019/11/08/JavaScript中遍历日期及日期格式化/">JavaScript中遍历日期及日期格式化</a>
           </li>
         
@@ -779,10 +783,6 @@ var swiper = new Swiper('.swiper-container', {
         
           <li>
             <a href="/blog-hexo/2019/10/29/使用heatmap-js生成热力图/">使用heatmap.js生成热力图</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2019/10/22/Python使用enumerate处理流数据/">Python使用enumerate处理流数据</a>
           </li>
         
       </ul>

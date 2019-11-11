@@ -68,6 +68,63 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-SpringBoot使用-Async实现异步调用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/06/24/SpringBoot使用-Async实现异步调用/" class="article-date">
+  <time datetime="2019-06-24T08:45:09.000Z" itemprop="datePublished">2019-06-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/06/24/SpringBoot使用-Async实现异步调用/">SpringBoot使用@Async实现异步调用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在使用 Spring Boot 搭建服务器时，大多数情况下都是同步返回的，但对于一些功能比较繁重的任务，执行时间较长，很有可能导致 HTTP 请求调用超时。   </p>
+<p>在这种情况下，我们通常会让接口调用先返回，让后台异步执行相关的任务。最后通过其它方式让用户获取到任务执行结果。   </p>
+<p>使用 Spring Boot 的 <code>@Async</code> 和 <code>@EnableAsync</code> 注解，可以很方便地完成从 [同步] -&gt; [异步] 的转换。</p>
+<p>假设原来的 Controller 类和 Service 类的代码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@RestController</div><div class="line">public class TestController &#123;</div><div class="line">    ...</div><div class="line">    public String executeAsyn()&#123;</div><div class="line">        log.info(&quot;准备开启异步线程...&quot;);</div><div class="line">        testService.executeAsync();</div><div class="line">        log.info(&quot;executeAsync 接口返回&quot;);</div><div class="line">        return &quot;success&quot;;</div><div class="line">    &#125;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@Service</div><div class="line">public class TestService &#123;</div><div class="line">    public void executeAsync()&#123;</div><div class="line">        log.info(&quot;开始异步线程&quot;);</div><div class="line">        for(int i = 0; i &lt; 10; i++)&#123;</div><div class="line">            try &#123;</div><div class="line">                Thread.sleep(1000);</div><div class="line">                log.info(&quot;sleep...&#123;&#125;&quot;, i);</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        log.info(&quot;完成异步线程&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在这种情况下，接口调用将等待10秒左右才会返回，查看日志输出为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">准备开启异步线程...</div><div class="line">开始异步线程</div><div class="line">sleep...0</div><div class="line">sleep...1</div><div class="line">...</div><div class="line">sleep...9</div><div class="line">完成异步线程</div><div class="line">executeAsync 接口返回</div></pre></td></tr></table></figure></p>
+<p>可以看到，在同步调用的情况下，只有当线程内sleep操作全部执行完了，外部接口调用才返回。</p>
+<p>为了将其修改为异步调用，只需要添加两个注解：</p>
+<ul>
+<li>在方法上添加注解 <code>@Async</code></li>
+<li>在调用方 Controller 类上添加注解 <code>@EnableAsync</code></li>
+</ul>
+<p>修改为异步后，得到的输出为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">准备开启异步线程...</div><div class="line">executeAsync 接口返回</div><div class="line">开始异步线程</div><div class="line">sleep...0</div><div class="line">sleep...1</div><div class="line">...</div><div class="line">sleep...9</div><div class="line">完成异步线程</div></pre></td></tr></table></figure></p>
+<p>这样方法就是异步执行了。</p>
+<p>事实上，同步改异步的难点，不在于这两个注解的添加。最关键的点在于，异步线程执行完毕后，通过何种方式通知操作者任务已经完成。这就需要结合实际场景和需求进行相关的改造了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/06/24/SpringBoot使用-Async实现异步调用/" data-id="ck2u6a38a007k9t8tr7v2yq8g" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Oracle数据库幂等性创建数据库表语句" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2019/06/15/Oracle数据库幂等性创建数据库表语句/" class="article-date">
@@ -108,7 +165,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/15/Oracle数据库幂等性创建数据库表语句/" data-id="ck2pjzj74006e0u8t9tyfraj1" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/06/15/Oracle数据库幂等性创建数据库表语句/" data-id="ck2u6a37r006a9t8t6k7m800t" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li></ul>
@@ -175,7 +232,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/" data-id="ck2pjzj4t001u0u8thgi53bxa" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/" data-id="ck2u6a357001u9t8t5elz2ze6" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -228,7 +285,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/05/SpringBoot运行jar包提示没有主清单属性的问题/" data-id="ck2pjzj7p007u0u8taj8uh6nx" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/06/05/SpringBoot运行jar包提示没有主清单属性的问题/" data-id="ck2u6a38f007t9t8t7ji50fmv" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
@@ -287,7 +344,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/04/Composer管理依赖包限制PHP版本/" data-id="ck2pjzj47000s0u8tta4t9enu" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/06/04/Composer管理依赖包限制PHP版本/" data-id="ck2u6a342000p9t8t6284yu4g" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Composer/">Composer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -337,7 +394,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/05/29/SpringCloud使用JdbcTemplate配置多数据源/" data-id="ck2pjzj7o007r0u8tt6ev0zyi" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/05/29/SpringCloud使用JdbcTemplate配置多数据源/" data-id="ck2u6a38h00809t8tliov0uue" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JdbcTemplate/">JdbcTemplate</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SpringCloud/">SpringCloud</a></li></ul>
@@ -395,7 +452,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/05/10/PHP中is-numeric和is-int的区别/" data-id="ck2pjzj78006k0u8t5il6dvgm" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/05/10/PHP中is-numeric和is-int的区别/" data-id="ck2u6a37t006g9t8tpbxd381o" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -446,7 +503,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/05/09/Laravel使用ProgressBar在控制台中显示进度条/" data-id="ck2pjzj6d00490u8tp4ow81bw" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/05/09/Laravel使用ProgressBar在控制台中显示进度条/" data-id="ck2u6a373004p9t8ts0tppgrb" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -511,7 +568,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/05/05/Javascript中数组splice函数的简单使用/" data-id="ck2pjzj5d002q0u8tgsjtwpjc" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/05/05/Javascript中数组splice函数的简单使用/" data-id="ck2u6a35t002q9t8t58szb96i" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -599,69 +656,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/04/28/Java的final关键字/" data-id="ck2pjzj5o003l0u8txtcmtnk6" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/04/28/Java的final关键字/" data-id="ck2u6a362003a9t8t3wotwsis" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Laravel使用union进行分页查询" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2019/04/24/Laravel使用union进行分页查询/" class="article-date">
-  <time datetime="2019-04-24T09:27:34.000Z" itemprop="datePublished">2019-04-24</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2019/04/24/Laravel使用union进行分页查询/">Laravel使用union进行分页查询</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在 <code>Laravel</code> 的数据库操作中，可以使用进行 <code>union</code> 进行数据库表的联合查询。</p>
-<p>参考 <a href="https://laravel.com/docs/5.5/queries" target="_blank" rel="external">Laravel官方文档</a> ，可以使用 <code>union</code> 方法将两个查询联合起来，具体操作是在一个初始化的查询的基础上用 <code>union</code> 方法将它和第二个查询连接起来。</p>
-<blockquote>
-<p>The query builder also provides a quick way to “union” two queries together. For example, you may create an initial query and use the union method to union it with a second query:</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$first = DB::table(&quot;users&quot;)</div><div class="line">            -&gt;whereNull(&quot;first_name&quot;);</div><div class="line">$users = DB::table(&quot;users&quot;)</div><div class="line">            -&gt;whereNull(&quot;last_name&quot;)</div><div class="line">            -&gt;union($first)</div><div class="line">            -&gt;get();</div></pre></td></tr></table></figure>
-<p>比如在实际中可以这样使用：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$query_1 = DB::table(&quot;users&quot;)-&gt;where([&quot;admin&quot; =&gt; 0]);</div><div class="line">$query_2 = DB::table(&quot;users&quot;)-&gt;where([&quot;admin&quot; =&gt; 1]);</div><div class="line">$query_union = $query_1-&gt;union($query_2);</div><div class="line">// in fact, $query_1 is already equals to $query_union</div><div class="line">$result = $query_union-&gt;get();</div></pre></td></tr></table></figure>
-<p>但涉及到使用分页相关的操作时，上述方法就不起效果了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$query_1 = DB::table(&quot;users&quot;)-&gt;where([&quot;admin&quot; =&gt; 0]);</div><div class="line">$query_2 = DB::table(&quot;users&quot;)-&gt;where([&quot;admin&quot; =&gt; 1]);</div><div class="line">$query_union = $query_1-&gt;union($query_2);</div><div class="line">$result = $query_union-&gt;paginate(3);</div></pre></td></tr></table></figure></p>
-<p>如果使用上述代码，会报错，大概原因是在paginate的过程中会有相关的 <code>select count(*)</code> 语句。直接使用 <code>-&gt;paginate()</code> 将会导致框架将 <code>union</code> 作用在 <code>select count(*)</code> 和 <code>select *</code> 上：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SQLSTATE[HY000]: General error: 1 SELECTs to the left and right of UNION do not have the same number of result columns (SQL: select * from (select count(*) as aggregate from &quot;users&quot; where (&quot;admin&quot; = 0) and &quot;users&quot;.&quot;deleted_at&quot; is null) union select * from (select * from &quot;users&quot; where (&quot;admin&quot; = 1) and &quot;users&quot;.&quot;deleted_at&quot; is null))</div></pre></td></tr></table></figure></p>
-<p>正确的方式应该参考如下方式使用 <code>union</code> 和 <code>painate</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$query_1 = DB::table(&quot;table_name&quot;)-&gt;where(&quot;column1&quot;, &quot;xxx&quot;)-&gt;select(&quot;column1&quot;, &quot;column2&quot;);</div><div class="line">$query_2 = DB::table(&quot;table_name&quot;)-&gt;where(&quot;column2&quot;, &quot;xxx&quot;)-&gt;select(&quot;column1&quot;, &quot;column2&quot;);</div><div class="line">$query_union = $query_1-&gt;union($query_2);</div><div class="line">$query_sql = $query_union-&gt;toSql(); </div><div class="line">$result = DB::table(DB::raw(&quot;($query_sql) as a&quot;))-&gt;mergeBindings($query_union)-&gt;paginate(10);</div></pre></td></tr></table></figure></p>
-<p>比如将上述样例代码修改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$query_1 = DB::table(&quot;users&quot;)-&gt;where([&quot;admin&quot; =&gt; 0]);</div><div class="line">$query_2 = DB::table(&quot;users&quot;)-&gt;where([&quot;admin&quot; =&gt; 1]);</div><div class="line">$query_union = $query_1-&gt;union($query_2);</div><div class="line">$query_sql = $query_union-&gt;toSql(); </div><div class="line">$result = DB::table(DB::raw(&quot;($query_sql)&quot;))-&gt;mergeBindings($query_union)-&gt;paginate(3);</div></pre></td></tr></table></figure></p>
-<p>注意：</p>
-<p>不能使用 <code>Eloquent Model</code> 进行查询，必须使用 <code>DB::table(&quot;table_name&quot;)</code> ，前者会得到一个 <code>Eloquent\Builder</code>，后者会得到 <code>Query\Builder</code> ，可能出现以下错误 ：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Type error: Argument 1 passed to Illuminate\Database\Query\Builder::mergeBindings() must be an instance of Illuminate\Database\Query\Builder, instance of Illuminate\Database\Eloquent\Builder given.</div></pre></td></tr></table></figure>
-<p>此外，两个查询结构的列数量一定要一致，才能执行 <code>union</code> 操作。</p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://laravel.com/docs/5.5/queries" target="_blank" rel="external">https://laravel.com/docs/5.5/queries</a><br><a href="http://www.bcty365.com/content-153-6177-1.html" target="_blank" rel="external">http://www.bcty365.com/content-153-6177-1.html</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/04/24/Laravel使用union进行分页查询/" data-id="ck2pjzj6i004p0u8tf6chmgb7" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
 
     </footer>
   </div>
@@ -727,6 +725,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2019/11/11/Laravel批量insert时数组维度的一个坑/">Laravel批量insert时数组维度的一个坑</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2019/11/08/JavaScript中遍历日期及日期格式化/">JavaScript中遍历日期及日期格式化</a>
           </li>
         
@@ -740,10 +742,6 @@
         
           <li>
             <a href="/blog-hexo/2019/10/29/使用heatmap-js生成热力图/">使用heatmap.js生成热力图</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2019/10/22/Python使用enumerate处理流数据/">Python使用enumerate处理流数据</a>
           </li>
         
       </ul>
