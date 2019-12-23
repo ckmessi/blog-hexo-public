@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -67,6 +67,84 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-初识peewee" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/11/02/初识peewee/" class="article-date">
+  <time datetime="2019-11-02T06:00:19.000Z" itemprop="datePublished">2019-11-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/11/02/初识peewee/">初识peewee</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Peewee 是一个简单轻量级的ORM，它的概念很少，但表达能力很强，学习和使用它非常简单直观。</p>
+<ul>
+<li>轻量级的功能丰富的ORM</li>
+<li>支持 Python 2.7+ 和 3.4+</li>
+<li>支持 <code>sqlite</code>，<code>mysql</code> 和 <code>postgrasql</code></li>
+<li>有丰富的扩展</li>
+</ul>
+<h2 id="安装方式"><a href="#安装方式" class="headerlink" title="安装方式"></a>安装方式</h2><p>最简单的方法是使用 <code>PyPI</code> 安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install peewee</div></pre></td></tr></table></figure></p>
+<h2 id="简单使用方式"><a href="#简单使用方式" class="headerlink" title="简单使用方式"></a>简单使用方式</h2><p>Peewee 的定位是 ORM，如果你熟悉 Laravel 的 Eloquent 类型话，学习 Peewee 将不会有太多难度。<br>通常使用 ORM 关注的点就是在数据CURD过程中所需要关注到的问题，比如数据库、数据库表、表字段、记录的增删改查等。</p>
+<h4 id="数据库表"><a href="#数据库表" class="headerlink" title="数据库表"></a>数据库表</h4><p>指定数据库表关联的对象，只需要使这个对象继承 <code>peewee.Model</code> 类即可，这一点与 Eloquent 很相似：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">from peewee import Model</div><div class="line">class FooBar(Model):</div><div class="line">    name = CharField()</div></pre></td></tr></table></figure></p>
+<p>默认会以类名作为表名，所有字母都会被转为小写字母，这意味着如果类名是 <code>FooBar</code>，创建的表名会是 <code>foobar</code> ，如果希望显式指定表名，可以在类中定义 <code>Meta</code> 类并覆写其 <code>table_name</code> 字段：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">from peewee import Model</div><div class="line">class FooBar(Model):</div><div class="line">    name = CharField()</div><div class="line">    class Meta:</div><div class="line">        table_name = &apos;foo_bar&apos;</div></pre></td></tr></table></figure></p>
+<h4 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h4><p>由于 Peewee 不与任何框架绑定（相对的，Eloquent 紧密关联于 Laravel 框架），因此需要在表示数据库表关联的类中为其指定所在在数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">import peewee</div><div class="line">db = peewee.SqliteDatabase(&apos;test.db&apos;)</div><div class="line">class FooBar(Model):</div><div class="line">    name = CharField()</div><div class="line">    class Meta:</div><div class="line">        table_name = &apos;foo_bar&apos;</div><div class="line">        database = db</div></pre></td></tr></table></figure></p>
+<h4 id="数据库表字段"><a href="#数据库表字段" class="headerlink" title="数据库表字段"></a>数据库表字段</h4><p>正如 ORM 的功能所希望实现的，一张数据库表的所有字段列通过关联列的成员变量体现。比如下面的代码中，为 <code>foo_bar</code> 表创建了两个字段，分别是 <code>varchar</code> 类型的 <code>name</code> 和 <code>int</code> 类型的 <code>age</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">import peewee</div><div class="line">class FooBar(Model):</div><div class="line">    name = CharField()</div><div class="line">    age = IntegerField()</div></pre></td></tr></table></figure></p>
+<p>不同的类型可以查询 <a href="http://docs.peewee-orm.com/en/latest/peewee/models.html#field-types-table" target="_blank" rel="external">官方文档</a> 使用。</p>
+<p>针对字段的不同操作，比如设置默认值，添加主键，设置索引等，都可以通过函数中的参数完成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">import peewee</div><div class="line">import datetime</div><div class="line">class FooBar(Model):</div><div class="line">    name = CharField(null=True)    # 允许为null</div><div class="line">    age = IntegerField(default=10)    # 默认值为10</div><div class="line">    created_at = DateTimeField(default=datetime.datetime.now)</div><div class="line">    admin = BooleanField(index=True)</div></pre></td></tr></table></figure></p>
+<h2 id="创建数据库表"><a href="#创建数据库表" class="headerlink" title="创建数据库表"></a>创建数据库表</h2><p>需要注意的是，Peewee 貌似没有考虑支持数据库迁移相关特性，这意味着只参手动维护数据库的变化（相对的，Laravel 可以通过 <code>php artisan migrate</code> 命令维护数据库表的变化）。<br>可以在应用启动前，手动运行以下代码脚本，连接数据库并创建 <code>foo_bar</code> 表：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">import peewee</div><div class="line">db = peewee.SqliteDatabase(&apos;test.db&apos;)</div><div class="line">if __name__ == &apos;__main__&apos;:</div><div class="line">    db.connect()</div><div class="line">    db.create_tables([FooBar])</div></pre></td></tr></table></figure></p>
+<h2 id="查询操作"><a href="#查询操作" class="headerlink" title="查询操作"></a>查询操作</h2><p>使用 ORM 的意义在于不用重复撰写繁杂的 SQL 语句，可以直接使用 ORM 提供的方式完成数据在查询。<br>Peewee 提供的接口很简单，符合正常的人类思维。</p>
+<ul>
+<li>Model.create()，执行 <code>INSERT</code> 查询；</li>
+<li>Model.save() 和 Model.update()，执行 <code>UPDATE</code> 查询；</li>
+<li>Model.delete_instance() 和 Model.delete()，执行 <code>DELETE</code> 查询；</li>
+<li>Model.select()，执行 <code>SELECT</code> 查询。</li>
+</ul>
+<h4 id="创建和更新数据"><a href="#创建和更新数据" class="headerlink" title="创建和更新数据"></a>创建和更新数据</h4><p>可以使用 <code>save()</code> 和 <code>create()</code> 方法完成数据的添加和存储。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">from datetime import date</div><div class="line">alice = Person(name=&apos;Alice&apos;, birthday=date(1990, 1, 14))</div><div class="line">alice.save()</div></pre></td></tr></table></figure></p>
+<p>或者直接使用 <code>Person</code> 类创建一个实例对象：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bob = Person.create(name=&apos;Bob&apos;, birthday=date(1991,2,14))</div></pre></td></tr></table></figure></p>
+<p>如果要修改数据库中的某一行实例，可以使用 <code>save()</code> 完成持久化存储：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">bob.name = &apos;Bob John&apos;</div><div class="line">bob.save()</div></pre></td></tr></table></figure></p>
+<p>删除时，使用 <code>delete_instance()</code> 方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bob.delete_instance()</div></pre></td></tr></table></figure></p>
+<h4 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h4><p>使用 <code>get()</code> 可以查询一条记录：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">item = FooBar.get(FooBar.name == &apos;abc&apos;)</div></pre></td></tr></table></figure></p>
+<p>使用 <code>select()</code> 可以查询多条记录：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">item_list = FooBar.select()</div></pre></td></tr></table></figure></p>
+<h4 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h4><p>删除一个实例可以使用 <code>delete_instance()</code> 方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">item = FooBar.get(Foobar.name == &apos;abc&apos;)</div><div class="line">item.delete_instance()</div></pre></td></tr></table></figure></p>
+<p>按照条件删除可以使用 <code>delete</code> 方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">query = FooBar.delete().where(FooBar.name = &apos;efg&apos;)</div><div class="line">query.execute()</div></pre></td></tr></table></figure></p>
+<h4 id="where查询"><a href="#where查询" class="headerlink" title="where查询"></a>where查询</h4><p>在上述各类查询命令中，都可以通过  <code>.where()</code> 命令添加查询条件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Stat.select().where(Stat.url == request.url)</div><div class="line">FooBar.delete().where(FooBar.name = &apos;efg&apos;)</div><div class="line">Tweet.update(is_published=True).where(Tweet.creation_date &lt; today)</div></pre></td></tr></table></figure></p>
+<p>此外，一些高级功能也有其对应的接口，比如查询或创建可以使用 <code>get_or_create</code> 语句完成，多条数据插入可以用 <code>insert_many</code> 完成等。</p>
+<p>总之，大多数查询方式和 Laravel 的 QueryBuilder 是很相似的。<br>关于查询和查询构造器的各种使用方式，可以参考 <a href="http://docs.peewee-orm.com/en/latest/peewee/query_builder.html#" target="_blank" rel="external">文档</a></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Peewee 是一款简单轻量级的 ORM，在 Python 项目中可以方便地使用它进行数据库操作。<br>Peewee 可以理解为脱离了 Laravel 框架的 Eloquent，封装了数据库操作相关的大多数接口，调用方式简洁易懂，能够减少许多撰写繁杂 SQL 语句的工作量。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://docs.peewee-orm.com/en/latest/" target="_blank" rel="external">http://docs.peewee-orm.com/en/latest/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/11/02/初识peewee/" data-id="ck4i4llpp00c5vy8tyxbansth" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/peewee/">peewee</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-初识cookiecutter" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -122,7 +200,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/10/30/初识cookiecutter/" data-id="ck47vx2ly00by3i8tnqfxdlj1" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/10/30/初识cookiecutter/" data-id="ck4i4llpo00c2vy8tpzffynsb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/cookiecutter/">cookiecutter</a></li></ul>
@@ -187,7 +265,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/10/29/使用heatmap-js生成热力图/" data-id="ck47vx2kt00ai3i8tzq8deei7" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/10/29/使用heatmap-js生成热力图/" data-id="ck4i4llp100alvy8tvmks3wyq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/heatmap-js/">heatmap.js</a></li></ul>
@@ -236,7 +314,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/10/22/Python使用enumerate处理流数据/" data-id="ck47vx2in007b3i8tdwhvzwq6" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/10/22/Python使用enumerate处理流数据/" data-id="ck4i4llnx007fvy8twhwpsww9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -293,7 +371,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/10/21/Python中检查日期时间格式/" data-id="ck47vx2im00783i8ty3exnb6h" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/10/21/Python中检查日期时间格式/" data-id="ck4i4llnv007bvy8t57g745md" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -348,7 +426,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/10/18/使用sed命令快速替换文件内容/" data-id="ck47vx2l200as3i8t5njoaxkm" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/10/18/使用sed命令快速替换文件内容/" data-id="ck4i4llp400asvy8tvw1nbeqx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/sed/">sed</a></li></ul>
@@ -425,7 +503,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/10/16/Git-submodule的使用/" data-id="ck47vx2a4001e3i8tq5br5zhd" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/10/16/Git-submodule的使用/" data-id="ck4i4lll0001dvy8tufdgqzxz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -475,7 +553,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/09/29/在Shell中执行Pythonenv的激活/" data-id="ck47vx2m500c93i8t2qtuo0qm" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/09/29/在Shell中执行Pythonenv的激活/" data-id="ck4i4llps00ccvy8tfhibokd6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Pythonenv/">Pythonenv</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li></ul>
@@ -526,7 +604,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/09/18/Python使用pynvml查看显卡信息/" data-id="ck47vx2kl00a73i8tfh0rzach" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/09/18/Python使用pynvml查看显卡信息/" data-id="ck4i4llnz007lvy8tgunfrxbi" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -579,64 +657,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/09/11/Laravel读写YAML格式文件/" data-id="ck47vx2h1004w3i8tsf6ynuyv" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/09/11/Laravel读写YAML格式文件/" data-id="ck4i4lln2004yvy8ttab6d3so" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Vue使用proxyTable解决跨域问题" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2019/09/06/Vue使用proxyTable解决跨域问题/" class="article-date">
-  <time datetime="2019-09-06T10:10:14.000Z" itemprop="datePublished">2019-09-06</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2019/09/06/Vue使用proxyTable解决跨域问题/">Vue使用proxyTable解决跨域问题</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>之前在使用 <code>Vue.js</code> 作为前端框架时，通常是在主方法中引入 <code>axios</code> ，并设置其 <code>baseURL</code> 属性指向后端：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">import axios from &apos;axios&apos;</div><div class="line">axios.defaults.baseURL = &apos;http://localhost:8080&apos;</div><div class="line">axios.defaults.withCredentials = true;</div><div class="line">...</div></pre></td></tr></table></figure></p>
-<p>在这种情况下，如果前端页面所在的域名和端口号与后台服务器不同，需要后台服务器提供支持，因为涉及到了跨域请求。</p>
-<p>还有一种方式，可以在 Vue.js 开发过程中直接避免跨域问题，就是使用配置中的 <code>proxyTable</code> 项。</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>在 <code>Vue.js</code> 框架目录中 <code>config/index.js</code> 文件，修改配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">module.exports = &#123;</div><div class="line">  dev: &#123;</div><div class="line">    proxyTable: &#123;</div><div class="line">        &apos;/backend-api&apos;: &#123;</div><div class="line">            // 测试环境</div><div class="line">            target: &apos;http://localhost:8710/&apos;, // 接口域名</div><div class="line">            changeOrigin: true, //是否跨域</div><div class="line">            pathRewrite: &#123;</div><div class="line">                &apos;^/backend-api&apos;: &apos;xxx&apos; // 其实如果原样的话，是可以不要重写的</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">...</div></pre></td></tr></table></figure></p>
-<p>其中 <code>proxyTable</code> 对象的键值 <code>/backend-api</code> 标识了一个匹配规则，即所有匹配上 <code>/backend-api</code> 的请求都会根据这个对象中的配置进行一些修改。<br><code>target</code> 属性标识了真实的后台域名，<code>changeOrigin</code> 设置为 <code>true</code> 可以允许跨域，而 <code>pathRewrite</code> 则标识了一个重写逻辑，这部分是可选的。</p>
-<p>然后在具体的 API 调用文件中，使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">import axios from &apos;axios&apos;</div><div class="line">export default &#123;</div><div class="line">    ExecuteSingle: (params) =&gt; &#123;</div><div class="line">        return axios.get(&apos;/backend-api/web/academy/list&apos;, &#123;</div><div class="line">            params: params</div><div class="line">        &#125;);</div><div class="line">    &#125;,</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
-<p>这样，如果前端页面所在的域名端口是 <code>http://127.0.0.1:8888</code> ，那么 <code>ExecuteSingle</code> 方法执行时发出的请求就是 <code>http://127.0.0.1:8888/backend-api/web/academy/list</code> 。<br>此时这个请求将被转发到 <code>proxyTable</code> 中 <code>target</code> 属性 <code>http://localhost:8710/</code> 处，即实际执行的请求会转变成 <code>http://localhost:8710/backend-api/web/academy/list</code> ；同时，由于 <code>pathRewrite</code> 属性的声明，其中路径中的 <code>^/backend-api</code> 部分还会被重写为 <code>xxx</code>，因此最终实际的请求是 <code>http://localhost:8710/xxx/web/academy/list</code>。</p>
-<p>注意，上述使用场景都是针对 <code>npm run dev</code> 启动时才有效。<br><strong>注意</strong>：修改 <code>config/index.js</code> 后，一定要重新运行 <code>npm run dev</code> 才会生效！！！</p>
-<h2 id="配置到-nginx"><a href="#配置到-nginx" class="headerlink" title="配置到 nginx"></a>配置到 nginx</h2><p>上述解决方法都是针对使用 <code>npm run dev</code> 场景下才有效，真正部署至线上时，我们通常会使用 <code>npm run build</code> 打出一个 <code>dist</code> 包，并使用 Nginx 服务器进行部署。<br>此时 <code>dist</code> 目录中的前端代码是不受上述代理配置约束的，它会按照正常的逻辑访问 <code>http://127.0.0.1:8888/backend-api/web/academy/list</code> 。<br>这当然是我们不希望看到的，为了解决这个问题，通常是修改 Nginx 服务器配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">location ^~/backend-api/ &#123;</div><div class="line">    proxy_pass http://localhost:8710/;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>这样使所有带 <code>/backend-api/</code> 的请求都被转发到后台端口，实际上也是完成了 <code>proxyTable</code> 的工作。<br>但在实际使用中发现，经过一次 <code>proxy_pass</code> 的请求，偶尔会出现一直 pending 的情况，直到超时了才重试，重试后又正常返回。</p>
-<p>具体现象和 <a href="https://segmentfault.com/q/1010000014023324" target="_blank" rel="external">这篇文章</a>  描述的很像，排查了好长时间，最终根据 <a href="https://www.lwhweb.com/2018/09/06/nginx-upstream-timed-out-10060/" target="_blank" rel="external">这篇博客</a> 知道了原因。<br>标准解决方法是将 <code>localhost</code> 修改为 <code>127.0.0.1</code> 即可，妥协的解决方法可以是设置一个较少的 <code>proxy_connect_timeout</code> 值让其超时自动重试。</p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://segmentfault.com/a/1190000014396546" target="_blank" rel="external">https://segmentfault.com/a/1190000014396546</a><br><a href="https://vuejs-templates.github.io/webpack/proxy.html" target="_blank" rel="external">https://vuejs-templates.github.io/webpack/proxy.html</a><br><a href="https://www.cnblogs.com/goloving/p/9170508.html" target="_blank" rel="external">https://www.cnblogs.com/goloving/p/9170508.html</a><br><a href="https://segmentfault.com/q/1010000014023324" target="_blank" rel="external">https://segmentfault.com/q/1010000014023324</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/09/06/Vue使用proxyTable解决跨域问题/" data-id="ck47vx2jd008h3i8tsc56tmis" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
 
     </footer>
   </div>
@@ -649,7 +673,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/15/">15</a><a class="extend next" rel="next" href="/blog-hexo/page/3/">weiter &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/16/">16</a><a class="extend next" rel="next" href="/blog-hexo/page/3/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -658,7 +682,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -687,7 +711,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -697,9 +721,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2019/12/23/Laravel获取请求中的XML数据/">Laravel获取请求中的XML数据</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2019/12/16/初识Supervisor/">初识Supervisor</a>
@@ -715,10 +743,6 @@
         
           <li>
             <a href="/blog-hexo/2019/11/28/初识FastAPI/">初识FastAPI</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2019/11/25/初识Alembic/">初识Alembic</a>
           </li>
         
       </ul>

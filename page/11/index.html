@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -67,6 +67,55 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Laravel个性化404页面" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/03/24/Laravel个性化404页面/" class="article-date">
+  <time datetime="2018-03-24T07:27:05.000Z" itemprop="datePublished">2018-03-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/03/24/Laravel个性化404页面/">Laravel个性化404页面</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Larvel5.5 默认的404页面比较普通，在实际中可能需要输出个性化的404页面。</p>
+<img src="/blog-hexo/2018/03/24/Laravel个性化404页面/1.png" alt="Laravel5.5的默认404页面" title="Laravel5.5的默认404页面">
+<p>根据<a href="https://laravel.com/docs/5.5/errors#custom-http-error-pages" target="_blank" rel="external">官方文档</a>，可以通过创建一个<code>resources/views/errors/404.blade.php</code>文件，实现自定义的404错误页面。</p>
+<p>查看相关源码，在文件<code>Illuminate\Foundation\Exceptions\Handler.php</code>中，可知其原理如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">protected function renderHttpException(HttpException $e)</div><div class="line">   &#123;</div><div class="line">       $status = $e-&gt;getStatusCode();</div><div class="line"></div><div class="line">       $paths = collect(config(&apos;view.paths&apos;));</div><div class="line"></div><div class="line">       view()-&gt;replaceNamespace(&apos;errors&apos;, $paths-&gt;map(function ($path) &#123;</div><div class="line">           return &quot;&#123;$path&#125;/errors&quot;;</div><div class="line">       &#125;)-&gt;push(__DIR__.&apos;/views&apos;)-&gt;all());</div><div class="line"></div><div class="line">       if (view()-&gt;exists($view = &quot;errors::&#123;$status&#125;&quot;)) &#123;</div><div class="line">           return response()-&gt;view($view, [&apos;exception&apos; =&gt; $e], $status, $e-&gt;getHeaders());</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       return $this-&gt;convertExceptionToResponse($e);</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p>这个方法<code>renderHttpException</code>的功能故名思义是渲染Http请求异常的。<br>其中会先收集<code>view</code>文件夹（这在<code>config/view.php</code>文件中定义）下所有文件集合，默认会在<code>resources/views/errors</code>文件夹下，查找是否有与<code>$status</code>相同的文件名称。若有，则输出这个页面；否则执行默认的异常渲染操作。   </p>
+<p>这就是为什么通过添加<code>resources/views/errors/404.blade.php</code>文件就能自定义404页面的原理。类似的，如果希望自定义503错误页面，则对应添加一个<code>503.blade.php</code>即可。   </p>
+<p>以上。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/03/24/Laravel个性化404页面/" data-id="ck4i4llml003vvy8tkmnf9g0p" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-PHP-unpack-函数的使用" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -107,7 +156,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/" data-id="ck47vx2i0006d3i8tcc2u08gj" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/" data-id="ck4i4llnk006hvy8t0cfahx5m" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -162,7 +211,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" data-id="ck47vx2hr00603i8t3bps22g0" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" data-id="ck4i4llnf0065vy8t559c5g8y" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -258,7 +307,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/01/初识AIDL/" data-id="ck47vx2l700az3i8th9zoa3q5" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/01/初识AIDL/" data-id="ck4i4llp800b7vy8t115vtgkb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li></ul>
@@ -353,7 +402,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" data-id="ck47vx2fp003p3i8tcadvfmtr" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" data-id="ck4i4llmh003qvy8t7yehwgw0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -399,7 +448,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="ck47vx2hm005m3i8t4wccqshk" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="ck4i4llnc005vvy8tezaqbs54" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li></ul>
@@ -474,7 +523,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/31/Laravel中对OPTIONS请求的批量处理/" data-id="ck47vx2gb00433i8t69sd8umu" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/31/Laravel中对OPTIONS请求的批量处理/" data-id="ck4i4llmw004evy8trlwefar9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -615,7 +664,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/" data-id="ck47vx2l300aw3i8tor4prgaf" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/" data-id="ck4i4llp600azvy8t4nn4io2g" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li></ul>
@@ -665,7 +714,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="ck47vx2h3004y3i8trb675ku4" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="ck4i4lln40053vy8tvngvefgw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li></ul>
@@ -720,58 +769,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/04/Linux管道和awk实现字符连接/" data-id="ck47vx2h800553i8trz16adec" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/04/Linux管道和awk实现字符连接/" data-id="ck4i4lln8005hvy8t740gpvpi" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Mac使用命令行快速生成zip包" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2018/01/02/Mac使用命令行快速生成zip包/" class="article-date">
-  <time datetime="2018-01-02T05:49:52.000Z" itemprop="datePublished">2018-01-02</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2018/01/02/Mac使用命令行快速生成zip包/">Mac使用命令行快速生成zip包</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Mac OS自带<code>zip</code>命令，可以用于生成<code>.zip</code>格式压缩文件。   </p>
-<h4 id="压缩单个文件"><a href="#压缩单个文件" class="headerlink" title="压缩单个文件"></a>压缩单个文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zip -e [file_name.zip] [file_name]</div></pre></td></tr></table></figure>
-<p>其中<code>-e</code>选项表示加密压缩，需要在上述命令后输入密码和确认密码。</p>
-<h4 id="压缩文件夹"><a href="#压缩文件夹" class="headerlink" title="压缩文件夹"></a>压缩文件夹</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zip -e -r [file_name.zip] [file_dir]</div></pre></td></tr></table></figure>
-<p>其中<code>-r</code>选项表示递归地进行压缩，与Linux命令中<code>rm -r</code>的使用方式类似。</p>
-<p>关于输入密码也可以通过一行命令直接完成。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zip -r -p [password] [file_name.zip] [file_dir]</div></pre></td></tr></table></figure></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/02/Mac使用命令行快速生成zip包/" data-id="ck47vx2ha00593i8tx1vybfvu" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li></ul>
 
     </footer>
   </div>
@@ -784,7 +785,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/page/10/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/9/">9</a><a class="page-number" href="/blog-hexo/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/blog-hexo/page/12/">12</a><a class="page-number" href="/blog-hexo/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/15/">15</a><a class="extend next" rel="next" href="/blog-hexo/page/12/">weiter &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/10/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/9/">9</a><a class="page-number" href="/blog-hexo/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/blog-hexo/page/12/">12</a><a class="page-number" href="/blog-hexo/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/16/">16</a><a class="extend next" rel="next" href="/blog-hexo/page/12/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -793,7 +794,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -822,7 +823,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -832,9 +833,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2019/12/23/Laravel获取请求中的XML数据/">Laravel获取请求中的XML数据</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2019/12/16/初识Supervisor/">初识Supervisor</a>
@@ -850,10 +855,6 @@
         
           <li>
             <a href="/blog-hexo/2019/11/28/初识FastAPI/">初识FastAPI</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2019/11/25/初识Alembic/">初识Alembic</a>
           </li>
         
       </ul>
