@@ -68,6 +68,59 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Oracle数据库创建表并添加自增字段" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/11/12/Oracle数据库创建表并添加自增字段/" class="article-date">
+  <time datetime="2018-11-12T09:30:03.000Z" itemprop="datePublished">2018-11-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/11/12/Oracle数据库创建表并添加自增字段/">Oracle数据库创建表并添加自增字段</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这篇文章记录一些简单的Oracle数据库操作语句。</p>
+<h2 id="查询当前存在的表名称列表"><a href="#查询当前存在的表名称列表" class="headerlink" title="查询当前存在的表名称列表"></a>查询当前存在的表名称列表</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select * from user_tables;</div></pre></td></tr></table></figure>
+<h2 id="Oracle创建表"><a href="#Oracle创建表" class="headerlink" title="Oracle创建表"></a>Oracle创建表</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">CREATE TABLE PREFIX_USER</div><div class="line">(</div><div class="line">    ID NUMBER not NULL</div><div class="line">        constraint PREFIX_USER_PK</div><div class="line">        primary key,</div><div class="line">    USER_NAME VARCHAR(128),</div><div class="line">    REMARK VARCHAR(256),</div><div class="line">    CREATED_AT TIMESTAMP default current_timestamp,</div><div class="line">    UPDATED_AT TIMESTAMP default NULL</div><div class="line">);</div></pre></td></tr></table></figure>
+<h2 id="Oracle设置数据库表自增字段"><a href="#Oracle设置数据库表自增字段" class="headerlink" title="Oracle设置数据库表自增字段"></a>Oracle设置数据库表自增字段</h2><p>与Mysql等数据库不同，Oracle无法直接在表字段中直接设置 <code>auto_increment</code> 属性。</p>
+<p>思路：创建一个从1开始一直自增的SEQUENCE，在每一次对表进行INSERT操作前，对SEQUENCE进行SELECT操作得到新值，然后赋值给表中新的这一行。</p>
+<p>示例：若PREFIX_USER中包含ID字段，欲将其设置为自增，可以在新建表后，执行以下两条SQL语句。</p>
+<p>首先创建一个序列器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">CREATE SEQUENCE PREFIX_USER_ID_SEQUENCE</div><div class="line">MINVALUE 1</div><div class="line">NOMAXVALUE</div><div class="line">INCREMENT BY 1</div><div class="line">START WITH 1</div><div class="line">NOCACHE</div><div class="line">NOCYCLE;</div></pre></td></tr></table></figure>
+<p>在每次对 <code>PREFIX_USER</code> 表进行 <code>INSERT</code> 操作前，都先运行 <code>SELECT</code> 语句对 <code>PREFIX_USER_ID_SEQUENCE</code> 读取下一个值，然后赋值给 <code>PREFIX_USER</code> 表的新行；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">CREATE OR REPLACE TRIGGER PREFIX_USER_ID_TRIGGER BEFORE</div><div class="line">INSERT ON PREFIX_USER</div><div class="line">FOR EACH ROW</div><div class="line">BEGIN</div><div class="line">    SELECT PREFIX_USER_ID_SEQUENCE.nextval into:NEW.ID from dual;</div><div class="line">END PREFIX_USER_ID_TRIGGER;</div></pre></td></tr></table></figure>
+<p>参考链接：<a href="https://stackoverflow.com/questions/11296361/how-to-create-id-with-auto-increment-on-oracle" target="_blank" rel="external">https://stackoverflow.com/questions/11296361/how-to-create-id-with-auto-increment-on-oracle</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/11/12/Oracle数据库创建表并添加自增字段/" data-id="ckaqi87tx006dsh8tacxslosc" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-在Visual-Studio使用libfacedetection检测人脸关键点" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2018/10/31/在Visual-Studio使用libfacedetection检测人脸关键点/" class="article-date">
@@ -113,7 +166,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/10/31/在Visual-Studio使用libfacedetection检测人脸关键点/" data-id="ck889zerk00d3i78t2nafpvsh" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/10/31/在Visual-Studio使用libfacedetection检测人脸关键点/" data-id="ckaqi87wu00d5sh8tq7t8or7d" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Visual-Studio/">Visual Studio</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/libfacedetection/">libfacedetection</a></li></ul>
@@ -177,7 +230,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/30/Oh-My-Zsh配合agnoster主题及Solarized配色/" data-id="ck889zeor0065i78tbiwp6wt0" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/09/30/Oh-My-Zsh配合agnoster主题及Solarized配色/" data-id="ckaqi87tz006gsh8twpzk1nwm" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Oh-My-Zsh/">Oh-My-Zsh</a></li></ul>
@@ -233,7 +286,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/21/Laravel中server-php文件的作用/" data-id="ck889zenx0041i78t4o3jmugy" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/09/21/Laravel中server-php文件的作用/" data-id="ckaqi87t60043sh8tg6qdzjax" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -282,7 +335,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/21/Ubuntu-16-04-升级OpenSSH/" data-id="ck889zepm008ni78tdpvtndpn" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/09/21/Ubuntu-16-04-升级OpenSSH/" data-id="ckaqi87ut008lsh8thnclgofw" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li></ul>
@@ -345,7 +398,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/17/Linux用户免密码sudo执行命令/" data-id="ck889zeoh005ai78t5f2500d7" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/09/17/Linux用户免密码sudo执行命令/" data-id="ckaqi87tk005bsh8t6xx77w4d" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li></ul>
@@ -395,7 +448,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/13/Windows-Ubuntu-Mac-OS查看文件md5值的命令/" data-id="ck889zepr0091i78t9c5nmcpq" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/09/13/Windows-Ubuntu-Mac-OS查看文件md5值的命令/" data-id="ckaqi87v2009dsh8t2mxghxs8" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li></ul>
@@ -475,7 +528,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/14/搭建SSH端口转发反向代理/" data-id="ck889zern00dbi78t40fnun2h" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/08/14/搭建SSH端口转发反向代理/" data-id="ckaqi87x100dksh8titdqa4fa" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li></ul>
@@ -532,7 +585,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/13/解决iPhone上Safari浏览器滑动比较卡的问题/" data-id="ck889zert00dpi78to1n0po59" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/08/13/解决iPhone上Safari浏览器滑动比较卡的问题/" data-id="ckaqi87x800dysh8t7jwrgu9q" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -585,61 +638,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/11/Ubuntu禁用SSH密码登录/" data-id="ck889zepp008ui78tpldpk24r" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/08/11/Ubuntu禁用SSH密码登录/" data-id="ckaqi87ux008wsh8t6p8rzntj" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-PHP使用ZipArchive完成后台文件压缩" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2018/08/09/PHP使用ZipArchive完成后台文件压缩/" class="article-date">
-  <time datetime="2018-08-09T12:13:12.000Z" itemprop="datePublished">2018-08-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2018/08/09/PHP使用ZipArchive完成后台文件压缩/">PHP使用ZipArchive完成后台文件压缩</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近在项目中遇到需要将后台相关文件打包成一个压缩包的功能。</p>
-<p>这时可以使用PHP自带的类 <code>ZipArchive</code> 。</p>
-<p><a href="http://us3.php.net/manual/en/class.ziparchive.php" target="_blank" rel="external">ZipArchive</a>是PHP官方自带的类，使用环境条件为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(PHP 5 &gt;= 5.2.0, PHP 7, PECL zip &gt;= 1.1.0)</div></pre></td></tr></table></figure></p>
-<p>使用以下代码可以将若干个文件压缩到目标 <code>.zip</code> 文件中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">if ($zip-&gt;open(&apos;test.zip&apos;, ZipArchive::CREATE) === TRUE)</div><div class="line">&#123;</div><div class="line">    $zip-&gt;addFile(&apos;image.txt&apos;);</div><div class="line">    $zip-&gt;addFile(&apos;image2.txt&apos;);</div><div class="line">    $zip-&gt;close();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>注意<code>open()</code> 方法的第二个参数可以有以下几种：<br>ZipArchive::OVERWRITE<br>ZipArchive::CREATE<br>ZipArchive::EXCL<br>ZipArchive::CHECKCONS</p>
-<p>此外，在 <code>Laravel</code> 中使用时，发现在web.php中可以直接使用以下语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$zip = new ZipArchive;</div></pre></td></tr></table></figure></p>
-<p>但是在Controller或自定的类中，就需要使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$zip = new \ZipArchive;</div></pre></td></tr></table></figure></p>
-<p>因为需要在全局（而不是当前命名空间下）寻找<code>ZipArchive</code>类。</p>
-<h2 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h2><p><a href="https://my.oschina.net/junn/blog/104464" target="_blank" rel="external">https://my.oschina.net/junn/blog/104464</a><br><a href="http://us3.php.net/manual/en/class.ziparchive.php" target="_blank" rel="external">http://us3.php.net/manual/en/class.ziparchive.php</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/09/PHP使用ZipArchive完成后台文件压缩/" data-id="ck889zep0006ri78tu3llmqvy" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
 
     </footer>
   </div>
@@ -692,7 +694,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archiv</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
   </div>
 
@@ -703,6 +705,10 @@
     <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2020/05/28/Laravel中添加路径参数限制规则/">Laravel中添加路径参数限制规则</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2020/03/26/Shell中使用xargs批量操作文件/">Shell中使用xargs批量操作文件</a>
@@ -718,10 +724,6 @@
         
           <li>
             <a href="/blog-hexo/2020/01/10/使用ffmpeg保存网络视频流/">使用ffmpeg保存网络视频流</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/01/09/使用setuptools为Python代码打包/">使用setuptools为Python代码打包</a>
           </li>
         
       </ul>

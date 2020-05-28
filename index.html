@@ -68,6 +68,59 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Laravel中添加路径参数限制规则" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/05/28/Laravel中添加路径参数限制规则/" class="article-date">
+  <time datetime="2020-05-28T08:16:34.000Z" itemprop="datePublished">2020-05-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/05/28/Laravel中添加路径参数限制规则/">Laravel中添加路径参数限制规则</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在后台项目开发过程中，参考 RESTful 风格的 API 可能会使用路径参数，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[GET] blog/list</div><div class="line">[GET] blog/&#123;blog_id&#125;/detail</div><div class="line">[DELETE] blog/&#123;blog_id&#125;</div><div class="line">[DELETE] blog/&#123;blog_id&#125;/comments</div></pre></td></tr></table></figure></p>
+<p>然而路径参数在某些情况下可能会引起歧义，比如版本迭代后，添加了新的 API：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[GET] blog/v2/list</div><div class="line">[GET] blog/v3/&#123;blog_id&#125;/detail</div></pre></td></tr></table></figure></p>
+<p>上述路由倒不会引起问题，如果突然新版本的接口不使用路径参数了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[DELETE] blog/v3</div><div class="line">[DELETE] blog/v3/comments</div></pre></td></tr></table></figure></p>
+<p>当使用 DELETE 方式访问 <code>blog/v3?blog_id=1</code> 时，就有可能产生冲突：<br>1）匹配到 <code>[DELETE] blog/{blog_id}</code>，将 <code>v3</code> 当成是参数 <code>blog_id</code> 进行后续处理；<br>2）匹配到 <code>[DELETE] blog/v3</code>，将参数 <code>blog_id=1</code> 作为参数后续处理。</p>
+<p>在不同的框架中，根据路由匹配规则的不同，两种情况都有可能发生。<br>在 Laravel 框架中，哪个路由规则写在前面，就会匹配到哪一个。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>上述由于路径参数和版本迭代引起的路由匹配错误，显然是我们不愿意看到的。<br>一个直观的解决方案是告诉框架：只有路径参数是纯数字时，才作为路径参数使用。这样当路由匹配器遇到 <code>v3</code> 这样的字符串时，不会将其作为路径参数解析。</p>
+<p>在 Laravel 框架中，可以使用 <code>Regular Expression Constraints</code> 特性进行约束：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Route::get(&apos;blog/&#123;name&#125;&apos;, function ($name) &#123;</div><div class="line">    // 限制字符</div><div class="line">&#125;)-&gt;where(&apos;name&apos;, &apos;[A-Za-z]+&apos;);</div><div class="line"></div><div class="line">Route::delete(&apos;blog/&#123;id&#125;&apos;, function ($id) &#123;</div><div class="line">    // 限制数字</div><div class="line">&#125;)-&gt;where(&apos;id&apos;, &apos;[0-9]+&apos;);</div></pre></td></tr></table></figure></p>
+<p>即在路由定义的最后，使用 <code>where(&#39;[parameter_name]&#39;, &#39;[regular_expression]&#39;)</code> 语句，即可对路由中的路径参数类型进行限制。</p>
+<p>此外，还可以添加全局的约束，在 <code>RouteServiceProvider</code> 的 <code>boot</code> 方法中添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * Define your route model bindings, pattern filters, etc.</div><div class="line"> *</div><div class="line"> * @return void</div><div class="line"> */</div><div class="line">public function boot()</div><div class="line">&#123;</div><div class="line">    Route::pattern(&apos;id&apos;, &apos;[0-9]+&apos;);</div><div class="line"></div><div class="line">    parent::boot();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>即可约束所有路径参数都必须是纯数字。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://laravel.com/docs/5.5/routing#parameters-regular-expression-constraints" target="_blank" rel="external">https://laravel.com/docs/5.5/routing#parameters-regular-expression-constraints</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/05/28/Laravel中添加路径参数限制规则/" data-id="ckaqi87sz003xsh8tah92v7o6" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Shell中使用xargs批量操作文件" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2020/03/26/Shell中使用xargs批量操作文件/" class="article-date">
@@ -141,7 +194,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/03/26/Shell中使用xargs批量操作文件/" data-id="ck889zepa007oi78tqo3n5asv" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/03/26/Shell中使用xargs批量操作文件/" data-id="ckaqi87uo0081sh8tqraoz1k7" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/xargs/">xargs</a></li></ul>
@@ -317,7 +370,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/01/16/Python匹配数值的正则表达式/" data-id="ck889zepa007qi78t5vnb4yz8" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/01/16/Python匹配数值的正则表达式/" data-id="ckaqi87ul007wsh8tvd71h7iw" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -370,7 +423,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/01/13/使用zip命令压缩文件夹时排除某些文件/" data-id="ck889zeqr00bfi78tyjucfeae" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/01/13/使用zip命令压缩文件夹时排除某些文件/" data-id="ckaqi87vz00bjsh8tdzelbkcq" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/zip/">zip</a></li></ul>
@@ -418,7 +471,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/01/10/使用ffmpeg保存网络视频流/" data-id="ck889zeqi00asi78tkgi8vhkn" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/01/10/使用ffmpeg保存网络视频流/" data-id="ckaqi87vp00aush8tpckr4nkq" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ffmpeg/">ffmpeg</a></li></ul>
@@ -489,7 +542,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/01/09/使用setuptools为Python代码打包/" data-id="ck889zeqp00bci78tuqny1jy0" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/01/09/使用setuptools为Python代码打包/" data-id="ckaqi87vx00bhsh8tjzl3u0z2" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/setuptools/">setuptools</a></li></ul>
@@ -541,7 +594,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/12/30/Python使用字符串令牌解析特定格式的一行文本/" data-id="ck889zep9007li78te36scxf7" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/12/30/Python使用字符串令牌解析特定格式的一行文本/" data-id="ckaqi87uk007qsh8tq0czpvpy" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -623,7 +676,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/12/26/使用bumpversion管理版本/" data-id="ck889zeqh00aoi78tamb43rxn" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/12/26/使用bumpversion管理版本/" data-id="ckaqi87vm00ansh8thdg8m5xj" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/bumpversion/">bumpversion</a></li></ul>
@@ -671,7 +724,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/12/23/Laravel获取请求中的XML数据/" data-id="ck889zeod004yi78txf92kr6y" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/12/23/Laravel获取请求中的XML数据/" data-id="ckaqi87tf004ush8txrt1xrfv" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -742,63 +795,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/12/16/初识Supervisor/" data-id="ck889zerb00cei78t19386rn2" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/12/16/初识Supervisor/" data-id="ckaqi87wj00cjsh8tyu5m0xzj" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/【Supervisor-Linux/">【Supervisor, Linux]</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Vue引用本地图片的几种方式" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2019/12/12/Vue引用本地图片的几种方式/" class="article-date">
-  <time datetime="2019-12-12T07:56:48.000Z" itemprop="datePublished">2019-12-12</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2019/12/12/Vue引用本地图片的几种方式/">Vue引用本地图片的几种方式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在使用 <code>Vue.js</code> 框架的过程中，不可避免会需要引用本地图片。<br>如果是全局URL，直接将其链接值设置到相关组件的属性值中即可，但本地图片的路径稍微有点不一样，这篇笔记总结相关的操作方式。</p>
-<p>假定将图片文件放置在 <code>src/assets/img/</code> 文件夹下，测试图片的路径为 <code>src/asserts/img/test.png</code>。</p>
-<h2 id="在-css-中引用"><a href="#在-css-中引用" class="headerlink" title="在 css 中引用"></a>在 css 中引用</h2><p>页面中很有可能某块区域需要背景图片，此时通常填写 <code>css</code> 样式中的 <code>background-image</code> 完成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">.element-classname&#123;</div><div class="line">  background-image: url(&apos;~@/assets/img/test.png&apos;);</div><div class="line">  background-repeat: no-repeat no-repeat;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>其中 <code>@</code> 指代的路径是 <code>src</code>，注意与普通模块的标识方式不同的是，前面一定要添加 <code>~</code> 符号。</p>
-<h2 id="作为-img-元素的-src-属性引用"><a href="#作为-img-元素的-src-属性引用" class="headerlink" title="作为 img 元素的 src 属性引用"></a>作为 <code>img</code> 元素的 <code>src</code> 属性引用</h2><h4 id="引用方式1：直接写在-img-标签内"><a href="#引用方式1：直接写在-img-标签内" class="headerlink" title="引用方式1：直接写在 img 标签内"></a>引用方式1：直接写在 img 标签内</h4><p>可以直接根据当前文件的路径写对应的 <code>src</code> 属性值，这也是 <code>Vue.js</code> 框架模板首页 LOGO 的引入方式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;app&quot;&gt;</div><div class="line">    &lt;img src=&quot;./assets/logo.png&quot;&gt;</div><div class="line">    &lt;router-view/&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">...</div><div class="line">&lt;img src=&quot;../../assets/img/test.png&quot;&gt;</div></pre></td></tr></table></figure></p>
-<p>也可以使用绝对路径：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;img src=&quot;@/assets/logo.png&quot;&gt;</div></pre></td></tr></table></figure></p>
-<p>需要注意的是，不能够把 <code>@/asserts/logo.png</code> 用一个数据变量存储起来，然后绑定到 <code>src</code> 属性上。<br>比如下面这种方式是无法显示出图片的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">    &lt;div&gt;</div><div class="line">        &lt;img :src=&quot;imageUrl&quot;&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/template&gt;</div><div class="line">&lt;script&gt;</div><div class="line">export default &#123;</div><div class="line">  data() &#123;</div><div class="line">    return &#123;</div><div class="line">        imageUrl:&apos;@/asserts/logo.png&apos;,</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">&#125;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure></p>
-<p>如果需要编一配置，可以采用下面这种引用方式。</p>
-<h4 id="引用方式2"><a href="#引用方式2" class="headerlink" title="引用方式2"></a>引用方式2</h4><p>在 <code>data</code> 数据使用 <code>require</code> 引入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">    &lt;div&gt;</div><div class="line">          &lt;img class=&quot;title&quot; :src=&quot;imageUrl&quot;/&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/template&gt;</div><div class="line">&lt;script&gt;</div><div class="line">export default &#123;</div><div class="line">  data() &#123;</div><div class="line">    return &#123;</div><div class="line">        imageUrl: require(&apos;@/assets/img/test.png&apos;),</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h4 id="引用方式3"><a href="#引用方式3" class="headerlink" title="引用方式3"></a>引用方式3</h4><p>当然，也可以提前引入作为模块，然后用 <code>data</code> 数据与其绑定。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">    &lt;div&gt;</div><div class="line">          &lt;img class=&quot;title&quot; :src=&quot;imageUrl&quot;/&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/template&gt;</div><div class="line">&lt;script&gt;</div><div class="line">import imageUrl from &apos;@/assets/img/test.png&apos;</div><div class="line">export default &#123;</div><div class="line">  data() &#123;</div><div class="line">    return &#123;</div><div class="line">        imageUrl: imageUrl,</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇笔记总结了几种可行的 Vue.js 项目中引用本地图片的方式，对不同的场景可以选择对应的方案。  </p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/12/12/Vue引用本地图片的几种方式/" data-id="ck889zeps0094i78tu98e6erx" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
 
     </footer>
   </div>
@@ -851,7 +851,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archiv</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
   </div>
 
@@ -862,6 +862,10 @@
     <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2020/05/28/Laravel中添加路径参数限制规则/">Laravel中添加路径参数限制规则</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2020/03/26/Shell中使用xargs批量操作文件/">Shell中使用xargs批量操作文件</a>
@@ -877,10 +881,6 @@
         
           <li>
             <a href="/blog-hexo/2020/01/10/使用ffmpeg保存网络视频流/">使用ffmpeg保存网络视频流</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/01/09/使用setuptools为Python代码打包/">使用setuptools为Python代码打包</a>
           </li>
         
       </ul>
