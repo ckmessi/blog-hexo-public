@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -67,6 +67,83 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Git-submodule的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/10/16/Git-submodule的使用/" class="article-date">
+  <time datetime="2019-10-16T09:59:00.000Z" itemprop="datePublished">2019-10-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/10/16/Git-submodule的使用/">Git submodule的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>面对比较复杂的项目，我们有可能会将代码根据功能拆解成不同的子模块。主项目对子模块有依赖关系，却又并不关心子模块的内部开发流程细节。<br>这种情况下，通常不会把所有源码都放在同一个 Git 仓库中。<br>有一种比较简单的方式，是在当前工作目录下，将子模块文件夹加入到 <code>.gitignore</code> 文件内容中，这样主项目就能够无视子项目的存在。这样做有一个弊端就是，使用主项目的人需要有一个先验知识：需要在当前目录下放置一份某版本的子模块代码。<br>还有另外一种方式可供借鉴，可以使用 Git 的 <code>submodule</code> 功能，也是这篇文章的主题<br>实际上 Git 工具的 <code>submodule</code> 功能就是建立了当前项目与子模块之间的依赖关系：<code>子模块路径</code>、<code>子模块的远程仓库</code>、<code>子模块的版本号</code>。</p>
+<h2 id="使用流程"><a href="#使用流程" class="headerlink" title="使用流程"></a>使用流程</h2><p>假定我们有两个项目：<code>project-main</code> 和 <code>project-sub-1</code>，其中 <code>project-main</code> 表示主项目，而 <code>project-sub-1</code> 表示子模块项目。<br>其中 <code>project-main</code> 的远程仓库地址为 <code>https://github.com/username/project-main.git</code>，而  <code>project-sub-1</code> 的远程仓库地址为 <code>https://github.com/username/project-sub-1.git</code>。<br>接下来，我们希望在 <code>project-main</code> 中添加 <code>project-sub-1</code> ，而又保持 <code>project-sub-1</code> 自身独立的版本控制。</p>
+<h4 id="创建-submodule"><a href="#创建-submodule" class="headerlink" title="创建 submodule"></a>创建 submodule</h4><p>使用 <code>git submodule add &lt;submodule_url&gt;</code> 命令可以在项目中创建一个 <code>submodule</code> 子模块。<br>进入项目 <code>project-main</code> ，输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">➜ project-main git:(master) git submodule add https://github.com/username/project-sub-1.git</div><div class="line">正克隆到 &apos;/path/to/project-main/project-sub-1&apos;...</div><div class="line">remote: Enumerating objects: 3, done.</div><div class="line">remote: Counting objects: 100% (3/3), done.</div><div class="line">remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0</div><div class="line">展开对象中: 100% (3/3), 完成.</div></pre></td></tr></table></figure></p>
+<p>此时项目仓库中会多出两个文件：<code>.gitmodules</code> 和 <code>project-sub-1</code> 。<br>前者的内容是这样的，事实上就是子模块的相关信息；而后者那个文件，实际上保存的是子模块当前版本的版本号信息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[submodule &quot;project-sub-1&quot;]</div><div class="line">    path = project-sub-1</div><div class="line">    url = https://github.com/username/project-sub-1.git</div></pre></td></tr></table></figure></p>
+<p>如果此前项目中已经存在 <code>.gitmodules</code> 文件，则会在文件内容中多出上述三行记录。<br>事实上，此时在 <code>.git/config</code> 文件中也会多出一些信息，在 <code>.git/modules</code> 文件夹下也会多出一份内容。</p>
+<p>通常此时可以使用 <code>git commit -m &quot;add submodule xxx&quot;</code> 提交一次，表示引入了某个子模块。<br>提交后，在主项目仓库中，会显示出子模块文件夹，并带上其所在仓库的版本号。</p>
+<img src="/blog-hexo/2019/10/16/Git-submodule的使用/1.png" alt="主项目仓库" title="主项目仓库">
+<h4 id="获取-submodule"><a href="#获取-submodule" class="headerlink" title="获取 submodule"></a>获取 submodule</h4><p>上述步骤在创建子模块的过程中，会自动将相关代码克隆到对应路径，但对于后续使用者而言，对于主项目使用普通的 <code>clone</code> 操作并不会拉取到子模块中的实际代码。<br>使用以下命令进行克隆，完成后 <code>project-main/project-sub-1</code> 文件夹是空的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /path/to/temp</div><div class="line">git clone https://github.com/username/project-main.git</div></pre></td></tr></table></figure></p>
+<p>一种方式是在克隆主项目的时候带上参数 <code>--recurse-submodules</code>，这样会递归地将项目中所有子模块的代码拉取。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /path/to/temp2</div><div class="line">git clone https://github.com/username/project-main.git --recurse-submodules</div></pre></td></tr></table></figure></p>
+<p>此时 <code>project-main/project-sub-1</code> 文件夹是有内容的，并且固定在某个 Git 提交的版本上。</p>
+<p>另外一种可行的方式是，在当前主项目中执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git submodule init</div><div class="line">git submodule update</div></pre></td></tr></table></figure></p>
+<p>则会根据主项目的配置信息，拉取更新子模块中的代码。</p>
+<h4 id="子模块内容的更新"><a href="#子模块内容的更新" class="headerlink" title="子模块内容的更新"></a>子模块内容的更新</h4><p>对于子模块而言，并不需要知道引用自己的主项目的存在。对于自身来讲，子模块就是一个完整的 Git 仓库，按照正常的 Git 代码管理规范操作即可。<br>对于主项目而言，子模块的内容发生变动时，通常有三种情况：<br>1）当前项目下子模块文件夹内的内容发生了未跟踪的内容变动；<br>2）当前项目下子模块文件夹内的内容发生了版本变化；<br>3）当前项目下子模块文件夹内的内容没变，远程有更新；</p>
+<h6 id="情况1：子模块有未跟踪的内容变动"><a href="#情况1：子模块有未跟踪的内容变动" class="headerlink" title="情况1：子模块有未跟踪的内容变动"></a>情况1：子模块有未跟踪的内容变动</h6><p>对于第1种情况，通常是在开发环境中，直接修改子模块文件夹中的代码导致的。<br>此时在主项目中使用 <code>git status</code> 能够看到关于子模块尚未暂存以备提交的变更，但是于主项目而言是无能为力的，使用 <code>git add/commit</code> 对其也不会产生影响。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">➜ project-main git:(master) git status</div><div class="line">位于分支 master</div><div class="line">您的分支与上游分支 &apos;origin/master&apos; 一致。</div><div class="line">尚未暂存以备提交的变更：</div><div class="line">  （使用 &quot;git add &lt;文件&gt;...&quot; 更新要提交的内容）</div><div class="line">  （使用 &quot;git checkout -- &lt;文件&gt;...&quot; 丢弃工作区的改动）</div><div class="line">  （提交或丢弃子模组中未跟踪或修改的内容）</div><div class="line"> 修改： project-sub-1 (未跟踪的内容)</div><div class="line">修改尚未加入提交（使用 &quot;git add&quot; 和/或 &quot;git commit -a&quot;）</div></pre></td></tr></table></figure></p>
+<p>在此情景下，通常需要进入子模块文件夹，按照子模块内部的版本控制体系提交代码。<br>当提交完成后，主项目的状态则进入了情况2，即当前项目下子模块文件夹内的内容发生了版本变化。</p>
+<h6 id="情况2：子模块有版本变化"><a href="#情况2：子模块有版本变化" class="headerlink" title="情况2：子模块有版本变化"></a>情况2：子模块有版本变化</h6><p>当子模块版本变化时，在主项目中使用 <code>git status</code> 查看仓库状态时，会显示子模块有新的提交：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">➜ project-main git:(master) ✗ git status</div><div class="line">位于分支 master</div><div class="line">您的分支与上游分支 &apos;origin/master&apos; 一致。</div><div class="line">尚未暂存以备提交的变更：</div><div class="line">  （使用 &quot;git add &lt;文件&gt;...&quot; 更新要提交的内容）</div><div class="line">  （使用 &quot;git checkout -- &lt;文件&gt;...&quot; 丢弃工作区的改动）</div><div class="line"> 修改： project-sub-1 (新提交)</div><div class="line">修改尚未加入提交（使用 &quot;git add&quot; 和/或 &quot;git commit -a&quot;）</div></pre></td></tr></table></figure></p>
+<p>在这种情况下，可以使用 <code>git add/commit</code> 将其添加到主项目的代码提交中，实际的改动就是那个子模块 <code>文件</code> 所表示的版本信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">git diff HEAD HEAD^</div><div class="line">diff --git a/project-sub-1 b/project-sub-1</div><div class="line">index ace9770..7097c48 160000</div><div class="line">--- a/project-sub-1</div><div class="line">+++ b/project-sub-1</div><div class="line">@@ -1 +1 @@</div><div class="line">-Subproject commit ace977071f94f4f88935f9bb9a33ac0f8b4ba935</div><div class="line">+Subproject commit 7097c4887798b71cee360e99815f7dbd1aa17eb4</div></pre></td></tr></table></figure></p>
+<p>通常当子项目更新后，主项目修改其所依赖的版本时，会产生类似这种情景的 commit 提交信息。</p>
+<h6 id="情况3：子模块远程有更新"><a href="#情况3：子模块远程有更新" class="headerlink" title="情况3：子模块远程有更新"></a>情况3：子模块远程有更新</h6><p>通常来讲，主项目与子模块的开发不会恰好是同时进行的。通常是子模块负责维护自己的版本升级后，推送到远程仓库，并告知主项目可以更新对子模块的版本依赖。<br>在这种情况下，主项目是比较茫然的。<br>之前曾经提到，主项目可以使用 <code>git submodule update</code> 更新子模块的代码，但那是指 <code>当前主项目文件夹下的子模块目录内容</code> 与 <code>当前主项目记录的子模块版本</code> 不一致时，会参考后者进行更新。<br>但如今这种情况下，后者 <code>当前主项目记录的子模块版本</code> 还没有变化，在主项目看来当前情况一切正常。<br>此时，需要让主项目主动进入子模块拉取新版代码，进行升级操作。<br>通常流程是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd project-sub-1</div><div class="line">git pull origin master</div></pre></td></tr></table></figure></p>
+<p>子模块目录下的代码版本会发生变化，转到情况2的流程进行主项目的提交。<br>当主项目的子项目特别多时，可能会不太方便，此时可以使用 <code>git submodule</code> 的一个命令 <code>foreach</code> 执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git submodule foreach &apos;git pull origin master&apos;</div></pre></td></tr></table></figure></p>
+<h6 id="情况汇总"><a href="#情况汇总" class="headerlink" title="情况汇总"></a>情况汇总</h6><p>终上所述，可知在不同场景下子模块的更新方式如下：</p>
+<ul>
+<li>对于子模块，只需要管理好自己的版本，并推送到远程分支即可；</li>
+<li>对于父模块，若子模块版本信息未提交，需要更新子模块目录下的代码，并执行 <code>commit</code> 操作提交子模块版本信息；</li>
+<li>对于父模块，若子模块版本信息已提交，需要使用 <code>git submodule update</code> ，Git 会自动根据子模块版本信息更新所有子模块目录的相关代码。</li>
+</ul>
+<h4 id="删除子模块"><a href="#删除子模块" class="headerlink" title="删除子模块"></a>删除子模块</h4><p>网上流传了一些偏法，主要步骤是直接移除模块，并手动修改 <code>.gitmodules</code>、<code>.git/config</code> 和 <code>.git/modules</code> 内容。<br>包含了一大堆类似<code>git rm --cached &lt;sub-module&gt;</code>、<code>rm -rf &lt;sub-moduel&gt;</code>、<code>rm .gitmodules</code> 和 <code>git rm --cached</code> 之类的代码。<br>实际上这是一种比较野的做法，不建议使用。</p>
+<p>根据官方文档的说明，应该使用 <code>git submodule deinit</code> 命令卸载一个子模块。这个命令如果添加上参数 <code>--force</code>，则子模块工作区内即使有本地的修改，也会被移除。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git submodule deinit project-sub-1</div><div class="line">git rm project-sub-1</div></pre></td></tr></table></figure></p>
+<p>执行 <code>git submodule deinit project-sub-1</code> 命令的实际效果，是自动在 <code>.git/config</code> 中删除了以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[submodule &quot;project-sub-1&quot;]</div><div class="line">    url = https://github.com/username/project-sub-1.git</div></pre></td></tr></table></figure></p>
+<p>执行 <code>git rm project-sub-1</code> 的效果，是移除了 <code>project-sub-1</code> 文件夹，并自动在 <code>.gitmodules</code> 中删除了以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[submodule &quot;project-sub-1&quot;]</div><div class="line">         path = project-sub-1</div><div class="line">         url = https://github.com/username/project-sub-1.git</div></pre></td></tr></table></figure></p>
+<p>此时，主项目中关于子模块的信息基本已经删除（虽然貌似 <code>.git/modules</code> 目录下还有残余）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">➜ project-main git:(master) ✗ gs</div><div class="line">位于分支 master</div><div class="line">您的分支与上游分支 &apos;origin/master&apos; 一致。</div><div class="line">要提交的变更：</div><div class="line">  （使用 &quot;git reset HEAD &lt;文件&gt;...&quot; 以取消暂存）</div><div class="line"> 修改： .gitmodules</div><div class="line"> 删除： project-sub-1</div></pre></td></tr></table></figure></p>
+<p>可以提交代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git commit -m &quot;delete submodule project-sub-1&quot;</div></pre></td></tr></table></figure></p>
+<p>至此完成对子模块的删除。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>当项目比较复杂，部分代码希望独立为子模块进行版本控制时，可以使用 <code>git submodule</code> 功能。<br>使用 <code>git submodule</code> 功能时，主项目仓库并不会包含子模块的文件，只会保留一份子模块的配置信息及版本信息，作为主项目版本管理的一部分。<br>本篇文章简单介绍了 <code>git submodule</code> 的添加和删除，以及项目开发过程中主项目与子模块不同状态时刻的操作方式。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://git-scm.com/docs/git-submodule" target="_blank" rel="external">https://git-scm.com/docs/git-submodule</a><br><a href="https://www.jianshu.com/p/0107698498af" target="_blank" rel="external">https://www.jianshu.com/p/0107698498af</a><br><a href="https://www.git-tower.com/learn/git/ebook/cn/command-line/advanced-topics/submodules" target="_blank" rel="external">https://www.git-tower.com/learn/git/ebook/cn/command-line/advanced-topics/submodules</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/10/16/Git-submodule的使用/" data-id="ckc4y77ci001mgp8tlv1f63qu" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-在Shell中执行Pythonenv的激活" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -106,7 +183,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/09/29/在Shell中执行Pythonenv的激活/" data-id="ckc37272s00datj8tuxvoxh29" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/09/29/在Shell中执行Pythonenv的激活/" data-id="ckc4y786700gvgp8twukmk3bj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Pythonenv/">Pythonenv</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li></ul>
@@ -157,7 +234,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/09/18/Python使用pynvml查看显卡信息/" data-id="ckc37270m007ttj8tzsq77jt4" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/09/18/Python使用pynvml查看显卡信息/" data-id="ckc4y77xh00b4gp8tp1izb76s" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -210,7 +287,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/09/11/Laravel读写YAML格式文件/" data-id="ckc3726zn0053tj8tng19td2h" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/09/11/Laravel读写YAML格式文件/" data-id="ckc4y77tl008kgp8tsfjgo2p6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -264,7 +341,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/09/06/Vue使用proxyTable解决跨域问题/" data-id="ckc372716009htj8tapyjqmkq" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/09/06/Vue使用proxyTable解决跨域问题/" data-id="ckc4y77zt00d0gp8tyzsoz60x" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -319,7 +396,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/09/04/FFMPeg剪切音频和拼接音频/" data-id="ckc3726xc0019tj8tdfbvhqyo" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/09/04/FFMPeg剪切音频和拼接音频/" data-id="ckc4y77c6001dgp8tt2y2ludt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/FFMpeg/">FFMpeg</a></li></ul>
@@ -377,7 +454,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/08/29/初识YAML文件格式/" data-id="ckc37272p00d1tj8tvecy1zkw" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/08/29/初识YAML文件格式/" data-id="ckc4y785u00ghgp8t7aecr3oh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/YAML/">YAML</a></li></ul>
@@ -436,7 +513,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/08/28/Laravel使用Nginx作为代理服务器时的两点注意事项/" data-id="ckc3726ze004jtj8tgiwja1i5" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/08/28/Laravel使用Nginx作为代理服务器时的两点注意事项/" data-id="ckc4y77rx007tgp8tbj0lmraw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -505,7 +582,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/08/19/最简单的Go测试代码样例/" data-id="ckc37273300e0tj8t2dvciafy" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/08/19/最简单的Go测试代码样例/" data-id="ckc4y787b00hugp8tmmyv2nzb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Go/">Go</a></li></ul>
@@ -570,65 +647,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/08/16/初识Docker/" data-id="ckc37272i00cktj8tpzbzj8wp" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/08/16/初识Docker/" data-id="ckc4y785e00g3gp8t0ivdxi8k" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Docker/">Docker</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Maven项目pom-xml文件中packaging配置" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2019/08/14/Maven项目pom-xml文件中packaging配置/" class="article-date">
-  <time datetime="2019-08-14T07:37:43.000Z" itemprop="datePublished">2019-08-14</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2019/08/14/Maven项目pom-xml文件中packaging配置/">Maven项目pom.xml文件中packaging配置</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在 Maven 项目的 <code>pom.xml</code> 文件中，有一些配置为 <code>packaging</code>，这个配置给出项目的打包类型。<br>任何一个 Maven 项目都需要定义 <code>packaging</code> 表示项目的打包方式。在没有指定 <code>packaging</code> 的默认情况下，它的配置值为 <code>jar</code> 。<br>常用的 <code>packaging</code> 取值有：</p>
-<ul>
-<li>pom</li>
-<li>jar</li>
-<li>war</li>
-<li>maven-plugin</li>
-<li>ejb</li>
-<li>ear</li>
-<li>rar</li>
-</ul>
-<p>不同的 <code>packaging</code> 方式会在 Maven 项目构建过程中执行不同的生命周期插件。<br>前三种方式比较常用，使用 <code>pom</code> 打包类型通常是父级项目使用的类型，使用 <code>jar</code> 则是打包为内部调用或作为服务使用，使用 <code>war</code> 则打包出一个需要手动部署的项目。</p>
-<p>对于 Spring Boot 而言，通常只会使用 <code>jar</code> 而不会使用 <code>war</code> ，这是因为 Spring Boot 的特性是内置容器，打包为 <code>jar</code> 后会自动将 Tomcat 打进 Jar 包内，直接运行即可；而如果打包成 <code>war</code> 则需要手动配置额外的 Tomcat 或 Nginx 相关容器，用于部署生成的 War 包。<br>当然也有例外，如果微服务较多，且统一进行部署的话，将打包类型设置成 <code>war</code> 能够减少生成代码的容量，并将所有打包出来的项目放置在同一个 Tomcat 下运行。</p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://blog.csdn.net/taiyangdao/article/details/52357132" target="_blank" rel="external">https://blog.csdn.net/taiyangdao/article/details/52357132</a><br><a href="https://maven.apache.org/pom.html" target="_blank" rel="external">https://maven.apache.org/pom.html</a><br><a href="https://maven.apache.org/ref/3.6.1/maven-core/default-bindings.html" target="_blank" rel="external">https://maven.apache.org/ref/3.6.1/maven-core/default-bindings.html</a><br><a href="https://www.cnblogs.com/seven717/p/9802813.html" target="_blank" rel="external">https://www.cnblogs.com/seven717/p/9802813.html</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/08/14/Maven项目pom-xml文件中packaging配置/" data-id="ckc3726zx005vtj8ttgcutiph" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Maven/">Maven</a></li></ul>
 
     </footer>
   </div>
@@ -641,7 +663,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/page/3/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><a class="page-number" href="/blog-hexo/page/2/">2</a><a class="page-number" href="/blog-hexo/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/blog-hexo/page/5/">5</a><a class="page-number" href="/blog-hexo/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/17/">17</a><a class="extend next" rel="next" href="/blog-hexo/page/5/">weiter &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/3/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><a class="page-number" href="/blog-hexo/page/2/">2</a><a class="page-number" href="/blog-hexo/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/blog-hexo/page/5/">5</a><a class="page-number" href="/blog-hexo/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/17/">17</a><a class="extend next" rel="next" href="/blog-hexo/page/5/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -650,7 +672,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -672,14 +694,14 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Alembic/" style="font-size: 10px;">Alembic</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 12px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 12px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 11px;">CSharp</a> <a href="/blog-hexo/tags/Code-Coverage/" style="font-size: 10px;">Code Coverage</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 11px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/Django/" style="font-size: 10px;">Django</a> <a href="/blog-hexo/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/FFMpeg/" style="font-size: 10px;">FFMpeg</a> <a href="/blog-hexo/tags/FastAPI/" style="font-size: 10px;">FastAPI</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Flyway/" style="font-size: 10px;">Flyway</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15px;">Git</a> <a href="/blog-hexo/tags/GitLab/" style="font-size: 10px;">GitLab</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Go/" style="font-size: 11px;">Go</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 17px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 13px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 18px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 19px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 16px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/blog-hexo/tags/Mkdocs/" style="font-size: 10px;">Mkdocs</a> <a href="/blog-hexo/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/blog-hexo/tags/MyBatisPlus/" style="font-size: 10px;">MyBatisPlus</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 11px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 11px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 12px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 12px;">Oracle</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pip/" style="font-size: 10px;">Pip</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 11px;">PowerShell</a> <a href="/blog-hexo/tags/Python/" style="font-size: 17px;">Python</a> <a href="/blog-hexo/tags/Pythonenv/" style="font-size: 10px;">Pythonenv</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SQLAlchemy/" style="font-size: 10px;">SQLAlchemy</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12px;">SSH</a> <a href="/blog-hexo/tags/Shell/" style="font-size: 11px;">Shell</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 14px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 12px;">Ubuntu</a> <a href="/blog-hexo/tags/VS-Code/" style="font-size: 11px;">VS Code</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15px;">Vue</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/YAML/" style="font-size: 10px;">YAML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 11px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/bumpversion/" style="font-size: 10px;">bumpversion</a> <a href="/blog-hexo/tags/cookiecutter/" style="font-size: 10px;">cookiecutter</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/ffmpeg/" style="font-size: 10px;">ffmpeg</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/heatmap-js/" style="font-size: 10px;">heatmap.js</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/peewee/" style="font-size: 10px;">peewee</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/sed/" style="font-size: 10px;">sed</a> <a href="/blog-hexo/tags/setuptools/" style="font-size: 10px;">setuptools</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/xargs/" style="font-size: 10px;">xargs</a> <a href="/blog-hexo/tags/zip/" style="font-size: 10px;">zip</a> <a href="/blog-hexo/tags/【Supervisor-Linux/" style="font-size: 10px;">【Supervisor, Linux]</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 12px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Alembic/" style="font-size: 10px;">Alembic</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 12px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 12px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 11px;">CSharp</a> <a href="/blog-hexo/tags/Code-Coverage/" style="font-size: 10px;">Code Coverage</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 11px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/Django/" style="font-size: 10px;">Django</a> <a href="/blog-hexo/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 13px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/FFMpeg/" style="font-size: 10px;">FFMpeg</a> <a href="/blog-hexo/tags/FastAPI/" style="font-size: 10px;">FastAPI</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Flyway/" style="font-size: 10px;">Flyway</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15px;">Git</a> <a href="/blog-hexo/tags/GitLab/" style="font-size: 10px;">GitLab</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Go/" style="font-size: 11px;">Go</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 17px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 13px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 18px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 19px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 16px;">Linux</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/blog-hexo/tags/Mkdocs/" style="font-size: 10px;">Mkdocs</a> <a href="/blog-hexo/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/blog-hexo/tags/MyBatisPlus/" style="font-size: 10px;">MyBatisPlus</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 11px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 11px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 12px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 12px;">Oracle</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pip/" style="font-size: 10px;">Pip</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 11px;">PowerShell</a> <a href="/blog-hexo/tags/Python/" style="font-size: 17px;">Python</a> <a href="/blog-hexo/tags/Pythonenv/" style="font-size: 10px;">Pythonenv</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SQLAlchemy/" style="font-size: 10px;">SQLAlchemy</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12px;">SSH</a> <a href="/blog-hexo/tags/Shell/" style="font-size: 11px;">Shell</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 14px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 12px;">Ubuntu</a> <a href="/blog-hexo/tags/VS-Code/" style="font-size: 11px;">VS Code</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 16px;">Vue</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/YAML/" style="font-size: 10px;">YAML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 11px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/bumpversion/" style="font-size: 10px;">bumpversion</a> <a href="/blog-hexo/tags/cookiecutter/" style="font-size: 10px;">cookiecutter</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/ffmpeg/" style="font-size: 10px;">ffmpeg</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/heatmap-js/" style="font-size: 10px;">heatmap.js</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/peewee/" style="font-size: 10px;">peewee</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/sed/" style="font-size: 10px;">sed</a> <a href="/blog-hexo/tags/setuptools/" style="font-size: 10px;">setuptools</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/xargs/" style="font-size: 10px;">xargs</a> <a href="/blog-hexo/tags/zip/" style="font-size: 10px;">zip</a> <a href="/blog-hexo/tags/【Supervisor-Linux/" style="font-size: 10px;">【Supervisor, Linux]</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 12px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
     </div>
   </div>
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -689,9 +711,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2020/07/02/Element-UI针对文件上传添加表单校验/">Element-UI针对文件上传添加表单校验</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2020/07/01/初识Django/">初识Django</a>
@@ -707,10 +733,6 @@
         
           <li>
             <a href="/blog-hexo/2020/06/09/GitLab中添加代码覆盖率报告数值/">GitLab中添加代码覆盖率报告数值</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/06/03/Axios调用post请求同时上传文件和参数/">Axios调用post请求同时上传文件和参数</a>
           </li>
         
       </ul>
