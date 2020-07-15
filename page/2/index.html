@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -67,6 +67,67 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Axios调用post请求同时上传文件和参数" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/06/03/Axios调用post请求同时上传文件和参数/" class="article-date">
+  <time datetime="2020-06-03T10:20:57.000Z" itemprop="datePublished">2020-06-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/06/03/Axios调用post请求同时上传文件和参数/">Axios调用post请求同时上传文件和参数</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在大多数场景下，前端项目使用 <code>axios</code> 可以方便地完成 API 的调用，无论是 <code>GET</code>、<code>POST</code>、<code>PUT</code> 或 <code>DELETE</code> 等请求，按照 axios 的文档封装特定的调用方式即可。  </p>
+<p>然而在一种特殊的场景下，有可能需要实现这样的一个操作：同时上传文件和参数。更麻烦的是，有可能参数还需要是路径参数。</p>
+<p>虽然这种场景比较奇怪，如果是我个人提供后台 API 接口，通常会习惯文件上传请求与其它请求拆分开，不过既然场景可能存在，作为前端只能选择想尽一切办法去适应后台服务器接口的要求。</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>首先，需要上传文件内容，因此请求方式一般会选择 <code>POST</code>，同时请求的 <code>Content-Type</code> 也会从主流的 <code>application/json</code> 切换为表单形式的 <code>multipar/form-data</code>。</p>
+<p>由于可能存在路径参数的必要，需要应对文件参数以外的其它参数不放在表单内部的情况。<br>查询 axios 的文档可知，使用 <code>POST</code> 方法发送请求时格式为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">axios.post(url[, data[, config]])</div></pre></td></tr></table></figure></p>
+<p>这里面的 <code>data</code> 和 <code>config</code> 是可选的，但由于需要上传文件及其它参数，这两部分内容都需要填充。</p>
+<p>应该使用的方法格式为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">axios.post(</div><div class="line">    api_path,</div><div class="line">    form_params,</div><div class="line">    &#123;</div><div class="line">        headers: &#123;</div><div class="line">            &apos;Content-Type&apos;: &apos;multipart/form-data&apos;</div><div class="line">        &#125;,</div><div class="line">        params: query_params</div><div class="line">    &#125;</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p>其中三个变量 <code>api_path</code> 是一个字符串，指向调用的API路径；<code>form_params</code> 用于放置表单参数；<code>params</code> 用于放置路径参数。</p>
+<p>对于变量 <code>form_params</code> ，为了上传文件，其类型通常是一个 <code>FormData</code>，在这种情况下 axios 会自动将 <code>Content-Type</code> 转为 <code>multipart/form-data</code>（即调用语句中对于 <code>config.headers</code> 的设置是冗余的，当然显示写出来会更清晰）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var form_params = new FormData()</div><div class="line">form_params.append(&apos;param_1&apos;, &apos;value1&apos;)</div><div class="line">form_params.append(&apos;file_1&apos;, file)</div></pre></td></tr></table></figure></p>
+<p>对于变量 <code>query_params</code>，使用一个普通的字典即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var query_params = &#123;</div><div class="line">    &apos;key_1&apos;: &apos;value1&apos;,</div><div class="line">    &apos;key_2&apos;: &apos;value2&apos;,</div><div class="line">     .....</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在这种场景下，发送的请求中会既带有文件参数和表单参数，又带有路径参数。</p>
+<img src="/blog-hexo/2020/06/03/Axios调用post请求同时上传文件和参数/1.png" alt="在 Chrome 中的请求详情示例" title="在 Chrome 中的请求详情示例">
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><ul>
+<li>如果不需要额外使用路径参数，可以直接将相关参数拼接到表单参数 <code>form_params</code> 中即可。</li>
+<li>如果使用的是 <code>element-ui</code> 的上传文件组件，且上传的文件需要传二进制数据，可以使用 <code>file.raw</code> 获取。</li>
+</ul>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://github.com/axios/axios" target="_blank" rel="external">https://github.com/axios/axios</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/06/03/Axios调用post请求同时上传文件和参数/" data-id="ckcnfkgc3005k758trqiotssl" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/axios/">axios</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Laravel中添加路径参数限制规则" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -109,7 +170,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/05/28/Laravel中添加路径参数限制规则/" data-id="ckcfq83mt004jaa8tfj3jjxnq" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/05/28/Laravel中添加路径参数限制规则/" data-id="ckcnfkgbk004a758tjj7svrce" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -194,7 +255,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/03/26/Shell中使用xargs批量操作文件/" data-id="ckcfq83o60085aa8t2blbustf" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/03/26/Shell中使用xargs批量操作文件/" data-id="ckcnfkgd10089758t5kn97cb1" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/xargs/">xargs</a></li></ul>
@@ -370,7 +431,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/01/16/Python匹配数值的正则表达式/" data-id="ckcfq83o3007zaa8to20ryvc7" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/01/16/Python匹配数值的正则表达式/" data-id="ckcnfkgd00086758t8y432jl5" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -423,7 +484,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/01/13/使用zip命令压缩文件夹时排除某些文件/" data-id="ckcfq83q500c8aa8tohpg7dvr" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/01/13/使用zip命令压缩文件夹时排除某些文件/" data-id="ckcnfkgev00c0758ttk9oan7c" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/zip/">zip</a></li></ul>
@@ -471,7 +532,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/01/10/使用ffmpeg保存网络视频流/" data-id="ckcfq83pt00bnaa8to4txbe8p" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/01/10/使用ffmpeg保存网络视频流/" data-id="ckcnfkged00bd758t9kgpqapz" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ffmpeg/">ffmpeg</a></li></ul>
@@ -542,7 +603,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/01/09/使用setuptools为Python代码打包/" data-id="ckcfq83q400c5aa8t5rzay5a3" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/01/09/使用setuptools为Python代码打包/" data-id="ckcnfkgen00bx758tb5xvmkka" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/setuptools/">setuptools</a></li></ul>
@@ -594,7 +655,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/12/30/Python使用字符串令牌解析特定格式的一行文本/" data-id="ckcfq83o2007waa8tvybag4v7" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/12/30/Python使用字符串令牌解析特定格式的一行文本/" data-id="ckcnfkgcx007x758tzt36e2c3" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -676,7 +737,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/12/26/使用bumpversion管理版本/" data-id="ckcfq83pm00bjaa8tu7w8fd0g" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/12/26/使用bumpversion管理版本/" data-id="ckcnfkgee00bh758tvz0lfk48" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/bumpversion/">bumpversion</a></li></ul>
@@ -724,81 +785,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/12/23/Laravel获取请求中的XML数据/" data-id="ckcfq83n20059aa8tkixko0dr" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/12/23/Laravel获取请求中的XML数据/" data-id="ckcnfkgbx0057758tnmyk521b" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-初识Supervisor" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2019/12/16/初识Supervisor/" class="article-date">
-  <time datetime="2019-12-16T03:34:02.000Z" itemprop="datePublished">2019-12-16</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2019/12/16/初识Supervisor/">初识Supervisor</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><code>Supervisor</code> 是一个客户端/服务器系统，允许用户在类 UNIX 操作系统中监控一系列进程。</p>
-<h2 id="安装："><a href="#安装：" class="headerlink" title="安装："></a>安装：</h2><p>可以使用 <code>apt-get</code> 安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install supervisor</div></pre></td></tr></table></figure></p>
-<p>也可以使用 <code>pip</code> 安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install supervisor</div></pre></td></tr></table></figure></p>
-<p>需要注意的是，根据 <a href="supervisord.org/installing.html">官方文档</a> 的介绍，<code>apt-get</code> 安装的发布包会落后于在 PyPI 发布的官方包，此外用户还反馈 Ubuntu 16.04 中的 Supervisor 发布包有与此前版本不一致的行为。</p>
-<h2 id="准备配置文件"><a href="#准备配置文件" class="headerlink" title="准备配置文件"></a>准备配置文件</h2><p>当 Supervisor 安装完成后，可以执行命令 <code>echo_supervisord_conf</code>，这个命令会在命令行打印样例配置文件的信息。</p>
-<p>确认要开始使用时，可以通过重定向的方式，将其写入一个配置文件中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo_supervisord_conf &gt; /path/to/supervisord.conf</div></pre></td></tr></table></figure></p>
-<p>官方推荐是将其写入 <code>/etc/supervisord.conf</code> 文件，事实上更好的方式是将其放在自定义的目录中，然后在启动 <code>supervisord</code> 命令的时候使用 <code>-c</code> 参数指定配置文件的位置，这样能够更加明确当前 <code>supervisord</code> 所使用的配置信息。</p>
-<p>关于 <code>supervisord.conf</code> 的配置项含义在样例文件中非常详细，其中比较关键的主要有：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[unix_http_server]</div><div class="line">file=/tmp/supervisor.sock</div><div class="line">...</div><div class="line">[supervisord]</div><div class="line">logfile=/tmp/supervisord.log</div><div class="line">pidfile=/tmp/supervisord.pid</div><div class="line">...</div><div class="line">[include]</div><div class="line">files= path/to.directory/*.conf</div><div class="line">...</div></pre></td></tr></table></figure>
-<p>其中 <code>[unix_http_server]</code> 模块的 <code>/tmp/supervisor.sock</code> 是配置 UNIX Socket 文件路径，使用 <code>supervisorctl</code> 客户端连接时会使用到。</p>
-<p>而 <code>[supervisord]</code> 模块的 <code>logfile</code> 和 <code>pidfile</code> 是 Supervisor 服务端进程的日志文件路径及进程对应的 PID 文件，PID 文件通常会用于向进程发送信号。</p>
-<p>若开启 <code>include</code> 模块配置，可以指定子配置文件，通常在实际使用中会每一个将使用 <code>Supervisor</code> 管理的项目会对应拥有一个 <code>[project-name].conf</code> 配置文件。<br>（这与 nginx 下为每个站点单独创建一个 <code>.conf</code> 配置文件很类似）。</p>
-<p>项目对应的 <code>[project-name].conf</code> 文件内容主要为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[program:&#123;project-name&#125;]</div><div class="line">user=root #进程运行的用户身份</div><div class="line">command=/home/username/project/bin/xxx # 执行的命令</div><div class="line">stderr_logfile=/path/to/log1 # 标准输出日志文件路径</div><div class="line">stdout_logfile=/path/to/log2 # 错误输出日志文件路径</div><div class="line">directory=/path/to/project # 项目所在目录路径</div><div class="line">autostart=true # 是否自动启动  </div><div class="line">autorestart=true # 是否自动重启</div></pre></td></tr></table></figure></p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>启动 Supervisor 服务端：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">supvervisord -c conf.d</div></pre></td></tr></table></figure></p>
-<p>这句命令从执行效果上看会生成三个东西：</p>
-<ul>
-<li>1）会在对应路径生成 <code>supervisor.sock</code> 文件；</li>
-<li>2）会在对应路径生成 <code>supervisord.log</code> 文件，保存当前 <code>supervisord</code> 进程的配置信息；</li>
-<li>3）会在对应路径生成 <code>supvervisord.pid</code> 文件，保存当前 <code>supervisord</code> 进程的ID。</li>
-</ul>
-<p>如果需要关闭刚刚启动的 <code>supervisord</code> 进程，可以使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kill -s SIGQUIT [supervisord_pid]</div></pre></td></tr></table></figure></p>
-<p>关闭后，对应上述三个文件中的 <code>supervisor.sock</code> 和 <code>supervisord.pid</code> 文件会消失，只保留日志文件。</p>
-<h2 id="使用客户端控制"><a href="#使用客户端控制" class="headerlink" title="使用客户端控制"></a>使用客户端控制</h2><p><code>supervisorctl</code> 是 <code>supervisord</code> 的命令行客户端工具，可以使用 <code>supervisorctl</code> 对 <code>supervisord</code> 进行相关控制。</p>
-<p>可以直接进入客户端命令行程序（类似于 <code>MySQL</code> 命令行客户端）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">supervisorctl -c [config_file]</div></pre></td></tr></table></figure></p>
-<p>注意要指定与启动 <code>supervisor</code> 进程相同的配置文件，否则会抛出错误（因为它找不着服务端无法连接上）。</p>
-<p>在命令行客户端中可以执行各类命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">status # 查看当前状态，会显示出控制的所有子进程</div><div class="line">pid # 查看对应 supervisord 进程的进程ID</div><div class="line">reload # 重启 supervisord 进程</div><div class="line">start &lt;name&gt; # 启动某个进程</div><div class="line">stop &lt;name&gt; # 关闭某个进程</div></pre></td></tr></table></figure></p>
-<p>当然也可以不进入命令行客户端直接操作，比如以下命令会直接显示当前状态：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">supervisorctl -c [config-file] status</div></pre></td></tr></table></figure></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Supervisor 是一个监控子进程的程序，使用它可以监控一系列子进程，每个子进程可以用一个 <code>.conf</code> 文件进行配置。使用 <code>supervisord</code> 可以启动服务端程序，使用 <code>supervisorctl</code> 可以启动客户端对 <code>supervisord</code> 进行相关控制操作。</p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://supervisord.org/introduction.html" target="_blank" rel="external">http://supervisord.org/introduction.html</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/12/16/初识Supervisor/" data-id="ckcfq83qv00doaa8t3ke40bp0" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/【Supervisor-Linux/">【Supervisor, Linux]</a></li></ul>
 
     </footer>
   </div>
@@ -811,7 +801,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/17/">17</a><a class="extend next" rel="next" href="/blog-hexo/page/3/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/17/">17</a><a class="extend next" rel="next" href="/blog-hexo/page/3/">weiter &raquo;</a>
   </nav>
 
 </section>
@@ -820,7 +810,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
+    <h3 class="widget-title">Kategorien</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -842,14 +832,14 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Alembic/" style="font-size: 10px;">Alembic</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 11.67px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 11.67px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 10.83px;">CSharp</a> <a href="/blog-hexo/tags/Code-Coverage/" style="font-size: 10px;">Code Coverage</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 10.83px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/Django/" style="font-size: 10px;">Django</a> <a href="/blog-hexo/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.5px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/FFMpeg/" style="font-size: 10px;">FFMpeg</a> <a href="/blog-hexo/tags/FIGlet/" style="font-size: 10px;">FIGlet</a> <a href="/blog-hexo/tags/FastAPI/" style="font-size: 10px;">FastAPI</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Flask/" style="font-size: 10px;">Flask</a> <a href="/blog-hexo/tags/Flyway/" style="font-size: 10px;">Flyway</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 14.17px;">Git</a> <a href="/blog-hexo/tags/GitLab/" style="font-size: 10px;">GitLab</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Go/" style="font-size: 10.83px;">Go</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 12.5px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 16.67px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 12.5px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 18.33px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 19.17px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/blog-hexo/tags/Loguru/" style="font-size: 10px;">Loguru</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/blog-hexo/tags/Mkdocs/" style="font-size: 10px;">Mkdocs</a> <a href="/blog-hexo/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/blog-hexo/tags/MyBatisPlus/" style="font-size: 10px;">MyBatisPlus</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 10.83px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10.83px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.67px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 11.67px;">Oracle</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pip/" style="font-size: 10px;">Pip</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 10.83px;">PowerShell</a> <a href="/blog-hexo/tags/Python/" style="font-size: 17.5px;">Python</a> <a href="/blog-hexo/tags/Pythonenv/" style="font-size: 10px;">Pythonenv</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SQLAlchemy/" style="font-size: 10px;">SQLAlchemy</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 11.67px;">SSH</a> <a href="/blog-hexo/tags/Shell/" style="font-size: 10.83px;">Shell</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 11.67px;">Ubuntu</a> <a href="/blog-hexo/tags/VS-Code/" style="font-size: 10.83px;">VS Code</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15.83px;">Vue</a> <a href="/blog-hexo/tags/Vuetify/" style="font-size: 10px;">Vuetify</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 11.67px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/YAML/" style="font-size: 10px;">YAML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 10.83px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/bumpversion/" style="font-size: 10px;">bumpversion</a> <a href="/blog-hexo/tags/cookiecutter/" style="font-size: 10px;">cookiecutter</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/ffmpeg/" style="font-size: 10px;">ffmpeg</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/heatmap-js/" style="font-size: 10px;">heatmap.js</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/peewee/" style="font-size: 10px;">peewee</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/sed/" style="font-size: 10px;">sed</a> <a href="/blog-hexo/tags/setuptools/" style="font-size: 10px;">setuptools</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/xargs/" style="font-size: 10px;">xargs</a> <a href="/blog-hexo/tags/zip/" style="font-size: 10px;">zip</a> <a href="/blog-hexo/tags/【Supervisor-Linux/" style="font-size: 10px;">【Supervisor, Linux]</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 11.67px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+      <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Alembic/" style="font-size: 10px;">Alembic</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 11.82px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/C/" style="font-size: 11.82px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 10.91px;">CSharp</a> <a href="/blog-hexo/tags/Code-Coverage/" style="font-size: 10px;">Code Coverage</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 10.91px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/Django/" style="font-size: 10px;">Django</a> <a href="/blog-hexo/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.73px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/blog-hexo/tags/FFMpeg/" style="font-size: 10px;">FFMpeg</a> <a href="/blog-hexo/tags/FIGlet/" style="font-size: 10px;">FIGlet</a> <a href="/blog-hexo/tags/FastAPI/" style="font-size: 10px;">FastAPI</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Flask/" style="font-size: 10px;">Flask</a> <a href="/blog-hexo/tags/Flyway/" style="font-size: 10px;">Flyway</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 14.55px;">Git</a> <a href="/blog-hexo/tags/GitLab/" style="font-size: 10px;">GitLab</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Go/" style="font-size: 10.91px;">Go</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 12.73px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 16.36px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 12.73px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 18.18px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 19.09px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 15.45px;">Linux</a> <a href="/blog-hexo/tags/Loguru/" style="font-size: 10px;">Loguru</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/blog-hexo/tags/Mkdocs/" style="font-size: 10px;">Mkdocs</a> <a href="/blog-hexo/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/blog-hexo/tags/MyBatisPlus/" style="font-size: 10px;">MyBatisPlus</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 10.91px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10.91px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.82px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 11.82px;">Oracle</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pip/" style="font-size: 10px;">Pip</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 10.91px;">PowerShell</a> <a href="/blog-hexo/tags/Python/" style="font-size: 17.27px;">Python</a> <a href="/blog-hexo/tags/Pythonenv/" style="font-size: 10px;">Pythonenv</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SQLAlchemy/" style="font-size: 10px;">SQLAlchemy</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 11.82px;">SSH</a> <a href="/blog-hexo/tags/Shell/" style="font-size: 11.82px;">Shell</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 13.64px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 11.82px;">Ubuntu</a> <a href="/blog-hexo/tags/VS-Code/" style="font-size: 10.91px;">VS Code</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15.45px;">Vue</a> <a href="/blog-hexo/tags/Vuetify/" style="font-size: 10px;">Vuetify</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12.73px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/YAML/" style="font-size: 10px;">YAML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 10.91px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/bumpversion/" style="font-size: 10px;">bumpversion</a> <a href="/blog-hexo/tags/cookiecutter/" style="font-size: 10px;">cookiecutter</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/ffmpeg/" style="font-size: 10px;">ffmpeg</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10px;">grep</a> <a href="/blog-hexo/tags/heatmap-js/" style="font-size: 10px;">heatmap.js</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/peewee/" style="font-size: 10px;">peewee</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/sed/" style="font-size: 10px;">sed</a> <a href="/blog-hexo/tags/setuptools/" style="font-size: 10px;">setuptools</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/xargs/" style="font-size: 10px;">xargs</a> <a href="/blog-hexo/tags/zip/" style="font-size: 10px;">zip</a> <a href="/blog-hexo/tags/【Supervisor-Linux/" style="font-size: 10px;">【Supervisor, Linux]</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 11.82px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
     </div>
   </div>
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archiv</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -859,9 +849,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2020/07/10/初识Vuetify/">初识Vuetify</a>
@@ -877,10 +871,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/04/初识FIGlet/">初识FIGlet</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/02/Element-UI针对文件上传添加表单校验/">Element-UI针对文件上传添加表单校验</a>
           </li>
         
       </ul>
