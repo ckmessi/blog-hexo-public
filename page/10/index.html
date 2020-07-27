@@ -68,6 +68,57 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Mybatis使用多个参数进行查询的方式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/12/27/Mybatis使用多个参数进行查询的方式/" class="article-date">
+  <time datetime="2018-12-27T09:26:46.000Z" itemprop="datePublished">2018-12-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/12/27/Mybatis使用多个参数进行查询的方式/">Mybatis使用多个参数进行查询的方式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在使用 <code>Mybatis</code> 进行简单的查询操作时，发现一个参数与多个参数的差别并不仅仅在于参数数量。</p>
+<h2 id="单参数查询"><a href="#单参数查询" class="headerlink" title="单参数查询"></a>单参数查询</h2><p>举例而言，在 <code>xxxMapper.xml</code> 文件中所写的单参数查询可以是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;sql id=&quot;tableName&quot;&gt;</span><br><span class="line">    TABLE_NAME</span><br><span class="line">&lt;/sql&gt;</span><br><span class="line">&lt;sql id=&quot;baseColumnList&quot;&gt;</span><br><span class="line">    ID, CODE, NAME, ..., VERSION</span><br><span class="line">&lt;/sql&gt;</span><br><span class="line">&lt;select id=&quot;getItemByCode&quot; resultMap=&quot;BaseResultMap&quot;&gt;</span><br><span class="line">    select</span><br><span class="line">        &lt;include refid=&quot;baseColumnList&quot; /&gt;</span><br><span class="line">    from</span><br><span class="line">        &lt;include refid=&quot;tableName&quot; /&gt;</span><br><span class="line">    where CODE = #&#123;code&#125;</span><br><span class="line">&lt;/select&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在接口文件 <code>xxxMapper.java</code> 中的接口为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">XXX getItemByCode(String code);</span><br></pre></td></tr></table></figure></p>
+<h3 id="多参数查询"><a href="#多参数查询" class="headerlink" title="多参数查询"></a>多参数查询</h3><p>在需要使用多个参数进行查询的时候，如果单纯添加两个文件中参数数量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;select id=&quot;getItemByCodeAndId&quot; resultMap=&quot;BaseResultMap&quot;&gt;</span><br><span class="line">    select</span><br><span class="line">        &lt;include refid=&quot;baseColumnList&quot; /&gt;</span><br><span class="line">    from</span><br><span class="line">        &lt;include refid=&quot;tableName&quot; /&gt;</span><br><span class="line">    where CODE = #&#123;code&#125; and ID = #&#123;id&#125;</span><br><span class="line">&lt;/select&gt;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">XXX getItemByCodeAndId(String code, String id);</span><br></pre></td></tr></table></figure>
+<p>则会抛错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Parameter &apos;id&apos; not found. Available parameters are [arg2, arg1, arg0, param3, param1, param2]或者Parameter &apos;0&apos; not found. Available parameters are [arg2, arg1, arg0, param3, param1, param2]</span><br></pre></td></tr></table></figure></p>
+<p>问题在于在 <code>MyBatis</code> 中不会识别这样的参数。</p>
+<p>一种方案是修改 <code>Mapper.xml</code> 中的代码，将 <code>#{code}</code> 和 <code>#{id}</code> 修改成#{arg0}，#{arg1}这样的形式。<br>还有一种方式更加优雅，修改 <code>xxxMapper.java</code> 文件内容，添加注解：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">XXX getItemByCodeAndId(@Param(&quot;code&quot;) String code, @Param(&quot;id&quot;) String id);</span><br></pre></td></tr></table></figure></p>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a href="https://www.cnblogs.com/EasonJim/p/7056256.html" target="_blank" rel="external">https://www.cnblogs.com/EasonJim/p/7056256.html</a><br><a href="https://www.oschina.net/question/1160609_133366" target="_blank" rel="external">https://www.oschina.net/question/1160609_133366</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/12/27/Mybatis使用多个参数进行查询的方式/" data-id="ckd4e9kw40069egshhh51l7uf" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mybatis/">Mybatis</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-部署-Spring-Boot-项目到服务器上" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2018/12/17/部署-Spring-Boot-项目到服务器上/" class="article-date">
@@ -107,7 +158,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/12/17/部署-Spring-Boot-项目到服务器上/" data-id="ckcznqyix00ezkwsh0pz6qkz0" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/12/17/部署-Spring-Boot-项目到服务器上/" data-id="ckd4e9l4300lzegshakl062lf" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring-Boot/">Spring Boot</a></li></ul>
@@ -153,7 +204,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/12/11/使用Vim修改文件编码/" data-id="ckcznqyhr00b9kwshmgqqpz7h" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/12/11/使用Vim修改文件编码/" data-id="ckd4e9kxx00b2egsh2xmovyuj" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/vim/">vim</a></li></ul>
@@ -203,7 +254,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/12/10/git-fetch-的使用/" data-id="ckcznqyhe00a3kwshrd4vjsk3" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/12/10/git-fetch-的使用/" data-id="ckd4e9kxe009pegshfzmealp0" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -256,7 +307,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/11/12/Oracle数据库创建表并添加自增字段/" data-id="ckcznqyg9006mkwsh1bj29sym" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/11/12/Oracle数据库创建表并添加自增字段/" data-id="ckd4e9kw8006kegsh6jl430rm" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li></ul>
@@ -313,7 +364,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/10/31/在Visual-Studio使用libfacedetection检测人脸关键点/" data-id="ckcznqyin00e3kwshu6c1ogvu" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/10/31/在Visual-Studio使用libfacedetection检测人脸关键点/" data-id="ckd4e9l2c00ktegsh5mdzx7iw" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Visual-Studio/">Visual Studio</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/libfacedetection/">libfacedetection</a></li></ul>
@@ -377,7 +428,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/30/Oh-My-Zsh配合agnoster主题及Solarized配色/" data-id="ckcznqyg8006jkwshgl1144ai" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/09/30/Oh-My-Zsh配合agnoster主题及Solarized配色/" data-id="ckd4e9kx3008vegsh0ttv1vo0" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Oh-My-Zsh/">Oh-My-Zsh</a></li></ul>
@@ -433,7 +484,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/21/Laravel中server-php文件的作用/" data-id="ckcznqyfm0048kwshly5l763b" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/09/21/Laravel中server-php文件的作用/" data-id="ckd4e9kuz0046egshjlr325mk" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -482,7 +533,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/21/Ubuntu-16-04-升级OpenSSH/" data-id="ckcznqyh30092kwsh82t6y5z1" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/09/21/Ubuntu-16-04-升级OpenSSH/" data-id="ckd4e9kx5008zegshl5blyirf" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li></ul>
@@ -545,60 +596,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/17/Linux用户免密码sudo执行命令/" data-id="ckcznqyg0005nkwshxi84w2yk" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/09/17/Linux用户免密码sudo执行命令/" data-id="ckd4e9kvu005jegshl2goca39" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Windows-Ubuntu-Mac-OS查看文件md5值的命令" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2018/09/13/Windows-Ubuntu-Mac-OS查看文件md5值的命令/" class="article-date">
-  <time datetime="2018-09-13T08:14:01.000Z" itemprop="datePublished">2018-09-13</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2018/09/13/Windows-Ubuntu-Mac-OS查看文件md5值的命令/">Windows/Ubuntu/Mac OS查看文件md5值的命令</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>MD5算法的一项重要功能就是一致性验证。</p>
-<p>有时候，为了判断下载文件是否正确，可以通过判断<code>本地文件的md5值</code>是否与<code>服务器文件的md5值</code>相同完成。</p>
-<p>这里总结在三种不同平台下，计算文件md5值的命令如下。</p>
-<h4 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h4><p>使用<code>certutil</code>命令计算文件的哈希值，可以选择<code>MD5</code>、<code>SHA1</code>或<code>SHA256</code>算法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">certutil -hashfile [filename] MD5</span><br><span class="line">certutil -hashfile [filename] SHA1</span><br><span class="line">certutil -hashfile [filename] SHA256</span><br></pre></td></tr></table></figure></p>
-<h4 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h4><p>在 <code>Ubuntu 16.04</code> 操作系统中可以使用 <code>md5sum</code> 命令。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">md5sum [filename]</span><br></pre></td></tr></table></figure></p>
-<h4 id="Mac-OS"><a href="#Mac-OS" class="headerlink" title="Mac OS"></a>Mac OS</h4><p>在 <code>Mac OS</code> 操作系统中可以使用 <code>md5</code> 命令。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">md5 [filename]</span><br></pre></td></tr></table></figure></p>
-<p>下载文件后，顺手比对一下文件的md5值是一个好习惯。</p>
-<p>一方面确保下载数据完整，另一方面防止中间人攻击。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/13/Windows-Ubuntu-Mac-OS查看文件md5值的命令/" data-id="ckcznqyhc009wkwshdyh3dnji" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li></ul>
 
     </footer>
   </div>
@@ -664,6 +665,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/07/27/Laravel数据库查询中get-和all-的区别/">Laravel数据库查询中get()和all()的区别</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/">一次 Swagger-UI 3.30.1 升级引发的故障</a>
           </li>
         
@@ -677,10 +682,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/10/初识Vuetify/">初识Vuetify</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/08/使用Loguru处理日志/">使用Loguru处理日志</a>
           </li>
         
       </ul>

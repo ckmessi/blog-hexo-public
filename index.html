@@ -68,6 +68,56 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Laravel数据库查询中get-和all-的区别" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/07/27/Laravel数据库查询中get-和all-的区别/" class="article-date">
+  <time datetime="2020-07-27T10:53:50.000Z" itemprop="datePublished">2020-07-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/07/27/Laravel数据库查询中get-和all-的区别/">Laravel数据库查询中get()和all()的区别</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>使用 Laravel 框架的 Eloquent 对象进行数据库查询时，通常在最后一步使用 <code>get()</code> 方法获取数据。<br>貌似 Laravel 的数据库查询中同时也可以使用 <code>all()</code> 方法。<br>那么 <code>get()</code> 和 <code>all()</code> 有什么区别和联系？</p>
+<p>事实上，对于 <strong>不带查询条件</strong> 的数据库查询而言，两者是等价的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User::get();</span><br><span class="line">User::all();</span><br></pre></td></tr></table></figure></p>
+<p>方法 <code>all()</code> 是定义在 <code>Eloquent/Model</code> 类中的一个静态方法，它做的事情就是创建一个新的查询对象，然后调用它的 <code>get()</code> 方法。在使用 <code>all()</code> 的时候，你不能修改查询条件，只能选择取出的列。<br>可参考 <code>laravel/framework/src/Illuminate/Database/Eloquent/Model.php</code> 相关代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Get all of the models from the database.</span><br><span class="line"> *</span><br><span class="line"> * @param  array|mixed  $columns</span><br><span class="line"> * @return \Illuminate\Database\Eloquent\Collection|static[]</span><br><span class="line"> */</span><br><span class="line">public static function all($columns = [&apos;*&apos;])</span><br><span class="line">&#123;</span><br><span class="line">    return (new static)-&gt;newQuery()-&gt;get(</span><br><span class="line">        is_array($columns) ? $columns : func_get_args()</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>方法 <code>get()</code> 是定义在 <code>Eloquent/Builder</code> 类对象中的方法，如果需要修改查询条件，可以在其前面添加 <code>where</code> 子句等，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">User::where(&apos;name&apos;, &apos;Abc&apos;)-&gt;get();</span><br></pre></td></tr></table></figure></p>
+<p>因此，对于需要查询的情况，只能使用 <code>get()</code> 方法；而对于一心只想从数据库表中取出所有数据的时候，可以直接使用 <code>all()</code>。<br>（它相比于使用 <code>get()</code> 方法，唯一的优势就是看起来比较装逼）。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://stackoverflow.com/questions/34587457/difference-between-eloquent-modelget-and-all" target="_blank" rel="external">https://stackoverflow.com/questions/34587457/difference-between-eloquent-modelget-and-all</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/07/27/Laravel数据库查询中get-和all-的区别/" data-id="ckd4e9kve004xegshcdx4myrm" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-一次-Swagger-UI-3-30-1-升级引发的故障" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/" class="article-date">
@@ -117,7 +167,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/" data-id="ckcznqyhi00aekwsh8pnpo7ns" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/" data-id="ckd4e9kxn00aaegshrorvqled" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Swagger-UI/">Swagger-UI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/fastapi/">fastapi</a></li></ul>
@@ -179,7 +229,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/21/Windows右键菜单中添加用VSCode打开选项/" data-id="ckcznqyhd00a0kwshel30xgj9" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/21/Windows右键菜单中添加用VSCode打开选项/" data-id="ckd4e9kxh009wegshv4h7qs5j" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/VSCode/">VSCode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li></ul>
@@ -229,7 +279,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/" data-id="ckcznqyip00ebkwsh6do7ujkj" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/" data-id="ckd4e9l2d00kwegshadcn76nk" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li></ul>
@@ -302,7 +352,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/10/初识Vuetify/" data-id="ckcznqyig00dikwsh1x4vi4v0" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/10/初识Vuetify/" data-id="ckd4e9l2600keegsh97a635os" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vuetify/">Vuetify</a></li></ul>
@@ -371,7 +421,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/08/使用Loguru处理日志/" data-id="ckcznqyhn00askwsh7x54lrds" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/08/使用Loguru处理日志/" data-id="ckd4e9kxw00azegshxjl6ztkr" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Loguru/">Loguru</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -438,7 +488,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/06/初识Flask/" data-id="ckcznqyia00czkwsh4h497qkx" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/06/初识Flask/" data-id="ckd4e9l1u00jtegshxu5iybqv" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Flask/">Flask</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -497,7 +547,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/04/初识FIGlet/" data-id="ckcznqyi900cwkwshs2ml86mq" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/04/初识FIGlet/" data-id="ckd4e9l1w00jwegsho6u773h6" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/FIGlet/">FIGlet</a></li></ul>
@@ -548,7 +598,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/02/Element-UI针对文件上传添加表单校验/" data-id="ckcznqyel0016kwsht0kcgsc9" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/02/Element-UI针对文件上传添加表单校验/" data-id="ckd4e9ktc0016egsh6732sia6" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -616,59 +666,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/01/初识Django/" data-id="ckcznqyi700cqkwshcu6jd9m8" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/01/初识Django/" data-id="ckd4e9l1t00jregsh3j7dvzcy" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Django/">Django</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-VSCode遇到Git找不到文件操作错误的解决" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2020/06/28/VSCode遇到Git找不到文件操作错误的解决/" class="article-date">
-  <time datetime="2020-06-28T04:01:00.000Z" itemprop="datePublished">2020-06-28</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2020/06/28/VSCode遇到Git找不到文件操作错误的解决/">VSCode遇到Git找不到文件操作错误的解决</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在使用 VSCode 的 <code>Source Control</code> 工具时，出现错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Git: fatal: xxx: &apos;xxx&apos; is outside repository</span><br></pre></td></tr></table></figure></p>
-<img src="/blog-hexo/2020/06/28/VSCode遇到Git找不到文件操作错误的解决/1.png" alt="错误示例" title="错误示例">
-<p>查看 Git log 可以看到错误的详细信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; git add -A -- d:\Code\xx\ValidateHelper.js</span><br><span class="line">fatal: d:\Code\xx\ValidateHelper.js: &apos;d:\Code\xx\ValidateHelper.js&apos; is outside repository</span><br></pre></td></tr></table></figure></p>
-<p>这里错误原因于，所有的盘符 <code>d:\</code> 变成了小写的，导致找不着。<br>因为其它盘符是 <code>D:\</code> 的命令都能正确执行，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git ls-tree -l HEAD -- D:\Code\xx\tslint.json</span><br></pre></td></tr></table></figure></p>
-<p>触发这个错误的原因，是 Windows 下某个版本的 Git 存在缺陷，无法正确处理盘符的情况。<br>解决方案有两个：<br>1）升级 Git 到最新版本，据说有效；<br>2）配置 <code>core.ignorecase</code>；</p>
-<p>使用 <code>git config --list</code> 查看 <code>core.ignorecase</code> 的值，如果是 <code>false</code>，将其修改为 <code>true</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config core.ignorecase true</span><br></pre></td></tr></table></figure></p>
-<p>这样操作时就不会抛错了。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/06/28/VSCode遇到Git找不到文件操作错误的解决/" data-id="ckcznqyhb009tkwshjh2grhcp" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/VS-Code/">VS Code</a></li></ul>
 
     </footer>
   </div>
@@ -734,6 +735,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/07/27/Laravel数据库查询中get-和all-的区别/">Laravel数据库查询中get()和all()的区别</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/">一次 Swagger-UI 3.30.1 升级引发的故障</a>
           </li>
         
@@ -747,10 +752,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/10/初识Vuetify/">初识Vuetify</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/08/使用Loguru处理日志/">使用Loguru处理日志</a>
           </li>
         
       </ul>

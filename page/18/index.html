@@ -68,6 +68,53 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Ubuntu修改Mysql数据库连接端口号" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/05/22/Ubuntu修改Mysql数据库连接端口号/" class="article-date">
+  <time datetime="2017-05-22T08:43:00.000Z" itemprop="datePublished">2017-05-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/05/22/Ubuntu修改Mysql数据库连接端口号/">Ubuntu修改Mysql数据库连接端口号</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在实际情况中，为了避免不避要的攻击，最好更换Mysql数据库的默认端口号3306为其它端口号。   </p>
+<p>基本的更换步骤如下：<br>找到mysql的配置文件，使用<code>locate my.cnf</code>命令可以查找my.cnf文件所在位置。<br>使用vim进行编辑<code>vim /etc/mysql/my.cnf</code>，查找<code>port = 3306</code>所在位置。<br>一共有两行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[client]</span><br><span class="line">port            = 3306</span><br><span class="line">socket          = /var/run/mysqld/mysqld.sock</span><br></pre></td></tr></table></figure></p>
+<p>以及<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">#</span><br><span class="line"># * Basic Settings</span><br><span class="line">#</span><br><span class="line">user            = mysql</span><br><span class="line">pid-file        = /var/run/mysqld/mysqld.pid</span><br><span class="line">socket          = /var/run/mysqld/mysqld.sock</span><br><span class="line">port            = 3306</span><br><span class="line">basedir         = /usr</span><br><span class="line">datadir         = /var/lib/mysql</span><br><span class="line">tmpdir          = /tmp</span><br><span class="line">lc-messages-dir = /usr/share/mysql</span><br></pre></td></tr></table></figure></p>
+<p>这两处的3306替换为新端口号即可。</p>
+<p>然后重启mysql服务：<code>service mysqld restart</code></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/05/22/Ubuntu修改Mysql数据库连接端口号/" data-id="ckd4e9kxa009cegsh3qaq16b1" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Hashids的使用" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2017/05/16/Hashids的使用/" class="article-date">
@@ -119,7 +166,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/05/16/Hashids的使用/" data-id="ckcznqyf0002ekwsh1wlkig98" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/05/16/Hashids的使用/" data-id="ckd4e9ktu002hegsh92jjwk5u" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li></ul>
@@ -188,6 +235,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/07/27/Laravel数据库查询中get-和all-的区别/">Laravel数据库查询中get()和all()的区别</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/">一次 Swagger-UI 3.30.1 升级引发的故障</a>
           </li>
         
@@ -201,10 +252,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/10/初识Vuetify/">初识Vuetify</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/08/使用Loguru处理日志/">使用Loguru处理日志</a>
           </li>
         
       </ul>

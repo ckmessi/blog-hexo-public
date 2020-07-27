@@ -68,6 +68,74 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Solution-sln-File-in-Visual-Studio" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/08/18/Solution-sln-File-in-Visual-Studio/" class="article-date">
+  <time datetime="2017-08-18T13:34:32.000Z" itemprop="datePublished">2017-08-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/08/18/Solution-sln-File-in-Visual-Studio/">Solution(.sln) File in Visual Studio</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>使用Visual Studio创建的项目都包含一个<code>.sln</code>文件，本文简要说明文件的内容及相关作用。</p>
+<h2 id="文件说明"><a href="#文件说明" class="headerlink" title="文件说明"></a>文件说明</h2><p>在Visual Studio中，解决方案是用于组织管理项目的结构。解决方案将所有项目的状态信息保存在<code>.sln</code>文件和<code>.suo</code>文件中。<code>.sln</code>文件以文本信息的方式，保存着环境需要用于查找和载入项目及其引用VSPackage的持久化数据name-value参数。当一个用户打开解决方案时，开发环境将遍历<code>.sln</code>文件中的<code>preSolution</code>、<code>Project</code>和<code>postSolution</code>信息，载入解决方案、解决方案中的项目、以及解决方案相关联的持久化信息。</p>
+<h2 id="内容概览"><a href="#内容概览" class="headerlink" title="内容概览"></a>内容概览</h2><p>我们可以显示地将<code>.sln</code>文件中的内容划分为以下几个部分：</p>
+<h4 id="第一部分，版本信息"><a href="#第一部分，版本信息" class="headerlink" title="第一部分，版本信息"></a>第一部分，版本信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Microsoft Visual Studio Solution File, Format Version 12.00</span><br><span class="line"># Visual Studio 14</span><br><span class="line">VisualStudioVersion = 14.0.25420.1</span><br><span class="line">MinimumVisualStudioVersion = 10.0.40219.1</span><br></pre></td></tr></table></figure>
+<h4 id="第二部分，项目信息"><a href="#第二部分，项目信息" class="headerlink" title="第二部分，项目信息"></a>第二部分，项目信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Project(&quot;&#123;FAE04EC0-301F-11D3-BF4B-00C04F79EFBC&#125;&quot;) = &quot;WebApplicationSample&quot;, &quot;WebApplicationSample\WebApplicationSample.csproj&quot;, &quot;&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;&quot;</span><br><span class="line">EndProject</span><br></pre></td></tr></table></figure>
+<h4 id="第三部分，全局信息"><a href="#第三部分，全局信息" class="headerlink" title="第三部分，全局信息"></a>第三部分，全局信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Global</span><br><span class="line">	GlobalSection(SolutionConfigurationPlatforms) = preSolution</span><br><span class="line">		Debug|Any CPU = Debug|Any CPU</span><br><span class="line">		Release|Any CPU = Release|Any CPU</span><br><span class="line">	EndGlobalSection</span><br><span class="line">	GlobalSection(ProjectConfigurationPlatforms) = postSolution</span><br><span class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Debug|Any CPU.ActiveCfg = Debug|Any CPU</span><br><span class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Debug|Any CPU.Build.0 = Debug|Any CPU</span><br><span class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Release|Any CPU.ActiveCfg = Release|Any CPU</span><br><span class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Release|Any CPU.Build.0 = Release|Any CPU</span><br><span class="line">	EndGlobalSection</span><br><span class="line">	GlobalSection(SolutionProperties) = preSolution</span><br><span class="line">		HideSolutionNode = FALSE</span><br><span class="line">	EndGlobalSection</span><br><span class="line">EndGlobal</span><br></pre></td></tr></table></figure>
+<h2 id="开发环境载入流程"><a href="#开发环境载入流程" class="headerlink" title="开发环境载入流程"></a>开发环境载入流程</h2><p>参考(MSDN官方文档)[<a href="https://msdn.microsoft.com/en-us/library/bb165951.aspx]，为了载入`解决方案`，环境平台将执行以下任务：" target="_blank" rel="external">https://msdn.microsoft.com/en-us/library/bb165951.aspx]，为了载入`解决方案`，环境平台将执行以下任务：</a></p>
+<ol>
+<li><p>开发环境将阅读Global区域，处理所有标记为<code>preSolution</code>的区域，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GlobalSection(SolutionConfigurationPlatforms) = preSolution</span><br><span class="line">	Debug|Any CPU = Debug|Any CPU</span><br><span class="line">	Release|Any CPU = Release|Any CPU</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>开发环境载入VSPackage，调用其中的接口<code>QueryInterface</code>，并使用区域中的数据调用<code>ReadSolutionProps</code>方法，这样数据就能存储在VSPackage中。开发环境将对每个<code>preSolution</code>区域重复这个流程。</p>
+</li>
+<li><p>开发环境迭代存留区域（persistence blocks）的项目。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Project(&quot;&#123;FAE04EC0-301F-11D3-BF4B-00C04F79EFBC&#125;&quot;) = &quot;WebApplicationSample&quot;, &quot;WebApplicationSample\WebApplicationSample.csproj&quot;, &quot;&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;&quot;</span><br><span class="line">EndProject</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这份声明包含了唯一的项目GUID，以及项目类型GUID。这些信息是被开发环境用于找到属于解决方案的项目文件，以及每个项目所需要的VSPackage。项目GUID将被传递给IVsProjectFactory以载入相关的VSPackage，然后载入项目。</p>
+<ol start="4">
+<li><p>基于.sln文件项目区域所包含的信息，环境变量载入每个项目文件。项目自身需要负责构建项目层级并载入内嵌的项目</p>
+</li>
+<li><p>在.sln文件所有区域后，解决方案将被显示在Solution Explorer中，并准备好呈现给用户。</p>
+</li>
+</ol>
+<p>如果解决方案中任何实现项目的VSPackage载入失败，将调用<code>OnProjectLoadFailure</code>方法，其它项目将让用户选择是否忽略。如果发生解析错误，开发环境将显示对话框警告用户解决方案损坏了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>.sln</code>文件包含了解决方案所需要的相关信息，包括开发环境的版本要求、属于解决方案的项目信息、载入解决方案所需要执行的相关操作等。在启动时，开发环境将根据<code>.sln</code>文件执行相关准备，完成后将解决方案呈现给用户，否则提供相关的提示信息。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/08/18/Solution-sln-File-in-Visual-Studio/" data-id="ckd4e9kws0083egsh2a32zgfo" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-NodeJS读写文件" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2017/08/11/NodeJS读写文件/" class="article-date">
@@ -105,7 +173,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/08/11/NodeJS读写文件/" data-id="ckcznqyg7006fkwshy3nqlth4" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/08/11/NodeJS读写文件/" data-id="ckd4e9kw9006megshojrvxi5m" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li></ul>
@@ -153,7 +221,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/08/02/PowerShell-Alias设置/" data-id="ckcznqygh007gkwshx8gres0q" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/08/02/PowerShell-Alias设置/" data-id="ckd4e9kwg007aegsheofwnnfy" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li></ul>
@@ -200,7 +268,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/28/C-读取XML格式内容/" data-id="ckcznqyef000okwsh8tszyn2k" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/28/C-读取XML格式内容/" data-id="ckd4e9ksx000iegshswdoif84" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li></ul>
@@ -270,7 +338,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/26/Git常用撤销命令总结/" data-id="ckcznqyex0026kwsh4qg46ist" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/26/Git常用撤销命令总结/" data-id="ckd4e9ktn0021egshw7mhxb3m" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -320,7 +388,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/25/C-使用正则表达式在字符串中查找子串/" data-id="ckcznqyea000hkwshzwjf5emt" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/25/C-使用正则表达式在字符串中查找子串/" data-id="ckd4e9ktb0013egsh1x71uoyr" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
@@ -366,7 +434,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/24/C-使用XmlDocument解析XML内容/" data-id="ckcznqye9000ekwshc3bqzd0p" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/24/C-使用XmlDocument解析XML内容/" data-id="ckd4e9ksw000fegshyhgl666q" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li></ul>
@@ -420,7 +488,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/22/Laravel使用Maatwebsite操作Excel/" data-id="ckcznqyfp004gkwshnchljo56" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/22/Laravel使用Maatwebsite操作Excel/" data-id="ckd4e9kv9004regsht392thh0" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -479,7 +547,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/20/C-的访问权限修饰符/" data-id="ckcznqyeh000skwsh5369xwoe" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/20/C-的访问权限修饰符/" data-id="ckd4e9kt1000pegshoeltgfys" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C#</a></li></ul>
@@ -527,55 +595,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/19/PowerShell实现光标快速移动操作和自动补全/" data-id="ckcznqygn007jkwshjyqwa1ol" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/19/PowerShell实现光标快速移动操作和自动补全/" data-id="ckd4e9kwj007hegsh593dk2ug" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-npm的package-json一些使用常识" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/07/19/npm的package-json一些使用常识/" class="article-date">
-  <time datetime="2017-07-19T14:28:56.000Z" itemprop="datePublished">2017-07-19</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/07/19/npm的package-json一些使用常识/">npm的package.json一些使用常识</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="npm-install-–save"><a href="#npm-install-–save" class="headerlink" title="npm install –save"></a>npm install –save</h2><p><code>npm install --save</code> 能够将安装包的信息保存到<code>package.json</code>中<br>但如果一开始没有<code>package.json</code>，它不会创建文件。<br>因此需要先<code>npm init</code>，会自动生成一个<code>package.json</code>文件，之后再执行带<code>--save</code>的安装包操作时就会保存了。</p>
-<h2 id="–save和–save-dev的区别"><a href="#–save和–save-dev的区别" class="headerlink" title="–save和–save-dev的区别"></a>–save和–save-dev的区别</h2><p>使用<code>--save</code>时，会在<code>package.json</code>的<code>dependencies</code>属性中添加相关包的信息<br>使用<code>--save-dev</code>时，会在<code>package.json</code>的<code>devDependencies</code>属性中添加相关包的信息。<br>以上两者是独立的。</p>
-<h2 id="dependencies和devDependencies属性的区别"><a href="#dependencies和devDependencies属性的区别" class="headerlink" title="dependencies和devDependencies属性的区别"></a>dependencies和devDependencies属性的区别</h2><p>使用<code>npm install</code>默认会安装以上两种依赖。<br>使用<code>npm install --production</code>只安装<code>dependencies</code>，不安装<code>devDependencies</code>。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/19/npm的package-json一些使用常识/" data-id="ckcznqyhk00ahkwshat0ysdb1" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li></ul>
 
     </footer>
   </div>
@@ -641,6 +664,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/07/27/Laravel数据库查询中get-和all-的区别/">Laravel数据库查询中get()和all()的区别</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/">一次 Swagger-UI 3.30.1 升级引发的故障</a>
           </li>
         
@@ -654,10 +681,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/10/初识Vuetify/">初识Vuetify</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/08/使用Loguru处理日志/">使用Loguru处理日志</a>
           </li>
         
       </ul>

@@ -68,6 +68,56 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Linux命令在文件中查找字符串" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/01/12/Linux命令在文件中查找字符串/" class="article-date">
+  <time datetime="2018-01-12T05:44:14.000Z" itemprop="datePublished">2018-01-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/01/12/Linux命令在文件中查找字符串/">Linux命令在文件中查找字符串</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="使用grep命令"><a href="#使用grep命令" class="headerlink" title="使用grep命令"></a>使用<code>grep</code>命令</h2><h4 id="指定文件"><a href="#指定文件" class="headerlink" title="指定文件"></a>指定文件</h4><p>在指定文件中查找相关字符串，可以使用<code>grep</code>命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep [target_str] [target_file]</span><br></pre></td></tr></table></figure></p>
+<p>比如查找后台访问日志中，调用接口<code>v1/user/profile/2</code>的所有记录：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep v1/user/profile/2 storage/logs/laravel-2016-11-25.log</span><br></pre></td></tr></table></figure></p>
+<h4 id="指定文件夹"><a href="#指定文件夹" class="headerlink" title="指定文件夹"></a>指定文件夹</h4><p>在指定文件夹中查找相关字符串，可以使用带参数的<code>grep</code>命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -rnw [target_dir] -e [target_str]</span><br></pre></td></tr></table></figure></p>
+<p>其中<code>-r</code>或<code>-R</code>表示递归向下搜索，<code>-n</code>是显示匹配行号，<code>-w</code>表示匹配整个字符。</p>
+<h2 id="使用find命令结合grep命令"><a href="#使用find命令结合grep命令" class="headerlink" title="使用find命令结合grep命令"></a>使用<code>find</code>命令结合<code>grep</code>命令</h2><p>在一堆文件中查找相关字符串及其出现的文件，可以使用<code>find</code>命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find [dir_path] -type f -exec grep -H [target_str] &#123;&#125; \;</span><br></pre></td></tr></table></figure></p>
+<p>其中<code>find</code>命令是Linux中常用的查找命令，后面接着的<code>-exec grep ... {} \;</code>表示执行<code>grep</code>命令，注意后面的<code>{} \;</code>是必须的。grep</p>
+<p>这类命令还是以实际使用场景为准，具体问题查询具体的参数语法即可。</p>
+<p>参考链接：<a href="https://stackoverflow.com/questions/16956810/how-do-i-find-all-files-containing-specific-text-on-linux" target="_blank" rel="external">https://stackoverflow.com/questions/16956810/how-do-i-find-all-files-containing-specific-text-on-linux</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="ckd4e9kvx005megshplo1aohg" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Linux管道和awk实现字符连接" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2018/01/04/Linux管道和awk实现字符连接/" class="article-date">
@@ -111,7 +161,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/04/Linux管道和awk实现字符连接/" data-id="ckcznqyfz005kkwshpqzm396o" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/04/Linux管道和awk实现字符连接/" data-id="ckd4e9kvz005wegshh8674n49" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li></ul>
@@ -159,7 +209,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/02/Mac使用命令行快速生成zip包/" data-id="ckcznqyg1005rkwshm99n0e4f" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/02/Mac使用命令行快速生成zip包/" data-id="ckd4e9kw10060egshfg5dlzyw" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li></ul>
@@ -208,7 +258,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/21/Mysql导出数据库表结构到Excel/" data-id="ckcznqyg60068kwshv42pdjoo" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/21/Mysql导出数据库表结构到Excel/" data-id="ckd4e9kw6006degshf1tq2wsj" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li></ul>
@@ -268,7 +318,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/18/Git-Fast-forward的一些常识/" data-id="ckcznqyem0019kwsh7mrbwztg" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/18/Git-Fast-forward的一些常识/" data-id="ckd4e9kte001degsh93rvxe5c" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -314,7 +364,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/17/Laravel扩展Guzzle-发送HTTP请求/" data-id="ckcznqyft004wkwsh6bgvzkfh" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/17/Laravel扩展Guzzle-发送HTTP请求/" data-id="ckd4e9kvc004uegshy5fhkqke" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -363,7 +413,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/14/Laravel模拟创建Request/" data-id="ckcznqyfv0054kwshi7ni1xw9" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/14/Laravel模拟创建Request/" data-id="ckd4e9kvm0056egsh0pd0o1tg" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -414,7 +464,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/09/PHPUnit测试protected方法/" data-id="ckcznqygc006wkwshrfgdyz30" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/09/PHPUnit测试protected方法/" data-id="ckd4e9kwe006zegshp2nfg47j" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li></ul>
@@ -473,7 +523,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/02/AngularJS中ng-if和ng-show的区别/" data-id="ckcznqydv0004kwsht95eb7u8" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/02/AngularJS中ng-if和ng-show的区别/" data-id="ckd4e9ksh0004egshi6d7ghgg" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -537,86 +587,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/30/Angular1模块间通信方式/" data-id="ckcznqydx0005kwshusataic6" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/10/30/Angular1模块间通信方式/" data-id="ckd4e9ksf0001egshula08xm6" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Laravel-Database-Query-Builder-insert的效率问题" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/10/23/Laravel-Database-Query-Builder-insert的效率问题/" class="article-date">
-  <time datetime="2017-10-23T13:44:46.000Z" itemprop="datePublished">2017-10-23</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/10/23/Laravel-Database-Query-Builder-insert的效率问题/">Laravel Database Query Builder insert的效率问题</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近在写代码的过程中发现一个奇怪的问题，在使用Laravel的Query Builder进行数据库数据插入时，似乎当数组长度较大时，插入过程会异常缓慢。</p>
-<p>在Laravel项目中，使用<code>QueryBuilder</code>的<code>insert($values)</code>方法时，参数<code>$values</code>可以是一个表示为数据库表项的数据；也可以是一个数组，包含多个数据库表项。因此，在执行多次数据插入时，可以考虑将待插入数据拼接成一个数组，只调用一次<code>insert()</code>操作，避免频繁的数据库IO。然而物极必反，当<code>$values</code>数组长度过长时，程序执行的速度变得非常缓慢，这个奇妙的现象吸引了我的注意，开始逐步分析原因。</p>
-<h2 id="原码概览"><a href="#原码概览" class="headerlink" title="原码概览"></a>原码概览</h2><p><code>Model::insert()</code>方法实质是调用了<code>Query Builder</code>中定义的方法，仔细逐步追踪<code>insert()</code>方法的操作步骤，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">  * Insert a new record into the database.</span><br><span class="line">  *</span><br><span class="line">  * @param  array  $values</span><br><span class="line">  * @return bool</span><br><span class="line">  */</span><br><span class="line"> public function insert(array $values)</span><br><span class="line"> &#123;</span><br><span class="line">     // Since every insert gets treated like a batch insert, we will make sure the</span><br><span class="line">     // bindings are structured in a way that is convenient when building these</span><br><span class="line">     // inserts statements by verifying these elements are actually an array.</span><br><span class="line">     if (empty($values)) &#123;</span><br><span class="line">         return true;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     if (! is_array(reset($values))) &#123;</span><br><span class="line">         $values = [$values];</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     // Here, we will sort the insert keys for every record so that each insert is</span><br><span class="line">     // in the same order for the record. We need to make sure this is the case</span><br><span class="line">     // so there are not any errors or problems when inserting these records.</span><br><span class="line">     else &#123;</span><br><span class="line">         foreach ($values as $key =&gt; $value) &#123;</span><br><span class="line">             ksort($value);</span><br><span class="line"></span><br><span class="line">             $values[$key] = $value;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     // Finally, we will run this query against the database connection and return</span><br><span class="line">     // the results. We will need to also flatten these bindings before running</span><br><span class="line">     // the query so they are all in one huge, flattened array for execution.</span><br><span class="line">     return $this-&gt;connection-&gt;insert(</span><br><span class="line">         $this-&gt;grammar-&gt;compileInsert($this, $values),</span><br><span class="line">         $this-&gt;cleanBindings(Arr::flatten($values, 1))</span><br><span class="line">     );</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="深入剖析"><a href="#深入剖析" class="headerlink" title="深入剖析"></a>深入剖析</h2><p>在这段代码中，实质有效操作语句只有3部分：</p>
-<ul>
-<li><p>1.对参数进行检查，如果为空直接返回；如果不是数组，将其封装为数组（这就是为什么参数即可以单项也可以多项的原理）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if (empty($values)) &#123;</span><br><span class="line">    return true;</span><br><span class="line">&#125;</span><br><span class="line">if (! is_array(reset($values))) &#123;</span><br><span class="line">    $values = [$values];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>2.如果是既定数组，将数组中每一项按照其内部键值进行排序。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">foreach ($values as $key =&gt; $value) &#123;</span><br><span class="line">    ksort($value);</span><br><span class="line">    $values[$key] = $value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>3.调用数据库链接，执行插入操作。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">return $this-&gt;connection-&gt;insert(</span><br><span class="line">    $this-&gt;grammar-&gt;compileInsert($this, $values),</span><br><span class="line">    $this-&gt;cleanBindings(Arr::flatten($values, 1))</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>通过二分法Debug，发现造成时间开销巨大的步骤出现在语句<code>$this-&gt;cleanBindings(Arr::flatten($values, 1))</code>中。<br>再进一步，是出现在<code>Arr::flatten($values, 1)</code>中。<br>打开<code>src/Illuminate/Support/Arr.php</code>文件，找到对应函数如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public static function flatten($array, $depth = INF)</span><br><span class="line">&#123;</span><br><span class="line">    return array_reduce($array, function ($result, $item) use ($depth) &#123;</span><br><span class="line">        $item = $item instanceof Collection ? $item-&gt;all() : $item;</span><br><span class="line">        if (! is_array($item)) &#123;</span><br><span class="line">            return array_merge($result, [$item]);</span><br><span class="line">        &#125; elseif ($depth === 1) &#123;</span><br><span class="line">            return array_merge($result, array_values($item));</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            return array_merge($result, static::flatten($item, $depth - 1));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, []);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>重点来了，这个函数完成的功能主要是：</p>
-<ul>
-<li>1.使用<code>array_reduce</code>函数，对参数<code>$array</code>（也就是处理后的<code>$values</code>）数组使用回调函数，迭代地对数组每个元素进行处理。</li>
-<li>2.针对每个元素，这里也就是<code>$item</code>，首先如果是一个<code>Collection</code>，使用<code>-&gt;all()</code>方法获取其值集合。</li>
-<li>3.之后根据条件判断，由于我们传入的<code>$values</code>是一个数组，参数<code>$depth</code>为<code>1</code>，因此将进入第二个条件语句中。</li>
-<li>4.执行<code>return array_merge($result, array_values($item));</code>语句。</li>
-</ul>
-<p>问题就出在这个<code>array_merge()</code>！</p>
-<p>我们知道，在PHP中<code>array_merge()</code>将一个或多个数组的单元合并起来，一个数组中的值附加在前一个数组的后面，返回作为结果的数组。<br>函数<code>array_merge()</code>底层操作的效果是，如果输入的数组中有相同的字符串键名，则该键名后面的值将覆盖前一个值；如果数组包含数字键名，后面的值将不会覆盖原来的值，而是附加到后面。<br>对于我们目前的情况，传入的数组都是数字键名类型的，因此键值不会覆盖，会逐个添加到数组后面。</p>
-<p>假设<code>$result</code>的长度为<code>n</code>，假设<code>array_values($item)</code>的长度固定为1，则每执行一次<code>array_merge()</code>的时间复杂度为<code>n</code><br>而<code>$result</code>的值是不断增长的，我们假设数组<code>$value</code>的长度为<code>n</code>，则<code>$result</code>的长度在遍历的过程中是从<code>1</code>增加到<code>n</code>。<br>总的时间复杂度是<code>O(n^2)</code>！</p>
-<p>回到原始操作中，如果我们使用for循环逐个插入数据，时间复杂度仅为<code>O(n)</code>。</p>
-<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>当使用<code>insert()</code>方法向数据库插入数据时，如果需要插入n条数据，有两种方式：</p>
-<ul>
-<li>方法1：将这n条数据拼成一个数组，将数据作为参数调用一次<code>insert()</code>方法</li>
-<li>方法2：使用一个循环，调用n次<code>insert()</code>方法，即调用n次数据库插入请求，每次插入1条数据</li>
-</ul>
-<p>方法1在数据处理的时间复杂度是O(n^2)，网络请求的复杂度是O(1)；<br>方法2在数据处理的时间复杂度是O(n)，网络请求的复杂度是O(n)。</p>
-<p>因此，根据插入数据数组的大小以及网络情况，在此可以进行一个权衡。<br>根据经验，当n=1000左右，可以容忍，当n&gt;10000时，数据处理的时间复杂度将远大于网络请求的时间开销。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/23/Laravel-Database-Query-Builder-insert的效率问题/" data-id="ckcznqyff003nkwsh7w2102ud" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
 
     </footer>
   </div>
@@ -682,6 +656,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/07/27/Laravel数据库查询中get-和all-的区别/">Laravel数据库查询中get()和all()的区别</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/">一次 Swagger-UI 3.30.1 升级引发的故障</a>
           </li>
         
@@ -695,10 +673,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/10/初识Vuetify/">初识Vuetify</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/08/使用Loguru处理日志/">使用Loguru处理日志</a>
           </li>
         
       </ul>

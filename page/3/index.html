@@ -68,6 +68,58 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Python使用字符串令牌解析特定格式的一行文本" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/12/30/Python使用字符串令牌解析特定格式的一行文本/" class="article-date">
+  <time datetime="2019-12-30T07:33:21.000Z" itemprop="datePublished">2019-12-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/12/30/Python使用字符串令牌解析特定格式的一行文本/">Python使用字符串令牌解析特定格式的一行文本</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在日常生活中，我们通常会使用特定格式的字符串记录一些信息。在后续的整理过程中，可能希望将这些信息的特定字段解析出来，这种情况下可以使用 Python 中的字符串令牌解析方法。<br>比如对于以下文本，是具有一定特殊格式规律的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">20190104：&#123;支出&#125;，【支付宝】143.2元 | 购买商品</span><br><span class="line">20190104：&#123;支出&#125;，【微信支付】20.2元</span><br></pre></td></tr></table></figure></p>
+<p>比如，字符串前 <code>8</code> 位代表了日期，后续跟着中文冒号，一个花括号描述了资金流向为 <code>支出</code>，紧跟着中文逗号，再后者是中括号包含的账户名称 <code>支付宝</code>，以及资金数额，可能还会有备注信息等。<br>比较朴素的传统方法，可以按照字符串规律截取前几位，再根据特定字符分隔字符串获取结果数组的第几个元素等。但这种方法的弊端在于多样性过于丰富，对于不同的字符串格式都需要艰难地寻找规律，且匹配过程对于异常情况的处理能力较弱。</p>
+<p>这里介绍一种新方法，可以使用 <a href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c02/p18_tokenizing_text.html" target="_blank" rel="external">字符串令牌解析</a> 方法，可以将想其从左至右将其解析为一个令牌流，再从令牌流中提取想要的字段。</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>首先，需要依赖的先验知识是正则表达式的匹配，字符串停牌将使用正则表达式指定，比如对于以下文本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Alice, 23, female</span><br><span class="line">Bob, 23, male</span><br></pre></td></tr></table></figure></p>
+<p>分析可知文本的令牌规律是 <code>姓名, 年龄, 性别</code>，可以使用如下正则表达式构建令牌模式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import re</span><br><span class="line">line = &apos;Alice, 23, female&apos;</span><br><span class="line">pattern = re.compile(r&apos;(?P&lt;name&gt;\S+), (?P&lt;age&gt;\d+), (?P&lt;gender&gt;\S+)&apos;)</span><br><span class="line">m = pattern.match(line)</span><br><span class="line">print(m.group(&apos;name&apos;))    // Alice</span><br><span class="line">print(m.group(&apos;age&apos;))        // 23</span><br><span class="line">print(m.group(&apos;gender&apos;))    // female</span><br></pre></td></tr></table></figure></p>
+<p>基本思想就是通过一个 <code>(?P&lt;[field_name]&gt;[pattern])</code> 令牌匹配对应的字段，其中 <code>[field_name]</code> 描述了被匹配内容的字段名称，在匹配结果中可以直接查询，而 <code>[pattern]</code> 则是正则表达式描述匹配规则，比如上例中一个或多个数字的匹配规则可以使用 <code>\d+</code> 来描述。<br>将多个令牌拼接在一起，对于固定的字符则可以直接拼在字符串中，这样就能解析出一段匹配文本中的各个域的值。</p>
+<h2 id="示例："><a href="#示例：" class="headerlink" title="示例："></a>示例：</h2><p>对于此前举的例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">20190104：&#123;支出&#125;，【支付宝】143.2元 | 购买商品</span><br><span class="line">20190104：&#123;支出&#125;，【微信支付】20.2元</span><br></pre></td></tr></table></figure></p>
+<p>结合字符串令牌的匹配方式，可以使用以下方式解析<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import re</span><br><span class="line">pattern = re.compile(r&apos;(?P&lt;date&gt;\d+)：&#123;(?P&lt;type&gt;\S+)&#125;，【(?P&lt;account&gt;\S+)】(?P&lt;amount&gt;(0\.\d+)|([1-9]\d*\.\d+))元([ ]*\|[ ]*(?P&lt;remark&gt;\S+))?&apos;)</span><br><span class="line">line = &apos;20190104：&#123;支出&#125;，【支付宝】143.2元 | 购买商品&apos;</span><br><span class="line">m = pattern.match(line)</span><br><span class="line">print(f&quot;date:&#123;m.group(&apos;date&apos;)&#125;, type:&#123;m.group(&apos;type&apos;)&#125;, account:&#123;m.group(&apos;account&apos;)&#125;, amount: &#123;m.group(&apos;amount&apos;)&#125;, remark: &#123;m.group(&apos;remark&apos;)&#125;&quot;)</span><br><span class="line">// date:20190104, type:支出, account:支付宝, amount: 143.2, remark: 购买商品</span><br><span class="line"></span><br><span class="line">line = &apos;20190104：&#123;支出&#125;，【微信支付】20.2元&apos;</span><br><span class="line">m = pattern.match(line)</span><br><span class="line">print(f&quot;date:&#123;m.group(&apos;date&apos;)&#125;, type:&#123;m.group(&apos;type&apos;)&#125;, account:&#123;m.group(&apos;account&apos;)&#125;, amount: &#123;m.group(&apos;amount&apos;)&#125;, remark: &#123;m.group(&apos;remark&apos;)&#125;&quot;)</span><br><span class="line">// date:20190104, type:支出, account:微信支付, amount: 20.2, remark: None</span><br></pre></td></tr></table></figure></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>对于按照特定格式组织的文本信息，可以使用 Python 的字符串令牌解析方式，将关键字段的值提取出来。<br>这个功能在针对特定目标的数据导入时很有用。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c02/p18_tokenizing_text.html" target="_blank" rel="external">https://python3-cookbook.readthedocs.io/zh_CN/latest/c02/p18_tokenizing_text.html</a><br><a href="https://blog.csdn.net/qq_17550379/article/details/79168787" target="_blank" rel="external">https://blog.csdn.net/qq_17550379/article/details/79168787</a><br><a href="https://www.cnblogs.com/aaronhoo/p/5439509.html" target="_blank" rel="external">https://www.cnblogs.com/aaronhoo/p/5439509.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/12/30/Python使用字符串令牌解析特定格式的一行文本/" data-id="ckd4e9kwo007uegshhzxk4i3l" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-使用bumpversion管理版本" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2019/12/26/使用bumpversion管理版本/" class="article-date">
@@ -138,7 +190,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/12/26/使用bumpversion管理版本/" data-id="ckcznqyhu00bjkwsh2quv0kos" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/12/26/使用bumpversion管理版本/" data-id="ckd4e9ky200bgegshgvh8kdtt" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/bumpversion/">bumpversion</a></li></ul>
@@ -186,7 +238,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/12/23/Laravel获取请求中的XML数据/" data-id="ckcznqyfw0058kwsh3q5dk4i7" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/12/23/Laravel获取请求中的XML数据/" data-id="ckd4e9kvp0059egsht0xh8pks" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -257,7 +309,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/12/16/初识Supervisor/" data-id="ckcznqyif00dfkwsh3j5rhaxr" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/12/16/初识Supervisor/" data-id="ckd4e9l2500kbegsh2av5yjnj" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/【Supervisor-Linux/">【Supervisor, Linux]</a></li></ul>
@@ -310,7 +362,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/12/12/Vue引用本地图片的几种方式/" data-id="ckcznqyh9009pkwshs0vdbnmb" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/12/12/Vue引用本地图片的几种方式/" data-id="ckd4e9kxc009iegshplevqoks" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -377,7 +429,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/12/06/Pip安装包的几种模式/" data-id="ckcznqygg007dkwshfnra2uux" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/12/06/Pip安装包的几种模式/" data-id="ckd4e9kwi007degsht5mk4s7w" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Pip/">Pip</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -429,7 +481,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/11/28/初识FastAPI/" data-id="ckcznqyid00dakwshx1wu5u7w" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/11/28/初识FastAPI/" data-id="ckd4e9l2100k3egsho2k4qg62" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/FastAPI/">FastAPI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -501,7 +553,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/11/25/初识Alembic/" data-id="ckcznqyi400cfkwshcg37b73x" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/11/25/初识Alembic/" data-id="ckd4e9l1a00jdegsh3815kq0i" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Alembic/">Alembic</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SQLAlchemy/">SQLAlchemy</a></li></ul>
@@ -554,7 +606,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/11/21/Python使用nltk统计词频/" data-id="ckcznqygr007tkwshpg01va26" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/11/21/Python使用nltk统计词频/" data-id="ckd4e9kwr0080egshkzr2se4f" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -625,89 +677,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/11/15/使用Mkdocs快速搭建高颜值文档/" data-id="ckcznqyho00azkwshraed0krt" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/11/15/使用Mkdocs快速搭建高颜值文档/" data-id="ckd4e9ky400bjegshebppjo8l" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mkdocs/">Mkdocs</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Laravel批量insert时数组维度的一个坑" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2019/11/11/Laravel批量insert时数组维度的一个坑/" class="article-date">
-  <time datetime="2019-11-11T08:32:49.000Z" itemprop="datePublished">2019-11-11</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2019/11/11/Laravel批量insert时数组维度的一个坑/">Laravel批量insert时数组维度的一个坑</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在 Laravel 官方文档中，对于数据库插入操作 <code>insert</code> 的描述比较简洁：</p>
-<blockquote>
-<p>You may even insert several records into the table with a single call to insert by passing an array of arrays. Each array represents a row to be inserted into the table:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DB::table(&apos;users&apos;)-&gt;insert([</span><br><span class="line">    [&apos;email&apos; =&gt; &apos;taylor@example.com&apos;, &apos;votes&apos; =&gt; 0],</span><br><span class="line">    [&apos;email&apos; =&gt; &apos;dayle@example.com&apos;, &apos;votes&apos; =&gt; 0]</span><br><span class="line">]);</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>这是一项非常实用的功能，意味着批量操作的时，可以通过执行一条 SQL 完成大量数据的快速插入。</p>
-<p>在 <a href="http://ckmessi.github.io/blog-hexo/2017/10/23/Laravel-Database-Query-Builder-insert%E7%9A%84%E6%95%88%E7%8E%87%E9%97%AE%E9%A2%98/">Laravel Database Query Builder insert的效率问题</a> 文章中，提到了曾经遇到的效率问题。这是由于 Laravel 底层代码在组织 SQL 语句时对数组进行了 <code>array_merge</code> 操作，导致对于长度为 <code>n</code> 的数组时间复杂度变成了 <code>O(n^2)</code> 。</p>
-<p>今天又遇到了一个坑，即<strong>数组中每个元素的维度必须是相同的，否则有可能导致最终插入数据库的数据列与列之间发生错乱</strong>。</p>
-<h2 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h2><p>还是从 Laravel 框架中 <code>Query\Builder.php</code> 源文件的 <code>insert</code> 方法入手，逐步查找造成问题的原因。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">insert(Query\Builder.php)</span><br><span class="line">    -&gt; compileInsert(Query\Grammars\Grammar.php)</span><br><span class="line">        -&gt; parameterize(Database\Grammar.php)</span><br><span class="line">            -&gt; parameter(Database\Grammar.php)</span><br><span class="line">    -&gt; cleanBininds(Query\Builder.php)</span><br><span class="line">        -&gt; flatten(Support\Arr.php)</span><br></pre></td></tr></table></figure></p>
-<p>这里要走两条线，一条件是生成 SQL 语句中的占位符，一条线是生成绑定的数据。</p>
-<p>支线1-1）在 <code>Query\Builder.php</code> 中的 <code>insert</code> 方法，是代码的入口，对参数 <code>$value</code> 按照键进行排序后，封装成相关的 SQL 语句调用数据库连接的插入方法 <code>$this-&gt;connection-&gt;insert</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Insert a new record into the database.</span><br><span class="line"> *</span><br><span class="line"> * @param array $values</span><br><span class="line"> * @return bool</span><br><span class="line"> */</span><br><span class="line">public function insert(array $values)</span><br><span class="line">&#123;</span><br><span class="line">    // Since every insert gets treated like a batch insert, we will make sure the</span><br><span class="line">    // bindings are structured in a way that is convenient when building these</span><br><span class="line">    // inserts statements by verifying these elements are actually an array.</span><br><span class="line">    if (empty($values)) &#123;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (! is_array(reset($values))) &#123;</span><br><span class="line">        $values = [$values];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Here, we will sort the insert keys for every record so that each insert is</span><br><span class="line">    // in the same order for the record. We need to make sure this is the case</span><br><span class="line">    // so there are not any errors or problems when inserting these records.</span><br><span class="line">    else &#123;</span><br><span class="line">        foreach ($values as $key =&gt; $value) &#123;</span><br><span class="line">            ksort($value);</span><br><span class="line"></span><br><span class="line">            $values[$key] = $value;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Finally, we will run this query against the database connection and return</span><br><span class="line">    // the results. We will need to also flatten these bindings before running</span><br><span class="line">    // the query so they are all in one huge, flattened array for execution.</span><br><span class="line">    return $this-&gt;connection-&gt;insert(</span><br><span class="line">        $this-&gt;grammar-&gt;compileInsert($this, $values),</span><br><span class="line">        $this-&gt;cleanBindings(Arr::flatten($values, 1))</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>支线1-2）在组织 SQL 语句的过程中，关注 <code>Query\Grammars\Grammar.php</code> 文件的 <code>compileInsert</code> 这个方法。<br>它主要执行操作主要有三步：</p>
-<ul>
-<li>先取出所有数据第一个元素的键列表作为 <code>column</code> 列信息（<code>reset</code> 方法将数组内部指针指向第一个元素，并返回第一个元素）；</li>
-<li>将整个数组按照值进行映射，组织成一个很长的 SQL 语句；</li>
-<li>根据上述两个信息，拼接成一个实际的 <code>insert into ...</code> SQL 语句。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Compile an insert statement into SQL.</span><br><span class="line"> *</span><br><span class="line"> * @param \Illuminate\Database\Query\Builder $query</span><br><span class="line"> * @param array $values</span><br><span class="line"> * @return string</span><br><span class="line"> */</span><br><span class="line">public function compileInsert(Builder $query, array $values)</span><br><span class="line">&#123;</span><br><span class="line">    // Essentially we will force every insert to be treated as a batch insert which</span><br><span class="line">    // simply makes creating the SQL easier for us since we can utilize the same</span><br><span class="line">    // basic routine regardless of an amount of records given to us to insert.</span><br><span class="line">    $table = $this-&gt;wrapTable($query-&gt;from);</span><br><span class="line"></span><br><span class="line">    if (! is_array(reset($values))) &#123;</span><br><span class="line">        $values = [$values];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $columns = $this-&gt;columnize(array_keys(reset($values)));</span><br><span class="line"></span><br><span class="line">    // We need to build a list of parameter place-holders of values that are bound</span><br><span class="line">    // to the query. Each insert should have the exact same amount of parameter</span><br><span class="line">    // bindings so we will loop through the record and parameterize them all.</span><br><span class="line">    $parameters = collect($values)-&gt;map(function ($record) &#123;</span><br><span class="line">        return &apos;(&apos;.$this-&gt;parameterize($record).&apos;)&apos;;</span><br><span class="line">    &#125;)-&gt;implode(&apos;, &apos;);</span><br><span class="line"></span><br><span class="line">    return &quot;insert into $table ($columns) values $parameters&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>支线1-3）我们重点关注其中的 <code>this-&gt;parameterize</code> 方法，因为数组中的每个元素会根据这个方法转换成一段字符串。<br>在 <code>Database\Grammar.php</code> 文件的 <code>parameterize</code> 方法中，我们可以看到其中的逻辑比较简单，将参数 <code>$values</code> （注意这里的 <code>$values</code> 已经是数组中的每个元素了，即待插入数据库的一条记录）的每一项都使用 <code>$this-parameter</code> 方法转换一下。<br><code>array_map([Object, &#39;MethodName&#39;], $array)</code> 的含义是将数组 <code>array</code> 的每个元素都传入函数 <code>Object-&gt;MethodName</code> 中，返回值再拼成一个数组。与 JavaScript 中针对数组的操作方式有点类似。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Create query parameter place-holders for an array.</span><br><span class="line"> *</span><br><span class="line"> * @param array $values</span><br><span class="line"> * @return string</span><br><span class="line"> */</span><br><span class="line">public function parameterize(array $values)</span><br><span class="line">&#123;</span><br><span class="line">    return implode(&apos;, &apos;, array_map([$this, &apos;parameter&apos;], $values));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>支线1-4）而其中的 <code>parameter</code> 方法内容如下，<br>主要操作是根据当前参数 <code>$value</code> 判断是否是 <code>Expression</code> 实例，如果是则直接返回其值，否则返回一个占位符 <code>?</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Get the appropriate query parameter place-holder for a value.</span><br><span class="line"> *</span><br><span class="line"> * @param mixed $value</span><br><span class="line"> * @return string</span><br><span class="line"> */</span><br><span class="line">public function parameter($value)</span><br><span class="line">&#123;</span><br><span class="line">    return $this-&gt;isExpression($value) ? $this-&gt;getValue($value) : &apos;?&apos;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>至此我们知道，这一部分主要是生成 SQL 语句的前半部分。</p>
-<p>支线2-1）对于 <code>$this-&gt;cleanBindings(Arr::flatten($values, 1))</code> 语句，主要分成两步。<br>首先观察 <code>Arr::flatten</code> 方法，这个方法的作用就是把一个二维数组摊平了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Flatten a multi-dimensional array into a single level.</span><br><span class="line"> *</span><br><span class="line"> * @param array $array</span><br><span class="line"> * @param int $depth</span><br><span class="line"> * @return array</span><br><span class="line"> */</span><br><span class="line">public static function flatten($array, $depth = INF)</span><br><span class="line">&#123;</span><br><span class="line">    $result = [];</span><br><span class="line"></span><br><span class="line">    foreach ($array as $item) &#123;</span><br><span class="line">        $item = $item instanceof Collection ? $item-&gt;all() : $item;</span><br><span class="line"></span><br><span class="line">        if (! is_array($item)) &#123;</span><br><span class="line">            $result[] = $item;</span><br><span class="line">        &#125; elseif ($depth === 1) &#123;</span><br><span class="line">            $result = array_merge($result, array_values($item));</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            $result = array_merge($result, static::flatten($item, $depth - 1));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return $result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>比如数组 <code>[[&#39;1&#39; =&gt; 1, &#39;2&#39; =&gt; 2], [&#39;3&#39; =&gt; 3, &#39;4&#39; =&gt; 4]]</code> 经过这个 <code>flatten</code> 操作后，就会变化为 <code>[&#39;1&#39; =&gt; 1, &#39;2&#39; =&gt; 2, &#39;3&#39; =&gt; 3, &#39;4&#39; =&gt; 4]</code>。</p>
-<p>支线2-2）对于 <code>cleanBindings</code> 方法，执行的逻辑也很简单，过滤并获取所有值列表。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Remove all of the expressions from a list of bindings.</span><br><span class="line"> *</span><br><span class="line"> * @param array $bindings</span><br><span class="line"> * @return array</span><br><span class="line"> */</span><br><span class="line">protected function cleanBindings(array $bindings)</span><br><span class="line">&#123;</span><br><span class="line">    return array_values(array_filter($bindings, function ($binding) &#123;</span><br><span class="line">        return ! $binding instanceof Expression;</span><br><span class="line">    &#125;));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>经过这步操作后，抛开对于 <code>Expression</code> 类型的过滤，上述数组将变成 <code>[1, 2, 3, 4]</code>。</p>
-<p>问题就出在这里！<br>如果数组元素的维度不同，产生的最终表达式包含的数组数量也会不同。这使得最终生成的SQL语句会匹配错乱。<br>举个例子，如果传入 <code>insert</code> 方法的数组参数是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    [</span><br><span class="line">        &apos;name&apos; =&gt; &apos;Foo&apos;,</span><br><span class="line">        &apos;age&apos; =&gt; 1,</span><br><span class="line">        &apos;address&apos; =&gt; &apos;bar&apos;</span><br><span class="line">    ],</span><br><span class="line">    [</span><br><span class="line">        &apos;name&apos; =&gt; &apos;Foo2&apos;,</span><br><span class="line">        &apos;address&apos; =&gt; &apos;bar2&apos;,</span><br><span class="line">    ]</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
-<p>在支线一第2）步生成的 <code>columns</code> 却是按照第一个元素的键列表生成的，转成 SQL 语句中的列会是 <code>(&quot;name&quot;, &quot;age&quot;, &quot;address&quot;)</code> ，而支线二生成的绑定数值就却只有5个 <code>[&#39;Foo&#39;, 1, &#39;bar&#39;, &#39;Foo2&#39;, &#39;bar2&#39;]</code>。<br>这样，在最终生成SQL语句的时候，原本针对 <code>address</code> 列的值 <code>bar2</code> 会被对应到 <code>age</code> 列上，最终造成插入数据的错误。</p>
-<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>我们可以在一个测试数据库中验证我们的猜想。</p>
-<p>首先创建一张数据库表 <code>users</code>，其中包括 <code>name</code>，<code>age</code>，<code>address</code> 等列。</p>
-<p>在 Laravel 项目中创建对应的实体类 <code>User</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">namespace App\Models;</span><br><span class="line">use Illuminate\Database\Eloquent\Model;</span><br><span class="line">class User extends Model</span><br><span class="line">&#123;</span><br><span class="line">    protected $table = &apos;users&apos;;</span><br><span class="line">    protected $primaryKey = &apos;id&apos;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>然后在代码中执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$data_array = [</span><br><span class="line">    [</span><br><span class="line">        &quot;name&quot; =&gt; &quot;name1&quot;, </span><br><span class="line">        &quot;age&quot; =&gt; &apos;10&apos;,</span><br><span class="line">        &quot;address&quot; =&gt; &quot;address1&quot;, </span><br><span class="line">    ],</span><br><span class="line">    [</span><br><span class="line">        &quot;name&quot; =&gt; &quot;name2&quot;, </span><br><span class="line">        &quot;address&quot; =&gt; &quot;address2&quot;, </span><br><span class="line">    ],</span><br><span class="line">];</span><br><span class="line">DB::connection()-&gt;enableQueryLog();</span><br><span class="line">User::insert($data_array);</span><br><span class="line">echo json_encode(DB::getQueryLog());</span><br></pre></td></tr></table></figure></p>
-<p>查看数据库表的情况，可以发现第 <code>2</code> 行数据错乱了，本来应该放在 <code>name</code> 列的值 <code>name2</code> 被放到了 <code>age</code> 列：</p>
-<img src="/blog-hexo/2019/11/11/Laravel批量insert时数组维度的一个坑/database.png" alt="数据库数据" title="数据库数据">
-<p>在上述代码中，我们通过 <code>enableQueryLog()</code> 和 <code>getQueryLog()</code> 方法获得了实际执行的 SQL 语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[&#123;&quot;query&quot;:&quot;insert into \&quot;users\&quot; (\&quot;address\&quot;, \&quot;age\&quot;, \&quot;name\&quot;) select ? as \&quot;address\&quot;, ? as \&quot;age\&quot;, ? as \&quot;name\&quot; union all select ? as \&quot;address\&quot;, ? as \&quot;age\&quot;, ? as \&quot;name\&quot;&quot;,&quot;bindings&quot;:[&quot;address1&quot;,&quot;10&quot;,&quot;name1&quot;,&quot;address2&quot;,&quot;name2&quot;],&quot;time&quot;:0.64&#125;]%</span><br></pre></td></tr></table></figure></p>
-<p>观察其中的内容，可以发现最后被整理出来的查询语句中，绑定的参数值只有 <code>5</code> 个（而正确情况下应该是 <code>6</code> 个）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[&quot;address1&quot;,&quot;10&quot;,&quot;name1&quot;,&quot;address2&quot;,&quot;name2&quot;]</span><br></pre></td></tr></table></figure></p>
-<p>因此在进行参数绑定的时候，<code>name2</code> 会被绑定到位置对应的列 <code>age</code> 中。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在使用 Laravel 的 <code>insert</code> 方法进行批量插入时，一定要确保参数数组中各个元素的维度是相同的，否则可能存在列值混乱的错误。   </p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://laravel.com/docs/5.5/queries#inserts" target="_blank" rel="external">https://laravel.com/docs/5.5/queries#inserts</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/11/11/Laravel批量insert时数组维度的一个坑/" data-id="ckcznqyfv0052kwshriuzedat" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
 
     </footer>
   </div>
@@ -773,6 +746,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/07/27/Laravel数据库查询中get-和all-的区别/">Laravel数据库查询中get()和all()的区别</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/">一次 Swagger-UI 3.30.1 升级引发的故障</a>
           </li>
         
@@ -786,10 +763,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/10/初识Vuetify/">初识Vuetify</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/08/使用Loguru处理日志/">使用Loguru处理日志</a>
           </li>
         
       </ul>

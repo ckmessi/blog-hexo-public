@@ -68,6 +68,56 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Windows-Ubuntu-Mac-OS查看文件md5值的命令" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/09/13/Windows-Ubuntu-Mac-OS查看文件md5值的命令/" class="article-date">
+  <time datetime="2018-09-13T08:14:01.000Z" itemprop="datePublished">2018-09-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/09/13/Windows-Ubuntu-Mac-OS查看文件md5值的命令/">Windows/Ubuntu/Mac OS查看文件md5值的命令</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>MD5算法的一项重要功能就是一致性验证。</p>
+<p>有时候，为了判断下载文件是否正确，可以通过判断<code>本地文件的md5值</code>是否与<code>服务器文件的md5值</code>相同完成。</p>
+<p>这里总结在三种不同平台下，计算文件md5值的命令如下。</p>
+<h4 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h4><p>使用<code>certutil</code>命令计算文件的哈希值，可以选择<code>MD5</code>、<code>SHA1</code>或<code>SHA256</code>算法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">certutil -hashfile [filename] MD5</span><br><span class="line">certutil -hashfile [filename] SHA1</span><br><span class="line">certutil -hashfile [filename] SHA256</span><br></pre></td></tr></table></figure></p>
+<h4 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h4><p>在 <code>Ubuntu 16.04</code> 操作系统中可以使用 <code>md5sum</code> 命令。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">md5sum [filename]</span><br></pre></td></tr></table></figure></p>
+<h4 id="Mac-OS"><a href="#Mac-OS" class="headerlink" title="Mac OS"></a>Mac OS</h4><p>在 <code>Mac OS</code> 操作系统中可以使用 <code>md5</code> 命令。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">md5 [filename]</span><br></pre></td></tr></table></figure></p>
+<p>下载文件后，顺手比对一下文件的md5值是一个好习惯。</p>
+<p>一方面确保下载数据完整，另一方面防止中间人攻击。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/09/13/Windows-Ubuntu-Mac-OS查看文件md5值的命令/" data-id="ckd4e9kxj00a0egshph3t53y8" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-搭建SSH端口转发反向代理" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2018/08/14/搭建SSH端口转发反向代理/" class="article-date">
@@ -136,7 +186,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/14/搭建SSH端口转发反向代理/" data-id="ckcznqyiw00ewkwsh4uefijcr" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/08/14/搭建SSH端口转发反向代理/" data-id="ckd4e9l2p00liegshnm43ev4b" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li></ul>
@@ -195,7 +245,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/13/解决iPhone上Safari浏览器滑动比较卡的问题/" data-id="ckcznqyj300f6kwshiefkw6n6" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/08/13/解决iPhone上Safari浏览器滑动比较卡的问题/" data-id="ckd4e9l3f00lsegshhjfp4gtl" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -248,7 +298,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/11/Ubuntu禁用SSH密码登录/" data-id="ckcznqyh6009ckwsh2wh23kx7" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/08/11/Ubuntu禁用SSH密码登录/" data-id="ckd4e9kx60092egshqimoqkid" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li></ul>
@@ -299,7 +349,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/09/PHP使用ZipArchive完成后台文件压缩/" data-id="ckcznqyge0076kwsh5cm4m23y" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/08/09/PHP使用ZipArchive完成后台文件压缩/" data-id="ckd4e9kwf0076egshzdrdnfqg" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -351,7 +401,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/03/Element-UI表格标题使用render-header函数/" data-id="ckcznqyek0013kwshf7k4r686" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/08/03/Element-UI表格标题使用render-header函数/" data-id="ckd4e9kt5000wegshpa4o3dnj" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -415,7 +465,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/02/在Windows上使用PHP-CGI的一个重要参数/" data-id="ckcznqyio00e7kwshii3dt9bk" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/08/02/在Windows上使用PHP-CGI的一个重要参数/" data-id="ckd4e9l2i00l7egsh3zdun0uq" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li></ul>
@@ -492,7 +542,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/07/27/Laravel-SocketIO即时发送消息/" data-id="ckcznqyfh003tkwsh18rz32o5" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/07/27/Laravel-SocketIO即时发送消息/" data-id="ckd4e9kuv003vegshxooesuek" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -544,7 +594,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/07/17/Linux查看并修改系统时间/" data-id="ckcznqyfy005hkwshpwxs8lby" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/07/17/Linux查看并修改系统时间/" data-id="ckd4e9kvy005qegsh3z9km76y" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li></ul>
@@ -622,58 +672,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/07/14/Vue在自定义组件上使用v-model的方法/" data-id="ckcznqyh9009mkwsh5qk34gbu" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/07/14/Vue在自定义组件上使用v-model的方法/" data-id="ckd4e9kxg009tegshri96me4s" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Element-UI的Tooltip对disabled的按钮无效的问题" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2018/07/06/Element-UI的Tooltip对disabled的按钮无效的问题/" class="article-date">
-  <time datetime="2018-07-06T09:13:53.000Z" itemprop="datePublished">2018-07-06</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2018/07/06/Element-UI的Tooltip对disabled的按钮无效的问题/">Element UI的Tooltip对disabled的按钮无效的问题</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近遇到一个问题，将 <a href="http://element.eleme.io" target="_blank" rel="external">Element UI</a>  的组件 <a href="http://element.eleme.io/#/zh-CN/component/tooltip" target="_blank" rel="external">Tooltip 文字提示</a> 添加到按钮上时，当按钮状态为 <code>disabled</code> 的情况下，不会出现提示。</p>
-<p>在Element的Github上有一个 <a href="https://github.com/ElemeFE/element/issues/8557" target="_blank" rel="external">Issue</a> 提到了这个问题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Disabled form elements are not supported for Tooltip, more information can be found at MDN. You need to wrap the disabled form element with a container element for Tooltip to work.</span><br></pre></td></tr></table></figure></p>
-<p>即，<code>disabled</code> 状态下的表单元素是不支持 <code>Tooltip</code>的，需要在被禁用的元素外面加一个容器，然后将 <code>Tooltip</code> 挂靠在外面这个容器上。</p>
-<p>最简单的方式是在对应的 <code>button</code> 外面添加一个 <code>div</code> ，需要设置好对应的 <code>display</code> 样式。</p>
-<p>这样就可以实现禁用按钮的提示。</p>
-<p>参考链接：<a href="https://github.com/ElemeFE/element/issues/8557" target="_blank" rel="external">https://github.com/ElemeFE/element/issues/8557</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/07/06/Element-UI的Tooltip对disabled的按钮无效的问题/" data-id="ckcznqyek0011kwsh0iyfn2or" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
 
     </footer>
   </div>
@@ -739,6 +741,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/07/27/Laravel数据库查询中get-和all-的区别/">Laravel数据库查询中get()和all()的区别</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/">一次 Swagger-UI 3.30.1 升级引发的故障</a>
           </li>
         
@@ -752,10 +758,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/10/初识Vuetify/">初识Vuetify</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/08/使用Loguru处理日志/">使用Loguru处理日志</a>
           </li>
         
       </ul>

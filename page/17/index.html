@@ -68,6 +68,51 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-npm的package-json一些使用常识" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/07/19/npm的package-json一些使用常识/" class="article-date">
+  <time datetime="2017-07-19T14:28:56.000Z" itemprop="datePublished">2017-07-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/07/19/npm的package-json一些使用常识/">npm的package.json一些使用常识</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="npm-install-–save"><a href="#npm-install-–save" class="headerlink" title="npm install –save"></a>npm install –save</h2><p><code>npm install --save</code> 能够将安装包的信息保存到<code>package.json</code>中<br>但如果一开始没有<code>package.json</code>，它不会创建文件。<br>因此需要先<code>npm init</code>，会自动生成一个<code>package.json</code>文件，之后再执行带<code>--save</code>的安装包操作时就会保存了。</p>
+<h2 id="–save和–save-dev的区别"><a href="#–save和–save-dev的区别" class="headerlink" title="–save和–save-dev的区别"></a>–save和–save-dev的区别</h2><p>使用<code>--save</code>时，会在<code>package.json</code>的<code>dependencies</code>属性中添加相关包的信息<br>使用<code>--save-dev</code>时，会在<code>package.json</code>的<code>devDependencies</code>属性中添加相关包的信息。<br>以上两者是独立的。</p>
+<h2 id="dependencies和devDependencies属性的区别"><a href="#dependencies和devDependencies属性的区别" class="headerlink" title="dependencies和devDependencies属性的区别"></a>dependencies和devDependencies属性的区别</h2><p>使用<code>npm install</code>默认会安装以上两种依赖。<br>使用<code>npm install --production</code>只安装<code>dependencies</code>，不安装<code>devDependencies</code>。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/07/19/npm的package-json一些使用常识/" data-id="ckd4e9kxk00a3egshre3ij752" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Grunt入门" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2017/07/19/Grunt入门/" class="article-date">
@@ -140,7 +185,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/19/Grunt入门/" data-id="ckcznqyez002bkwshhkxz43jh" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/19/Grunt入门/" data-id="ckd4e9ktz002oegsh0scox2yv" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -195,7 +240,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/07/使用mysqldump快速拷贝一个数据库/" data-id="ckcznqyhy00bwkwsh1c0k5ob4" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/07/使用mysqldump快速拷贝一个数据库/" data-id="ckd4e9kyc00bzegsh35y1zdbb" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li></ul>
@@ -246,7 +291,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/06/Apache配置php5升级为php7/" data-id="ckcznqydp0000kwshv08r3qeq" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/06/Apache配置php5升级为php7/" data-id="ckd4e9kt3000tegshl082i0xj" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -303,7 +348,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/28/Hexo个人博客使用流程/" data-id="ckcznqyf2002gkwshhk5gr739" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/28/Hexo个人博客使用流程/" data-id="ckd4e9kts002begshrnl9474x" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li></ul>
@@ -380,7 +425,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/23/Hexo项目的Git版本控制/" data-id="ckcznqyf4002pkwshnglbg2qs" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/23/Hexo项目的Git版本控制/" data-id="ckd4e9ktw002jegsheksi31bb" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li></ul>
@@ -437,7 +482,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/22/Hexo博客正文添加图片/" data-id="ckcznqyf3002mkwshr290v2yo" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/22/Hexo博客正文添加图片/" data-id="ckd4e9kty002megshmp5kelr4" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li></ul>
@@ -520,7 +565,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/21/Hexo配合Github-Pages部署个人博客/" data-id="ckcznqyf2002ikwshi7ijprwz" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/21/Hexo配合Github-Pages部署个人博客/" data-id="ckd4e9ku1002regshowff29os" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li></ul>
@@ -581,7 +626,7 @@ var swiper = new Swiper('.swiper-container', {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/17/Swiper插件的使用/" data-id="ckcznqyh3008zkwshagzczjmf" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/17/Swiper插件的使用/" data-id="ckd4e9kx1008oegsha3d9rv2h" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li></ul>
@@ -652,57 +697,10 @@ var swiper = new Swiper('.swiper-container', {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/16/随机游走/" data-id="ckcznqyj200f3kwshlqxbleky" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/16/随机游走/" data-id="ckd4e9l3500lpegsh4wxksuj4" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Ubuntu修改Mysql数据库连接端口号" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/05/22/Ubuntu修改Mysql数据库连接端口号/" class="article-date">
-  <time datetime="2017-05-22T08:43:00.000Z" itemprop="datePublished">2017-05-22</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/05/22/Ubuntu修改Mysql数据库连接端口号/">Ubuntu修改Mysql数据库连接端口号</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在实际情况中，为了避免不避要的攻击，最好更换Mysql数据库的默认端口号3306为其它端口号。   </p>
-<p>基本的更换步骤如下：<br>找到mysql的配置文件，使用<code>locate my.cnf</code>命令可以查找my.cnf文件所在位置。<br>使用vim进行编辑<code>vim /etc/mysql/my.cnf</code>，查找<code>port = 3306</code>所在位置。<br>一共有两行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[client]</span><br><span class="line">port            = 3306</span><br><span class="line">socket          = /var/run/mysqld/mysqld.sock</span><br></pre></td></tr></table></figure></p>
-<p>以及<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">#</span><br><span class="line"># * Basic Settings</span><br><span class="line">#</span><br><span class="line">user            = mysql</span><br><span class="line">pid-file        = /var/run/mysqld/mysqld.pid</span><br><span class="line">socket          = /var/run/mysqld/mysqld.sock</span><br><span class="line">port            = 3306</span><br><span class="line">basedir         = /usr</span><br><span class="line">datadir         = /var/lib/mysql</span><br><span class="line">tmpdir          = /tmp</span><br><span class="line">lc-messages-dir = /usr/share/mysql</span><br></pre></td></tr></table></figure></p>
-<p>这两处的3306替换为新端口号即可。</p>
-<p>然后重启mysql服务：<code>service mysqld restart</code></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/05/22/Ubuntu修改Mysql数据库连接端口号/" data-id="ckcznqyh40095kwshkuhaeobr" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li></ul>
 
     </footer>
   </div>
@@ -768,6 +766,10 @@ var swiper = new Swiper('.swiper-container', {
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/07/27/Laravel数据库查询中get-和all-的区别/">Laravel数据库查询中get()和all()的区别</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/">一次 Swagger-UI 3.30.1 升级引发的故障</a>
           </li>
         
@@ -781,10 +783,6 @@ var swiper = new Swiper('.swiper-container', {
         
           <li>
             <a href="/blog-hexo/2020/07/10/初识Vuetify/">初识Vuetify</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/08/使用Loguru处理日志/">使用Loguru处理日志</a>
           </li>
         
       </ul>
