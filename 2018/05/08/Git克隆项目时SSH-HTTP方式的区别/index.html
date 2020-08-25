@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在使用Git获取仓库中的项目时，通常可以选择用SSH或HTTP方式。两种克隆方式对应的URL也不一样。以Github为例，选择Clone with SSH时，对应的URL为： git@github.com:ckmessi/ckmessi.github.io.git而选择Clone with HTTPS时，对应的URL为： https://github.com/ckmessi/ckmessi.git">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.886Z">
+<meta property="og:updated_time" content="2018-05-08T08:44:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git克隆项目时SSH&#x2F;HTTP方式的区别">
 <meta name="twitter:description" content="在使用Git获取仓库中的项目时，通常可以选择用SSH或HTTP方式。两种克隆方式对应的URL也不一样。以Github为例，选择Clone with SSH时，对应的URL为： git@github.com:ckmessi/ckmessi.github.io.git而选择Clone with HTTPS时，对应的URL为： https://github.com/ckmessi/ckmessi.git">
@@ -95,7 +95,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>在使用Git获取仓库中的项目时，通常可以选择用SSH或HTTP方式。<br>两种克隆方式对应的URL也不一样。以Github为例，选择Clone with SSH时，对应的URL为：</p>
-<p><a href="mailto:git@github.com" target="_blank" rel="external">git@github.com</a>:ckmessi/ckmessi.github.io.git<br>而选择Clone with HTTPS时，对应的URL为：</p>
+<p>git@github.com:ckmessi/ckmessi.github.io.git<br>而选择Clone with HTTPS时，对应的URL为：</p>
 <p><a href="https://github.com/ckmessi/ckmessi.github.io.git" target="_blank" rel="external">https://github.com/ckmessi/ckmessi.github.io.git</a><br>两种方式的区别在于：</p>
 <p>使用SSH方式时，需要预先配置ssh key相关信息，克隆过程实质上建立了一个SSH连接（就像远程免密登录服务器一样）；如果在配置ssh key时没有设置密码，则每次push时不需要验证密码。<br>使用HTTP方式时，可以不经任何验证克隆该项目的数据，但在每次push的时候，都需要验证用户名和密码。<br>类似于SSH是一项永久性操作，而HTTP只是快速构建临时可读的方案。</p>
 <p>因此，在实际工作中，如果要频繁地获取并提交修改，应该使用SSH方式；如果只是将项目克隆下来随意浏览，不需要提交修改操作，则使用HTTP更方便。</p>
@@ -103,7 +103,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/" data-id="cke84v2ir001j1gshwi57da50" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/" data-id="ckea49090001z9e8tm2mpcbnm" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -184,6 +184,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -197,10 +201,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2017/08/11/NodeJS读写文件/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="许多项目可能在生成时需要执行一些脚本处理文件，由于npm环境下NodeJS是最合适的选择，因此使用NodeJS进行文件读写成为必要操作。    简单查找了一下，参考这篇文章学会了基本的NodeJS文件读写。 首先需要require两个包：12var fs = require(&amp;apos;fs&amp;apos;);var path = require(&amp;apos;path&amp;apos;); 然后定义咱们的操">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.976Z">
+<meta property="og:updated_time" content="2017-08-11T13:53:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NodeJS读写文件">
 <meta name="twitter:description" content="许多项目可能在生成时需要执行一些脚本处理文件，由于npm环境下NodeJS是最合适的选择，因此使用NodeJS进行文件读写成为必要操作。    简单查找了一下，参考这篇文章学会了基本的NodeJS文件读写。 首先需要require两个包：12var fs = require(&amp;apos;fs&amp;apos;);var path = require(&amp;apos;path&amp;apos;); 然后定义咱们的操">
@@ -96,16 +96,16 @@
       
         <p>许多项目可能在生成时需要执行一些脚本处理文件，由于npm环境下NodeJS是最合适的选择，因此使用NodeJS进行文件读写成为必要操作。   </p>
 <p>简单查找了一下，参考<a href="http://www.2cto.com/kf/201411/351586.html" target="_blank" rel="external">这篇文章</a>学会了基本的NodeJS文件读写。</p>
-<p>首先需要require两个包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var fs = require(&apos;fs&apos;);</span><br><span class="line">var path = require(&apos;path&apos;);</span><br></pre></td></tr></table></figure></p>
-<p>然后定义咱们的操作数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var data = &#123;</span><br><span class="line">	&quot;user_id&quot;: 1,</span><br><span class="line">	&quot;user_name&quot;: &quot;Lionel&quot;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>使用<code>fs.writeFile</code>函数能够实现文件的写入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fs.writeFile(path.join(__dirname, &apos;data.json&apos;), JSON.stringify(data), function (err) &#123;</span><br><span class="line">    if (err) &#123;</span><br><span class="line">        throw err;</span><br><span class="line">    &#125;</span><br><span class="line">    console.log(&quot;Export Account Success!&quot;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<p>使用<code>fs.readFile</code>函数能够实现文件的读取：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">fs.readFile(path.join(__dirname, &apos;data.json&apos;),&#123;encoding:&apos;utf-8&apos;&#125;, function (err,bytesRead) &#123;</span><br><span class="line">	if (err) &#123;</span><br><span class="line">	    throw err;</span><br><span class="line">	&#125;</span><br><span class="line">	console.log(&quot;readFile success&quot;);</span><br><span class="line">	console.log(&quot;content below:&quot;);</span><br><span class="line">	console.log(bytesRead);</span><br><span class="line">	var data = JSON.parse(bytesRead);</span><br><span class="line">	console.log(data);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>首先需要require两个包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var fs = require(&apos;fs&apos;);</div><div class="line">var path = require(&apos;path&apos;);</div></pre></td></tr></table></figure></p>
+<p>然后定义咱们的操作数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var data = &#123;</div><div class="line">	&quot;user_id&quot;: 1,</div><div class="line">	&quot;user_name&quot;: &quot;Lionel&quot;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>使用<code>fs.writeFile</code>函数能够实现文件的写入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">fs.writeFile(path.join(__dirname, &apos;data.json&apos;), JSON.stringify(data), function (err) &#123;</div><div class="line">    if (err) &#123;</div><div class="line">        throw err;</div><div class="line">    &#125;</div><div class="line">    console.log(&quot;Export Account Success!&quot;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>使用<code>fs.readFile</code>函数能够实现文件的读取：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">fs.readFile(path.join(__dirname, &apos;data.json&apos;),&#123;encoding:&apos;utf-8&apos;&#125;, function (err,bytesRead) &#123;</div><div class="line">	if (err) &#123;</div><div class="line">	    throw err;</div><div class="line">	&#125;</div><div class="line">	console.log(&quot;readFile success&quot;);</div><div class="line">	console.log(&quot;content below:&quot;);</div><div class="line">	console.log(bytesRead);</div><div class="line">	var data = JSON.parse(bytesRead);</div><div class="line">	console.log(data);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
 <p>以上。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/08/11/NodeJS读写文件/" data-id="cke84v2mh00a61gshdlfmiyd8" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/08/11/NodeJS读写文件/" data-id="ckea490b6006l9e8t6hi5ol3b" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li></ul>
@@ -186,6 +186,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -199,10 +203,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

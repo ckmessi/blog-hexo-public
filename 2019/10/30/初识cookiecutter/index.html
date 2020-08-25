@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="背景通常我们在创建项目时，首先需要进行一些重复性的劳动，比如 Web 项目按照 MVC 设计风格拆分出数据层和视图层，并有一个文件夹包含存储路由信息的代码文件。这类常见的代码组织方式及风格，通常被称为项目框架的基本结构。项目框架的基本结构还通常结合了基本的配置文件、测试代码、构建配置、持续集成等信息，极大降低初学者的入门门槛，也避免了不同开发人员之间习惯风格不同导致的差异。在一些主流的项目框架中，">
 <meta property="og:image" content="http://ckmessi.github.io/blog-hexo/2019/10/30/初识cookiecutter/cookiecutter.png">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.232Z">
+<meta property="og:updated_time" content="2019-10-30T12:52:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初识cookiecutter">
 <meta name="twitter:description" content="背景通常我们在创建项目时，首先需要进行一些重复性的劳动，比如 Web 项目按照 MVC 设计风格拆分出数据层和视图层，并有一个文件夹包含存储路由信息的代码文件。这类常见的代码组织方式及风格，通常被称为项目框架的基本结构。项目框架的基本结构还通常结合了基本的配置文件、测试代码、构建配置、持续集成等信息，极大降低初学者的入门门槛，也避免了不同开发人员之间习惯风格不同导致的差异。在一些主流的项目框架中，">
@@ -108,14 +108,14 @@
 <li>……</li>
 </ul>
 <p>总之，使用 cookiecutter 能够便捷地基于 <code>项目模板</code> 创建一个项目。</p>
-<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><p><code>cookiecutter</code> 本身是一个发布的 Python 包，因此安装 <code>cookiecutter</code> 最简单的方式是安装通过 <code>pip</code> 安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install cookiecutter</span><br></pre></td></tr></table></figure></p>
+<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><p><code>cookiecutter</code> 本身是一个发布的 Python 包，因此安装 <code>cookiecutter</code> 最简单的方式是安装通过 <code>pip</code> 安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install cookiecutter</div></pre></td></tr></table></figure></p>
 <p>另外 Mac 用户和 Linux 用户也可以使用 <code>brew install cookiecutter</code> 或 <code>sudo apt install cookiecutter</code> 安装。</p>
-<p><code>cookiecutter</code> 命令的使用方式是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cookiecutter [template]</span><br></pre></td></tr></table></figure></p>
+<p><code>cookiecutter</code> 命令的使用方式是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cookiecutter [template]</div></pre></td></tr></table></figure></p>
 <p>执行后，会弹出一些输入项或选项，完成新项目基本信息的输入。</p>
 <h2 id="类比"><a href="#类比" class="headerlink" title="类比"></a>类比</h2><p>我此前主要使用 Laravel 和 Vue.js 进行前后端的开发。<br>根据迁移学习的基本方式，类比可知，使用 <code>cookiecutter</code> 的功能实际上是与创建这两类项目时的操作相似的。</p>
-<p>在创建新的 Laravel 项目是，使用的命令是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer create-project --prefer-dist laravel/laravel [project_name] &quot;5.5.*&quot;</span><br></pre></td></tr></table></figure></p>
+<p>在创建新的 Laravel 项目是，使用的命令是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer create-project --prefer-dist laravel/laravel [project_name] &quot;5.5.*&quot;</div></pre></td></tr></table></figure></p>
 <p>这是使用了 <code>composer</code> 的 <code>create-project</code> 命令，指定了 <code>laravel/laravel</code> 包创建目录，其中 <code>5.5.*</code> 指定了版本，默认情况下会在 <code>packagist.org</code> 上查找指定的包。</p>
-<p>而在创建 Vue.js 项目时，通常使用的是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vue init webpack [project_name]</span><br></pre></td></tr></table></figure></p>
+<p>而在创建 Vue.js 项目时，通常使用的是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vue init webpack [project_name]</div></pre></td></tr></table></figure></p>
 <p>这是使用了 <code>Vue CLI</code> 工具的创建项目命令，初始化一个基于 <code>webpack</code> 模板的新项目。</p>
 <p>因此，<code>cookiecutter</code> 与 <code>vue init</code>、<code>composer create-project</code> 的功能是基本相同的，都是基于一个模板创建项目。<br>其中 Vue.js 项目创建的流程与 <code>cookiecutter</code> 更接近，它会弹出连续几个问题让用户输入项目名称、描述、作者等信息，而 <code>cookiecutter</code> 也会基于所选模板项目的 <code>cookiecutter.json</code> 文件弹出对应选项。<br><code>composer create-project</code> 我使用的比较少，在创建 Laravel 项目时是没有自定义参数可以输入的。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>cookiecutter</code> 是一款基于项目模板创建新项目的命令行工具。<br>普通开发者知道如何使用它创建新项目即可。对于项目架构师或高级造轮子的工程师，需要知道如何按照其语法创建一个项目模板，给其它开发者作为模板创建新的项目，这样能够控制团队中项目风格的统一性。</p>
@@ -124,7 +124,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/10/30/初识cookiecutter/" data-id="cke84v2p000hx1gsh2iq7rqdx" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/10/30/初识cookiecutter/" data-id="ckea490ea00dy9e8tft5ysyzs" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/cookiecutter/">cookiecutter</a></li></ul>
@@ -205,6 +205,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -218,10 +222,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2018/03/27/PHP使用php-ml完成距离计算/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="众所周知，Python有许多机器学习的插件，如scikit-learn。而在PHP中，如果希望完成一些距离的计算，也有一些现成的库，介绍一个机器学习扩展库php-ml。 通过composer安装：1composer require php-ai/php-ml 然后就可以直接使用各种库函数了，如果要使用欧几里德距离：1234use Phpml\Math\Distance\Euclidean;$euc">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.992Z">
+<meta property="og:updated_time" content="2018-03-27T12:52:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PHP使用php-ml完成距离计算">
 <meta name="twitter:description" content="众所周知，Python有许多机器学习的插件，如scikit-learn。而在PHP中，如果希望完成一些距离的计算，也有一些现成的库，介绍一个机器学习扩展库php-ml。 通过composer安装：1composer require php-ai/php-ml 然后就可以直接使用各种库函数了，如果要使用欧几里德距离：1234use Phpml\Math\Distance\Euclidean;$euc">
@@ -95,14 +95,14 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>众所周知，Python有许多机器学习的插件，如<code>scikit-learn</code>。而在PHP中，如果希望完成一些距离的计算，也有一些现成的库，介绍一个机器学习扩展库<a href="https://github.com/php-ai/php-ml" target="_blank" rel="external">php-ml</a>。</p>
-<p>通过composer安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require php-ai/php-ml</span><br></pre></td></tr></table></figure></p>
-<p>然后就可以直接使用各种库函数了，如果要使用欧几里德距离：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use Phpml\Math\Distance\Euclidean;</span><br><span class="line"></span><br><span class="line">$euclidean = new Euclidean();</span><br><span class="line">$euclidean_ids = $euclidean-&gt;distance($array_1, $array_2);</span><br></pre></td></tr></table></figure></p>
+<p>通过composer安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer require php-ai/php-ml</div></pre></td></tr></table></figure></p>
+<p>然后就可以直接使用各种库函数了，如果要使用欧几里德距离：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">use Phpml\Math\Distance\Euclidean;</div><div class="line"></div><div class="line">$euclidean = new Euclidean();</div><div class="line">$euclidean_ids = $euclidean-&gt;distance($array_1, $array_2);</div></pre></td></tr></table></figure></p>
 <p>其它使用方法可以参考官方文档。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/27/PHP使用php-ml完成距离计算/" data-id="cke84v2n400bx1gshirg2mf8k" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/27/PHP使用php-ml完成距离计算/" data-id="ckea490br007f9e8typ3rdgrx" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -183,6 +183,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -196,10 +200,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

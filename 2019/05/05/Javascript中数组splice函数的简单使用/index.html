@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/05/05/Javascript中数组splice函数的简单使用/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在 Javascript 中，通常会使用 splice 方法对数组进行操作。splice 方法能够通过删除、替换现有元素、原地添加新的元素等方式对数组进行修改，以数组形式返回被修改的内容。 语法splice 方法的语法为：1array.splice(start[, deleteCount[, item1[, item2[, ...]]]]) 其中 start 指定修改的开始位置（从0计数）。  如">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.914Z">
+<meta property="og:updated_time" content="2019-05-05T03:05:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript中数组splice函数的简单使用">
 <meta name="twitter:description" content="在 Javascript 中，通常会使用 splice 方法对数组进行操作。splice 方法能够通过删除、替换现有元素、原地添加新的元素等方式对数组进行修改，以数组形式返回被修改的内容。 语法splice 方法的语法为：1array.splice(start[, deleteCount[, item1[, item2[, ...]]]]) 其中 start 指定修改的开始位置（从0计数）。  如">
@@ -95,7 +95,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>在 Javascript 中，通常会使用 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/splice" target="_blank" rel="external">splice</a> 方法对数组进行操作。<br><code>splice</code> 方法能够通过删除、替换现有元素、原地添加新的元素等方式对数组进行修改，以数组形式返回被修改的内容。</p>
-<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p><code>splice</code> 方法的语法为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array.splice(start[, deleteCount[, item1[, item2[, ...]]]])</span><br></pre></td></tr></table></figure></p>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p><code>splice</code> 方法的语法为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">array.splice(start[, deleteCount[, item1[, item2[, ...]]]])</div></pre></td></tr></table></figure></p>
 <p>其中 <code>start</code> 指定修改的开始位置（从0计数）。</p>
 <ul>
 <li>如果超出了数组的长度，则从数组末尾开始添加内容；</li>
@@ -112,16 +112,16 @@
 <ul>
 <li>如果不指定，则 <code>splice()</code> 将只删除数组元素。</li>
 </ul>
-<h2 id="使用样例"><a href="#使用样例" class="headerlink" title="使用样例"></a>使用样例</h2><p>比如，在数组末尾添加一个元素可以使用 <code>push</code> 方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var clubs = [&apos;Real Madrid&apos;, &apos;Liverpool&apos;];</span><br><span class="line">clubs.push(&apos;FC Barcelona&apos;);</span><br></pre></td></tr></table></figure></p>
-<p>如果希望将元素插入到数组的特定位置，则可以使用 <code>splice</code> 方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var clubs = [&apos;Real Madrid&apos;, &apos;Liverpool&apos;];</span><br><span class="line">clubs.splice(0, 0, &apos;FC Barcelona&apos;);</span><br><span class="line">// 运算后的 clubs:  [&quot;FC Barcelona&quot;, &quot;Real Madrid&quot;, &quot;Liverpool&quot;]</span><br><span class="line">clubs.splice(2, 0, &apos;Arsenal&apos;);</span><br><span class="line">// 运算后的 clubs:  [&quot;FC Barcelona&quot;, &quot;Real Madrid&quot;, &quot;Arsenal&quot;, &quot;Liverpool&quot;]</span><br></pre></td></tr></table></figure></p>
-<p>如果希望替换某个位置的元素，也可以使用 <code>splice</code> 方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var clubs = [&apos;Real Madrid&apos;, &apos;Liverpool&apos;];</span><br><span class="line">clubs.splice(0, 1, &apos;FC Barcelona&apos;);</span><br><span class="line">// 运算后的 clubs:  [&quot;FC Barcelona&quot;, &quot;Liverpool&quot;]</span><br></pre></td></tr></table></figure></p>
-<h2 id="针对不定长度参数的使用"><a href="#针对不定长度参数的使用" class="headerlink" title="针对不定长度参数的使用"></a>针对不定长度参数的使用</h2><p>如果希望将一个数组添加到另外一个数组中，也可以使用 <code>splice</code> 方法。<br>注意到 <code>splice</code> 方法的第三个参数起是一个不定长度参数，直接传入数组是不行的，这时候需要使用展开操作符 <code>...</code> 。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var clubs = [&apos;Real Madrid&apos;, &apos;Liverpool&apos;];</span><br><span class="line">var append_clubs = [&apos;FC Barcelona&apos;, &apos;Arsenal&apos;, &apos;Juventus&apos;]</span><br><span class="line">clubs.splice(1, 0, ...append_clubs);</span><br><span class="line">// 运算后的 clubs:  [&quot;Real Madrid&quot;, &quot;FC Barcelona&quot;, &quot;Arsenal&quot;, &quot;Juventus&quot;, &quot;Liverpool&quot;]</span><br></pre></td></tr></table></figure></p>
+<h2 id="使用样例"><a href="#使用样例" class="headerlink" title="使用样例"></a>使用样例</h2><p>比如，在数组末尾添加一个元素可以使用 <code>push</code> 方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var clubs = [&apos;Real Madrid&apos;, &apos;Liverpool&apos;];</div><div class="line">clubs.push(&apos;FC Barcelona&apos;);</div></pre></td></tr></table></figure></p>
+<p>如果希望将元素插入到数组的特定位置，则可以使用 <code>splice</code> 方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var clubs = [&apos;Real Madrid&apos;, &apos;Liverpool&apos;];</div><div class="line">clubs.splice(0, 0, &apos;FC Barcelona&apos;);</div><div class="line">// 运算后的 clubs:  [&quot;FC Barcelona&quot;, &quot;Real Madrid&quot;, &quot;Liverpool&quot;]</div><div class="line">clubs.splice(2, 0, &apos;Arsenal&apos;);</div><div class="line">// 运算后的 clubs:  [&quot;FC Barcelona&quot;, &quot;Real Madrid&quot;, &quot;Arsenal&quot;, &quot;Liverpool&quot;]</div></pre></td></tr></table></figure></p>
+<p>如果希望替换某个位置的元素，也可以使用 <code>splice</code> 方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var clubs = [&apos;Real Madrid&apos;, &apos;Liverpool&apos;];</div><div class="line">clubs.splice(0, 1, &apos;FC Barcelona&apos;);</div><div class="line">// 运算后的 clubs:  [&quot;FC Barcelona&quot;, &quot;Liverpool&quot;]</div></pre></td></tr></table></figure></p>
+<h2 id="针对不定长度参数的使用"><a href="#针对不定长度参数的使用" class="headerlink" title="针对不定长度参数的使用"></a>针对不定长度参数的使用</h2><p>如果希望将一个数组添加到另外一个数组中，也可以使用 <code>splice</code> 方法。<br>注意到 <code>splice</code> 方法的第三个参数起是一个不定长度参数，直接传入数组是不行的，这时候需要使用展开操作符 <code>...</code> 。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var clubs = [&apos;Real Madrid&apos;, &apos;Liverpool&apos;];</div><div class="line">var append_clubs = [&apos;FC Barcelona&apos;, &apos;Arsenal&apos;, &apos;Juventus&apos;]</div><div class="line">clubs.splice(1, 0, ...append_clubs);</div><div class="line">// 运算后的 clubs:  [&quot;Real Madrid&quot;, &quot;FC Barcelona&quot;, &quot;Arsenal&quot;, &quot;Juventus&quot;, &quot;Liverpool&quot;]</div></pre></td></tr></table></figure></p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/splice" target="_blank" rel="external">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/splice</a><br><a href="https://stackoverflow.com/questions/7032550/javascript-insert-an-array-inside-another-array" target="_blank" rel="external">https://stackoverflow.com/questions/7032550/javascript-insert-an-array-inside-another-array</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/05/05/Javascript中数组splice函数的简单使用/" data-id="cke84v2j6002p1gshqpcgfiee" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/05/05/Javascript中数组splice函数的简单使用/" data-id="ckea4909m00309e8t706430l7" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -202,6 +202,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -215,10 +219,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

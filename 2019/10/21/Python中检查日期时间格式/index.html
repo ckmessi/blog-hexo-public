@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/10/21/Python中检查日期时间格式/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在 Python 中，可以使用 datetime 包检查日期格式。 具体的方式是使用 datetime.datetime.strptime(date_str, format_str) 语句尝试将字符串按照特定格式转换为时间。如果在转换过程中出现错误，则会抛出 ValueError 异常；因此可以通过 try...except... 语句，根据转换过程中是否抛出异常，来判断日期时间格式的字符串是否正">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.996Z">
+<meta property="og:updated_time" content="2019-10-21T07:56:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python中检查日期时间格式">
 <meta name="twitter:description" content="在 Python 中，可以使用 datetime 包检查日期格式。 具体的方式是使用 datetime.datetime.strptime(date_str, format_str) 语句尝试将字符串按照特定格式转换为时间。如果在转换过程中出现错误，则会抛出 ValueError 异常；因此可以通过 try...except... 语句，根据转换过程中是否抛出异常，来判断日期时间格式的字符串是否正">
@@ -107,13 +107,13 @@
 <li>分钟：<code>%M</code>（补零的分钟，00，01，…，59）</li>
 <li>秒数：<code>%S</code>（补零的秒数，00，01，…，59）</li>
 </ul>
-<h2 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import datetime</span><br><span class="line"></span><br><span class="line">def validate_format(date_str, format_str):</span><br><span class="line">    try:</span><br><span class="line">        datetime.datetime.strptime(date_str, format_str)</span><br><span class="line">    except ValueError:</span><br><span class="line">        raise ValueError(&quot;Incorrect data format, should be %s&quot; % format_str)</span><br><span class="line"></span><br><span class="line">def check_date_format_correct(date_str, format_str):</span><br><span class="line">    try:</span><br><span class="line">        validate_format(date_str, format_str)</span><br><span class="line">        return True</span><br><span class="line">    except ValueError:</span><br><span class="line">        return False</span><br><span class="line"></span><br><span class="line">assert True == check_date_format_correct(&apos;2019-10-17&apos;, &apos;%Y-%m-%d&apos;)</span><br><span class="line">assert False == check_date_format_correct(&apos;2019-10-37&apos;, &apos;%Y-%m-%d&apos;)</span><br><span class="line">assert True == check_date_format_correct(&apos;2019-10-17 00:00:01&apos;, &apos;%Y-%m-%d %H:%M:%S&apos;)</span><br><span class="line">assert False == check_date_format_correct(&apos;2019-10-17 00:00:61&apos;, &apos;%Y-%m-%d %H:%M:%S&apos;)</span><br></pre></td></tr></table></figure>
+<h2 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">import datetime</div><div class="line"></div><div class="line">def validate_format(date_str, format_str):</div><div class="line">    try:</div><div class="line">        datetime.datetime.strptime(date_str, format_str)</div><div class="line">    except ValueError:</div><div class="line">        raise ValueError(&quot;Incorrect data format, should be %s&quot; % format_str)</div><div class="line"></div><div class="line">def check_date_format_correct(date_str, format_str):</div><div class="line">    try:</div><div class="line">        validate_format(date_str, format_str)</div><div class="line">        return True</div><div class="line">    except ValueError:</div><div class="line">        return False</div><div class="line"></div><div class="line">assert True == check_date_format_correct(&apos;2019-10-17&apos;, &apos;%Y-%m-%d&apos;)</div><div class="line">assert False == check_date_format_correct(&apos;2019-10-37&apos;, &apos;%Y-%m-%d&apos;)</div><div class="line">assert True == check_date_format_correct(&apos;2019-10-17 00:00:01&apos;, &apos;%Y-%m-%d %H:%M:%S&apos;)</div><div class="line">assert False == check_date_format_correct(&apos;2019-10-17 00:00:61&apos;, &apos;%Y-%m-%d %H:%M:%S&apos;)</div></pre></td></tr></table></figure>
 <p>其它字符串格式可参考 <a href="https://www.programiz.com/python-programming/datetime/strftime" target="_blank" rel="external">官方文档</a> 。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/10/21/Python中检查日期时间格式/" data-id="cke84v2mz00bg1gshoktyfn40" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/10/21/Python中检查日期时间格式/" data-id="ckea490bw007v9e8tidfk5auf" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -194,6 +194,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -207,10 +211,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

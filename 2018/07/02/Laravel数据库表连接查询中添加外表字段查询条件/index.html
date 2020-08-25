@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2018/07/02/Laravel数据库表连接查询中添加外表字段查询条件/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在 Laravel 框架中，数据库表连接查询通常使用 leftJoin 语句。 举个简单的例子，下述查询语句中，查询 persons 表中 person_type 的值为 1 的表项，并左连接 users 表，以 persons_id 为条件进行两个表的关联，获取 persons 表项在 users 表中的对应属性。123$list = Person::where(&amp;apos;person_typ">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.955Z">
+<meta property="og:updated_time" content="2018-07-02T08:36:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Laravel数据库表连接查询中添加外表字段查询条件">
 <meta name="twitter:description" content="在 Laravel 框架中，数据库表连接查询通常使用 leftJoin 语句。 举个简单的例子，下述查询语句中，查询 persons 表中 person_type 的值为 1 的表项，并左连接 users 表，以 persons_id 为条件进行两个表的关联，获取 persons 表项在 users 表中的对应属性。123$list = Person::where(&amp;apos;person_typ">
@@ -95,11 +95,11 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>在 <code>Laravel</code> 框架中，数据库表连接查询通常使用 <code>leftJoin</code> 语句。</p>
-<p>举个简单的例子，下述查询语句中，查询 <code>persons</code> 表中 <code>person_type</code> 的值为 <code>1</code> 的表项，并左连接 <code>users</code> 表，以 <code>persons_id</code> 为条件进行两个表的关联，获取 <code>persons</code> 表项在 <code>users</code> 表中的对应属性。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$list = Person::where(&apos;person_type&apos;, &apos;=&apos;, &apos;1&apos;)</span><br><span class="line">    -&gt;leftJoin(&apos;users&apos;, &apos;users.person_id&apos;, &apos;=&apos;, &apos;persons.person_id&apos;)</span><br><span class="line">    -&gt;get();</span><br></pre></td></tr></table></figure></p>
-<p>然而如果需要限制 <code>users</code> 表中某个字段，比如限定 <code>users.deleted_at</code> 为 <code>null</code> 的记录才筛选出来，就有点麻烦了。<br>如果直接使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$list = Person::where(&apos;person_type&apos;, &apos;=&apos;, &apos;1&apos;)</span><br><span class="line">    -&gt;whereNull(&apos;users.deleted_at&apos;)</span><br><span class="line">    -&gt;leftJoin(&apos;users&apos;, &apos;users.person_id&apos;, &apos;=&apos;, &apos;persons.person_id&apos;)</span><br><span class="line">    -&gt;get();</span><br></pre></td></tr></table></figure></p>
+<p>举个简单的例子，下述查询语句中，查询 <code>persons</code> 表中 <code>person_type</code> 的值为 <code>1</code> 的表项，并左连接 <code>users</code> 表，以 <code>persons_id</code> 为条件进行两个表的关联，获取 <code>persons</code> 表项在 <code>users</code> 表中的对应属性。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$list = Person::where(&apos;person_type&apos;, &apos;=&apos;, &apos;1&apos;)</div><div class="line">    -&gt;leftJoin(&apos;users&apos;, &apos;users.person_id&apos;, &apos;=&apos;, &apos;persons.person_id&apos;)</div><div class="line">    -&gt;get();</div></pre></td></tr></table></figure></p>
+<p>然而如果需要限制 <code>users</code> 表中某个字段，比如限定 <code>users.deleted_at</code> 为 <code>null</code> 的记录才筛选出来，就有点麻烦了。<br>如果直接使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$list = Person::where(&apos;person_type&apos;, &apos;=&apos;, &apos;1&apos;)</div><div class="line">    -&gt;whereNull(&apos;users.deleted_at&apos;)</div><div class="line">    -&gt;leftJoin(&apos;users&apos;, &apos;users.person_id&apos;, &apos;=&apos;, &apos;persons.person_id&apos;)</div><div class="line">    -&gt;get();</div></pre></td></tr></table></figure></p>
 <p>将造成返回空记录。</p>
-<p>这是因为，对于数据库而言，表连接时直接加where条件是不行的，会导致返回结果不返回空记录，正确是写法应该是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from persons left join users on persons.person_id=users.person_id and users.deleted_at=null;</span><br></pre></td></tr></table></figure></p>
-<p>对应地，在 <code>Laravel</code> 中的语句为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$list = Person::where(&apos;person_type&apos;, &apos;=&apos;, &apos;1&apos;)</span><br><span class="line">    -&gt;leftJoin(&apos;users&apos;, function($join)&#123;</span><br><span class="line">            $join-&gt;on(&apos;users.person_id&apos;, &apos;=&apos;, &apos;persons.person_id&apos;)</span><br><span class="line">                    -&gt;whereNull(&apos;users.deleted_at&apos;);</span><br><span class="line">        &#125;</span><br><span class="line">    )</span><br><span class="line">    -&gt;get();</span><br></pre></td></tr></table></figure></p>
+<p>这是因为，对于数据库而言，表连接时直接加where条件是不行的，会导致返回结果不返回空记录，正确是写法应该是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select * from persons left join users on persons.person_id=users.person_id and users.deleted_at=null;</div></pre></td></tr></table></figure></p>
+<p>对应地，在 <code>Laravel</code> 中的语句为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$list = Person::where(&apos;person_type&apos;, &apos;=&apos;, &apos;1&apos;)</div><div class="line">    -&gt;leftJoin(&apos;users&apos;, function($join)&#123;</div><div class="line">            $join-&gt;on(&apos;users.person_id&apos;, &apos;=&apos;, &apos;persons.person_id&apos;)</div><div class="line">                    -&gt;whereNull(&apos;users.deleted_at&apos;);</div><div class="line">        &#125;</div><div class="line">    )</div><div class="line">    -&gt;get();</div></pre></td></tr></table></figure></p>
 <p>即将关于 <code>users.deleted_at</code> 列的筛选条件放到 <code>leftJoin</code> 语句的回调函数中进行相关操作。</p>
 <p>这样能够实现在表连接过程中，对外表字段添加查询条件。</p>
 <p>参考链接：<a href="https://blog.csdn.net/php_girl/article/details/77478429" target="_blank" rel="external">https://blog.csdn.net/php_girl/article/details/77478429</a></p>
@@ -107,7 +107,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/07/02/Laravel数据库表连接查询中添加外表字段查询条件/" data-id="cke84v2jw004y1gshld51m2nc" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/07/02/Laravel数据库表连接查询中添加外表字段查询条件/" data-id="ckea490al00569e8tx5ciwxpl" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -188,6 +188,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -201,10 +205,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

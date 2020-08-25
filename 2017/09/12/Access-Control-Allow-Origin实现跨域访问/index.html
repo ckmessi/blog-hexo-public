@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2017/09/12/Access-Control-Allow-Origin实现跨域访问/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在前端使用Ajax请求后台时，如果前端和后台项目是分离的，很容易出现跨域请求访问的错误：1XMLHttpRequest cannot load http://localhost/.... The &amp;apos;Access-Control-Allow-Origin&amp;apos; header has a value  that is not equal to the supplied origin.">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.817Z">
+<meta property="og:updated_time" content="2017-09-12T13:34:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Access-Control-Allow-Origin实现跨域访问">
 <meta name="twitter:description" content="在前端使用Ajax请求后台时，如果前端和后台项目是分离的，很容易出现跨域请求访问的错误：1XMLHttpRequest cannot load http://localhost/.... The &amp;apos;Access-Control-Allow-Origin&amp;apos; header has a value  that is not equal to the supplied origin.">
@@ -94,16 +94,16 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在前端使用Ajax请求后台时，如果前端和后台项目是分离的，很容易出现跨域请求访问的错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">XMLHttpRequest cannot load http://localhost/.... The &apos;Access-Control-Allow-Origin&apos; header has a value  that is not equal to the supplied origin. Origin &apos;null&apos; is therefore not allowed access.</span><br></pre></td></tr></table></figure></p>
+        <p>在前端使用Ajax请求后台时，如果前端和后台项目是分离的，很容易出现跨域请求访问的错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">XMLHttpRequest cannot load http://localhost/.... The &apos;Access-Control-Allow-Origin&apos; header has a value  that is not equal to the supplied origin. Origin &apos;null&apos; is therefore not allowed access.</div></pre></td></tr></table></figure></p>
 <p>跨域指的是浏览器执行了其他网站的脚本。这是由浏览器的同源策略造成的，是浏览器对javascript施加的安全限制。<br>之前一直为其困扰，最近找到一种便捷的方法实现跨域访问，其基本原理是在服务器端设置Access-Control-Allow-Origin，表示允许浏览器跨域访问，相当于被请求资源给浏览器开了一道绿色通行证。</p>
-<p>客户端正常使用ajax请求资源：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">axios.get(&apos;http://localhost/your/path&apos;).then(function (response) &#123;</span><br><span class="line">    var data = response.data;</span><br><span class="line">    if (data.code === 200) &#123;</span><br><span class="line">        alert(data.data.message)</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        alert(data.data);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;).catch(function (error) &#123;</span><br><span class="line">    alert(error);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<p>服务器端需要添加以下内容设置<code>header</code>信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 指定允许其他域名访问  </span><br><span class="line">header(&apos;Access-Control-Allow-Origin:*&apos;);  </span><br><span class="line">// 响应类型  </span><br><span class="line">header(&apos;Access-Control-Allow-Methods:GET&apos;);  </span><br><span class="line">// 响应头设置  </span><br><span class="line">header(&apos;Access-Control-Allow-Headers:x-requested-with,content-type&apos;);</span><br></pre></td></tr></table></figure></p>
+<p>客户端正常使用ajax请求资源：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">axios.get(&apos;http://localhost/your/path&apos;).then(function (response) &#123;</div><div class="line">    var data = response.data;</div><div class="line">    if (data.code === 200) &#123;</div><div class="line">        alert(data.data.message)</div><div class="line">    &#125; else &#123;</div><div class="line">        alert(data.data);</div><div class="line">    &#125;</div><div class="line">&#125;).catch(function (error) &#123;</div><div class="line">    alert(error);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>服务器端需要添加以下内容设置<code>header</code>信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// 指定允许其他域名访问  </div><div class="line">header(&apos;Access-Control-Allow-Origin:*&apos;);  </div><div class="line">// 响应类型  </div><div class="line">header(&apos;Access-Control-Allow-Methods:GET&apos;);  </div><div class="line">// 响应头设置  </div><div class="line">header(&apos;Access-Control-Allow-Headers:x-requested-with,content-type&apos;);</div></pre></td></tr></table></figure></p>
 <p>这样前端就不会报浏览器跨域访问的错误了。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/12/Access-Control-Allow-Origin实现跨域访问/" data-id="cke84v2ew00001gsh8yb7yod2" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/09/12/Access-Control-Allow-Origin实现跨域访问/" data-id="ckea4907f00059e8tykfdqojt" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li></ul>
@@ -184,6 +184,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -197,10 +201,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

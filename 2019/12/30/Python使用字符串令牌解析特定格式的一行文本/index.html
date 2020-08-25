@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/12/30/Python使用字符串令牌解析特定格式的一行文本/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="背景在日常生活中，我们通常会使用特定格式的字符串记录一些信息。在后续的整理过程中，可能希望将这些信息的特定字段解析出来，这种情况下可以使用 Python 中的字符串令牌解析方法。比如对于以下文本，是具有一定特殊格式规律的。1220190104：&amp;#123;支出&amp;#125;，【支付宝】143.2元 | 购买商品20190104：&amp;#123;支出&amp;#125;，【微信支付】20.2元 比如，字符串前 8">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.004Z">
+<meta property="og:updated_time" content="2019-12-30T07:33:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python使用字符串令牌解析特定格式的一行文本">
 <meta name="twitter:description" content="背景在日常生活中，我们通常会使用特定格式的字符串记录一些信息。在后续的整理过程中，可能希望将这些信息的特定字段解析出来，这种情况下可以使用 Python 中的字符串令牌解析方法。比如对于以下文本，是具有一定特殊格式规律的。1220190104：&amp;#123;支出&amp;#125;，【支付宝】143.2元 | 购买商品20190104：&amp;#123;支出&amp;#125;，【微信支付】20.2元 比如，字符串前 8">
@@ -94,21 +94,21 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在日常生活中，我们通常会使用特定格式的字符串记录一些信息。在后续的整理过程中，可能希望将这些信息的特定字段解析出来，这种情况下可以使用 Python 中的字符串令牌解析方法。<br>比如对于以下文本，是具有一定特殊格式规律的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">20190104：&#123;支出&#125;，【支付宝】143.2元 | 购买商品</span><br><span class="line">20190104：&#123;支出&#125;，【微信支付】20.2元</span><br></pre></td></tr></table></figure></p>
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在日常生活中，我们通常会使用特定格式的字符串记录一些信息。在后续的整理过程中，可能希望将这些信息的特定字段解析出来，这种情况下可以使用 Python 中的字符串令牌解析方法。<br>比如对于以下文本，是具有一定特殊格式规律的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">20190104：&#123;支出&#125;，【支付宝】143.2元 | 购买商品</div><div class="line">20190104：&#123;支出&#125;，【微信支付】20.2元</div></pre></td></tr></table></figure></p>
 <p>比如，字符串前 <code>8</code> 位代表了日期，后续跟着中文冒号，一个花括号描述了资金流向为 <code>支出</code>，紧跟着中文逗号，再后者是中括号包含的账户名称 <code>支付宝</code>，以及资金数额，可能还会有备注信息等。<br>比较朴素的传统方法，可以按照字符串规律截取前几位，再根据特定字符分隔字符串获取结果数组的第几个元素等。但这种方法的弊端在于多样性过于丰富，对于不同的字符串格式都需要艰难地寻找规律，且匹配过程对于异常情况的处理能力较弱。</p>
 <p>这里介绍一种新方法，可以使用 <a href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c02/p18_tokenizing_text.html" target="_blank" rel="external">字符串令牌解析</a> 方法，可以将想其从左至右将其解析为一个令牌流，再从令牌流中提取想要的字段。</p>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>首先，需要依赖的先验知识是正则表达式的匹配，字符串停牌将使用正则表达式指定，比如对于以下文本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Alice, 23, female</span><br><span class="line">Bob, 23, male</span><br></pre></td></tr></table></figure></p>
-<p>分析可知文本的令牌规律是 <code>姓名, 年龄, 性别</code>，可以使用如下正则表达式构建令牌模式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import re</span><br><span class="line">line = &apos;Alice, 23, female&apos;</span><br><span class="line">pattern = re.compile(r&apos;(?P&lt;name&gt;\S+), (?P&lt;age&gt;\d+), (?P&lt;gender&gt;\S+)&apos;)</span><br><span class="line">m = pattern.match(line)</span><br><span class="line">print(m.group(&apos;name&apos;))    // Alice</span><br><span class="line">print(m.group(&apos;age&apos;))        // 23</span><br><span class="line">print(m.group(&apos;gender&apos;))    // female</span><br></pre></td></tr></table></figure></p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>首先，需要依赖的先验知识是正则表达式的匹配，字符串停牌将使用正则表达式指定，比如对于以下文本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Alice, 23, female</div><div class="line">Bob, 23, male</div></pre></td></tr></table></figure></p>
+<p>分析可知文本的令牌规律是 <code>姓名, 年龄, 性别</code>，可以使用如下正则表达式构建令牌模式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">import re</div><div class="line">line = &apos;Alice, 23, female&apos;</div><div class="line">pattern = re.compile(r&apos;(?P&lt;name&gt;\S+), (?P&lt;age&gt;\d+), (?P&lt;gender&gt;\S+)&apos;)</div><div class="line">m = pattern.match(line)</div><div class="line">print(m.group(&apos;name&apos;))    // Alice</div><div class="line">print(m.group(&apos;age&apos;))        // 23</div><div class="line">print(m.group(&apos;gender&apos;))    // female</div></pre></td></tr></table></figure></p>
 <p>基本思想就是通过一个 <code>(?P&lt;[field_name]&gt;[pattern])</code> 令牌匹配对应的字段，其中 <code>[field_name]</code> 描述了被匹配内容的字段名称，在匹配结果中可以直接查询，而 <code>[pattern]</code> 则是正则表达式描述匹配规则，比如上例中一个或多个数字的匹配规则可以使用 <code>\d+</code> 来描述。<br>将多个令牌拼接在一起，对于固定的字符则可以直接拼在字符串中，这样就能解析出一段匹配文本中的各个域的值。</p>
-<h2 id="示例："><a href="#示例：" class="headerlink" title="示例："></a>示例：</h2><p>对于此前举的例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">20190104：&#123;支出&#125;，【支付宝】143.2元 | 购买商品</span><br><span class="line">20190104：&#123;支出&#125;，【微信支付】20.2元</span><br></pre></td></tr></table></figure></p>
-<p>结合字符串令牌的匹配方式，可以使用以下方式解析<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import re</span><br><span class="line">pattern = re.compile(r&apos;(?P&lt;date&gt;\d+)：&#123;(?P&lt;type&gt;\S+)&#125;，【(?P&lt;account&gt;\S+)】(?P&lt;amount&gt;(0\.\d+)|([1-9]\d*\.\d+))元([ ]*\|[ ]*(?P&lt;remark&gt;\S+))?&apos;)</span><br><span class="line">line = &apos;20190104：&#123;支出&#125;，【支付宝】143.2元 | 购买商品&apos;</span><br><span class="line">m = pattern.match(line)</span><br><span class="line">print(f&quot;date:&#123;m.group(&apos;date&apos;)&#125;, type:&#123;m.group(&apos;type&apos;)&#125;, account:&#123;m.group(&apos;account&apos;)&#125;, amount: &#123;m.group(&apos;amount&apos;)&#125;, remark: &#123;m.group(&apos;remark&apos;)&#125;&quot;)</span><br><span class="line">// date:20190104, type:支出, account:支付宝, amount: 143.2, remark: 购买商品</span><br><span class="line"></span><br><span class="line">line = &apos;20190104：&#123;支出&#125;，【微信支付】20.2元&apos;</span><br><span class="line">m = pattern.match(line)</span><br><span class="line">print(f&quot;date:&#123;m.group(&apos;date&apos;)&#125;, type:&#123;m.group(&apos;type&apos;)&#125;, account:&#123;m.group(&apos;account&apos;)&#125;, amount: &#123;m.group(&apos;amount&apos;)&#125;, remark: &#123;m.group(&apos;remark&apos;)&#125;&quot;)</span><br><span class="line">// date:20190104, type:支出, account:微信支付, amount: 20.2, remark: None</span><br></pre></td></tr></table></figure></p>
+<h2 id="示例："><a href="#示例：" class="headerlink" title="示例："></a>示例：</h2><p>对于此前举的例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">20190104：&#123;支出&#125;，【支付宝】143.2元 | 购买商品</div><div class="line">20190104：&#123;支出&#125;，【微信支付】20.2元</div></pre></td></tr></table></figure></p>
+<p>结合字符串令牌的匹配方式，可以使用以下方式解析<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">import re</div><div class="line">pattern = re.compile(r&apos;(?P&lt;date&gt;\d+)：&#123;(?P&lt;type&gt;\S+)&#125;，【(?P&lt;account&gt;\S+)】(?P&lt;amount&gt;(0\.\d+)|([1-9]\d*\.\d+))元([ ]*\|[ ]*(?P&lt;remark&gt;\S+))?&apos;)</div><div class="line">line = &apos;20190104：&#123;支出&#125;，【支付宝】143.2元 | 购买商品&apos;</div><div class="line">m = pattern.match(line)</div><div class="line">print(f&quot;date:&#123;m.group(&apos;date&apos;)&#125;, type:&#123;m.group(&apos;type&apos;)&#125;, account:&#123;m.group(&apos;account&apos;)&#125;, amount: &#123;m.group(&apos;amount&apos;)&#125;, remark: &#123;m.group(&apos;remark&apos;)&#125;&quot;)</div><div class="line">// date:20190104, type:支出, account:支付宝, amount: 143.2, remark: 购买商品</div><div class="line"></div><div class="line">line = &apos;20190104：&#123;支出&#125;，【微信支付】20.2元&apos;</div><div class="line">m = pattern.match(line)</div><div class="line">print(f&quot;date:&#123;m.group(&apos;date&apos;)&#125;, type:&#123;m.group(&apos;type&apos;)&#125;, account:&#123;m.group(&apos;account&apos;)&#125;, amount: &#123;m.group(&apos;amount&apos;)&#125;, remark: &#123;m.group(&apos;remark&apos;)&#125;&quot;)</div><div class="line">// date:20190104, type:支出, account:微信支付, amount: 20.2, remark: None</div></pre></td></tr></table></figure></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>对于按照特定格式组织的文本信息，可以使用 Python 的字符串令牌解析方式，将关键字段的值提取出来。<br>这个功能在针对特定目标的数据导入时很有用。</p>
 <h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c02/p18_tokenizing_text.html" target="_blank" rel="external">https://python3-cookbook.readthedocs.io/zh_CN/latest/c02/p18_tokenizing_text.html</a><br><a href="https://blog.csdn.net/qq_17550379/article/details/79168787" target="_blank" rel="external">https://blog.csdn.net/qq_17550379/article/details/79168787</a><br><a href="https://www.cnblogs.com/aaronhoo/p/5439509.html" target="_blank" rel="external">https://www.cnblogs.com/aaronhoo/p/5439509.html</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/12/30/Python使用字符串令牌解析特定格式的一行文本/" data-id="cke84v2n100bn1gshvmx0fbdc" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/12/30/Python使用字符串令牌解析特定格式的一行文本/" data-id="ckea490c000849e8t4b07ttjm" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -189,6 +189,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -202,10 +206,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

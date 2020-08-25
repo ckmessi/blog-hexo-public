@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/04/28/Java的final关键字/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在Java中，关键词 final 通常表示一个 不可改变 的含义。 final 关键字只能用于修饰变量、方法或类，依据其出现的上下文不同，可能有细微的差别。 从使用场景出发，通常来说使用关键词 final 可以有以下几种方式：  变量 局部变量 成员变量 参数   方法 类  一、修饰变量当变量使用 final 关键字修饰时，意味着它是“不能被修改的”。如果被 final 关键字修饰的变量是基础类">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.926Z">
+<meta property="og:updated_time" content="2019-04-28T07:16:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java的final关键字">
 <meta name="twitter:description" content="在Java中，关键词 final 通常表示一个 不可改变 的含义。 final 关键字只能用于修饰变量、方法或类，依据其出现的上下文不同，可能有细微的差别。 从使用场景出发，通常来说使用关键词 final 可以有以下几种方式：  变量 局部变量 成员变量 参数   方法 类  一、修饰变量当变量使用 final 关键字修饰时，意味着它是“不能被修改的”。如果被 final 关键字修饰的变量是基础类">
@@ -107,14 +107,14 @@
 <li>类</li>
 </ol>
 <h2 id="一、修饰变量"><a href="#一、修饰变量" class="headerlink" title="一、修饰变量"></a>一、修饰变量</h2><p>当变量使用 <code>final</code> 关键字修饰时，意味着它是“不能被修改的”。<br>如果被 <code>final</code> 关键字修饰的变量是基础类型，则这个变量的值不能改变；<br>如果被 <code>final</code> 关键字修饰的变量是引用类型，则这个引用的地址的值不能修改，但引用指向的对象里内容还是可以修改的，比如可以从 <code>final</code> 的数组和 <code>final</code> 集合中添加或移除元素。<br>这里所说的变量通常会存在于三个场景中：</p>
-<h4 id="1-局部变量"><a href="#1-局部变量" class="headerlink" title="1. 局部变量"></a>1. 局部变量</h4><p>对于用 <code>final</code> 修饰的局部变量而言，只能初始化一次。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 正确</span><br><span class="line">final int a;</span><br><span class="line">// 正确</span><br><span class="line">final int b = 1;</span><br><span class="line">// 错误</span><br><span class="line">final int c = 2;</span><br><span class="line">c = 3;</span><br></pre></td></tr></table></figure></p>
+<h4 id="1-局部变量"><a href="#1-局部变量" class="headerlink" title="1. 局部变量"></a>1. 局部变量</h4><p>对于用 <code>final</code> 修饰的局部变量而言，只能初始化一次。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">// 正确</div><div class="line">final int a;</div><div class="line">// 正确</div><div class="line">final int b = 1;</div><div class="line">// 错误</div><div class="line">final int c = 2;</div><div class="line">c = 3;</div></pre></td></tr></table></figure></p>
 <p>其中最后一行代码会显示 <code>Cannot assign a value to final variable &#39;c&#39;</code>。</p>
-<h4 id="2-参数变量"><a href="#2-参数变量" class="headerlink" title="2. 参数变量"></a>2. 参数变量</h4><p>对于用 <code>final</code> 修饰的参数变量，意味着在函数执行过程中，这个参数不可以被修改。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public void method(String pa, final String pb)&#123;</span><br><span class="line">    // 正确</span><br><span class="line">    pa = &quot;a&quot;;</span><br><span class="line">    // 错误</span><br><span class="line">    pb = &quot;b&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-参数变量"><a href="#2-参数变量" class="headerlink" title="2. 参数变量"></a>2. 参数变量</h4><p>对于用 <code>final</code> 修饰的参数变量，意味着在函数执行过程中，这个参数不可以被修改。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public void method(String pa, final String pb)&#123;</div><div class="line">    // 正确</div><div class="line">    pa = &quot;a&quot;;</div><div class="line">    // 错误</div><div class="line">    pb = &quot;b&quot;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <h4 id="3-类的成员变量或静态成员变量"><a href="#3-类的成员变量或静态成员变量" class="headerlink" title="3. 类的成员变量或静态成员变量"></a>3. 类的成员变量或静态成员变量</h4><p>对于用 <code>final</code> 修饰的类的成员变量而言，必须进行初始化，且只能初始化一次，通常有以下三种方法：</p>
 <ol>
 <li>在声明时直接初始化，这种方式是最常用的。（如果没有被初始化，则称为 <code>空白的 final 变量</code>），后面两种方式都可以用于初始化 <code>空白的 final 变量</code>）；</li>
 <li>使用 <code>实例初始化代码块</code> 或 <code>静态代码块</code> 进行初始化操作，分别针对成员变量和静态成员变量；</li>
-<li>使用构造函数初始化，如果有多个构造函数，所有构造函数都要进行初始化操作。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public class FinalEntity &#123;</span><br><span class="line">    private final String FINAL_FIELD = &quot;1&quot;</span><br><span class="line">    private final String FINAL_FIELD_2;</span><br><span class="line">    static final String STATIC_FINAL_FIELD_3;</span><br><span class="line">    private final String FINAL_FIELD_4;</span><br><span class="line">    </span><br><span class="line">    // instance initializer block for initializing FINAL_FIELD_2 </span><br><span class="line">    &#123;</span><br><span class="line">        FINAL_FIELD_2 = &quot;2&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // static initializer block for  initializing STATIC_FINAL_FIELD_3 </span><br><span class="line">    static &#123;</span><br><span class="line">        STATIC_FINAL_FIELD_3 = &quot;3&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    // constructor for initializing FINAL_FIELD_4, Note that if there are more than one constructor, you must initialize FINAL_FIELD_4 in them also.</span><br><span class="line">    public FinalEntity()&#123;</span><br><span class="line">        FINAL_FIELD_4 = &quot;4&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li>使用构造函数初始化，如果有多个构造函数，所有构造函数都要进行初始化操作。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">public class FinalEntity &#123;</div><div class="line">    private final String FINAL_FIELD = &quot;1&quot;</div><div class="line">    private final String FINAL_FIELD_2;</div><div class="line">    static final String STATIC_FINAL_FIELD_3;</div><div class="line">    private final String FINAL_FIELD_4;</div><div class="line">    </div><div class="line">    // instance initializer block for initializing FINAL_FIELD_2 </div><div class="line">    &#123;</div><div class="line">        FINAL_FIELD_2 = &quot;2&quot;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // static initializer block for  initializing STATIC_FINAL_FIELD_3 </div><div class="line">    static &#123;</div><div class="line">        STATIC_FINAL_FIELD_3 = &quot;3&quot;;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    // constructor for initializing FINAL_FIELD_4, Note that if there are more than one constructor, you must initialize FINAL_FIELD_4 in them also.</div><div class="line">    public FinalEntity()&#123;</div><div class="line">        FINAL_FIELD_4 = &quot;4&quot;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 </ol>
 <p>一种好的编程风格是用大写字符命名 <code>final</code> 变量，使用下划线连接不同的单词。<br>使用 <code>static final</code> 修饰一个Java的变量，有一个明显的好处：编译好的 Java 类文件能够加速执行性能。</p>
@@ -122,7 +122,7 @@
 <blockquote>
 <p>A final method cannot be overridden</p>
 </blockquote>
-<p>当我们希望所有继承子类都遵循相同的成员方法实现逻辑时，可以使用 <code>final</code> 关键字对成员方法进行约束。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class A </span><br><span class="line">&#123;</span><br><span class="line">    final void method1() </span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(&quot;This is a final method.&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">class B extends A </span><br><span class="line">&#123;</span><br><span class="line">    void method1()</span><br><span class="line">    &#123; </span><br><span class="line">        // 错误</span><br><span class="line">        System.out.println(&quot;Illegal!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当我们希望所有继承子类都遵循相同的成员方法实现逻辑时，可以使用 <code>final</code> 关键字对成员方法进行约束。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">class A </div><div class="line">&#123;</div><div class="line">    final void method1() </div><div class="line">    &#123;</div><div class="line">        System.out.println(&quot;This is a final method.&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">class B extends A </div><div class="line">&#123;</div><div class="line">    void method1()</div><div class="line">    &#123; </div><div class="line">        // 错误</div><div class="line">        System.out.println(&quot;Illegal!&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>其中，类里的 <code>private</code> 方法会被隐式地指定为 <code>final</code> 方法。<br>这一点是很自然的，因为 <code>private</code> 方法本来就不能被继承，更不可能被重写。<br>在成员方法层面，<code>private</code> 等价于 <code>final</code> ，但对于变量而并不是这样。</p>
 <h2 id="三、修饰类"><a href="#三、修饰类" class="headerlink" title="三、修饰类"></a>三、修饰类</h2><p>使用 <code>final</code> 关键字修饰一个类时，表示这个类不能被继承。</p>
 <p>通常会有两种用处：</p>
@@ -144,7 +144,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/04/28/Java的final关键字/" data-id="cke84v2jf003j1gshinituhlt" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/04/28/Java的final关键字/" data-id="ckea4909y003r9e8tngtdcx48" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -225,6 +225,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -238,10 +242,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

@@ -68,6 +68,67 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Swiper插件的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/06/17/Swiper插件的使用/" class="article-date">
+  <time datetime="2017-06-17T13:14:20.000Z" itemprop="datePublished">2017-06-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/06/17/Swiper插件的使用/">Swiper插件的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>近年来许多网页的风格流行一屏一屏滑动的特效，这是一个比较常规的方案，应该有许多现成的组件可供使用。<br>之前尝试过许多前端组件，不知道是我的技术不行还是查找能力差，总之没有特别满意的。直到最近发现Swiper插件，代码相对简洁易懂，可供配制的参数选项较丰富。   </p>
+<p>一个简单的demo窗口如下：</p>
+<div id="main" style="width: 850px;"><br>    <!-- Swiper --><br>    <div class="swiper-container" style="background-color: #f5f5f5; height: 300px;"><br>      <div class="swiper-wrapper"><br>          <div class="swiper-slide"><br>            Slide1<br>          </div><br>          <div class="swiper-slide"><br>            Slide2<br>          </div><br>          <div class="swiper-slide"><br>            Slide3<br>          </div><br>      </div><br>      <!-- Add Pagination --><br>      <div class="swiper-pagination">…</div><br>    </div><br>  </div><br>
+
+
+<p><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.1/css/swiper.css"></p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.1/js/swiper.min.js"></script>
+<script>
+var swiper = new Swiper('.swiper-container', {
+    pagination: '.swiper-pagination',
+    direction: 'vertical',
+    slidesPerView: 1,
+    paginationClickable: true,
+    spaceBetween: 0,
+    mousewheelControl: true,
+    speed: 1000,
+    loop: false,
+    freeMode: false,
+});    
+</script>
+
+<p>可通过修改swiper初始化的javascript代码修改配置项：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var swiper = new Swiper(&apos;.swiper-container&apos;, &#123;</div><div class="line">    pagination: &apos;.swiper-pagination&apos;,   // 导航的三个点</div><div class="line">    direction: &apos;horizontal&apos;,            // 垂直|水平方向</div><div class="line">    slidesPerView: 1,                   // 每屏滑片数量</div><div class="line">    paginationClickable: true,          // 导航是否可点击</div><div class="line">    spaceBetween: 0,                    // 滑片之间的间距</div><div class="line">    mousewheelControl: true,            // 鼠标滚轮是否有效</div><div class="line">    speed: 1000,                        // 切换速度 </div><div class="line">    loop: false,                        // 是否循环</div><div class="line">    freeMode: false,                    // 是否可以自由地移动（取消自动贴合）</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>更多内容可直接参考<a href="http://www.swiper.com.cn/" target="_blank" rel="external">Swiper中文网</a>。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/06/17/Swiper插件的使用/" data-id="ckea490cd00969e8t718usngc" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-随机游走" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2017/06/16/随机游走/" class="article-date">
@@ -127,7 +188,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/16/随机游走/" data-id="cke84v2pd00j31gshppd9d2lx" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/16/随机游走/" data-id="ckea490f000fj9e8tw90kdn65" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li></ul>
@@ -166,15 +227,15 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>在实际情况中，为了避免不避要的攻击，最好更换Mysql数据库的默认端口号3306为其它端口号。   </p>
-<p>基本的更换步骤如下：<br>找到mysql的配置文件，使用<code>locate my.cnf</code>命令可以查找my.cnf文件所在位置。<br>使用vim进行编辑<code>vim /etc/mysql/my.cnf</code>，查找<code>port = 3306</code>所在位置。<br>一共有两行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[client]</span><br><span class="line">port            = 3306</span><br><span class="line">socket          = /var/run/mysqld/mysqld.sock</span><br></pre></td></tr></table></figure></p>
-<p>以及<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">#</span><br><span class="line"># * Basic Settings</span><br><span class="line">#</span><br><span class="line">user            = mysql</span><br><span class="line">pid-file        = /var/run/mysqld/mysqld.pid</span><br><span class="line">socket          = /var/run/mysqld/mysqld.sock</span><br><span class="line">port            = 3306</span><br><span class="line">basedir         = /usr</span><br><span class="line">datadir         = /var/lib/mysql</span><br><span class="line">tmpdir          = /tmp</span><br><span class="line">lc-messages-dir = /usr/share/mysql</span><br></pre></td></tr></table></figure></p>
+<p>基本的更换步骤如下：<br>找到mysql的配置文件，使用<code>locate my.cnf</code>命令可以查找my.cnf文件所在位置。<br>使用vim进行编辑<code>vim /etc/mysql/my.cnf</code>，查找<code>port = 3306</code>所在位置。<br>一共有两行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[client]</div><div class="line">port            = 3306</div><div class="line">socket          = /var/run/mysqld/mysqld.sock</div></pre></td></tr></table></figure></p>
+<p>以及<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[mysqld]</div><div class="line">#</div><div class="line"># * Basic Settings</div><div class="line">#</div><div class="line">user            = mysql</div><div class="line">pid-file        = /var/run/mysqld/mysqld.pid</div><div class="line">socket          = /var/run/mysqld/mysqld.sock</div><div class="line">port            = 3306</div><div class="line">basedir         = /usr</div><div class="line">datadir         = /var/lib/mysql</div><div class="line">tmpdir          = /tmp</div><div class="line">lc-messages-dir = /usr/share/mysql</div></pre></td></tr></table></figure></p>
 <p>这两处的3306替换为新端口号即可。</p>
 <p>然后重启mysql服务：<code>service mysqld restart</code></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/05/22/Ubuntu修改Mysql数据库连接端口号/" data-id="cke84v2nd00cq1gsh9m0unung" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/05/22/Ubuntu修改Mysql数据库连接端口号/" data-id="ckea490ch009h9e8txu5qcdw4" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li></ul>
@@ -218,9 +279,9 @@
 <p>后来就发现了这个工具：<a href="http://hashids.org/" target="_blank" rel="external">Hashids</a></p>
 <p>它具有多种语言、多种框架的适配方式。</p>
 <h2 id="2-Hashids在Laravel中的使用"><a href="#2-Hashids在Laravel中的使用" class="headerlink" title="2. Hashids在Laravel中的使用"></a>2. Hashids在Laravel中的使用</h2><h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>在Laravel项目中使用composer安装：<br><code>$ composer require vinkla/hashids</code><br>在Laravel项目的config/app.php进行如下修改：<br><code>Vinkla\Hashids\HashidsServiceProvider::class</code><br>如果想使用Facade，继续添加一处：<br><code>&#39;Hashids&#39; =&gt; Vinkla\Hashids\Facades\Hashids::class</code><br>运行命令，会生成一个<code>config/hashids.php</code>文件，在其中可以进行hashids相关的配置<br><code>php artisan vendor:publish</code></p>
-<h4 id="基本使用方法"><a href="#基本使用方法" class="headerlink" title="基本使用方法"></a>基本使用方法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">use Vinkla\Hashids\Facades\Hashids;</span><br><span class="line">$md5_str = Hashids::connection(&apos;main&apos;)-&gt;encode(1234);</span><br><span class="line">$origin_array = Hashids::decode($md5_str);</span><br></pre></td></tr></table></figure>
+<h4 id="基本使用方法"><a href="#基本使用方法" class="headerlink" title="基本使用方法"></a>基本使用方法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">use Vinkla\Hashids\Facades\Hashids;</div><div class="line">$md5_str = Hashids::connection(&apos;main&apos;)-&gt;encode(1234);</div><div class="line">$origin_array = Hashids::decode($md5_str);</div></pre></td></tr></table></figure>
 <p>需要注意的是decode方法解析出来是一个数组，需要判断其长度来获取是否有合法的解密结果。</p>
-<h4 id="参数配置"><a href="#参数配置" class="headerlink" title="参数配置"></a>参数配置</h4><p>在<code>config/hashids.php</code>文件中，可以设置盐和长度等内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&apos;connections&apos; =&gt; [</span><br><span class="line"></span><br><span class="line">    &apos;main&apos; =&gt; [</span><br><span class="line">        &apos;salt&apos; =&gt; &apos;your-salt-string&apos;,</span><br><span class="line">        &apos;length&apos; =&gt; 10,</span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line">    &apos;alternative&apos; =&gt; [</span><br><span class="line">        &apos;salt&apos; =&gt; &apos;your-salt-string&apos;,</span><br><span class="line">        &apos;length&apos; =&gt; &apos;your-length-integer&apos;,</span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line">],</span><br></pre></td></tr></table></figure></p>
+<h4 id="参数配置"><a href="#参数配置" class="headerlink" title="参数配置"></a>参数配置</h4><p>在<code>config/hashids.php</code>文件中，可以设置盐和长度等内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&apos;connections&apos; =&gt; [</div><div class="line"></div><div class="line">    &apos;main&apos; =&gt; [</div><div class="line">        &apos;salt&apos; =&gt; &apos;your-salt-string&apos;,</div><div class="line">        &apos;length&apos; =&gt; 10,</div><div class="line">    ],</div><div class="line"></div><div class="line">    &apos;alternative&apos; =&gt; [</div><div class="line">        &apos;salt&apos; =&gt; &apos;your-salt-string&apos;,</div><div class="line">        &apos;length&apos; =&gt; &apos;your-length-integer&apos;,</div><div class="line">    ],</div><div class="line"></div><div class="line">],</div></pre></td></tr></table></figure></p>
 <p>其中将length设置为10，则可以保证在ID较小的时候，看起来比较高大上（默认1位数的ID加密出来只有2个字母）。</p>
 <h2 id="3-Hashids的一些使用策略"><a href="#3-Hashids的一些使用策略" class="headerlink" title="3. Hashids的一些使用策略"></a>3. Hashids的一些使用策略</h2><p>在了解Hashids的使用流程后，我就产生了一个疑问，既然它能够实现双向加密解密，我是否还需要在数据库中为其保留加密后的字符串呢？<br>通过搜索，发现了Hashids的创建者的<a href="https://laracasts.com/discuss/channels/general-discussion/should-i-store-hashids-in-database-or-decode-them-on-every-request" target="_blank" rel="external">回答</a>很有价值。<br>大概意思是，需要根据实际情况进行判断：</p>
 <ol>
@@ -237,7 +298,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/05/16/Hashids的使用/" data-id="cke84v2mr00ax1gshj8d4tzz4" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/05/16/Hashids的使用/" data-id="ckea4909e002f9e8tpkhzpzvg" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li></ul>
@@ -306,6 +367,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -319,10 +384,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

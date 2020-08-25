@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/12/26/使用bumpversion管理版本/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="bumpversion 是一个小型的命令行工具，用于简化应用发布时的版本控制。它主要能够完成以下几个功能：  根据命令升级版本号； 自动替换项目相关文件中的版本信息； 自动创建一次 Git 提交； 为这一次提交打上版本升级的标签；  安装方式bumpversion 的安装比较简单，可以直接使用 pip install 从 PyPI 仓库安装：1pip install --upgrade bumpv">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.120Z">
+<meta property="og:updated_time" content="2019-12-26T05:13:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用bumpversion管理版本">
 <meta name="twitter:description" content="bumpversion 是一个小型的命令行工具，用于简化应用发布时的版本控制。它主要能够完成以下几个功能：  根据命令升级版本号； 自动替换项目相关文件中的版本信息； 自动创建一次 Git 提交； 为这一次提交打上版本升级的标签；  安装方式bumpversion 的安装比较简单，可以直接使用 pip install 从 PyPI 仓库安装：1pip install --upgrade bumpv">
@@ -101,8 +101,8 @@
 <li>自动创建一次 Git 提交；</li>
 <li>为这一次提交打上版本升级的标签；</li>
 </ul>
-<h2 id="安装方式"><a href="#安装方式" class="headerlink" title="安装方式"></a>安装方式</h2><p><code>bumpversion</code> 的安装比较简单，可以直接使用 <code>pip install</code> 从 PyPI 仓库安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install --upgrade bumpversion</span><br></pre></td></tr></table></figure></p>
-<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><p>最基础的使用方式是在命令行中使用命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bumpversion [options] part [file]</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装方式"><a href="#安装方式" class="headerlink" title="安装方式"></a>安装方式</h2><p><code>bumpversion</code> 的安装比较简单，可以直接使用 <code>pip install</code> 从 PyPI 仓库安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install --upgrade bumpversion</div></pre></td></tr></table></figure></p>
+<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><p>最基础的使用方式是在命令行中使用命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bumpversion [options] part [file]</div></pre></td></tr></table></figure></p>
 <p>其中 <code>part</code> 字段是命令的必填参数，表示要增加的版本部分。通常版本号会以 <code>[major].[minor].[patch]</code> 形式，比如 <code>1.2.3</code> 表示表示主版本号为 <code>1</code>，小版本号为 <code>2</code>，补丁版本号为 <code>3</code>。<br>使用上述 <code>bumpversion</code> 命令时，如果原始版本号为 <code>1.2.3</code>，则使用 <code>bumpversion patch</code> 会升级到版本 <code>1.2.4</code>，使用 <code>bumpversion minor</code> 会升级到版本 <code>1.3.0</code>，使用 <code>bumpversion major</code> 会升级到版本 <code>2.0.0</code>。</p>
 <p><code>option</code> 是配置参数的输入位置，可选内容有许多，具体可参考 <a href="https://pypi.org/project/bumpversion/" target="_blank" rel="external">官方文档</a>，而 <code>file</code> 表示了将要修改的文件（替换文件中的版本信息），如果没有提供的话，则会查找配置文件中 <code>[bumpversion:file:...]</code> 列表。</p>
 <h2 id="配置项"><a href="#配置项" class="headerlink" title="配置项"></a>配置项</h2><p>所有配置信息既可以在命令行中指定，也可以通过配置文件的方式指定。通常使用 <code>bumpversion</code> 的项目会在根目录包含一个 <code>.bumpversion.cfg</code> 文件，这样在根目录执行 <code>bumpversion</code> 命令时，会自动根据这个文件加载相关配置。</p>
@@ -122,9 +122,9 @@
 <li><code>message</code>： 在创建 <code>commit</code> 时的消息</li>
 </ul>
 <h4 id="版本部分指定配置"><a href="#版本部分指定配置" class="headerlink" title="版本部分指定配置"></a>版本部分指定配置</h4><p>一个版本字符串通常包含一个或多个部分，比如版本 <code>1.0.2</code> 包含了 <code>3</code> 个部分，通过 <code>.</code> 符号分隔。默认情况下这些部分被命名为 <code>major</code>、<code>minor</code> 和 <code>patch</code> ，在 <code>bumpversion</code> 中可以使用 <code>parse/serialize</code> 参数自定义配置。<br>这部分内容不常用，通常使用遵循默认的版本升级逻辑即可。</p>
-<h4 id="文件指定配置"><a href="#文件指定配置" class="headerlink" title="文件指定配置"></a>文件指定配置</h4><p><code>bumpversion</code> 可以帮助开发者快速替换文件中的版本信息，避免对一个一个文件进行手动修改。<br>在配置文件中使用 <code>[bumpversion:file:{filename}]</code> 模块语句可以指定替换的文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[bumpversion:file:setup.py]</span><br><span class="line">search = version=&apos;&#123;current_version&#125;&apos;</span><br><span class="line">replace = version=&apos;&#123;new_version&#125;&apos;</span><br></pre></td></tr></table></figure></p>
+<h4 id="文件指定配置"><a href="#文件指定配置" class="headerlink" title="文件指定配置"></a>文件指定配置</h4><p><code>bumpversion</code> 可以帮助开发者快速替换文件中的版本信息，避免对一个一个文件进行手动修改。<br>在配置文件中使用 <code>[bumpversion:file:{filename}]</code> 模块语句可以指定替换的文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[bumpversion:file:setup.py]</div><div class="line">search = version=&apos;&#123;current_version&#125;&apos;</div><div class="line">replace = version=&apos;&#123;new_version&#125;&apos;</div></pre></td></tr></table></figure></p>
 <p>其中 <code>search</code> 和 <code>replace</code> 的默认值分别为 <code>{current_version}</code> 和 <code>{new_version}</code>，当然为了避免误伤其它内容，通常会指定特定格式，比如在上述配置中，如果当前版本为 <code>v1.2.3</code>，在执行 <code>bumpversion patch</code> 语句时将在 <code>setup.py</code> 文件中，查找内容为 <code>version=v1.2.3</code> 的文本，并替换为 <code>version=v1.2.4</code>。</p>
-<h2 id="操作示例"><a href="#操作示例" class="headerlink" title="操作示例"></a>操作示例</h2><p>综上所述，如果在使用 Git 管理的项目代码中当前版本是 <code>0.1.3</code>，并拥有以下 <code>.bumpversion.cfg</code> 配置文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[bumpversion]</span><br><span class="line">current_version = 0.1.3</span><br><span class="line">commit = True</span><br><span class="line">tag = True</span><br><span class="line"></span><br><span class="line">[bumpversion:file:setup.py]</span><br><span class="line">search = version=&apos;&#123;current_version&#125;&apos;</span><br><span class="line">replace = version=&apos;&#123;new_version&#125;&apos;</span><br><span class="line"></span><br><span class="line">[bumpversion:file:docs/conf.py]</span><br><span class="line">search = version=&apos;&#123;current_version&#125;&apos;</span><br><span class="line">replace = version=&apos;&#123;new_version&#125;&apos;</span><br></pre></td></tr></table></figure></p>
+<h2 id="操作示例"><a href="#操作示例" class="headerlink" title="操作示例"></a>操作示例</h2><p>综上所述，如果在使用 Git 管理的项目代码中当前版本是 <code>0.1.3</code>，并拥有以下 <code>.bumpversion.cfg</code> 配置文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[bumpversion]</div><div class="line">current_version = 0.1.3</div><div class="line">commit = True</div><div class="line">tag = True</div><div class="line"></div><div class="line">[bumpversion:file:setup.py]</div><div class="line">search = version=&apos;&#123;current_version&#125;&apos;</div><div class="line">replace = version=&apos;&#123;new_version&#125;&apos;</div><div class="line"></div><div class="line">[bumpversion:file:docs/conf.py]</div><div class="line">search = version=&apos;&#123;current_version&#125;&apos;</div><div class="line">replace = version=&apos;&#123;new_version&#125;&apos;</div></pre></td></tr></table></figure></p>
 <p>在执行 <code>bumpversion patch</code> 命令后，会产生以下效果：</p>
 <ul>
 <li>修改 <code>setup.py</code> 和 <code>docs/conf.py</code> 文件中内容为新版本号，同时也会修改 <code>.bumpversion.cfg</code> 文件；</li>
@@ -138,7 +138,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/12/26/使用bumpversion管理版本/" data-id="cke84v2o100eo1gsh3xeywykt" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/12/26/使用bumpversion管理版本/" data-id="ckea490db00bk9e8tevv0m0gi" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/bumpversion/">bumpversion</a></li></ul>
@@ -219,6 +219,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -232,10 +236,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

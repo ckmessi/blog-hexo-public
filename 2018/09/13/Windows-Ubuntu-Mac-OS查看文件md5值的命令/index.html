@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2018/09/13/Windows-Ubuntu-Mac-OS查看文件md5值的命令/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="MD5算法的一项重要功能就是一致性验证。 有时候，为了判断下载文件是否正确，可以通过判断本地文件的md5值是否与服务器文件的md5值相同完成。 这里总结在三种不同平台下，计算文件md5值的命令如下。 Windows使用certutil命令计算文件的哈希值，可以选择MD5、SHA1或SHA256算法。123certutil -hashfile [filename] MD5certutil -hash">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.085Z">
+<meta property="og:updated_time" content="2018-09-13T08:15:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Windows&#x2F;Ubuntu&#x2F;Mac OS查看文件md5值的命令">
 <meta name="twitter:description" content="MD5算法的一项重要功能就是一致性验证。 有时候，为了判断下载文件是否正确，可以通过判断本地文件的md5值是否与服务器文件的md5值相同完成。 这里总结在三种不同平台下，计算文件md5值的命令如下。 Windows使用certutil命令计算文件的哈希值，可以选择MD5、SHA1或SHA256算法。123certutil -hashfile [filename] MD5certutil -hash">
@@ -97,16 +97,16 @@
         <p>MD5算法的一项重要功能就是一致性验证。</p>
 <p>有时候，为了判断下载文件是否正确，可以通过判断<code>本地文件的md5值</code>是否与<code>服务器文件的md5值</code>相同完成。</p>
 <p>这里总结在三种不同平台下，计算文件md5值的命令如下。</p>
-<h4 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h4><p>使用<code>certutil</code>命令计算文件的哈希值，可以选择<code>MD5</code>、<code>SHA1</code>或<code>SHA256</code>算法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">certutil -hashfile [filename] MD5</span><br><span class="line">certutil -hashfile [filename] SHA1</span><br><span class="line">certutil -hashfile [filename] SHA256</span><br></pre></td></tr></table></figure></p>
-<h4 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h4><p>在 <code>Ubuntu 16.04</code> 操作系统中可以使用 <code>md5sum</code> 命令。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">md5sum [filename]</span><br></pre></td></tr></table></figure></p>
-<h4 id="Mac-OS"><a href="#Mac-OS" class="headerlink" title="Mac OS"></a>Mac OS</h4><p>在 <code>Mac OS</code> 操作系统中可以使用 <code>md5</code> 命令。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">md5 [filename]</span><br></pre></td></tr></table></figure></p>
+<h4 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h4><p>使用<code>certutil</code>命令计算文件的哈希值，可以选择<code>MD5</code>、<code>SHA1</code>或<code>SHA256</code>算法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">certutil -hashfile [filename] MD5</div><div class="line">certutil -hashfile [filename] SHA1</div><div class="line">certutil -hashfile [filename] SHA256</div></pre></td></tr></table></figure></p>
+<h4 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h4><p>在 <code>Ubuntu 16.04</code> 操作系统中可以使用 <code>md5sum</code> 命令。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">md5sum [filename]</div></pre></td></tr></table></figure></p>
+<h4 id="Mac-OS"><a href="#Mac-OS" class="headerlink" title="Mac OS"></a>Mac OS</h4><p>在 <code>Mac OS</code> 操作系统中可以使用 <code>md5</code> 命令。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">md5 [filename]</div></pre></td></tr></table></figure></p>
 <p>下载文件后，顺手比对一下文件的md5值是一个好习惯。</p>
 <p>一方面确保下载数据完整，另一方面防止中间人攻击。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/13/Windows-Ubuntu-Mac-OS查看文件md5值的命令/" data-id="cke84v2nq00dm1gshlf5frvm5" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/09/13/Windows-Ubuntu-Mac-OS查看文件md5值的命令/" data-id="ckea490cq00a49e8tz5zkxwyk" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li></ul>
@@ -187,6 +187,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -200,10 +204,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

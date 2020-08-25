@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在使用nginx+php作为后台服务器时，如果遇到需要上传文件的业务逻辑，需要注意两者对文件的限制大小。 Ngnix配置首先，有可能遇到的情况是，前端网页上传文件时报错了；而后台服务器没有接到访问请求。这是由于nginx对客户端的body大小的限制，请求会中断在nginx，无法到达php。默认情况下，上传大文件可能造成错误413 Request Entity Too Large的情况。 在ngin">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.975Z">
+<meta property="og:updated_time" content="2018-03-08T11:49:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nginx+PHP上传大文件场景需要注意的配置">
 <meta name="twitter:description" content="在使用nginx+php作为后台服务器时，如果遇到需要上传文件的业务逻辑，需要注意两者对文件的限制大小。 Ngnix配置首先，有可能遇到的情况是，前端网页上传文件时报错了；而后台服务器没有接到访问请求。这是由于nginx对客户端的body大小的限制，请求会中断在nginx，无法到达php。默认情况下，上传大文件可能造成错误413 Request Entity Too Large的情况。 在ngin">
@@ -96,22 +96,22 @@
       
         <p>在使用nginx+php作为后台服务器时，如果遇到需要上传文件的业务逻辑，需要注意两者对文件的限制大小。</p>
 <h2 id="Ngnix配置"><a href="#Ngnix配置" class="headerlink" title="Ngnix配置"></a>Ngnix配置</h2><p>首先，有可能遇到的情况是，前端网页上传文件时报错了；而后台服务器没有接到访问请求。这是由于nginx对客户端的body大小的限制，请求会中断在nginx，无法到达php。默认情况下，上传大文件可能造成错误<code>413 Request Entity Too Large</code>的情况。</p>
-<p>在<code>nginx.conf</code>中，添加一行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">client_max_body_size 20m</span><br></pre></td></tr></table></figure></p>
+<p>在<code>nginx.conf</code>中，添加一行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">client_max_body_size 20m</div></pre></td></tr></table></figure></p>
 <p><code>client_max_body_size</code>的默认值为<code>1m</code>，上述语句表示客户端可以上传的最大body大小为20Mb。</p>
 <p>至于在哪个层级下设置，查找到一篇博客是这样说的：</p>
 <blockquote>
 <p>可以选择在http{ }中设置：client_max_body_size 20m;<br>也可以选择在server{ }中设置：client_max_body_size 20m;<br>还可以选择在location{ }中设置：client_max_body_size 20m;<br>三者到区别是：http{} 中控制着所有nginx收到的请求。而报文大小限制设置在server｛｝中，则控制该server收到的请求报文大小，同理，如果配置在location中，则报文大小限制，只对匹配了location 路由规则的请求生效。</p>
 </blockquote>
 <h2 id="PHP配置"><a href="#PHP配置" class="headerlink" title="PHP配置"></a>PHP配置</h2><p>解决nginx的配置问题后，还有可能在php代码中出现获取不到提交文件的问题。这是由于php对于文件大小也有限制。</p>
-<p>在<code>php.ini</code>中，相关需要考虑的参数在<code>File Uploads</code>区域，有如下几个：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">file_uploads = On</span><br><span class="line">upload_max_filesize = 2M</span><br><span class="line">post_max_size = 8M</span><br></pre></td></tr></table></figure></p>
+<p>在<code>php.ini</code>中，相关需要考虑的参数在<code>File Uploads</code>区域，有如下几个：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">file_uploads = On</div><div class="line">upload_max_filesize = 2M</div><div class="line">post_max_size = 8M</div></pre></td></tr></table></figure></p>
 <p>其中<code>file_uploads</code>表示开启文件上传，<code>upload_max_filesize</code>限制最大文件大小，<code>post_max_size</code>限制了一次POST请求数据的大小。   </p>
-<p>某篇博客中提，一般来说，设置好上述参数后，在网络正常的情况下，上传小于8M的文件是不成问题的。但如果上传大文件的话，只设置上述还不一定能行的通，因为还有响应时间的限制。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">max_execution_time 600 每个PHP页面运行的最大时间值(秒)，默认30秒 </span><br><span class="line">max_input_time 600 每个PHP页面接收数据所需的最大时间，默认60秒 </span><br><span class="line">memory_limit 8m 每个PHP页面所吃掉的最大内存，默认8M</span><br></pre></td></tr></table></figure></p>
+<p>某篇博客中提，一般来说，设置好上述参数后，在网络正常的情况下，上传小于8M的文件是不成问题的。但如果上传大文件的话，只设置上述还不一定能行的通，因为还有响应时间的限制。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">max_execution_time 600 每个PHP页面运行的最大时间值(秒)，默认30秒 </div><div class="line">max_input_time 600 每个PHP页面接收数据所需的最大时间，默认60秒 </div><div class="line">memory_limit 8m 每个PHP页面所吃掉的最大内存，默认8M</div></pre></td></tr></table></figure></p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://blog.csdn.net/li396864285/article/details/53522828" target="_blank" rel="external">http://blog.csdn.net/li396864285/article/details/53522828</a><br><a href="http://blog.csdn.net/webnoties/article/details/17266651" target="_blank" rel="external">http://blog.csdn.net/webnoties/article/details/17266651</a><br><a href="https://www.jianshu.com/p/9a4a423e1ca6" target="_blank" rel="external">https://www.jianshu.com/p/9a4a423e1ca6</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" data-id="cke84v2mg00a21gshb1qkkygk" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" data-id="ckea490b2006a9e8td07nliej" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -192,6 +192,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -205,10 +209,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

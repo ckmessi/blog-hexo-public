@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2017/08/18/Solution-sln-File-in-Visual-Studio/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="使用Visual Studio创建的项目都包含一个.sln文件，本文简要说明文件的内容及相关作用。 文件说明在Visual Studio中，解决方案是用于组织管理项目的结构。解决方案将所有项目的状态信息保存在.sln文件和.suo文件中。.sln文件以文本信息的方式，保存着环境需要用于查找和载入项目及其引用VSPackage的持久化数据name-value参数。当一个用户打开解决方案时，开发环境将">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.041Z">
+<meta property="og:updated_time" content="2017-08-18T13:35:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Solution(.sln) File in Visual Studio">
 <meta name="twitter:description" content="使用Visual Studio创建的项目都包含一个.sln文件，本文简要说明文件的内容及相关作用。 文件说明在Visual Studio中，解决方案是用于组织管理项目的结构。解决方案将所有项目的状态信息保存在.sln文件和.suo文件中。.sln文件以文本信息的方式，保存着环境需要用于查找和载入项目及其引用VSPackage的持久化数据name-value参数。当一个用户打开解决方案时，开发环境将">
@@ -97,22 +97,22 @@
         <p>使用Visual Studio创建的项目都包含一个<code>.sln</code>文件，本文简要说明文件的内容及相关作用。</p>
 <h2 id="文件说明"><a href="#文件说明" class="headerlink" title="文件说明"></a>文件说明</h2><p>在Visual Studio中，解决方案是用于组织管理项目的结构。解决方案将所有项目的状态信息保存在<code>.sln</code>文件和<code>.suo</code>文件中。<code>.sln</code>文件以文本信息的方式，保存着环境需要用于查找和载入项目及其引用VSPackage的持久化数据name-value参数。当一个用户打开解决方案时，开发环境将遍历<code>.sln</code>文件中的<code>preSolution</code>、<code>Project</code>和<code>postSolution</code>信息，载入解决方案、解决方案中的项目、以及解决方案相关联的持久化信息。</p>
 <h2 id="内容概览"><a href="#内容概览" class="headerlink" title="内容概览"></a>内容概览</h2><p>我们可以显示地将<code>.sln</code>文件中的内容划分为以下几个部分：</p>
-<h4 id="第一部分，版本信息"><a href="#第一部分，版本信息" class="headerlink" title="第一部分，版本信息"></a>第一部分，版本信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Microsoft Visual Studio Solution File, Format Version 12.00</span><br><span class="line"># Visual Studio 14</span><br><span class="line">VisualStudioVersion = 14.0.25420.1</span><br><span class="line">MinimumVisualStudioVersion = 10.0.40219.1</span><br></pre></td></tr></table></figure>
-<h4 id="第二部分，项目信息"><a href="#第二部分，项目信息" class="headerlink" title="第二部分，项目信息"></a>第二部分，项目信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Project(&quot;&#123;FAE04EC0-301F-11D3-BF4B-00C04F79EFBC&#125;&quot;) = &quot;WebApplicationSample&quot;, &quot;WebApplicationSample\WebApplicationSample.csproj&quot;, &quot;&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;&quot;</span><br><span class="line">EndProject</span><br></pre></td></tr></table></figure>
-<h4 id="第三部分，全局信息"><a href="#第三部分，全局信息" class="headerlink" title="第三部分，全局信息"></a>第三部分，全局信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Global</span><br><span class="line">	GlobalSection(SolutionConfigurationPlatforms) = preSolution</span><br><span class="line">		Debug|Any CPU = Debug|Any CPU</span><br><span class="line">		Release|Any CPU = Release|Any CPU</span><br><span class="line">	EndGlobalSection</span><br><span class="line">	GlobalSection(ProjectConfigurationPlatforms) = postSolution</span><br><span class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Debug|Any CPU.ActiveCfg = Debug|Any CPU</span><br><span class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Debug|Any CPU.Build.0 = Debug|Any CPU</span><br><span class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Release|Any CPU.ActiveCfg = Release|Any CPU</span><br><span class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Release|Any CPU.Build.0 = Release|Any CPU</span><br><span class="line">	EndGlobalSection</span><br><span class="line">	GlobalSection(SolutionProperties) = preSolution</span><br><span class="line">		HideSolutionNode = FALSE</span><br><span class="line">	EndGlobalSection</span><br><span class="line">EndGlobal</span><br></pre></td></tr></table></figure>
+<h4 id="第一部分，版本信息"><a href="#第一部分，版本信息" class="headerlink" title="第一部分，版本信息"></a>第一部分，版本信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Microsoft Visual Studio Solution File, Format Version 12.00</div><div class="line"># Visual Studio 14</div><div class="line">VisualStudioVersion = 14.0.25420.1</div><div class="line">MinimumVisualStudioVersion = 10.0.40219.1</div></pre></td></tr></table></figure>
+<h4 id="第二部分，项目信息"><a href="#第二部分，项目信息" class="headerlink" title="第二部分，项目信息"></a>第二部分，项目信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Project(&quot;&#123;FAE04EC0-301F-11D3-BF4B-00C04F79EFBC&#125;&quot;) = &quot;WebApplicationSample&quot;, &quot;WebApplicationSample\WebApplicationSample.csproj&quot;, &quot;&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;&quot;</div><div class="line">EndProject</div></pre></td></tr></table></figure>
+<h4 id="第三部分，全局信息"><a href="#第三部分，全局信息" class="headerlink" title="第三部分，全局信息"></a>第三部分，全局信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">Global</div><div class="line">	GlobalSection(SolutionConfigurationPlatforms) = preSolution</div><div class="line">		Debug|Any CPU = Debug|Any CPU</div><div class="line">		Release|Any CPU = Release|Any CPU</div><div class="line">	EndGlobalSection</div><div class="line">	GlobalSection(ProjectConfigurationPlatforms) = postSolution</div><div class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Debug|Any CPU.ActiveCfg = Debug|Any CPU</div><div class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Debug|Any CPU.Build.0 = Debug|Any CPU</div><div class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Release|Any CPU.ActiveCfg = Release|Any CPU</div><div class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Release|Any CPU.Build.0 = Release|Any CPU</div><div class="line">	EndGlobalSection</div><div class="line">	GlobalSection(SolutionProperties) = preSolution</div><div class="line">		HideSolutionNode = FALSE</div><div class="line">	EndGlobalSection</div><div class="line">EndGlobal</div></pre></td></tr></table></figure>
 <h2 id="开发环境载入流程"><a href="#开发环境载入流程" class="headerlink" title="开发环境载入流程"></a>开发环境载入流程</h2><p>参考(MSDN官方文档)[<a href="https://msdn.microsoft.com/en-us/library/bb165951.aspx]，为了载入`解决方案`，环境平台将执行以下任务：" target="_blank" rel="external">https://msdn.microsoft.com/en-us/library/bb165951.aspx]，为了载入`解决方案`，环境平台将执行以下任务：</a></p>
 <ol>
 <li><p>开发环境将阅读Global区域，处理所有标记为<code>preSolution</code>的区域，例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GlobalSection(SolutionConfigurationPlatforms) = preSolution</span><br><span class="line">	Debug|Any CPU = Debug|Any CPU</span><br><span class="line">	Release|Any CPU = Release|Any CPU</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">GlobalSection(SolutionConfigurationPlatforms) = preSolution</div><div class="line">	Debug|Any CPU = Debug|Any CPU</div><div class="line">	Release|Any CPU = Release|Any CPU</div></pre></td></tr></table></figure>
 </li>
 <li><p>开发环境载入VSPackage，调用其中的接口<code>QueryInterface</code>，并使用区域中的数据调用<code>ReadSolutionProps</code>方法，这样数据就能存储在VSPackage中。开发环境将对每个<code>preSolution</code>区域重复这个流程。</p>
 </li>
 <li><p>开发环境迭代存留区域（persistence blocks）的项目。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Project(&quot;&#123;FAE04EC0-301F-11D3-BF4B-00C04F79EFBC&#125;&quot;) = &quot;WebApplicationSample&quot;, &quot;WebApplicationSample\WebApplicationSample.csproj&quot;, &quot;&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;&quot;</span><br><span class="line">EndProject</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Project(&quot;&#123;FAE04EC0-301F-11D3-BF4B-00C04F79EFBC&#125;&quot;) = &quot;WebApplicationSample&quot;, &quot;WebApplicationSample\WebApplicationSample.csproj&quot;, &quot;&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;&quot;</div><div class="line">EndProject</div></pre></td></tr></table></figure>
 </li>
 </ol>
 <p>这份声明包含了唯一的项目GUID，以及项目类型GUID。这些信息是被开发环境用于找到属于解决方案的项目文件，以及每个项目所需要的VSPackage。项目GUID将被传递给IVsProjectFactory以载入相关的VSPackage，然后载入项目。</p>
-<ol start="4">
+<ol>
 <li><p>基于.sln文件项目区域所包含的信息，环境变量载入每个项目文件。项目自身需要负责构建项目层级并载入内嵌的项目</p>
 </li>
 <li><p>在.sln文件所有区域后，解决方案将被显示在Solution Explorer中，并准备好呈现给用户。</p>
@@ -124,7 +124,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/08/18/Solution-sln-File-in-Visual-Studio/" data-id="cke84v2n300bu1gshwqwl908g" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/08/18/Solution-sln-File-in-Visual-Studio/" data-id="ckea490c3008d9e8t2ix7czyw" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li></ul>
@@ -205,6 +205,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -218,10 +222,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

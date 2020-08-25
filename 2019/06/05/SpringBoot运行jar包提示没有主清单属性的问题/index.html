@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="背景使用命令 java -jar xxx-0.1.0-SNAPSHOT.jar 启动 Spring Boot 项目时，可能遇到错误：1xxx-0.1.0-SNAPSHOT.jar中没有主清单属性 这个问题是在 maven 构建过程中没有正确配置插件导致的。spring-boot-maven-plugin 能够将 Spring Boot 应用打包为可执行的 jar 或 war 文件，然后以正常方式运">
 <meta property="og:image" content="http://ckmessi.github.io/blog-hexo/2019/06/05/SpringBoot运行jar包提示没有主清单属性的问题/META-INF.png">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.050Z">
+<meta property="og:updated_time" content="2019-06-05T07:39:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringBoot运行jar包提示没有主清单属性的问题">
 <meta name="twitter:description" content="背景使用命令 java -jar xxx-0.1.0-SNAPSHOT.jar 启动 Spring Boot 项目时，可能遇到错误：1xxx-0.1.0-SNAPSHOT.jar中没有主清单属性 这个问题是在 maven 构建过程中没有正确配置插件导致的。spring-boot-maven-plugin 能够将 Spring Boot 应用打包为可执行的 jar 或 war 文件，然后以正常方式运">
@@ -96,22 +96,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>使用命令 <code>java -jar xxx-0.1.0-SNAPSHOT.jar</code> 启动 Spring Boot 项目时，可能遇到错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx-0.1.0-SNAPSHOT.jar中没有主清单属性</span><br></pre></td></tr></table></figure></p>
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>使用命令 <code>java -jar xxx-0.1.0-SNAPSHOT.jar</code> 启动 Spring Boot 项目时，可能遇到错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">xxx-0.1.0-SNAPSHOT.jar中没有主清单属性</div></pre></td></tr></table></figure></p>
 <p>这个问题是在 maven 构建过程中没有正确配置插件导致的。<br><code>spring-boot-maven-plugin</code> 能够将 Spring Boot 应用打包为可执行的 <code>jar</code> 或 <code>war</code> 文件，然后以正常方式运行 Spring Boot 应用。</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>如果添加了 <code>spring-boot-maven-plugin</code> 构建插件，得到的 <code>jar</code> 包解压缩后的目录如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── BOOT-INF</span><br><span class="line">├── META-INF</span><br><span class="line">├── org</span><br></pre></td></tr></table></figure></p>
-<p>而没有添加 <code>spring-boot-maven-plugin</code> 构建插件，得到的 <code>jar</code> 包解压缩后的目录如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── com</span><br><span class="line">├── mapper</span><br><span class="line">├── META-INF</span><br><span class="line">├── application.yml</span><br><span class="line">├── bootstrap.yml</span><br></pre></td></tr></table></figure></p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>如果添加了 <code>spring-boot-maven-plugin</code> 构建插件，得到的 <code>jar</code> 包解压缩后的目录如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">.</div><div class="line">├── BOOT-INF</div><div class="line">├── META-INF</div><div class="line">├── org</div></pre></td></tr></table></figure></p>
+<p>而没有添加 <code>spring-boot-maven-plugin</code> 构建插件，得到的 <code>jar</code> 包解压缩后的目录如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">.</div><div class="line">├── com</div><div class="line">├── mapper</div><div class="line">├── META-INF</div><div class="line">├── application.yml</div><div class="line">├── bootstrap.yml</div></pre></td></tr></table></figure></p>
 <p>注：其中 <code>mapper</code>，<code>application.yml</code> 和 <code>bootstrap.yml</code> 等是源码中 <code>resource</code> 目录下的相关文件。</p>
 <p>其中 <code>META-INF</code> 文件夹下有一个 <code>MANIFEST.MF</code> 文件，该文件指明了程序的入口以及版本信息等内容。  </p>
 <img src="/blog-hexo/2019/06/05/SpringBoot运行jar包提示没有主清单属性的问题/META-INF.png" alt="不同方式构建项目Jar包中的MANIFEST.MF文件内容对比" title="不同方式构建项目Jar包中的MANIFEST.MF文件内容对比">
 <p>从截图中可以看出，如果没有添加 <code>spring-boot-maven-plugin</code> 构建插件，将缺少 <code>Main-Class</code>，<code>Start-Class</code> 等启动类配置信息。因此会抛错。</p>
 <p>￼</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>因此，可行的解决方案是在启动项目的 <code>pom.xml</code> 文件中添加一个构建插件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;build&gt;</span><br><span class="line">  &lt;plugins&gt;</span><br><span class="line">   &lt;plugin&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">   &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">   &lt;/plugin&gt;</span><br><span class="line">  &lt;/plugins&gt;</span><br><span class="line"> &lt;/build&gt;</span><br></pre></td></tr></table></figure></p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>因此，可行的解决方案是在启动项目的 <code>pom.xml</code> 文件中添加一个构建插件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;build&gt;</div><div class="line">  &lt;plugins&gt;</div><div class="line">   &lt;plugin&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">   &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</div><div class="line">   &lt;/plugin&gt;</div><div class="line">  &lt;/plugins&gt;</div><div class="line"> &lt;/build&gt;</div></pre></td></tr></table></figure></p>
 <p>这样在执行 <code>mvn install</code> 时，将会自动生成主清单属性。<br>执行 <code>java -jar xxx-0.1.0-SNAPSHOT.jar</code> 启动 Spring Boot 项目时，就不会报错了。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/05/SpringBoot运行jar包提示没有主清单属性的问题/" data-id="cke84v2n800ca1gshnibt7913" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/06/05/SpringBoot运行jar包提示没有主清单属性的问题/" data-id="ckea490cb00909e8t09rwea0n" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
@@ -192,6 +192,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -205,10 +209,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

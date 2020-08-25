@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/01/16/Mybatis-Oracle-批量添加或更新/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在数据库操作中，可能希望实现 insertOrUpdate 操作，即如果数据不存在则添加，否则更新。    在 Laravel 中，是可以通过 updateOrCreate 方法完成，对于 Mybatis ，则应该使用 Merge Into 语句完成。   在相关 Mapper类的 xml 文件中的代码为： 12345678910111213141516171819202122232425&amp;lt;">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.969Z">
+<meta property="og:updated_time" content="2019-01-23T09:52:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mybatis Oracle 批量添加或更新">
 <meta name="twitter:description" content="在数据库操作中，可能希望实现 insertOrUpdate 操作，即如果数据不存在则添加，否则更新。    在 Laravel 中，是可以通过 updateOrCreate 方法完成，对于 Mybatis ，则应该使用 Merge Into 语句完成。   在相关 Mapper类的 xml 文件中的代码为： 12345678910111213141516171819202122232425&amp;lt;">
@@ -97,14 +97,14 @@
         <p>在数据库操作中，可能希望实现 <code>insertOrUpdate</code> 操作，即如果数据不存在则添加，否则更新。   </p>
 <p>在 <code>Laravel</code> 中，是可以通过 <code>updateOrCreate</code> 方法完成，对于 <code>Mybatis</code> ，则应该使用 <code>Merge Into</code> 语句完成。  </p>
 <p>在相关 <code>Mapper</code>类的 <code>xml</code> 文件中的代码为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;update id=&quot;insertOrUpdateList&quot; parameterType=“java.util.List” useGeneratedKeys=“false”&gt;</span><br><span class="line">    MERGE INTO</span><br><span class="line">    &lt;include refid=“tableName” /&gt;</span><br><span class="line">    A1</span><br><span class="line">    USING</span><br><span class="line">    (</span><br><span class="line">        &lt;foreach collection=“list” index=“index” item=“item” open=“” separator=“union”&gt;</span><br><span class="line">            select #&#123;item.ruCode&#125; ruCode, #&#123;item.proCode&#125; proCode from dual</span><br><span class="line">        &lt;/foreach&gt;</span><br><span class="line">    ) A2</span><br><span class="line">    ON</span><br><span class="line">    (</span><br><span class="line">        A1.RU_CODE = A2.ruCode and A1.PRO_CODE = A2.proCode</span><br><span class="line">    )</span><br><span class="line">    WHEN MATCHED THEN</span><br><span class="line">    UPDATE SET A1.testField = A2.testField</span><br><span class="line">    WHEN NOT MATCHED THEN</span><br><span class="line">    INSERT </span><br><span class="line">        (RU_CODE, PRO_CODE)</span><br><span class="line">    VALUES</span><br><span class="line">    (</span><br><span class="line">        A2.ruCode,</span><br><span class="line">        A2.proCode</span><br><span class="line">    )</span><br><span class="line">&lt;/update&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">&lt;update id=&quot;insertOrUpdateList&quot; parameterType=“java.util.List” useGeneratedKeys=“false”&gt;</div><div class="line">    MERGE INTO</div><div class="line">    &lt;include refid=“tableName” /&gt;</div><div class="line">    A1</div><div class="line">    USING</div><div class="line">    (</div><div class="line">        &lt;foreach collection=“list” index=“index” item=“item” open=“” separator=“union”&gt;</div><div class="line">            select #&#123;item.ruCode&#125; ruCode, #&#123;item.proCode&#125; proCode from dual</div><div class="line">        &lt;/foreach&gt;</div><div class="line">    ) A2</div><div class="line">    ON</div><div class="line">    (</div><div class="line">        A1.RU_CODE = A2.ruCode and A1.PRO_CODE = A2.proCode</div><div class="line">    )</div><div class="line">    WHEN MATCHED THEN</div><div class="line">    UPDATE SET A1.testField = A2.testField</div><div class="line">    WHEN NOT MATCHED THEN</div><div class="line">    INSERT </div><div class="line">        (RU_CODE, PRO_CODE)</div><div class="line">    VALUES</div><div class="line">    (</div><div class="line">        A2.ruCode,</div><div class="line">        A2.proCode</div><div class="line">    )</div><div class="line">&lt;/update&gt;</div></pre></td></tr></table></figure>
 <p>基本思想是使用 <code>MERGE INTO</code> 语句，</p>
 <p>参考链接：<br><a href="https://blog.csdn.net/weixin_40333020/article/details/80637359" target="_blank" rel="external">https://blog.csdn.net/weixin_40333020/article/details/80637359</a><br><a href="https://www.jianshu.com/p/ad4e0e702320?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation" target="_blank" rel="external">https://www.jianshu.com/p/ad4e0e702320?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/01/16/Mybatis-Oracle-批量添加或更新/" data-id="cke84v2md009w1gshb2ctiycc" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/01/16/Mybatis-Oracle-批量添加或更新/" data-id="ckea490b4006h9e8temghuox6" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mybatis/">Mybatis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li></ul>
@@ -185,6 +185,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -198,10 +202,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

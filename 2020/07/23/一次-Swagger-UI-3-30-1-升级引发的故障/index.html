@@ -19,7 +19,7 @@
 <meta property="og:image" content="http://ckmessi.github.io/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/2.png">
 <meta property="og:image" content="http://ckmessi.github.io/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/3.png">
 <meta property="og:image" content="http://ckmessi.github.io/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/4.png">
-<meta property="og:updated_time" content="2020-07-23T11:06:06.641Z">
+<meta property="og:updated_time" content="2020-07-23T14:56:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一次 Swagger-UI 3.30.1 升级引发的故障">
 <meta name="twitter:description" content="现象使用 fastapi 框架搭建的后台服务启动后，访问 /docs 文档地址显示正确，但无法使用，现象如下：1、点击任意一个分组下的接口，会自动跳到 Default 组下；2、点击 Default 组下的任何接口，在展开之后内容一直停留在无限加载中的状态；  查找原因在服务器和本地都复现了，由于近期并没有版本更新，初步判断是依赖的第三方组件升级导致的问题。由于 \docs 页面是基于 Swagg">
@@ -106,12 +106,12 @@
 <img src="/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/1.png" alt="Issue描述" title="Issue描述">
 <p>这个问题暂时没有得到修复。<br>评论区中，立刻有人将这个问题报到了我们所使用的 <a href="https://github.com/tiangolo/fastapi" target="_blank" rel="external">fastapi</a> 项目中：</p>
 <img src="/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/2.png" alt="fastapi项目受到影响" title="fastapi项目受到影响">
-<p>而 fastapi 框架的作者 tiangolo 也立刻进行了回复，并对 fastapi 的源码进行了 <a href="https://github.com/tiangolo/fastapi/pull/1763" target="_blank" rel="external">更新</a>，使其暂时固定依赖于 <a href="mailto:`swagger-ui@3.30.0" target="_blank" rel="external">`swagger-ui@3.30.0</a>` 版本。</p>
+<p>而 fastapi 框架的作者 tiangolo 也立刻进行了回复，并对 fastapi 的源码进行了 <a href="https://github.com/tiangolo/fastapi/pull/1763" target="_blank" rel="external">更新</a>，使其暂时固定依赖于 <code>swagger-ui@3.30.0</code> 版本。</p>
 <blockquote>
 <p>Pin Swagger UI while this is fixed: swagger-api/swagger-ui#6249</p>
 </blockquote>
 <img src="/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/3.png" alt="fastapi作者tiangole的快速响应" title="fastapi作者tiangole的快速响应">
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>最优的解决方案自然是等待 Swagger-UI 的作者完成修复或版本回滚，毕竟仅是 <code>3.30.0</code>-&gt;<code>3.30.1</code> 的 patch 发布，不应该有 breaking change 存在，更何况直接影响到所有依赖它的第三方库。<br>在问题被解决之前，如果需要临时快速修复问题，可以参考 tiangolo 的方法，直接修改 fastapi 的源码。<br>步骤示例：<br>1、在 Docker 镜像中查找 Python 环境文件所在，一般是 <code>/usr/lib/local/python3/site-packages/fastapi</code>；<br>2、修改其中的 <code>openapi/docs.py</code> 文件，将定义的<code>swagger_js_url</code> 和 <code>swagger_css_url</code> 的链接中 <code>swagger-ui-dist@3</code> 改为 <a href="mailto:`swagger-ui-dist@3.30.0" target="_blank" rel="external">`swagger-ui-dist@3.30.0</a>`；<br>3、重启 docker 容器（重启基于 fastapi 的服务）；<br>4、刷新网页</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>最优的解决方案自然是等待 Swagger-UI 的作者完成修复或版本回滚，毕竟仅是 <code>3.30.0</code>-&gt;<code>3.30.1</code> 的 patch 发布，不应该有 breaking change 存在，更何况直接影响到所有依赖它的第三方库。<br>在问题被解决之前，如果需要临时快速修复问题，可以参考 tiangolo 的方法，直接修改 fastapi 的源码。<br>步骤示例：<br>1、在 Docker 镜像中查找 Python 环境文件所在，一般是 <code>/usr/lib/local/python3/site-packages/fastapi</code>；<br>2、修改其中的 <code>openapi/docs.py</code> 文件，将定义的<code>swagger_js_url</code> 和 <code>swagger_css_url</code> 的链接中 <code>swagger-ui-dist@3</code> 改为 <code>swagger-ui-dist@3.30.0</code>；<br>3、重启 docker 容器（重启基于 fastapi 的服务）；<br>4、刷新网页</p>
 <p>这种方式可以快速临时恢复工作环境，避免开发工作卡在这个问题上。</p>
 <h2 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h2><p>快下班时又搂了一眼 Swagger-UI 的 Issue，发现另一个<a href="https://github.com/tfranzel/drf-spectacular/pull/133/files" target="_blank" rel="external">第三方库</a>也遭灾了，该作者也选择了相同的方式固定 swagger-ui 的版本号。</p>
 <img src="/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/4.png" alt="另一个受到影响的第三方库" title="另一个受到影响的第三方库">
@@ -123,7 +123,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/" data-id="cke84v2o500f21gsh6pojxa8j" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/" data-id="ckea490cv00af9e8t76lvq2a8" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Swagger-UI/">Swagger-UI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/fastapi/">fastapi</a></li></ul>
@@ -204,6 +204,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -217,10 +221,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/06/15/Oracle数据库幂等性创建数据库表语句/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="背景在 Oracle 数据库中，一条最基础的创建数据库表的语句通常是如下形式：1234CREATE TABLE &amp;quot;[table_name]&amp;quot; (    &amp;quot;[primary_id]&amp;quot; VARCHAR2(18 BYTE) NOT NULL,    &amp;quot;[field_name]&amp;quot; VARCHAR2(128 BYTE) NOT NULL); 这条语">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.982Z">
+<meta property="og:updated_time" content="2019-06-15T07:21:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Oracle数据库幂等性创建数据库表语句">
 <meta name="twitter:description" content="背景在 Oracle 数据库中，一条最基础的创建数据库表的语句通常是如下形式：1234CREATE TABLE &amp;quot;[table_name]&amp;quot; (    &amp;quot;[primary_id]&amp;quot; VARCHAR2(18 BYTE) NOT NULL,    &amp;quot;[field_name]&amp;quot; VARCHAR2(128 BYTE) NOT NULL); 这条语">
@@ -94,21 +94,21 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在 Oracle 数据库中，一条最基础的创建数据库表的语句通常是如下形式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE &quot;[table_name]&quot; (</span><br><span class="line">    &quot;[primary_id]&quot; VARCHAR2(18 BYTE) NOT NULL,</span><br><span class="line">    &quot;[field_name]&quot; VARCHAR2(128 BYTE) NOT NULL</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
-<p>这条语句没有问题，但只能执行一次，如果多执行一次的话，会抛出 <code>数据库表已存在</code> 的错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[Err] ORA-00955: 名称已由现有对象使用</span><br></pre></td></tr></table></figure></p>
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在 Oracle 数据库中，一条最基础的创建数据库表的语句通常是如下形式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">CREATE TABLE &quot;[table_name]&quot; (</div><div class="line">    &quot;[primary_id]&quot; VARCHAR2(18 BYTE) NOT NULL,</div><div class="line">    &quot;[field_name]&quot; VARCHAR2(128 BYTE) NOT NULL</div><div class="line">);</div></pre></td></tr></table></figure></p>
+<p>这条语句没有问题，但只能执行一次，如果多执行一次的话，会抛出 <code>数据库表已存在</code> 的错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[Err] ORA-00955: 名称已由现有对象使用</div></pre></td></tr></table></figure></p>
 <p>这样的话，在作为部署脚本使用的话可能比较麻烦，最好能够使创建数据库表的语句 <code>幂等化</code> ，即执行一次和执行多次达到的效果相同。   </p>
 <h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>在 Mysql 数据库中，通常会在创建数据库表之前使用 <code>DROP TABLE IF EXISTS [table_name]</code> 的语句，先删除这张可能存在的数据库表，为之后的创建工作作好铺垫。而其中的 <code>IF EXISTS</code> 语句则避免了数据库表不存在时误报错误。</p>
-<p>然而在 Oracle 数据库中，没有 <code>DROP TABLE IF EXISTS</code> 语句，直接使用 <code>DROP TABLE [table_name]</code> 在数据库表不存在时，将抛出 <code>表或视图不存在</code> 的错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[Err] ORA-00942: 表或视图不存在</span><br></pre></td></tr></table></figure></p>
-<p>查询一些资料发现，可以使用 <code>BEGIN...EXCEPTION...END</code> 语句来避免这个错误的抛出。类似于在代码中使用 <code>try...catch</code> 语句。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">BEGIN</span><br><span class="line">    EXECUTE IMMEDIATE &apos;DROP TABLE [table_name]&apos;;</span><br><span class="line">EXCEPTION</span><br><span class="line">    WHEN OTHERS THEN</span><br><span class="line">         IF SQLCODE != -942 THEN</span><br><span class="line">            RAISE;</span><br><span class="line">        END IF;</span><br><span class="line">END;</span><br></pre></td></tr></table></figure></p>
+<p>然而在 Oracle 数据库中，没有 <code>DROP TABLE IF EXISTS</code> 语句，直接使用 <code>DROP TABLE [table_name]</code> 在数据库表不存在时，将抛出 <code>表或视图不存在</code> 的错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[Err] ORA-00942: 表或视图不存在</div></pre></td></tr></table></figure></p>
+<p>查询一些资料发现，可以使用 <code>BEGIN...EXCEPTION...END</code> 语句来避免这个错误的抛出。类似于在代码中使用 <code>try...catch</code> 语句。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">BEGIN</div><div class="line">    EXECUTE IMMEDIATE &apos;DROP TABLE [table_name]&apos;;</div><div class="line">EXCEPTION</div><div class="line">    WHEN OTHERS THEN</div><div class="line">         IF SQLCODE != -942 THEN</div><div class="line">            RAISE;</div><div class="line">        END IF;</div><div class="line">END;</div></pre></td></tr></table></figure></p>
 <p>可以看出语句很好理解，尝试执行 <code>DROP TABLE [table_name]</code> 语句，如果有抛出异常，判断错误码是否等于 <code>-942</code> ，在错误码为 <code>-942</code> 的情况下不抛出异常，不影响后续语句的使用，否则抛出异常。</p>
-<p>这样，结合上述删除数据库表和创建数据库表的语句，可以得到综合的幂等性创建数据库表语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">BEGIN</span><br><span class="line">    EXECUTE IMMEDIATE &apos;DROP TABLE [table_name]&apos;;</span><br><span class="line">EXCEPTION</span><br><span class="line">    WHEN OTHERS THEN</span><br><span class="line">         IF SQLCODE != -942 THEN</span><br><span class="line">            RAISE;</span><br><span class="line">        END IF;</span><br><span class="line">END;</span><br><span class="line">/</span><br><span class="line">CREATE TABLE &quot;[table_name]&quot; (</span><br><span class="line">    &quot;[primary_id]&quot; VARCHAR2(18 BYTE) NOT NULL,</span><br><span class="line">    &quot;[field_name]&quot; VARCHAR2(128 BYTE) NOT NULL</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
-<h2 id="一个深坑"><a href="#一个深坑" class="headerlink" title="一个深坑"></a>一个深坑</h2><p>注意上一节解决方案中的 SQL 代码，在前一段 <code>BEGIN...EXCEPTION...END</code> 后的那个斜线 <code>/</code> 不可缺少，否则会抛出错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[Err] ORA-06550: 第11行，第1列：</span><br><span class="line">PLS-00103: 出现符号 &quot;CREATE&quot;</span><br></pre></td></tr></table></figure></p>
+<p>这样，结合上述删除数据库表和创建数据库表的语句，可以得到综合的幂等性创建数据库表语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">BEGIN</div><div class="line">    EXECUTE IMMEDIATE &apos;DROP TABLE [table_name]&apos;;</div><div class="line">EXCEPTION</div><div class="line">    WHEN OTHERS THEN</div><div class="line">         IF SQLCODE != -942 THEN</div><div class="line">            RAISE;</div><div class="line">        END IF;</div><div class="line">END;</div><div class="line">/</div><div class="line">CREATE TABLE &quot;[table_name]&quot; (</div><div class="line">    &quot;[primary_id]&quot; VARCHAR2(18 BYTE) NOT NULL,</div><div class="line">    &quot;[field_name]&quot; VARCHAR2(128 BYTE) NOT NULL</div><div class="line">);</div></pre></td></tr></table></figure></p>
+<h2 id="一个深坑"><a href="#一个深坑" class="headerlink" title="一个深坑"></a>一个深坑</h2><p>注意上一节解决方案中的 SQL 代码，在前一段 <code>BEGIN...EXCEPTION...END</code> 后的那个斜线 <code>/</code> 不可缺少，否则会抛出错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[Err] ORA-06550: 第11行，第1列：</div><div class="line">PLS-00103: 出现符号 &quot;CREATE&quot;</div></pre></td></tr></table></figure></p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://stackoverflow.com/questions/1008248/how-do-i-use-create-or-replace" target="_blank" rel="external">https://stackoverflow.com/questions/1008248/how-do-i-use-create-or-replace</a><br><a href="https://stackoverflow.com/questions/1799128/oracle-if-table-exists" target="_blank" rel="external">https://stackoverflow.com/questions/1799128/oracle-if-table-exists</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/15/Oracle数据库幂等性创建数据库表语句/" data-id="cke84v2mj00ad1gsh69mykm7q" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/06/15/Oracle数据库幂等性创建数据库表语句/" data-id="ckea490bc006y9e8ta90a2g9e" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li></ul>
@@ -189,6 +189,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -202,10 +206,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

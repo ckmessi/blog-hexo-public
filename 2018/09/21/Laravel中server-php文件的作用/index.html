@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2018/09/21/Laravel中server-php文件的作用/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在 Laravel 项目根目录下，有一个文件 server.php ，内容是： 123456789101112131415161718192021&amp;lt;?php/** * Laravel - A PHP Framework For Web Artisans * * @package Laravel * @author Taylor Otwell &amp;lt;taylor@laravel.com&amp;gt">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.938Z">
+<meta property="og:updated_time" content="2018-09-21T06:50:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Laravel中server.php文件的作用">
 <meta name="twitter:description" content="在 Laravel 项目根目录下，有一个文件 server.php ，内容是： 123456789101112131415161718192021&amp;lt;?php/** * Laravel - A PHP Framework For Web Artisans * * @package Laravel * @author Taylor Otwell &amp;lt;taylor@laravel.com&amp;gt">
@@ -95,7 +95,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>在 <code>Laravel</code> 项目根目录下，有一个文件 <code>server.php</code> ，内容是：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Laravel - A PHP Framework For Web Artisans</span><br><span class="line"> *</span><br><span class="line"> * @package Laravel</span><br><span class="line"> * @author Taylor Otwell &lt;taylor@laravel.com&gt;</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">$uri = urldecode(</span><br><span class="line">    parse_url($_SERVER[&apos;REQUEST_URI&apos;], PHP_URL_PATH)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">// This file allows us to emulate Apache&apos;s &quot;mod_rewrite&quot; functionality from the</span><br><span class="line">// built-in PHP web server. This provides a convenient way to test a Laravel</span><br><span class="line">// application without having installed a &quot;real&quot; web server software here.</span><br><span class="line">if ($uri !== &apos;/&apos; &amp;&amp; file_exists(__DIR__.&apos;/public&apos;.$uri)) &#123;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">require_once __DIR__.&apos;/public/index.php&apos;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">/**</div><div class="line"> * Laravel - A PHP Framework For Web Artisans</div><div class="line"> *</div><div class="line"> * @package Laravel</div><div class="line"> * @author Taylor Otwell &lt;taylor@laravel.com&gt;</div><div class="line"> */</div><div class="line"></div><div class="line">$uri = urldecode(</div><div class="line">    parse_url($_SERVER[&apos;REQUEST_URI&apos;], PHP_URL_PATH)</div><div class="line">);</div><div class="line"></div><div class="line">// This file allows us to emulate Apache&apos;s &quot;mod_rewrite&quot; functionality from the</div><div class="line">// built-in PHP web server. This provides a convenient way to test a Laravel</div><div class="line">// application without having installed a &quot;real&quot; web server software here.</div><div class="line">if ($uri !== &apos;/&apos; &amp;&amp; file_exists(__DIR__.&apos;/public&apos;.$uri)) &#123;</div><div class="line">    return false;</div><div class="line">&#125;</div><div class="line"></div><div class="line">require_once __DIR__.&apos;/public/index.php&apos;;</div></pre></td></tr></table></figure>
 <p>此前一直没有使用到这个文件，也不知道它的作用。</p>
 <p>直到最近有次安全扫描说其中使用相对路径可能存在问题，才注意到这个文件。</p>
 <p>在 <code>stackoverflow</code> 上找到一篇回答，基本说明了这个文件的作用。</p>
@@ -112,7 +112,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/21/Laravel中server-php文件的作用/" data-id="cke84v2jp00491gsheycycq2u" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/09/21/Laravel中server-php文件的作用/" data-id="ckea490a9004b9e8tzry48h1w" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -193,6 +193,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -206,10 +210,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

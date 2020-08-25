@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/03/14/初识Rust/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="Rust是一门系统编程语言，专注于安全，尤其是并发安全，支持函数式和命令式以及泛型等编程范式的多范式语言。Rust在语法上和C++类似，但是设计者想要在保证性能的同时提供更好的内存安全。Rust最初是由Mozilla研究院的Graydon Hoare设计创造，然后在Dave Herman, Brendan Eich以及很多其他人的贡献下逐步完善的。Rust的设计者们通过在研发Servo网站浏览器布">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.221Z">
+<meta property="og:updated_time" content="2019-03-14T09:17:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初识Rust">
 <meta name="twitter:description" content="Rust是一门系统编程语言，专注于安全，尤其是并发安全，支持函数式和命令式以及泛型等编程范式的多范式语言。Rust在语法上和C++类似，但是设计者想要在保证性能的同时提供更好的内存安全。Rust最初是由Mozilla研究院的Graydon Hoare设计创造，然后在Dave Herman, Brendan Eich以及很多其他人的贡献下逐步完善的。Rust的设计者们通过在研发Servo网站浏览器布">
@@ -95,12 +95,12 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Rust是一门系统编程语言，专注于安全，尤其是并发安全，支持函数式和命令式以及泛型等编程范式的多范式语言。Rust在语法上和C++类似，但是设计者想要在保证性能的同时提供更好的内存安全。<br>Rust最初是由Mozilla研究院的Graydon Hoare设计创造，然后在Dave Herman, Brendan Eich以及很多其他人的贡献下逐步完善的。<br>Rust的设计者们通过在研发Servo网站浏览器布局引擎过程中积累的经验优化了Rust语言和Rust编译器。</p>
-<h2 id="安装-rust"><a href="#安装-rust" class="headerlink" title="安装 rust"></a>安装 rust</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https://sh.rustup.rs -sSf | sh</span><br></pre></td></tr></table></figure>
-<p>命令行中出现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  stable installed - rustc 1.33.0 (2aa4c46cf 2019-02-28)</span><br><span class="line">Rust is installed now. Great!</span><br><span class="line">To get started you need Cargo&apos;s bin directory ($HOME/.cargo/bin) in your PATH</span><br><span class="line">environment variable. Next time you log in this will be done automatically.</span><br><span class="line">To configure your current shell run source $HOME/.cargo/env</span><br></pre></td></tr></table></figure></p>
-<p>表示 Rust 安装成功了。<br>根据提示执行 <code>source ~/.cargo/env</code> 命令，将 <code>~/.cargo/bin</code> 添加到环境变量中。<br>这个 <code>source ~/.cargo/env</code> 文件中的代码其实是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PATH=&quot;$HOME/.cargo/bin:$PATH&quot;</span><br></pre></td></tr></table></figure></p>
-<p>为了测试 <code>Rust</code> 和 <code>Cargo</code> 是否成功安装，可以在命令行中输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cargo —version</span><br></pre></td></tr></table></figure></p>
-<p>显示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜ Code cargo --version</span><br><span class="line">cargo 1.33.0 (f099fe94b 2019-02-12)</span><br></pre></td></tr></table></figure></p>
-<p>或者也可以使用 <code>rustc</code> 命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜ Code rustc --version</span><br><span class="line">rustc 1.33.0 (2aa4c46cf 2019-02-28)</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装-rust"><a href="#安装-rust" class="headerlink" title="安装 rust"></a>安装 rust</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl https://sh.rustup.rs -sSf | sh</div></pre></td></tr></table></figure>
+<p>命令行中出现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">  stable installed - rustc 1.33.0 (2aa4c46cf 2019-02-28)</div><div class="line">Rust is installed now. Great!</div><div class="line">To get started you need Cargo&apos;s bin directory ($HOME/.cargo/bin) in your PATH</div><div class="line">environment variable. Next time you log in this will be done automatically.</div><div class="line">To configure your current shell run source $HOME/.cargo/env</div></pre></td></tr></table></figure></p>
+<p>表示 Rust 安装成功了。<br>根据提示执行 <code>source ~/.cargo/env</code> 命令，将 <code>~/.cargo/bin</code> 添加到环境变量中。<br>这个 <code>source ~/.cargo/env</code> 文件中的代码其实是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export PATH=&quot;$HOME/.cargo/bin:$PATH&quot;</div></pre></td></tr></table></figure></p>
+<p>为了测试 <code>Rust</code> 和 <code>Cargo</code> 是否成功安装，可以在命令行中输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cargo —version</div></pre></td></tr></table></figure></p>
+<p>显示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜ Code cargo --version</div><div class="line">cargo 1.33.0 (f099fe94b 2019-02-12)</div></pre></td></tr></table></figure></p>
+<p>或者也可以使用 <code>rustc</code> 命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜ Code rustc --version</div><div class="line">rustc 1.33.0 (2aa4c46cf 2019-02-28)</div></pre></td></tr></table></figure></p>
 <p>安装 rustup 完成后，你同时得到了最新版本的 Rust 构建工具和包管理器 <code>Cargo</code> ，它有以下功能：</p>
 <ul>
 <li>使用 <code>cargo build</code> 构建你的项目</li>
@@ -109,17 +109,17 @@
 <li>使用 <code>cargo doc</code> 为项目构建文档</li>
 <li>使用 <code>cargo publish</code> 发布一个库</li>
 </ul>
-<h2 id="Rust的Hello-World"><a href="#Rust的Hello-World" class="headerlink" title="Rust的Hello World"></a>Rust的Hello World</h2><p>执行命令以下命令将自动创建一个目录：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cargo new hello-rust</span><br></pre></td></tr></table></figure></p>
-<p>目录结构如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hello-rust</span><br><span class="line">|- Cargo.toml</span><br><span class="line">|- src</span><br><span class="line">  |- main.rs</span><br></pre></td></tr></table></figure></p>
-<p>其中 <code>Cargo.toml</code> 文件是 <code>Rust</code> 的配置文件，在这里将保存一些 metadata 信息及依赖信息。<br>注：可以理解为 <code>npm</code> 使用的 <code>package.json</code> 文件，以及 <code>composer</code> 使用的 <code>composer.json</code> 文件。<br>其中 <code>src/main.rs</code> 文件就是我们要撰写代码的地方。<br><code>cargo new</code> 命令已经为我们的项目生成了一段 <code>&quot;Hello, world!&quot;</code> 代码。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    println!(&quot;Hello, world!&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>可以直接进入这个新的目录，运行代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜ hello-rust git:(master) ✗ cargo run</span><br><span class="line">   Compiling hello-rust v0.1.0 (/Users/chenkai/Lionel/Code/Rust/hello-rust)</span><br><span class="line">    Finished dev [unoptimized + debuginfo] target(s) in 0.85s</span><br><span class="line">     Running `target/debug/hello-rust`</span><br><span class="line">Hello, world!</span><br><span class="line">➜ hello-rust git:(master) ✗</span><br></pre></td></tr></table></figure></p>
+<h2 id="Rust的Hello-World"><a href="#Rust的Hello-World" class="headerlink" title="Rust的Hello World"></a>Rust的Hello World</h2><p>执行命令以下命令将自动创建一个目录：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cargo new hello-rust</div></pre></td></tr></table></figure></p>
+<p>目录结构如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">hello-rust</div><div class="line">|- Cargo.toml</div><div class="line">|- src</div><div class="line">  |- main.rs</div></pre></td></tr></table></figure></p>
+<p>其中 <code>Cargo.toml</code> 文件是 <code>Rust</code> 的配置文件，在这里将保存一些 metadata 信息及依赖信息。<br>注：可以理解为 <code>npm</code> 使用的 <code>package.json</code> 文件，以及 <code>composer</code> 使用的 <code>composer.json</code> 文件。<br>其中 <code>src/main.rs</code> 文件就是我们要撰写代码的地方。<br><code>cargo new</code> 命令已经为我们的项目生成了一段 <code>&quot;Hello, world!&quot;</code> 代码。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fn main() &#123;</div><div class="line">    println!(&quot;Hello, world!&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以直接进入这个新的目录，运行代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">➜ hello-rust git:(master) ✗ cargo run</div><div class="line">   Compiling hello-rust v0.1.0 (/Users/chenkai/Lionel/Code/Rust/hello-rust)</div><div class="line">    Finished dev [unoptimized + debuginfo] target(s) in 0.85s</div><div class="line">     Running `target/debug/hello-rust`</div><div class="line">Hello, world!</div><div class="line">➜ hello-rust git:(master) ✗</div></pre></td></tr></table></figure></p>
 <p>执行后项目目录下多出了一个 <code>Cargo.lock</code> 文件和 <code>target</code> 文件夹。<br>其中 <code>Cargo.lock</code> 文件是用于版本锁定功能的，类似于 <code>package.lock</code> 和 <code>composer.lock</code> 文件； <code>target</code> 文件夹中大概是编译生成的相关内容。</p>
 <h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="https://www.rust-lang.org/tools/install" target="_blank" rel="external">https://www.rust-lang.org/tools/install</a><br><a href="https://www.ibm.com/developerworks/cn/opensource/os-know-rust/index.html" target="_blank" rel="external">https://www.ibm.com/developerworks/cn/opensource/os-know-rust/index.html</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/03/14/初识Rust/" data-id="cke84v2ot00hd1gshu0092kro" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/03/14/初识Rust/" data-id="ckea490e400dk9e8tmiih4oxb" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Rust/">Rust</a></li></ul>
@@ -200,6 +200,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -213,10 +217,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

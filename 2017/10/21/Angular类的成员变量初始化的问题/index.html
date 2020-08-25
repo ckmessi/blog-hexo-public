@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2017/10/21/Angular类的成员变量初始化的问题/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="最近工作中遇到一个比较困惑的事情，在使用Angular1.5框架的项目中，通常遇到两种不同风格的变量初始化方法。有的代码直接在类的成员变量声明后紧接着初始化语句，如：123export class Sample &amp;#123;	public name:string = &amp;apos;initialized following statement&amp;apos;&amp;#125; 有的代码只进行了声明，此后在类的">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.820Z">
+<meta property="og:updated_time" content="2017-10-21T10:25:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Angular类的成员变量初始化的问题">
 <meta name="twitter:description" content="最近工作中遇到一个比较困惑的事情，在使用Angular1.5框架的项目中，通常遇到两种不同风格的变量初始化方法。有的代码直接在类的成员变量声明后紧接着初始化语句，如：123export class Sample &amp;#123;	public name:string = &amp;apos;initialized following statement&amp;apos;&amp;#125; 有的代码只进行了声明，此后在类的">
@@ -94,15 +94,15 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近工作中遇到一个比较困惑的事情，在使用Angular1.5框架的项目中，通常遇到两种不同风格的变量初始化方法。<br>有的代码直接在类的成员变量声明后紧接着初始化语句，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export class Sample &#123;</span><br><span class="line">	public name:string = &apos;initialized following statement&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>有的代码只进行了声明，此后在类的构造函数<code>constructor</code>中进行初始化：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">export class Sample &#123;</span><br><span class="line">	public name:string</span><br><span class="line">	constructor() &#123;</span><br><span class="line">		this.name = &apos;initialized in constructor&apos;;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <p>最近工作中遇到一个比较困惑的事情，在使用Angular1.5框架的项目中，通常遇到两种不同风格的变量初始化方法。<br>有的代码直接在类的成员变量声明后紧接着初始化语句，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export class Sample &#123;</div><div class="line">	public name:string = &apos;initialized following statement&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>有的代码只进行了声明，此后在类的构造函数<code>constructor</code>中进行初始化：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">export class Sample &#123;</div><div class="line">	public name:string</div><div class="line">	constructor() &#123;</div><div class="line">		this.name = &apos;initialized in constructor&apos;;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>两种方法是否有区别呢？<br>通过一些查询，可以确认，两种写法都是合法的，并且行为完全一致。<br>前者在编译之后，会变成后者的形式。</p>
 <p>参考链接：<a href="https://stackoverflow.com/questions/42635833/initialization-of-components-class-variables" target="_blank" rel="external">https://stackoverflow.com/questions/42635833/initialization-of-components-class-variables</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/21/Angular类的成员变量初始化的问题/" data-id="cke84v2hr00061gshjgfruv4d" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/10/21/Angular类的成员变量初始化的问题/" data-id="ckea4907700019e8t6k6xizjf" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -183,6 +183,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -196,10 +200,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/06/24/SpringBoot使用-Async实现异步调用/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在使用 Spring Boot 搭建服务器时，大多数情况下都是同步返回的，但对于一些功能比较繁重的任务，执行时间较长，很有可能导致 HTTP 请求调用超时。    在这种情况下，我们通常会让接口调用先返回，让后台异步执行相关的任务。最后通过其它方式让用户获取到任务执行结果。    使用 Spring Boot 的 @Async 和 @EnableAsync 注解，可以很方便地完成从 [同步] -&amp;">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.046Z">
+<meta property="og:updated_time" content="2019-06-24T08:52:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringBoot使用@Async实现异步调用">
 <meta name="twitter:description" content="在使用 Spring Boot 搭建服务器时，大多数情况下都是同步返回的，但对于一些功能比较繁重的任务，执行时间较长，很有可能导致 HTTP 请求调用超时。    在这种情况下，我们通常会让接口调用先返回，让后台异步执行相关的任务。最后通过其它方式让用户获取到任务执行结果。    使用 Spring Boot 的 @Async 和 @EnableAsync 注解，可以很方便地完成从 [同步] -&amp;">
@@ -97,23 +97,23 @@
         <p>在使用 Spring Boot 搭建服务器时，大多数情况下都是同步返回的，但对于一些功能比较繁重的任务，执行时间较长，很有可能导致 HTTP 请求调用超时。   </p>
 <p>在这种情况下，我们通常会让接口调用先返回，让后台异步执行相关的任务。最后通过其它方式让用户获取到任务执行结果。   </p>
 <p>使用 Spring Boot 的 <code>@Async</code> 和 <code>@EnableAsync</code> 注解，可以很方便地完成从 [同步] -&gt; [异步] 的转换。</p>
-<p>假设原来的 Controller 类和 Service 类的代码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class TestController &#123;</span><br><span class="line">    ...</span><br><span class="line">    public String executeAsyn()&#123;</span><br><span class="line">        log.info(&quot;准备开启异步线程...&quot;);</span><br><span class="line">        testService.executeAsync();</span><br><span class="line">        log.info(&quot;executeAsync 接口返回&quot;);</span><br><span class="line">        return &quot;success&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@Service</span><br><span class="line">public class TestService &#123;</span><br><span class="line">    public void executeAsync()&#123;</span><br><span class="line">        log.info(&quot;开始异步线程&quot;);</span><br><span class="line">        for(int i = 0; i &lt; 10; i++)&#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                Thread.sleep(1000);</span><br><span class="line">                log.info(&quot;sleep...&#123;&#125;&quot;, i);</span><br><span class="line">            &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        log.info(&quot;完成异步线程&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在这种情况下，接口调用将等待10秒左右才会返回，查看日志输出为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">准备开启异步线程...</span><br><span class="line">开始异步线程</span><br><span class="line">sleep...0</span><br><span class="line">sleep...1</span><br><span class="line">...</span><br><span class="line">sleep...9</span><br><span class="line">完成异步线程</span><br><span class="line">executeAsync 接口返回</span><br></pre></td></tr></table></figure></p>
+<p>假设原来的 Controller 类和 Service 类的代码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@RestController</div><div class="line">public class TestController &#123;</div><div class="line">    ...</div><div class="line">    public String executeAsyn()&#123;</div><div class="line">        log.info(&quot;准备开启异步线程...&quot;);</div><div class="line">        testService.executeAsync();</div><div class="line">        log.info(&quot;executeAsync 接口返回&quot;);</div><div class="line">        return &quot;success&quot;;</div><div class="line">    &#125;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@Service</div><div class="line">public class TestService &#123;</div><div class="line">    public void executeAsync()&#123;</div><div class="line">        log.info(&quot;开始异步线程&quot;);</div><div class="line">        for(int i = 0; i &lt; 10; i++)&#123;</div><div class="line">            try &#123;</div><div class="line">                Thread.sleep(1000);</div><div class="line">                log.info(&quot;sleep...&#123;&#125;&quot;, i);</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        log.info(&quot;完成异步线程&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在这种情况下，接口调用将等待10秒左右才会返回，查看日志输出为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">准备开启异步线程...</div><div class="line">开始异步线程</div><div class="line">sleep...0</div><div class="line">sleep...1</div><div class="line">...</div><div class="line">sleep...9</div><div class="line">完成异步线程</div><div class="line">executeAsync 接口返回</div></pre></td></tr></table></figure></p>
 <p>可以看到，在同步调用的情况下，只有当线程内sleep操作全部执行完了，外部接口调用才返回。</p>
 <p>为了将其修改为异步调用，只需要添加两个注解：</p>
 <ul>
 <li>在方法上添加注解 <code>@Async</code></li>
 <li>在调用方 Controller 类上添加注解 <code>@EnableAsync</code></li>
 </ul>
-<p>修改为异步后，得到的输出为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">准备开启异步线程...</span><br><span class="line">executeAsync 接口返回</span><br><span class="line">开始异步线程</span><br><span class="line">sleep...0</span><br><span class="line">sleep...1</span><br><span class="line">...</span><br><span class="line">sleep...9</span><br><span class="line">完成异步线程</span><br></pre></td></tr></table></figure></p>
+<p>修改为异步后，得到的输出为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">准备开启异步线程...</div><div class="line">executeAsync 接口返回</div><div class="line">开始异步线程</div><div class="line">sleep...0</div><div class="line">sleep...1</div><div class="line">...</div><div class="line">sleep...9</div><div class="line">完成异步线程</div></pre></td></tr></table></figure></p>
 <p>这样方法就是异步执行了。</p>
 <p>事实上，同步改异步的难点，不在于这两个注解的添加。最关键的点在于，异步线程执行完毕后，通过何种方式通知操作者任务已经完成。这就需要结合实际场景和需求进行相关的改造了。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/24/SpringBoot使用-Async实现异步调用/" data-id="cke84v2n800c71gshqfgv9rlk" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/06/24/SpringBoot使用-Async实现异步调用/" data-id="ckea490c8008t9e8td266473l" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
@@ -194,6 +194,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -207,10 +211,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

@@ -68,6 +68,62 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Python使用importlib动态导入模块" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/" class="article-date">
+  <time datetime="2020-08-25T15:39:41.000Z" itemprop="datePublished">2020-08-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在使用 Python 导入模块的过程中，有时模块的名称和路径不是固定的，是根据配置文件读取获得的。<br>这时候需要使用 <code>importlib</code> 库动态导入模块。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>需要根据配置文件获取的内容包括：</p>
+<ul>
+<li>模块文件路径</li>
+<li>模块名称</li>
+<li>模块内部的类名或方法名</li>
+</ul>
+<p>对于 Python 3.5+ 的场景，应该使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">import importlib.util</div><div class="line">spec = importlib.util.spec_from_file_location(&quot;module_name&quot;, &quot;/path/to/module_file.py&quot;)</div><div class="line">foo = importlib.util.module_from_spec(spec)</div><div class="line">spec.loader.exec_module(foo)</div><div class="line"># call module member</div><div class="line">foo.MyClass()</div></pre></td></tr></table></figure></p>
+<p>如果模块中的方法也是动态的，可以使用 <code>get_attr</code> 方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">params = [1, 2, 3]</div><div class="line">method = &quot;myMethod&quot;</div><div class="line">getattr(foo, method)(*params)</div></pre></td></tr></table></figure></p>
+<p>其效果可以等价于以下常规的编程方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">from xxx import moudle_name</div><div class="line">module_name.myMethod(*params)</div></pre></td></tr></table></figure></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path" target="_blank" rel="external">https://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path</a></li>
+<li><a href="https://stackoverflow.com/questions/3190583/python-call-a-function-in-a-module-dynamically" target="_blank" rel="external">https://stackoverflow.com/questions/3190583/python-call-a-function-in-a-module-dynamically</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/08/25/Python使用importlib动态导入模块/" data-id="ckea490bu007o9e8tc1y0tjyl" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-使用crontab添加特定用户执行的定时任务" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/" class="article-date">
@@ -98,15 +154,15 @@
 <p>比如使用 <code>crontab -l</code> 可以查看当前用户设定的定时任务，使用 <code>crontab -e</code> 可以编辑定时任务。具体定时任务的格式在这里不详加叙述，这篇文章主要针对执行定时任务的用户。   </p>
 <p>事实上，Linux 是一个多用户系统，每个用户执行 <code>crontab -l</code> 看到的定时任务内容是不同的，都是属于其自己的定时任务。而这些定时任务的操作者，也会被自动选中为添加该定时任务的用户。<br>但有的情况下，定时任务如果由普通用户创建，很可能会造成问题。比如一个定时任务如果写日志文件，而这个日志文件正常情况下是由项目的服务启动者（比如 <code>www-data</code>）来执行写入操作，那么就有可能会出问题。<br>现实项目中就出现这样一种情况，Laravel 项目的错误日志在日期分片后会写在 <code>storage/logs/</code> 目录下的 <code>laravel-yyyy-mm-dd.log</code> 文件中。如果有一个普通用户 <code>x</code> 创建的定时任务在每天凌晨时执行，且执行过程中写日志了，就会自动创建一个所有者是 <code>x</code> 的 <code>laravel-yyyy-mm-dd.log</code>。而当框架代码正常情况下需要往这个日志写内容时，由于文件是 644 权限，托管 Laravel 项目的 nginx 用户 <code>www-data</code> 无法写文件，就会抛出异常。</p>
 <h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p><strong>将定时任务从个人列表中删除，由全局添加，并且在添加时指定执行用户。</strong></p>
-<p>在所有用户个人的 crontab 列表之外，还有一个全局的定时任务列表，内容在 <code>/etc/crontab</code> 文件中。<br>编辑这个文件需要 root 权限，且这个文件的内容格式与普通用户的略有不同。<br>普通用户的格式为以下格式，前5列是执行频率，然后就是执行语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># For example, you can run a backup of all your user accounts</span><br><span class="line"># at 5 a.m every week with:</span><br><span class="line"># 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/</span><br></pre></td></tr></table></figure></p>
-<p>全局的格式在前5列之后，多了一列执行用户，然后才是执行语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># /etc/crontab: system-wide crontab</span><br><span class="line"># Unlike any other crontab you don&apos;t have to run the `crontab&apos;</span><br><span class="line"># command to install the new version when you edit this file</span><br><span class="line"># and files in /etc/cron.d. These files also have username fields,</span><br><span class="line"># that none of the other crontabs do.</span><br><span class="line">SHELL=/bin/sh</span><br><span class="line">PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin</span><br><span class="line"># m h dom mon dow user  command</span><br></pre></td></tr></table></figure></p>
+<p>在所有用户个人的 crontab 列表之外，还有一个全局的定时任务列表，内容在 <code>/etc/crontab</code> 文件中。<br>编辑这个文件需要 root 权限，且这个文件的内容格式与普通用户的略有不同。<br>普通用户的格式为以下格式，前5列是执行频率，然后就是执行语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># For example, you can run a backup of all your user accounts</div><div class="line"># at 5 a.m every week with:</div><div class="line"># 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/</div></pre></td></tr></table></figure></p>
+<p>全局的格式在前5列之后，多了一列执行用户，然后才是执行语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"># /etc/crontab: system-wide crontab</div><div class="line"># Unlike any other crontab you don&apos;t have to run the `crontab&apos;</div><div class="line"># command to install the new version when you edit this file</div><div class="line"># and files in /etc/cron.d. These files also have username fields,</div><div class="line"># that none of the other crontabs do.</div><div class="line">SHELL=/bin/sh</div><div class="line">PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin</div><div class="line"># m h dom mon dow user  command</div></pre></td></tr></table></figure></p>
 <p>因此，只需要将原有的定时任务内容，搬到全局 <code>/etc/crontab</code> 文件中，然后在最后执行语句之前加上一列执行用户信息即可。</p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://www.cnblogs.com/kenshinobiy/p/4545676.html" target="_blank" rel="external">https://www.cnblogs.com/kenshinobiy/p/4545676.html</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/08/24/使用crontab添加特定用户执行的定时任务/" data-id="cke84v2o400ey1gshisvhtkym" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/08/24/使用crontab添加特定用户执行的定时任务/" data-id="ckea490d800bd9e8te28ne6o7" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/crontab/">crontab</a></li></ul>
@@ -145,9 +201,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>使用 Laravel 框架的 Eloquent 对象进行数据库查询时，通常在最后一步使用 <code>get()</code> 方法获取数据。<br>貌似 Laravel 的数据库查询中同时也可以使用 <code>all()</code> 方法。<br>那么 <code>get()</code> 和 <code>all()</code> 有什么区别和联系？</p>
-<p>事实上，对于 <strong>不带查询条件</strong> 的数据库查询而言，两者是等价的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User::get();</span><br><span class="line">User::all();</span><br></pre></td></tr></table></figure></p>
-<p>方法 <code>all()</code> 是定义在 <code>Eloquent/Model</code> 类中的一个静态方法，它做的事情就是创建一个新的查询对象，然后调用它的 <code>get()</code> 方法。在使用 <code>all()</code> 的时候，你不能修改查询条件，只能选择取出的列。<br>可参考 <code>laravel/framework/src/Illuminate/Database/Eloquent/Model.php</code> 相关代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Get all of the models from the database.</span><br><span class="line"> *</span><br><span class="line"> * @param  array|mixed  $columns</span><br><span class="line"> * @return \Illuminate\Database\Eloquent\Collection|static[]</span><br><span class="line"> */</span><br><span class="line">public static function all($columns = [&apos;*&apos;])</span><br><span class="line">&#123;</span><br><span class="line">    return (new static)-&gt;newQuery()-&gt;get(</span><br><span class="line">        is_array($columns) ? $columns : func_get_args()</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>方法 <code>get()</code> 是定义在 <code>Eloquent/Builder</code> 类对象中的方法，如果需要修改查询条件，可以在其前面添加 <code>where</code> 子句等，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">User::where(&apos;name&apos;, &apos;Abc&apos;)-&gt;get();</span><br></pre></td></tr></table></figure></p>
+<p>事实上，对于 <strong>不带查询条件</strong> 的数据库查询而言，两者是等价的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">User::get();</div><div class="line">User::all();</div></pre></td></tr></table></figure></p>
+<p>方法 <code>all()</code> 是定义在 <code>Eloquent/Model</code> 类中的一个静态方法，它做的事情就是创建一个新的查询对象，然后调用它的 <code>get()</code> 方法。在使用 <code>all()</code> 的时候，你不能修改查询条件，只能选择取出的列。<br>可参考 <code>laravel/framework/src/Illuminate/Database/Eloquent/Model.php</code> 相关代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * Get all of the models from the database.</div><div class="line"> *</div><div class="line"> * @param  array|mixed  $columns</div><div class="line"> * @return \Illuminate\Database\Eloquent\Collection|static[]</div><div class="line"> */</div><div class="line">public static function all($columns = [&apos;*&apos;])</div><div class="line">&#123;</div><div class="line">    return (new static)-&gt;newQuery()-&gt;get(</div><div class="line">        is_array($columns) ? $columns : func_get_args()</div><div class="line">    );</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>方法 <code>get()</code> 是定义在 <code>Eloquent/Builder</code> 类对象中的方法，如果需要修改查询条件，可以在其前面添加 <code>where</code> 子句等，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">User::where(&apos;name&apos;, &apos;Abc&apos;)-&gt;get();</div></pre></td></tr></table></figure></p>
 <p>因此，对于需要查询的情况，只能使用 <code>get()</code> 方法；而对于一心只想从数据库表中取出所有数据的时候，可以直接使用 <code>all()</code>。<br>（它相比于使用 <code>get()</code> 方法，唯一的优势就是看起来比较装逼）。</p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
 <li><a href="https://stackoverflow.com/questions/34587457/difference-between-eloquent-modelget-and-all" target="_blank" rel="external">https://stackoverflow.com/questions/34587457/difference-between-eloquent-modelget-and-all</a></li>
@@ -156,7 +212,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/27/Laravel数据库查询中get-和all-的区别/" data-id="cke84v2m5009j1gsh9mq3ikzk" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/27/Laravel数据库查询中get-和all-的区别/" data-id="ckea490aj004z9e8t0a1mzc8c" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -200,12 +256,12 @@
 <img src="/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/1.png" alt="Issue描述" title="Issue描述">
 <p>这个问题暂时没有得到修复。<br>评论区中，立刻有人将这个问题报到了我们所使用的 <a href="https://github.com/tiangolo/fastapi" target="_blank" rel="external">fastapi</a> 项目中：</p>
 <img src="/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/2.png" alt="fastapi项目受到影响" title="fastapi项目受到影响">
-<p>而 fastapi 框架的作者 tiangolo 也立刻进行了回复，并对 fastapi 的源码进行了 <a href="https://github.com/tiangolo/fastapi/pull/1763" target="_blank" rel="external">更新</a>，使其暂时固定依赖于 <a href="mailto:`swagger-ui@3.30.0" target="_blank" rel="external">`swagger-ui@3.30.0</a>` 版本。</p>
+<p>而 fastapi 框架的作者 tiangolo 也立刻进行了回复，并对 fastapi 的源码进行了 <a href="https://github.com/tiangolo/fastapi/pull/1763" target="_blank" rel="external">更新</a>，使其暂时固定依赖于 <code>swagger-ui@3.30.0</code> 版本。</p>
 <blockquote>
 <p>Pin Swagger UI while this is fixed: swagger-api/swagger-ui#6249</p>
 </blockquote>
 <img src="/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/3.png" alt="fastapi作者tiangole的快速响应" title="fastapi作者tiangole的快速响应">
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>最优的解决方案自然是等待 Swagger-UI 的作者完成修复或版本回滚，毕竟仅是 <code>3.30.0</code>-&gt;<code>3.30.1</code> 的 patch 发布，不应该有 breaking change 存在，更何况直接影响到所有依赖它的第三方库。<br>在问题被解决之前，如果需要临时快速修复问题，可以参考 tiangolo 的方法，直接修改 fastapi 的源码。<br>步骤示例：<br>1、在 Docker 镜像中查找 Python 环境文件所在，一般是 <code>/usr/lib/local/python3/site-packages/fastapi</code>；<br>2、修改其中的 <code>openapi/docs.py</code> 文件，将定义的<code>swagger_js_url</code> 和 <code>swagger_css_url</code> 的链接中 <code>swagger-ui-dist@3</code> 改为 <a href="mailto:`swagger-ui-dist@3.30.0" target="_blank" rel="external">`swagger-ui-dist@3.30.0</a>`；<br>3、重启 docker 容器（重启基于 fastapi 的服务）；<br>4、刷新网页</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>最优的解决方案自然是等待 Swagger-UI 的作者完成修复或版本回滚，毕竟仅是 <code>3.30.0</code>-&gt;<code>3.30.1</code> 的 patch 发布，不应该有 breaking change 存在，更何况直接影响到所有依赖它的第三方库。<br>在问题被解决之前，如果需要临时快速修复问题，可以参考 tiangolo 的方法，直接修改 fastapi 的源码。<br>步骤示例：<br>1、在 Docker 镜像中查找 Python 环境文件所在，一般是 <code>/usr/lib/local/python3/site-packages/fastapi</code>；<br>2、修改其中的 <code>openapi/docs.py</code> 文件，将定义的<code>swagger_js_url</code> 和 <code>swagger_css_url</code> 的链接中 <code>swagger-ui-dist@3</code> 改为 <code>swagger-ui-dist@3.30.0</code>；<br>3、重启 docker 容器（重启基于 fastapi 的服务）；<br>4、刷新网页</p>
 <p>这种方式可以快速临时恢复工作环境，避免开发工作卡在这个问题上。</p>
 <h2 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h2><p>快下班时又搂了一眼 Swagger-UI 的 Issue，发现另一个<a href="https://github.com/tfranzel/drf-spectacular/pull/133/files" target="_blank" rel="external">第三方库</a>也遭灾了，该作者也选择了相同的方式固定 swagger-ui 的版本号。</p>
 <img src="/blog-hexo/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/4.png" alt="另一个受到影响的第三方库" title="另一个受到影响的第三方库">
@@ -217,7 +273,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/" data-id="cke84v2o500f21gsh6pojxa8j" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/" data-id="ckea490cv00af9e8t76lvq2a8" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Swagger-UI/">Swagger-UI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/fastapi/">fastapi</a></li></ul>
@@ -256,7 +312,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>在某台电脑上已经安装了 VS Code，当时安装时没有勾选 <code>添加到右键菜单</code>，现在希望重新添加到菜单中，可以通过添加注册表的形式完成。</p>
-<p>随意打开一个文本文件，输入以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line"> </span><br><span class="line">[HKEY_CLASSES_ROOT\*\shell\VSCode]</span><br><span class="line">@=&quot;Open with Code&quot;</span><br><span class="line">&quot;Icon&quot;=&quot;C:\\Program Files\\Microsoft VS Code\\Code.exe&quot;</span><br><span class="line"> </span><br><span class="line">[HKEY_CLASSES_ROOT\*\shell\VSCode\command]</span><br><span class="line">@=&quot;\&quot;C:\\Program Files\\Microsoft VS Code\\Code.exe\&quot; \&quot;%1\&quot;&quot;</span><br><span class="line"> </span><br><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line"> </span><br><span class="line">[HKEY_CLASSES_ROOT\Directory\shell\VSCode]</span><br><span class="line">@=&quot;Open with Code&quot;</span><br><span class="line">&quot;Icon&quot;=&quot;C:\\Program Files\\Microsoft VS Code\\Code.exe&quot;</span><br><span class="line"> </span><br><span class="line">[HKEY_CLASSES_ROOT\Directory\shell\VSCode\command]</span><br><span class="line">@=&quot;\&quot;C:\\Program Files\\Microsoft VS Code\\Code.exe\&quot; \&quot;%V\&quot;&quot;</span><br><span class="line"> </span><br><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line"> </span><br><span class="line">[HKEY_CLASSES_ROOT\Directory\Background\shell\VSCode]</span><br><span class="line">@=&quot;Open with Code&quot;</span><br><span class="line">&quot;Icon&quot;=&quot;C:\\Program Files\\Microsoft VS Code\\Code.exe&quot;</span><br><span class="line"> </span><br><span class="line">[HKEY_CLASSES_ROOT\Directory\Background\shell\VSCode\command]</span><br><span class="line">@=&quot;\&quot;C:\\Program Files\\Microsoft VS Code\\Code.exe\&quot; \&quot;%V\&quot;&quot;</span><br></pre></td></tr></table></figure></p>
+<p>随意打开一个文本文件，输入以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">Windows Registry Editor Version 5.00</div><div class="line"> </div><div class="line">[HKEY_CLASSES_ROOT\*\shell\VSCode]</div><div class="line">@=&quot;Open with Code&quot;</div><div class="line">&quot;Icon&quot;=&quot;C:\\Program Files\\Microsoft VS Code\\Code.exe&quot;</div><div class="line"> </div><div class="line">[HKEY_CLASSES_ROOT\*\shell\VSCode\command]</div><div class="line">@=&quot;\&quot;C:\\Program Files\\Microsoft VS Code\\Code.exe\&quot; \&quot;%1\&quot;&quot;</div><div class="line"> </div><div class="line">Windows Registry Editor Version 5.00</div><div class="line"> </div><div class="line">[HKEY_CLASSES_ROOT\Directory\shell\VSCode]</div><div class="line">@=&quot;Open with Code&quot;</div><div class="line">&quot;Icon&quot;=&quot;C:\\Program Files\\Microsoft VS Code\\Code.exe&quot;</div><div class="line"> </div><div class="line">[HKEY_CLASSES_ROOT\Directory\shell\VSCode\command]</div><div class="line">@=&quot;\&quot;C:\\Program Files\\Microsoft VS Code\\Code.exe\&quot; \&quot;%V\&quot;&quot;</div><div class="line"> </div><div class="line">Windows Registry Editor Version 5.00</div><div class="line"> </div><div class="line">[HKEY_CLASSES_ROOT\Directory\Background\shell\VSCode]</div><div class="line">@=&quot;Open with Code&quot;</div><div class="line">&quot;Icon&quot;=&quot;C:\\Program Files\\Microsoft VS Code\\Code.exe&quot;</div><div class="line"> </div><div class="line">[HKEY_CLASSES_ROOT\Directory\Background\shell\VSCode\command]</div><div class="line">@=&quot;\&quot;C:\\Program Files\\Microsoft VS Code\\Code.exe\&quot; \&quot;%V\&quot;&quot;</div></pre></td></tr></table></figure></p>
 <p>仔细阅读可以推测，其中3个区域分别表示的是：</p>
 <ul>
 <li>在任何文件点击右键显示的菜单；</li>
@@ -265,7 +321,7 @@
 </ul>
 <p>而每个区域的两段代码，分别添加了菜单项的图标，以及点击这个图标后所执行的命令。需要注意把 <code>C:\\Program Files\\Microsoft VS Code\\Code.exe</code> 替换为自己电脑中 VS Code 所在的真实路径。</p>
 <p>将这个文本文件保存为 <code>xxx.reg</code>，然后双击打开，在对象中选择 <code>是</code>，顺利的话就完成了。</p>
-<p>如果出现报错信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">指定的文件不是注册脚本。您在注册表编辑器中只能导入二进位注册文件。</span><br></pre></td></tr></table></figure></p>
+<p>如果出现报错信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">指定的文件不是注册脚本。您在注册表编辑器中只能导入二进位注册文件。</div></pre></td></tr></table></figure></p>
 <p>可能的问题在于：</p>
 <ul>
 <li>文件内容开头不能有空行；</li>
@@ -279,7 +335,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/21/Windows右键菜单中添加用VSCode打开选项/" data-id="cke84v2nv00e31gshtaxc5yjx" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/21/Windows右键菜单中添加用VSCode打开选项/" data-id="ckea490cr00a89e8t9r7jxggv" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/VSCode/">VSCode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li></ul>
@@ -318,9 +374,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>项目中添加了一个 <code>.sh</code> 脚本文件，在 Windows 系统中编辑后上传到 Git 服务器，在 Linux 环境中使用时发现 Shell 抛奇奇怪怪的错。<br>经过排查后确定，是由于 Windows 系统中编辑的文件换行符与 Unix 系统不同导致的。<br>通过 <code>cat -v [filename]</code> 可以查看到文件内容的末尾带有 <code>^M</code> 字符。<br>这个字符在普通代码文件中不会有影响，但对于 Shell 脚本而言会造成错误。   </p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>使用 <code>sed</code> 命令直接替换文件内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -i &apos;s/^M//g&apos; filename</span><br></pre></td></tr></table></figure></p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>使用 <code>sed</code> 命令直接替换文件内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed -i &apos;s/^M//g&apos; filename</div></pre></td></tr></table></figure></p>
 <p>特别需要注意的是，<code>^M</code> 字符显示出来是两个字符 <code>^</code> 和 <code>M</code> 的组合，但上述替换中不能直接输入 <code>^M</code>，那样会查找到普通的字符 <code>M</code>，正确的输入方式是 <code>Ctrl + V</code>，然后 <code>Ctrl + M</code>。<br>完成替换后，可以使用 <code>cat -v [filename]</code> 再次查看，观察文件末尾的 <code>^M</code> 是否已经去除。</p>
-<p>网络上搜索的方案通常还会提到使用 <code>tr -d</code> 命令进行去除。<br>使用 <code>tr -d</code> 命令去除一些字符：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat -v [filename] | tr -d &apos;^M&apos;</span><br></pre></td></tr></table></figure></p>
+<p>网络上搜索的方案通常还会提到使用 <code>tr -d</code> 命令进行去除。<br>使用 <code>tr -d</code> 命令去除一些字符：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat -v [filename] | tr -d &apos;^M&apos;</div></pre></td></tr></table></figure></p>
 <p>然而实践中发现，如果这里的 <code>^M</code> 通过两个字符 <code>^</code> 和 <code>M</code> 输入，则会将文件中正常的大写 <code>M</code> 字符去除掉；如果这里的 <code>^M</code> 通过 <code>Ctrl + V</code>， <code>Ctrl + M</code> 方式输入，则输出的结果中依然还有特殊换行符 <code>^M</code>。<br>不知道是不是我哪里使用的方式不正确。</p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
 <li><a href="https://blog.csdn.net/u012122743/article/details/52332133" target="_blank" rel="external">https://blog.csdn.net/u012122743/article/details/52332133</a></li>
@@ -329,7 +385,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/" data-id="cke84v2p500if1gsho3p3o9rb" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/" data-id="ckea490el00eu9e8tjiwgfeea" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li></ul>
@@ -368,9 +424,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p><a href="https://vuetifyjs.com/en/getting-started/quick-start/" target="_blank" rel="external">Vuetify</a> 是基于 Vue 的 UI 库，集成了许多现成的组件。</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>首先创建一个 Vue.js 项目<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vue create learn-vuetify</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>首先创建一个 Vue.js 项目<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vue create learn-vuetify</div></pre></td></tr></table></figure></p>
 <img src="/blog-hexo/2020/07/10/初识Vuetify/1.png" alt="Vue基础示例页面" title="Vue基础示例页面">
-<p>使用命令行添加 <code>Vuetify</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vue add vuetify</span><br></pre></td></tr></table></figure></p>
+<p>使用命令行添加 <code>Vuetify</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vue add vuetify</div></pre></td></tr></table></figure></p>
 <p>命令执行后，观察项目内的差异，可以发现：</p>
 <ul>
 <li><code>package.json</code> 中添加了 <code>vuetify</code> 依赖，另外还有 <code>sass</code>、<code>sass-loader</code>、<code>vue-cli-plugin-vuetify</code> 和 <code>vuetify-loader</code> 等开发依赖项；</li>
@@ -383,7 +439,7 @@
 <li>多了一个 <code>src/assets/logo.svg</code> 资源文件</li>
 </ul>
 <img src="/blog-hexo/2020/07/10/初识Vuetify/2.png" alt="添加Vuetify后的示例页面" title="添加Vuetify后的示例页面">
-<p>如果在使用 <code>vue add vuetify</code> 命令之前已经是 <code>npm run serve</code> 状态，可能会抛出错误，此时中止并执行启动即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ERROR  Failed to compile with 1 errors                                                   </span><br><span class="line">This dependency was not found:</span><br><span class="line">* vuetify/lib in ./src/plugins/vuetify.js</span><br><span class="line">To install it, you can run: npm install --save vuetify/lib</span><br></pre></td></tr></table></figure></p>
+<p>如果在使用 <code>vue add vuetify</code> 命令之前已经是 <code>npm run serve</code> 状态，可能会抛出错误，此时中止并执行启动即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ERROR  Failed to compile with 1 errors                                                   </div><div class="line">This dependency was not found:</div><div class="line">* vuetify/lib in ./src/plugins/vuetify.js</div><div class="line">To install it, you can run: npm install --save vuetify/lib</div></pre></td></tr></table></figure></p>
 <p>除此之外，<code>vuetify</code> 还可以通过 <code>Nuxt install</code>、<code>Webpack install</code> 或 <code>Electron</code> 等方式安装或引入。</p>
 <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>对于 Vuetify 的使用，可以类似于大多数前端样式库。<br>比如：</p>
 <ul>
@@ -391,8 +447,8 @@
 <li>UI组件，可以参考 <a href="https://vuetifyjs.com/en/components/api-explorer/" target="_blank" rel="external">这里</a></li>
 <li>指令，可以参考 <a href="https://vuetifyjs.com/en/directives/click-outside/" target="_blank" rel="external">这里</a></li>
 </ul>
-<p>比如创建一个按钮：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;el-button type=&quot;primary&quot;&gt;按钮1&lt;/el-button&gt;</span><br><span class="line">&lt;v-btn color=&quot;primary&quot;&gt;按钮2&lt;/v-btn&gt;</span><br></pre></td></tr></table></figure></p>
-<p>比如创建一个横幅：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;v-alert type=&quot;warning&gt;xxxx&lt;/v-alert&gt;</span><br></pre></td></tr></table></figure></p>
+<p>比如创建一个按钮：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;el-button type=&quot;primary&quot;&gt;按钮1&lt;/el-button&gt;</div><div class="line">&lt;v-btn color=&quot;primary&quot;&gt;按钮2&lt;/v-btn&gt;</div></pre></td></tr></table></figure></p>
+<p>比如创建一个横幅：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;v-alert type=&quot;warning&gt;xxxx&lt;/v-alert&gt;</div></pre></td></tr></table></figure></p>
 <p>使用方式和 Element-UI 基本一致。</p>
 <p>除了基础样式库（如 Element-UI）能够实现的 Layout 和 UI 组件之外，Vuetify 更多处理的是框架和兼容性方面的问题。<br>在后续文章中详细分析值得学习的部分。</p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
@@ -402,7 +458,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/10/初识Vuetify/" data-id="cke84v2ow00hp1gshepbkqqp2" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/10/初识Vuetify/" data-id="ckea490e800dr9e8tbdkoernd" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vuetify/">Vuetify</a></li></ul>
@@ -441,25 +497,25 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Loguru 是一个旨在给 Python 日志处理带来愉悦的工具库。</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install loguru</span><br></pre></td></tr></table></figure>
-<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><h4 id="基础用法"><a href="#基础用法" class="headerlink" title="基础用法"></a>基础用法</h4><p>最基础的日志打印方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from loguru import logger </span><br><span class="line">logger.debug(&quot;That&apos;s it, beautiful and simple logging!&quot;)</span><br></pre></td></tr></table></figure></p>
-<h4 id="添加处理器"><a href="#添加处理器" class="headerlink" title="添加处理器"></a>添加处理器</h4><p>希望配置输出方式、格式、过滤器、日志级别的时候，只需要简单的使用 <code>add()</code> 方法即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logger.add(sys.stderr, format=&quot;&#123;time&#125; &#123;level&#125; &#123;message&#125;&quot;, filter=&quot;x_module&quot;, level=&quot;INFO&quot;)</span><br></pre></td></tr></table></figure></p>
-<h4 id="文件滚动、保留和压缩"><a href="#文件滚动、保留和压缩" class="headerlink" title="文件滚动、保留和压缩"></a>文件滚动、保留和压缩</h4><p>如果希望将日志消息存到文件中，只需要：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">logger.add(&quot;file_&#123;time&#125;.log&quot;)</span><br><span class="line">logger.info(&quot;xxx&quot;)</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install loguru</div></pre></td></tr></table></figure>
+<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><h4 id="基础用法"><a href="#基础用法" class="headerlink" title="基础用法"></a>基础用法</h4><p>最基础的日志打印方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">from loguru import logger </div><div class="line">logger.debug(&quot;That&apos;s it, beautiful and simple logging!&quot;)</div></pre></td></tr></table></figure></p>
+<h4 id="添加处理器"><a href="#添加处理器" class="headerlink" title="添加处理器"></a>添加处理器</h4><p>希望配置输出方式、格式、过滤器、日志级别的时候，只需要简单的使用 <code>add()</code> 方法即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">logger.add(sys.stderr, format=&quot;&#123;time&#125; &#123;level&#125; &#123;message&#125;&quot;, filter=&quot;x_module&quot;, level=&quot;INFO&quot;)</div></pre></td></tr></table></figure></p>
+<h4 id="文件滚动、保留和压缩"><a href="#文件滚动、保留和压缩" class="headerlink" title="文件滚动、保留和压缩"></a>文件滚动、保留和压缩</h4><p>如果希望将日志消息存到文件中，只需要：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">logger.add(&quot;file_&#123;time&#125;.log&quot;)</div><div class="line">logger.info(&quot;xxx&quot;)</div></pre></td></tr></table></figure></p>
 <p>执行后，会在同级目录下生成一个 <code>file_{YYYY-mm-dd_HH-MM-ss_sss}.log</code> 文件。</p>
-<p>可以使用 <code>rotation</code>、<code>retention</code>、<code>compression</code> 参数指定相关的滚动、保留和压缩方式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">logger.add(&quot;file_1.log&quot;, rotation=&quot;500 MB&quot;)    # Automatically rotate too big file</span><br><span class="line">logger.add(&quot;file_2.log&quot;, rotation=&quot;12:00&quot;)     # New file is created each day at noon</span><br><span class="line">logger.add(&quot;file_3.log&quot;, rotation=&quot;1 week&quot;)    # Once the file is too old, it&apos;s rotated</span><br><span class="line">logger.add(&quot;file_X.log&quot;, retention=&quot;10 days&quot;)  # Cleanup after some time</span><br><span class="line">logger.add(&quot;file_Y.log&quot;, compression=&quot;zip&quot;)    # Save some loved space</span><br></pre></td></tr></table></figure></p>
-<h4 id="花括号风格的字符串格式化"><a href="#花括号风格的字符串格式化" class="headerlink" title="花括号风格的字符串格式化"></a>花括号风格的字符串格式化</h4><p>Loguru偏向于使用更优雅的 <code>{}</code> 格式化而不是 <code>%</code>，日志方法的效果与 <code>str.format</code> 是等价的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logger.info(&quot;A is &#123;&#125;, and B is &#123;value&#125;&quot;, 3.4, value=&quot;value-3.4&quot;)</span><br></pre></td></tr></table></figure></p>
-<h4 id="线程或主函数里的异常捕捉"><a href="#线程或主函数里的异常捕捉" class="headerlink" title="线程或主函数里的异常捕捉"></a>线程或主函数里的异常捕捉</h4><p>使用 <code>catch</code> 装饰器，能够确保一个方法内发生的异常被正确地传递到 <code>logger</code> 中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@logger.catch</span><br><span class="line">def my_function(x, y, z):</span><br><span class="line">    # An error? It&apos;s caught anyway!</span><br><span class="line">    return 1 / (x + y + z)</span><br></pre></td></tr></table></figure></p>
-<h4 id="更漂亮的颜色"><a href="#更漂亮的颜色" class="headerlink" title="更漂亮的颜色"></a>更漂亮的颜色</h4><p>Loguru自动添加了一些颜色，同样你也可以自定义配置喜欢的颜色，使用 <code>markup tags</code> 相关的配置。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logger.add(sys.stdout, colorize=True, format=&quot;&lt;green&gt;&#123;time&#125;&lt;/green&gt; &lt;level&gt;&#123;message&#125;&lt;/level&gt;&quot;)</span><br></pre></td></tr></table></figure></p>
-<h4 id="异步、线程安全、多进程安全"><a href="#异步、线程安全、多进程安全" class="headerlink" title="异步、线程安全、多进程安全"></a>异步、线程安全、多进程安全</h4><p>所有添加到 <code>logger</code> 中的处理器都默认是线程安全的，它们不是多进程安全的，但可以使用 <code>enqueue</code> 参数来确保日志内容的完整性。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logger.add(&quot;somefile.log&quot;, enqueue=True)</span><br></pre></td></tr></table></figure></p>
-<h4 id="描述完整的异常信息"><a href="#描述完整的异常信息" class="headerlink" title="描述完整的异常信息"></a>描述完整的异常信息</h4><p>记录异常信息对于追踪bug而言是至关重要的，但如果你不知道为何失败了就没啥用。Loguru 能够展示完整的调用堆栈来帮助定位问题。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">logger.add(&quot;out.log&quot;, backtrace=True, diagnose=True)  # &apos;False&apos; to not leak sensitive data in prod</span><br><span class="line">def func(a, b):</span><br><span class="line">    return a / b</span><br><span class="line"></span><br><span class="line">def nested(c):</span><br><span class="line">    try:</span><br><span class="line">        func(5, c)</span><br><span class="line">    except ZeroDivisionError:</span><br><span class="line">        logger.exception(&quot;What?!&quot;)</span><br><span class="line">nested(0)</span><br></pre></td></tr></table></figure></p>
+<p>可以使用 <code>rotation</code>、<code>retention</code>、<code>compression</code> 参数指定相关的滚动、保留和压缩方式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">logger.add(&quot;file_1.log&quot;, rotation=&quot;500 MB&quot;)    # Automatically rotate too big file</div><div class="line">logger.add(&quot;file_2.log&quot;, rotation=&quot;12:00&quot;)     # New file is created each day at noon</div><div class="line">logger.add(&quot;file_3.log&quot;, rotation=&quot;1 week&quot;)    # Once the file is too old, it&apos;s rotated</div><div class="line">logger.add(&quot;file_X.log&quot;, retention=&quot;10 days&quot;)  # Cleanup after some time</div><div class="line">logger.add(&quot;file_Y.log&quot;, compression=&quot;zip&quot;)    # Save some loved space</div></pre></td></tr></table></figure></p>
+<h4 id="花括号风格的字符串格式化"><a href="#花括号风格的字符串格式化" class="headerlink" title="花括号风格的字符串格式化"></a>花括号风格的字符串格式化</h4><p>Loguru偏向于使用更优雅的 <code>{}</code> 格式化而不是 <code>%</code>，日志方法的效果与 <code>str.format</code> 是等价的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">logger.info(&quot;A is &#123;&#125;, and B is &#123;value&#125;&quot;, 3.4, value=&quot;value-3.4&quot;)</div></pre></td></tr></table></figure></p>
+<h4 id="线程或主函数里的异常捕捉"><a href="#线程或主函数里的异常捕捉" class="headerlink" title="线程或主函数里的异常捕捉"></a>线程或主函数里的异常捕捉</h4><p>使用 <code>catch</code> 装饰器，能够确保一个方法内发生的异常被正确地传递到 <code>logger</code> 中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@logger.catch</div><div class="line">def my_function(x, y, z):</div><div class="line">    # An error? It&apos;s caught anyway!</div><div class="line">    return 1 / (x + y + z)</div></pre></td></tr></table></figure></p>
+<h4 id="更漂亮的颜色"><a href="#更漂亮的颜色" class="headerlink" title="更漂亮的颜色"></a>更漂亮的颜色</h4><p>Loguru自动添加了一些颜色，同样你也可以自定义配置喜欢的颜色，使用 <code>markup tags</code> 相关的配置。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">logger.add(sys.stdout, colorize=True, format=&quot;&lt;green&gt;&#123;time&#125;&lt;/green&gt; &lt;level&gt;&#123;message&#125;&lt;/level&gt;&quot;)</div></pre></td></tr></table></figure></p>
+<h4 id="异步、线程安全、多进程安全"><a href="#异步、线程安全、多进程安全" class="headerlink" title="异步、线程安全、多进程安全"></a>异步、线程安全、多进程安全</h4><p>所有添加到 <code>logger</code> 中的处理器都默认是线程安全的，它们不是多进程安全的，但可以使用 <code>enqueue</code> 参数来确保日志内容的完整性。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">logger.add(&quot;somefile.log&quot;, enqueue=True)</div></pre></td></tr></table></figure></p>
+<h4 id="描述完整的异常信息"><a href="#描述完整的异常信息" class="headerlink" title="描述完整的异常信息"></a>描述完整的异常信息</h4><p>记录异常信息对于追踪bug而言是至关重要的，但如果你不知道为何失败了就没啥用。Loguru 能够展示完整的调用堆栈来帮助定位问题。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">logger.add(&quot;out.log&quot;, backtrace=True, diagnose=True)  # &apos;False&apos; to not leak sensitive data in prod</div><div class="line">def func(a, b):</div><div class="line">    return a / b</div><div class="line"></div><div class="line">def nested(c):</div><div class="line">    try:</div><div class="line">        func(5, c)</div><div class="line">    except ZeroDivisionError:</div><div class="line">        logger.exception(&quot;What?!&quot;)</div><div class="line">nested(0)</div></pre></td></tr></table></figure></p>
 <p>只要指定了 <code>backtrace</code> 和 <code>diagnose</code> 在捕捉异常时，只需要打印关键信息，其余堆栈信息会自动添加。<br>这两个参数默认值都是 <code>True</code>，如果设置为 <code>False</code>，可以参考查看在日志中减少的部分。</p>
-<h4 id="按需制定的结构化日志"><a href="#按需制定的结构化日志" class="headerlink" title="按需制定的结构化日志"></a>按需制定的结构化日志</h4><p>使用 <code>serialize</code> 参数，每条日志信息将会被转换成 JSON 格式的字符串。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logger.add(custom_sink_function, serialize=True)</span><br></pre></td></tr></table></figure></p>
-<p>通过 <code>bind</code> 方法，可以定义已经配置的格式中的相关属性信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">logger.add(&quot;file.log&quot;, format=&quot;&#123;extra[ip]&#125; &#123;extra[user]&#125; &#123;message&#125;&quot;)</span><br><span class="line">context_logger = logger.bind(ip=&quot;192.168.0.1&quot;, user=&quot;someone&quot;)</span><br><span class="line">context_logger.info(&quot;Contextualize your logger easily&quot;)</span><br><span class="line">context_logger.bind(user=&quot;someone_else&quot;).info(&quot;Inline binding of extra attribute&quot;)</span><br><span class="line">context_logger.info(&quot;Use kwargs to add context during formatting: &#123;user&#125;&quot;, user=&quot;anybody&quot;)</span><br></pre></td></tr></table></figure></p>
+<h4 id="按需制定的结构化日志"><a href="#按需制定的结构化日志" class="headerlink" title="按需制定的结构化日志"></a>按需制定的结构化日志</h4><p>使用 <code>serialize</code> 参数，每条日志信息将会被转换成 JSON 格式的字符串。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">logger.add(custom_sink_function, serialize=True)</div></pre></td></tr></table></figure></p>
+<p>通过 <code>bind</code> 方法，可以定义已经配置的格式中的相关属性信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">logger.add(&quot;file.log&quot;, format=&quot;&#123;extra[ip]&#125; &#123;extra[user]&#125; &#123;message&#125;&quot;)</div><div class="line">context_logger = logger.bind(ip=&quot;192.168.0.1&quot;, user=&quot;someone&quot;)</div><div class="line">context_logger.info(&quot;Contextualize your logger easily&quot;)</div><div class="line">context_logger.bind(user=&quot;someone_else&quot;).info(&quot;Inline binding of extra attribute&quot;)</div><div class="line">context_logger.info(&quot;Use kwargs to add context during formatting: &#123;user&#125;&quot;, user=&quot;anybody&quot;)</div></pre></td></tr></table></figure></p>
 <h4 id="计算耗能较高的方法的懒加载"><a href="#计算耗能较高的方法的懒加载" class="headerlink" title="计算耗能较高的方法的懒加载"></a>计算耗能较高的方法的懒加载</h4><p>通过 <code>opt</code> 方法指定 <code>lazy=True</code> 可以避免生产环境的性能问题。</p>
-<h4 id="自定义级别"><a href="#自定义级别" class="headerlink" title="自定义级别"></a>自定义级别</h4><p>除了标准的日志级别外，Loguru 添加了 <code>trace</code> 和 <code>seccuss</code> 级别，如果还想要自定义的，可以使用 <code>level</code> 方法创建：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">new_level = logger.level(&quot;SNAKY&quot;, no=38, color=&quot;&lt;yellow&gt;&quot;, icon=&quot;🐍&quot;)</span><br><span class="line">logger.log(&quot;SNAKY&quot;, &quot;Here we go!&quot;)</span><br></pre></td></tr></table></figure></p>
-<h4 id="更优的日期处理"><a href="#更优的日期处理" class="headerlink" title="更优的日期处理"></a>更优的日期处理</h4><p>Loguru可以使用无时区信息的时间：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logger.add(&quot;file.log&quot;, format=&quot;&#123;time:YYYY-MM-DD at HH:mm:ss&#125; | &#123;level&#125; | &#123;message&#125;&quot;)</span><br></pre></td></tr></table></figure></p>
+<h4 id="自定义级别"><a href="#自定义级别" class="headerlink" title="自定义级别"></a>自定义级别</h4><p>除了标准的日志级别外，Loguru 添加了 <code>trace</code> 和 <code>seccuss</code> 级别，如果还想要自定义的，可以使用 <code>level</code> 方法创建：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">new_level = logger.level(&quot;SNAKY&quot;, no=38, color=&quot;&lt;yellow&gt;&quot;, icon=&quot;🐍&quot;)</div><div class="line">logger.log(&quot;SNAKY&quot;, &quot;Here we go!&quot;)</div></pre></td></tr></table></figure></p>
+<h4 id="更优的日期处理"><a href="#更优的日期处理" class="headerlink" title="更优的日期处理"></a>更优的日期处理</h4><p>Loguru可以使用无时区信息的时间：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">logger.add(&quot;file.log&quot;, format=&quot;&#123;time:YYYY-MM-DD at HH:mm:ss&#125; | &#123;level&#125; | &#123;message&#125;&quot;)</div></pre></td></tr></table></figure></p>
 <h4 id="针对脚本和库的适配"><a href="#针对脚本和库的适配" class="headerlink" title="针对脚本和库的适配"></a>针对脚本和库的适配</h4><p>在一个脚本中使用日志是很容易 的，可以直接使用 <code>configure</code> 方法配置。在一个库中使用 Loguru，记得不要使用 <code>add</code> 而是使用 <code>disable</code>，如果开发者希望看到相关的信息，它可以使用 <code>enable</code> 来重新启用</p>
-<h4 id="通过环境变量配置个性化默认配置"><a href="#通过环境变量配置个性化默认配置" class="headerlink" title="通过环境变量配置个性化默认配置"></a>通过环境变量配置个性化默认配置</h4><p>可以使用设置环境变量的方式，配置日志格式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Linux / OSX</span><br><span class="line">export LOGURU_FORMAT=&quot;&#123;time&#125; | &lt;lvl&gt;&#123;message&#125;&lt;/lvl&gt;&quot;</span><br><span class="line"></span><br><span class="line"># Windows</span><br><span class="line">setx LOGURU_DEBUG_COLOR &quot;&lt;green&gt;&quot;</span><br></pre></td></tr></table></figure></p>
+<h4 id="通过环境变量配置个性化默认配置"><a href="#通过环境变量配置个性化默认配置" class="headerlink" title="通过环境变量配置个性化默认配置"></a>通过环境变量配置个性化默认配置</h4><p>可以使用设置环境变量的方式，配置日志格式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># Linux / OSX</div><div class="line">export LOGURU_FORMAT=&quot;&#123;time&#125; | &lt;lvl&gt;&#123;message&#125;&lt;/lvl&gt;&quot;</div><div class="line"></div><div class="line"># Windows</div><div class="line">setx LOGURU_DEBUG_COLOR &quot;&lt;green&gt;&quot;</div></pre></td></tr></table></figure></p>
 <h4 id="方便地解析"><a href="#方便地解析" class="headerlink" title="方便地解析"></a>方便地解析</h4><p>Loguru 提供 <code>parse</code> 方法，帮助在日志中使用正则表达式提取相关信息</p>
 <h4 id="详情的通知器"><a href="#详情的通知器" class="headerlink" title="详情的通知器"></a>详情的通知器</h4><p>Loguru 可以轻松地结合一些通知器的库，用于发送电子邮件，当程序遇到预期之外的异常时，通过各种方式通知开发者</p>
 <p>更多细节可以参考 <a href="https://github.com/Delgan/loguru" target="_blank" rel="external">Loguru官方项目说明</a>。</p>
@@ -471,7 +527,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/08/使用Loguru处理日志/" data-id="cke84v2o200er1gshrtylsegy" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/08/使用Loguru处理日志/" data-id="ckea490d600b39e8tpatemv2g" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Loguru/">Loguru</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -518,12 +574,12 @@
 <li>ItsDangerous</li>
 <li>Click</li>
 </ul>
-<p>使用 <code>pip</code> 安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install Flask</span><br></pre></td></tr></table></figure></p>
-<h2 id="启动应用"><a href="#启动应用" class="headerlink" title="启动应用"></a>启动应用</h2><p>完成上述安装后，可以创建一个目录，新建一个 <code>hello.py</code> 文件，输入以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from flask import Flask</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">@app.route(&apos;/&apos;)</span><br><span class="line">def hello_world():</span><br><span class="line">    return &apos;Hello, World!&apos;</span><br></pre></td></tr></table></figure></p>
+<p>使用 <code>pip</code> 安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install Flask</div></pre></td></tr></table></figure></p>
+<h2 id="启动应用"><a href="#启动应用" class="headerlink" title="启动应用"></a>启动应用</h2><p>完成上述安装后，可以创建一个目录，新建一个 <code>hello.py</code> 文件，输入以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">from flask import Flask</div><div class="line">app = Flask(__name__)</div><div class="line"></div><div class="line">@app.route(&apos;/&apos;)</div><div class="line">def hello_world():</div><div class="line">    return &apos;Hello, World!&apos;</div></pre></td></tr></table></figure></p>
 <p>上述代码引入了 <code>Flask</code> 类，这个类的实例将会是一个 WSGI 应用。<br>接着创建了 <code>Flask</code> 类的实例，构造方法第一个参数是应用的名称，如果像这个示例中使用的是单一模块，应该使用 <code>__name__</code>，因为取决于它是启动为一个应用，还是被引入作为一个模块，这个名称将会是不同的。<br>接下来使用了 <code>route</code> 装饰器，告诉 Flask 这个 URL 将会触发这个方法，<code>route</code> 方法的参数用于声明URL的匹配格式。对应被装饰的函数内容是返回希望展示给客户端的内容。</p>
-<p>接下来运行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ export FLASK_APP=hello.py</span><br><span class="line">$ flask run</span><br><span class="line"> * Serving Flask app &quot;hello.py&quot;</span><br><span class="line"> * Environment: production</span><br><span class="line">   WARNING: This is a development server. Do not use it in a production deployment.</span><br><span class="line">   Use a production WSGI server instead.</span><br><span class="line"> * Debug mode: off</span><br><span class="line"> * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)</span><br></pre></td></tr></table></figure></p>
-<p>打开浏览器，输入 <code>http://127.0.0.1:5000/</code> ，可以看到浏览器上返回了 <code>Hello, World!</code> 字符串。<br>如果希望修改主机和端口号，可以使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flask run --host 0.0.0.0 --port 5001</span><br></pre></td></tr></table></figure></p>
-<h2 id="Debug模式"><a href="#Debug模式" class="headerlink" title="Debug模式"></a>Debug模式</h2><p>在开发过程中，可能不希望反复地重启服务（PHP就没有这个问题！），Flask 提供了一种自动 reload 的功能，这样当代码发生改动时，服务器将自动重新载入。<br>同时，这种模式也给提供大量有用的调试信息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export FLASK_ENV=development</span><br><span class="line">flask run</span><br></pre></td></tr></table></figure></p>
+<p>接下来运行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ export FLASK_APP=hello.py</div><div class="line">$ flask run</div><div class="line"> * Serving Flask app &quot;hello.py&quot;</div><div class="line"> * Environment: production</div><div class="line">   WARNING: This is a development server. Do not use it in a production deployment.</div><div class="line">   Use a production WSGI server instead.</div><div class="line"> * Debug mode: off</div><div class="line"> * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)</div></pre></td></tr></table></figure></p>
+<p>打开浏览器，输入 <code>http://127.0.0.1:5000/</code> ，可以看到浏览器上返回了 <code>Hello, World!</code> 字符串。<br>如果希望修改主机和端口号，可以使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">flask run --host 0.0.0.0 --port 5001</div></pre></td></tr></table></figure></p>
+<h2 id="Debug模式"><a href="#Debug模式" class="headerlink" title="Debug模式"></a>Debug模式</h2><p>在开发过程中，可能不希望反复地重启服务（PHP就没有这个问题！），Flask 提供了一种自动 reload 的功能，这样当代码发生改动时，服务器将自动重新载入。<br>同时，这种模式也给提供大量有用的调试信息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export FLASK_ENV=development</div><div class="line">flask run</div></pre></td></tr></table></figure></p>
 <p>添加 <code>FLASK_ENV=development</code> 实质上做了三件事：</p>
 <ul>
 <li>激活了调试器；</li>
@@ -531,14 +587,14 @@
 <li>开启 Flask 应用内部的 debug 模式；</li>
 </ul>
 <h2 id="一些基础功能"><a href="#一些基础功能" class="headerlink" title="一些基础功能"></a>一些基础功能</h2><h4 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h4><p>使用 <code>route()</code> 装饰器可以将一个方法绑定到一个 URL 上。</p>
-<h4 id="变量规则"><a href="#变量规则" class="headerlink" title="变量规则"></a>变量规则</h4><p>可以添加变量区域到 URL 格式中，这样可以接受到参数，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@app.route(&apos;/post/&lt;int:post_id&gt;&apos;)</span><br><span class="line">def show_post(post_id):</span><br><span class="line">    return &apos;Post: %d&apos; % post_id</span><br></pre></td></tr></table></figure></p>
+<h4 id="变量规则"><a href="#变量规则" class="headerlink" title="变量规则"></a>变量规则</h4><p>可以添加变量区域到 URL 格式中，这样可以接受到参数，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@app.route(&apos;/post/&lt;int:post_id&gt;&apos;)</div><div class="line">def show_post(post_id):</div><div class="line">    return &apos;Post: %d&apos; % post_id</div></pre></td></tr></table></figure></p>
 <p>基本上至此可以跑通一个简单的接口调用。<br>其它特性和功能可以参考官方文档。</p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://flask.palletsprojects.com/en/1.1.x/quickstart/#quickstart" target="_blank" rel="external">https://flask.palletsprojects.com/en/1.1.x/quickstart/#quickstart</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/06/初识Flask/" data-id="cke84v2or00h91gsh1jcd9xox" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/06/初识Flask/" data-id="ckea490e200dh9e8tqsuhoxfy" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Flask/">Flask</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -580,13 +636,13 @@
 <img src="/blog-hexo/2020/07/04/初识FIGlet/figlet1.png" alt="FIGlet示意图" title="FIGlet示意图">
 <p>最通俗的 FIGlet 之一是坊间流传广泛的那张图：</p>
 <img src="/blog-hexo/2020/07/04/初识FIGlet/figlet2.png" alt="佛祖保佑" title="佛祖保佑">
-<h2 id="如何使用FIGlet"><a href="#如何使用FIGlet" class="headerlink" title="如何使用FIGlet"></a>如何使用FIGlet</h2><p>在不同平台、不同语言下，可以找到各种 FIGlet 相关的包。<br>比如在 Node.js 下安装包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install figlet</span><br></pre></td></tr></table></figure></p>
-<p>然后创建一个 <code>main.js</code> 文件，输入以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var figlet = require(&apos;figlet&apos;);</span><br><span class="line">figlet(&apos;Hello World!!&apos;, function(err, data) &#123;</span><br><span class="line">    if (err) &#123;</span><br><span class="line">        console.log(&apos;Something went wrong...&apos;);</span><br><span class="line">        console.dir(err);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    console.log(data)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<p>执行 <code>node main.js</code> 即可看到结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ node main.js</span><br><span class="line"></span><br><span class="line">  _   _      _ _        __        __         _     _ _ _</span><br><span class="line"></span><br><span class="line"> | | | | ___| | | ___   \ \      / /__  _ __| | __| | | |</span><br><span class="line"></span><br><span class="line"> | |_| |/ _ \ | |/ _ \   \ \ /\ / / _ \| &apos;__| |/ _` | | |</span><br><span class="line"></span><br><span class="line"> |  _  |  __/ | | (_) |   \ V  V / (_) | |  | | (_| |_|_|</span><br><span class="line"></span><br><span class="line"> |_| |_|\___|_|_|\___/     \_/\_/ \___/|_|  |_|\__,_(_|_)</span><br></pre></td></tr></table></figure></p>
+<h2 id="如何使用FIGlet"><a href="#如何使用FIGlet" class="headerlink" title="如何使用FIGlet"></a>如何使用FIGlet</h2><p>在不同平台、不同语言下，可以找到各种 FIGlet 相关的包。<br>比如在 Node.js 下安装包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install figlet</div></pre></td></tr></table></figure></p>
+<p>然后创建一个 <code>main.js</code> 文件，输入以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var figlet = require(&apos;figlet&apos;);</div><div class="line">figlet(&apos;Hello World!!&apos;, function(err, data) &#123;</div><div class="line">    if (err) &#123;</div><div class="line">        console.log(&apos;Something went wrong...&apos;);</div><div class="line">        console.dir(err);</div><div class="line">        return;</div><div class="line">    &#125;</div><div class="line">    console.log(data)</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>执行 <code>node main.js</code> 即可看到结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ node main.js</div><div class="line"></div><div class="line">  _   _      _ _        __        __         _     _ _ _</div><div class="line"></div><div class="line"> | | | | ___| | | ___   \ \      / /__  _ __| | __| | | |</div><div class="line"></div><div class="line"> | |_| |/ _ \ | |/ _ \   \ \ /\ / / _ \| &apos;__| |/ _` | | |</div><div class="line"></div><div class="line"> |  _  |  __/ | | (_) |   \ V  V / (_) | |  | | (_| |_|_|</div><div class="line"></div><div class="line"> |_| |_|\___|_|_|\___/     \_/\_/ \___/|_|  |_|\__,_(_|_)</div></pre></td></tr></table></figure></p>
 <img src="/blog-hexo/2020/07/04/初识FIGlet/figlet3.png" alt="输出效果" title="输出效果">
-<h2 id="Ubuntu-添加到欢迎页面"><a href="#Ubuntu-添加到欢迎页面" class="headerlink" title="Ubuntu 添加到欢迎页面"></a>Ubuntu 添加到欢迎页面</h2><p>首先可以使用 <code>apt-get</code> 安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; sudo apt-get install figlet</span><br></pre></td></tr></table></figure></p>
-<p>安装完成后：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; figlet abc</span><br></pre></td></tr></table></figure></p>
-<p>在 <code>oh-my-zsh</code> 的 <code>.zshrc</code> 文件中添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">figlet -f slant [xxx]</span><br></pre></td></tr></table></figure></p>
+<h2 id="Ubuntu-添加到欢迎页面"><a href="#Ubuntu-添加到欢迎页面" class="headerlink" title="Ubuntu 添加到欢迎页面"></a>Ubuntu 添加到欢迎页面</h2><p>首先可以使用 <code>apt-get</code> 安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt; sudo apt-get install figlet</div></pre></td></tr></table></figure></p>
+<p>安装完成后：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt; figlet abc</div></pre></td></tr></table></figure></p>
+<p>在 <code>oh-my-zsh</code> 的 <code>.zshrc</code> 文件中添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">figlet -f slant [xxx]</div></pre></td></tr></table></figure></p>
 <p>前提是系统存在 <code>figlet</code> 命令，否则会提示 <code>command not found: figlet</code>。<br>其中 <code>-f slant</code> 是为了添加倾斜字体的效果。</p>
 <p>之后每次 SSH 连接登录时，就会显示：<br><img src="/blog-hexo/2020/07/04/初识FIGlet/figlet4.png" alt="输出效果" title="输出效果"></p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
@@ -597,61 +653,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/04/初识FIGlet/" data-id="cke84v2op00h21gshw8p6inng" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/04/初识FIGlet/" data-id="ckea490e000da9e8tmuj19f34" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/FIGlet/">FIGlet</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Element-UI针对文件上传添加表单校验" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2020/07/02/Element-UI针对文件上传添加表单校验/" class="article-date">
-  <time datetime="2020-07-02T15:31:44.000Z" itemprop="datePublished">2020-07-02</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2020/07/02/Element-UI针对文件上传添加表单校验/">Element-UI针对文件上传添加表单校验</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在使用 <code>Element-UI</code> 绘制前端页面时，通常会使用到表单校验的功能，能够快速地针对用户输入的信息进行自定义规则的校验及错误提示。</p>
-<p>不过查看 <a href="https://element.eleme.cn/#/zh-CN/component/form" target="_blank" rel="external">ElementUI官网</a> 可以发现，在表单检查的示例中并没有关于文件上传类型的示例代码。事实上，如果在表单中使用 <a href="https://element.eleme.cn/#/zh-CN/component/upload" target="_blank" rel="external">文件上传组件</a> ，会发现即使是最基础的 <code>required</code> 校验规则也会出问题。</p>
-<p>如果这个表单被赋予了 <code>required</code> 规则（即必须填写），则会出现相关的错误提示，并且当用户上传文件后，这个提示依然不会消失。<br>初步分析是 ElementUI 框架自身的限制，没有处理这种情况。   </p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>如果在表单中需要有文件上传，且又希望用到表单校验的功能，要怎么办呢？<br>在网上搜索相关的内容，可以找到若干篇相似的回答，大概的含义是，需要在文件上传组件的 <code>on-success</code> 钩子方法中调用 <code>this.$refs.xxx.clearValidate()</code> 方法，来实现上传文件后清除表单错误提示信息的功能。</p>
-<p>这些解决方法都存在一个问题，就是如果用户上传了文件又把它移除了，则校验信息回不来了。  </p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>因此，如果希望实现简单的有/无校验，需要在 <code>on-success</code> 和 <code>on-remove</code> 方法中同步添加逻辑。<br>对于文件上传组件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;el-upload</span><br><span class="line">   ...</span><br><span class="line">   :on-success=&quot;handleSuccess&quot;</span><br><span class="line">   :on-remove=&quot;handleRemove&quot;</span><br><span class="line">   ...</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></p>
-<p>在两个方法中添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">handleSuccess() &#123;</span><br><span class="line">    const refKey = ...;</span><br><span class="line">    if(this.$refs &amp;&amp; this.refs[refKey] &amp;&amp; this.refs[refKey][0])&#123;</span><br><span class="line">         this.$refs[refKey][0].clearValidate();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">handleRemove() &#123;</span><br><span class="line">    const refKey = ...;</span><br><span class="line">    if(this.$refs &amp;&amp; this.refs[refKey] &amp;&amp; this.refs[refKey][0])&#123;</span><br><span class="line">         this.$refs[refKey][0].validate();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这样可以实现在上传文件后错误提示消息，在移除文件后又会恢复错误信息。<br>这种方法依然有局限性，仅限于处理单个文件上传的场景，对于允许上传文件列表的情况又会有新的bug。</p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://blog.csdn.net/abcde158308/article/details/80578909" target="_blank" rel="external">https://blog.csdn.net/abcde158308/article/details/80578909</a><br><a href="https://juejin.im/post/5d5de2546fb9a06b0703c369" target="_blank" rel="external">https://juejin.im/post/5d5de2546fb9a06b0703c369</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/02/Element-UI针对文件上传添加表单校验/" data-id="cke84v2ik00171gsh7ti3veph" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
 
     </footer>
   </div>
@@ -717,6 +722,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -730,10 +739,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

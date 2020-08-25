@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/07/04/Axios发送Ajax请求至SpringBoot后台时参数匹配的一个问题/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="问题描述在 Vue.js 框架中使用 axios 给后台接口发送请求时，发现后台 Spring Boot 无法接收到参数。在前端，发送请求的代码为：1234PutMethod: (params) =&amp;gt; &amp;#123;    return axios.put(&amp;apos;/api/request/path&amp;apos;, params);&amp;#125;// params 的值为  &amp;#123; pa">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.857Z">
+<meta property="og:updated_time" content="2019-07-04T08:49:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Axios发送Ajax请求至SpringBoot后台时参数匹配的一个问题">
 <meta name="twitter:description" content="问题描述在 Vue.js 框架中使用 axios 给后台接口发送请求时，发现后台 Spring Boot 无法接收到参数。在前端，发送请求的代码为：1234PutMethod: (params) =&amp;gt; &amp;#123;    return axios.put(&amp;apos;/api/request/path&amp;apos;, params);&amp;#125;// params 的值为  &amp;#123; pa">
@@ -94,23 +94,23 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>在 Vue.js 框架中使用 axios 给后台接口发送请求时，发现后台 Spring Boot 无法接收到参数。<br>在前端，发送请求的代码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PutMethod: (params) =&gt; &#123;</span><br><span class="line">    return axios.put(&apos;/api/request/path&apos;, params);</span><br><span class="line">&#125;</span><br><span class="line">// params 的值为  &#123; paramSample: &apos;abcd&apos; &#125;</span><br></pre></td></tr></table></figure></p>
+        <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>在 Vue.js 框架中使用 axios 给后台接口发送请求时，发现后台 Spring Boot 无法接收到参数。<br>在前端，发送请求的代码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">PutMethod: (params) =&gt; &#123;</div><div class="line">    return axios.put(&apos;/api/request/path&apos;, params);</div><div class="line">&#125;</div><div class="line">// params 的值为  &#123; paramSample: &apos;abcd&apos; &#125;</div></pre></td></tr></table></figure></p>
 <p>使用 <code>PUT</code> 方法，将参数放在了请求体 <code>Request Payload</code> 中。</p>
-<p>在 Spring Boot 后台，接口的定义方法为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public void putMethod(String paramSample) &#123;</span><br><span class="line"> log.info(paramSample);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在 Spring Boot 后台，接口的定义方法为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public void putMethod(String paramSample) &#123;</div><div class="line"> log.info(paramSample);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>这种情况下，Spring Boot 默认会从访问请求的 URL 中提取名称为 <code>paramSample</code> 的参数，但 <code>PUT</code> 方法没有将参数拼接到 URL 里，因此后台获取不到 axios 请求时的参数。</p>
 <h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>在这种场景下，问题本质在于前后端对于参数传递的位置不一致造成的。<br>前端认为应该通过请求体传递参数，而后台认为应该从请求的 URL 中接收参数。<br>因此，修改方式可以从两个角度来考虑。</p>
-<h4 id="1-考虑修改后端"><a href="#1-考虑修改后端" class="headerlink" title="1.考虑修改后端"></a>1.考虑修改后端</h4><p>通常来说 <code>POST</code> 和 <code>PUT</code> 方法不会将参数暴露在 URL 中，因此可以考虑将后台接口修改为从请求体中获取参数。<br>具体的流程大概有以下几步：<br>添加一个实体类 <code>ParamEntity</code> ，其中成员变量定义为需要接收的参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">class ParamEntity &#123;</span><br><span class="line">    private String paramSample;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>在 Controller 接口中，使用 <code>@RequestBody</code> 注解使参数能够获取到请求体的内容。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public Void putMethod(@RequestBody ParamEntity paramEntity)&#123;</span><br><span class="line"> // …</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="1-考虑修改后端"><a href="#1-考虑修改后端" class="headerlink" title="1.考虑修改后端"></a>1.考虑修改后端</h4><p>通常来说 <code>POST</code> 和 <code>PUT</code> 方法不会将参数暴露在 URL 中，因此可以考虑将后台接口修改为从请求体中获取参数。<br>具体的流程大概有以下几步：<br>添加一个实体类 <code>ParamEntity</code> ，其中成员变量定义为需要接收的参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">class ParamEntity &#123;</div><div class="line">    private String paramSample;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在 Controller 接口中，使用 <code>@RequestBody</code> 注解使参数能够获取到请求体的内容。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public Void putMethod(@RequestBody ParamEntity paramEntity)&#123;</div><div class="line"> // …</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>然后在参数变量 <code>paramEntity</code> 中获取对应的成员变量 <code>paramSample</code> ，即可获取对应参数的值。</p>
 <h4 id="2-考虑修改前端"><a href="#2-考虑修改前端" class="headerlink" title="2.考虑修改前端"></a>2.考虑修改前端</h4><p>有时候参数比较简单而接口较为繁多，为每一个接口声明一个实体类可能会有点麻烦。<br>这时可以直接采用在前端中将参数拼接到 URL 中的方案。</p>
-<p>平时使用 axios 进行 ajax 请求时，对于 <code>PUT</code> 方法主要是使用了前两个参数 <code>url</code> 和 <code>data</code> ，参考 axios 的官方文档，可以使用第三个参数 <code>config</code> 中的 <code>params</code> 参数项，类似于 <code>GET</code> 方法的第二个参数。<br>将<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PutMethod: (params) =&gt; &#123;</span><br><span class="line"> return axis.put(`/api/request/path`, params);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>修改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PutMethod: (params) =&gt; &#123;</span><br><span class="line"> return axis.put(`/api/request/path`, params, &#123;</span><br><span class="line">  params: params</span><br><span class="line"> &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>平时使用 axios 进行 ajax 请求时，对于 <code>PUT</code> 方法主要是使用了前两个参数 <code>url</code> 和 <code>data</code> ，参考 axios 的官方文档，可以使用第三个参数 <code>config</code> 中的 <code>params</code> 参数项，类似于 <code>GET</code> 方法的第二个参数。<br>将<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">PutMethod: (params) =&gt; &#123;</div><div class="line"> return axis.put(`/api/request/path`, params);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>修改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">PutMethod: (params) =&gt; &#123;</div><div class="line"> return axis.put(`/api/request/path`, params, &#123;</div><div class="line">  params: params</div><div class="line"> &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>就会在 <code>PUT</code> 请求的 URL 中拼接上对应的参数，这时后台就可以使用原来的方案获取到参数了。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/07/04/Axios发送Ajax请求至SpringBoot后台时参数匹配的一个问题/" data-id="cke84v2i6000i1gshwl061xdq" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/07/04/Axios发送Ajax请求至SpringBoot后台时参数匹配的一个问题/" data-id="ckea4907p00099e8tij8sf1i1" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/axios/">axios</a></li></ul>
@@ -191,6 +191,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -204,10 +208,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

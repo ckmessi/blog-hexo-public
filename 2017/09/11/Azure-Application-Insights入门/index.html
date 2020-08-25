@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2017/09/11/Azure-Application-Insights入门/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="Application Insights是微软Azure平台的一项服务，声称能够全面监控和了解服务的行为、可靠性和性能。可以这样理解，当一项应用添加了Application Insights插件后，相当于给自己的应用添加了许多监控机制，可以通过Azure平台页面直接监测服务的运行状况。类似于阿里云平台查看云主机吞吐量，或自行使用tail -f x.log命令监控日志信息。 基本概念首先需要理解以下">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.861Z">
+<meta property="og:updated_time" content="2017-09-11T14:52:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Azure Application Insights入门">
 <meta name="twitter:description" content="Application Insights是微软Azure平台的一项服务，声称能够全面监控和了解服务的行为、可靠性和性能。可以这样理解，当一项应用添加了Application Insights插件后，相当于给自己的应用添加了许多监控机制，可以通过Azure平台页面直接监测服务的运行状况。类似于阿里云平台查看云主机吞吐量，或自行使用tail -f x.log命令监控日志信息。 基本概念首先需要理解以下">
@@ -101,18 +101,18 @@
 <li>Microsoft Azure：微软推出的云平台，用于监控配置了Application Insights的服务资源。</li>
 <li>InstrumentationKey：检测密钥，一项Azure上的Application Insights资源对应唯一的密钥，当项目配置密钥后，将直接将该项目应用绑定到密钥所标识的Azure资源上。</li>
 </ul>
-<h2 id="Application-Insights在ASP-NET中的使用"><a href="#Application-Insights在ASP-NET中的使用" class="headerlink" title="Application Insights在ASP.NET中的使用"></a>Application Insights在ASP.NET中的使用</h2><h4 id="设置InstrumentationKey"><a href="#设置InstrumentationKey" class="headerlink" title="设置InstrumentationKey"></a>设置<code>InstrumentationKey</code></h4><p>Application Insights的基本使用方法可以参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-asp-net" target="_blank" rel="external">微软官方文档</a>。<br>主要包括安装相关SDK，初始化Application Insights配置等流程。<br>最重要的步骤是添加<code>InstrumentationKey</code>，事实证明所有流程的最终结果本质上是在<code>ApplicationInsights.config</code>文件中添加该配置项，这样应用就能够连上Azure监控平台。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;InstrumentationKey&gt;Your Key&lt;/InstrumentationKey&gt;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Application-Insights在ASP-NET中的使用"><a href="#Application-Insights在ASP-NET中的使用" class="headerlink" title="Application Insights在ASP.NET中的使用"></a>Application Insights在ASP.NET中的使用</h2><h4 id="设置InstrumentationKey"><a href="#设置InstrumentationKey" class="headerlink" title="设置InstrumentationKey"></a>设置<code>InstrumentationKey</code></h4><p>Application Insights的基本使用方法可以参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-asp-net" target="_blank" rel="external">微软官方文档</a>。<br>主要包括安装相关SDK，初始化Application Insights配置等流程。<br>最重要的步骤是添加<code>InstrumentationKey</code>，事实证明所有流程的最终结果本质上是在<code>ApplicationInsights.config</code>文件中添加该配置项，这样应用就能够连上Azure监控平台。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;InstrumentationKey&gt;Your Key&lt;/InstrumentationKey&gt;</div></pre></td></tr></table></figure></p>
 <p>由于不同部署平台可能需要使用不同的<code>InstrumentationKey</code>，比较好的方案是在程序启动后执行的代码中读取配置文件动态添加。<br>参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-configuration-with-applicationinsights-config#instrumentationkey" target="_blank" rel="external">文档</a>，可以在项目的启动添加中动态添加<code>InstrumentationKey</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">protected void Application_Start()</span><br><span class="line">&#123;</span><br><span class="line">	Microsoft.ApplicationInsights.Extensibility.</span><br><span class="line">		TelemetryConfiguration.Active.InstrumentationKey =</span><br><span class="line">          // - for example -</span><br><span class="line">        WebConfigurationManager.Settings[&quot;ikey&quot;];</span><br><span class="line">    //...</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">protected void Application_Start()</div><div class="line">&#123;</div><div class="line">	Microsoft.ApplicationInsights.Extensibility.</div><div class="line">		TelemetryConfiguration.Active.InstrumentationKey =</div><div class="line">          // - for example -</div><div class="line">        WebConfigurationManager.Settings[&quot;ikey&quot;];</div><div class="line">    //...</div></pre></td></tr></table></figure>
 <h4 id="设置cloud-RoleName"><a href="#设置cloud-RoleName" class="headerlink" title="设置cloud_RoleName"></a>设置<code>cloud_RoleName</code></h4><p><code>cloud_RoleName</code>的作用是区分使用同一个<code>InstrumentationKey</code>的不同组件（Components）。例如，在同一个应用下，可能有多个组件组成，此时如果希望对一些性能指标、日志记录进行筛选，则需要给每个组件添加唯一的<code>cloud_RoleName</code>，在Azure监控平台上的”搜索”中可以添加<code>cloud_RoleName</code>的筛选条件。</p>
-<p>参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-monitor-multi-role-apps" target="_blank" rel="external">官方文档1</a>和<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-api-filtering-sampling#add-properties-itelemetryinitializer" target="_blank" rel="external">cloud_RoleName的覆写方法</a>，可以在程序启动时为应用配置特殊的<code>cloud_RoleName</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">private class MyTelemetryInitializer : ITelemetryInitializer</span><br><span class="line">&#123;</span><br><span class="line">	public void Initialize(ITelemetry telemetry)</span><br><span class="line">	&#123;</span><br><span class="line">		telemetry.Context.Cloud.RoleName = &quot;TEST_ROLE_NAME&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">TelemetryConfiguration.Active.TelemetryInitializers.Add(new MyTelemetryInitializer());</span><br></pre></td></tr></table></figure></p>
-<h4 id="添加遥测追踪"><a href="#添加遥测追踪" class="headerlink" title="添加遥测追踪"></a>添加遥测追踪</h4><p>参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-asp-net-trace-logs" target="_blank" rel="external">文档</a>可以添加日志记录，最基础的方案是手动添加一项遥测数据。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var telemetry = new Microsoft.ApplicationInsights.TelemetryClient();</span><br><span class="line">telemetry.TrackTrace(&quot;Slow database response&quot;,</span><br><span class="line">               SeverityLevel.Warning,</span><br><span class="line">               new Dictionary&lt;string,string&gt; &#123; &#123;&quot;database&quot;, db.ID&#125; &#125;);</span><br></pre></td></tr></table></figure></p>
+<p>参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-monitor-multi-role-apps" target="_blank" rel="external">官方文档1</a>和<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-api-filtering-sampling#add-properties-itelemetryinitializer" target="_blank" rel="external">cloud_RoleName的覆写方法</a>，可以在程序启动时为应用配置特殊的<code>cloud_RoleName</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">private class MyTelemetryInitializer : ITelemetryInitializer</div><div class="line">&#123;</div><div class="line">	public void Initialize(ITelemetry telemetry)</div><div class="line">	&#123;</div><div class="line">		telemetry.Context.Cloud.RoleName = &quot;TEST_ROLE_NAME&quot;;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">TelemetryConfiguration.Active.TelemetryInitializers.Add(new MyTelemetryInitializer());</div></pre></td></tr></table></figure></p>
+<h4 id="添加遥测追踪"><a href="#添加遥测追踪" class="headerlink" title="添加遥测追踪"></a>添加遥测追踪</h4><p>参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-asp-net-trace-logs" target="_blank" rel="external">文档</a>可以添加日志记录，最基础的方案是手动添加一项遥测数据。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var telemetry = new Microsoft.ApplicationInsights.TelemetryClient();</div><div class="line">telemetry.TrackTrace(&quot;Slow database response&quot;,</div><div class="line">               SeverityLevel.Warning,</div><div class="line">               new Dictionary&lt;string,string&gt; &#123; &#123;&quot;database&quot;, db.ID&#125; &#125;);</div></pre></td></tr></table></figure></p>
 <p>当包含上述代码的代码段运行后，在监控平台上可以找到相关追踪的日志记录。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/09/11/Azure-Application-Insights入门/" data-id="cke84v2ii00141gshtq5afg7b" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/09/11/Azure-Application-Insights入门/" data-id="ckea4907z000f9e8t52up7uhn" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C#</a></li></ul>
@@ -193,6 +193,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -206,10 +210,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

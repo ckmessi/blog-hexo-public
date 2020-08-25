@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2018/11/12/Oracle数据库创建表并添加自增字段/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="这篇文章记录一些简单的Oracle数据库操作语句。 查询当前存在的表名称列表1select * from user_tables; Oracle创建表12345678910CREATE TABLE PREFIX_USER(    ID NUMBER not NULL        constraint PREFIX_USER_PK        primary key,    USER_NAME">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.981Z">
+<meta property="og:updated_time" content="2018-11-12T09:32:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Oracle数据库创建表并添加自增字段">
 <meta name="twitter:description" content="这篇文章记录一些简单的Oracle数据库操作语句。 查询当前存在的表名称列表1select * from user_tables; Oracle创建表12345678910CREATE TABLE PREFIX_USER(    ID NUMBER not NULL        constraint PREFIX_USER_PK        primary key,    USER_NAME">
@@ -95,21 +95,21 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>这篇文章记录一些简单的Oracle数据库操作语句。</p>
-<h2 id="查询当前存在的表名称列表"><a href="#查询当前存在的表名称列表" class="headerlink" title="查询当前存在的表名称列表"></a>查询当前存在的表名称列表</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from user_tables;</span><br></pre></td></tr></table></figure>
-<h2 id="Oracle创建表"><a href="#Oracle创建表" class="headerlink" title="Oracle创建表"></a>Oracle创建表</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE PREFIX_USER</span><br><span class="line">(</span><br><span class="line">    ID NUMBER not NULL</span><br><span class="line">        constraint PREFIX_USER_PK</span><br><span class="line">        primary key,</span><br><span class="line">    USER_NAME VARCHAR(128),</span><br><span class="line">    REMARK VARCHAR(256),</span><br><span class="line">    CREATED_AT TIMESTAMP default current_timestamp,</span><br><span class="line">    UPDATED_AT TIMESTAMP default NULL</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h2 id="查询当前存在的表名称列表"><a href="#查询当前存在的表名称列表" class="headerlink" title="查询当前存在的表名称列表"></a>查询当前存在的表名称列表</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select * from user_tables;</div></pre></td></tr></table></figure>
+<h2 id="Oracle创建表"><a href="#Oracle创建表" class="headerlink" title="Oracle创建表"></a>Oracle创建表</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">CREATE TABLE PREFIX_USER</div><div class="line">(</div><div class="line">    ID NUMBER not NULL</div><div class="line">        constraint PREFIX_USER_PK</div><div class="line">        primary key,</div><div class="line">    USER_NAME VARCHAR(128),</div><div class="line">    REMARK VARCHAR(256),</div><div class="line">    CREATED_AT TIMESTAMP default current_timestamp,</div><div class="line">    UPDATED_AT TIMESTAMP default NULL</div><div class="line">);</div></pre></td></tr></table></figure>
 <h2 id="Oracle设置数据库表自增字段"><a href="#Oracle设置数据库表自增字段" class="headerlink" title="Oracle设置数据库表自增字段"></a>Oracle设置数据库表自增字段</h2><p>与Mysql等数据库不同，Oracle无法直接在表字段中直接设置 <code>auto_increment</code> 属性。</p>
 <p>思路：创建一个从1开始一直自增的SEQUENCE，在每一次对表进行INSERT操作前，对SEQUENCE进行SELECT操作得到新值，然后赋值给表中新的这一行。</p>
 <p>示例：若PREFIX_USER中包含ID字段，欲将其设置为自增，可以在新建表后，执行以下两条SQL语句。</p>
 <p>首先创建一个序列器：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE SEQUENCE PREFIX_USER_ID_SEQUENCE</span><br><span class="line">MINVALUE 1</span><br><span class="line">NOMAXVALUE</span><br><span class="line">INCREMENT BY 1</span><br><span class="line">START WITH 1</span><br><span class="line">NOCACHE</span><br><span class="line">NOCYCLE;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">CREATE SEQUENCE PREFIX_USER_ID_SEQUENCE</div><div class="line">MINVALUE 1</div><div class="line">NOMAXVALUE</div><div class="line">INCREMENT BY 1</div><div class="line">START WITH 1</div><div class="line">NOCACHE</div><div class="line">NOCYCLE;</div></pre></td></tr></table></figure>
 <p>在每次对 <code>PREFIX_USER</code> 表进行 <code>INSERT</code> 操作前，都先运行 <code>SELECT</code> 语句对 <code>PREFIX_USER_ID_SEQUENCE</code> 读取下一个值，然后赋值给 <code>PREFIX_USER</code> 表的新行；</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE OR REPLACE TRIGGER PREFIX_USER_ID_TRIGGER BEFORE</span><br><span class="line">INSERT ON PREFIX_USER</span><br><span class="line">FOR EACH ROW</span><br><span class="line">BEGIN</span><br><span class="line">    SELECT PREFIX_USER_ID_SEQUENCE.nextval into:NEW.ID from dual;</span><br><span class="line">END PREFIX_USER_ID_TRIGGER;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">CREATE OR REPLACE TRIGGER PREFIX_USER_ID_TRIGGER BEFORE</div><div class="line">INSERT ON PREFIX_USER</div><div class="line">FOR EACH ROW</div><div class="line">BEGIN</div><div class="line">    SELECT PREFIX_USER_ID_SEQUENCE.nextval into:NEW.ID from dual;</div><div class="line">END PREFIX_USER_ID_TRIGGER;</div></pre></td></tr></table></figure>
 <p>参考链接：<a href="https://stackoverflow.com/questions/11296361/how-to-create-id-with-auto-increment-on-oracle" target="_blank" rel="external">https://stackoverflow.com/questions/11296361/how-to-create-id-with-auto-increment-on-oracle</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/11/12/Oracle数据库创建表并添加自增字段/" data-id="cke84v2mi00a91gsh4fy1je12" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/11/12/Oracle数据库创建表并添加自增字段/" data-id="ckea490b8006s9e8tkb5bsrld" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li></ul>
@@ -190,6 +190,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -203,10 +207,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

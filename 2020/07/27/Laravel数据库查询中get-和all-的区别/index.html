@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2020/07/27/Laravel数据库查询中get-和all-的区别/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="使用 Laravel 框架的 Eloquent 对象进行数据库查询时，通常在最后一步使用 get() 方法获取数据。貌似 Laravel 的数据库查询中同时也可以使用 all() 方法。那么 get() 和 all() 有什么区别和联系？ 事实上，对于 不带查询条件 的数据库查询而言，两者是等价的：12User::get();User::all(); 方法 all() 是定义在 Eloquent/">
-<meta property="og:updated_time" content="2020-07-27T10:54:32.970Z">
+<meta property="og:updated_time" content="2020-08-25T15:39:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Laravel数据库查询中get()和all()的区别">
 <meta name="twitter:description" content="使用 Laravel 框架的 Eloquent 对象进行数据库查询时，通常在最后一步使用 get() 方法获取数据。貌似 Laravel 的数据库查询中同时也可以使用 all() 方法。那么 get() 和 all() 有什么区别和联系？ 事实上，对于 不带查询条件 的数据库查询而言，两者是等价的：12User::get();User::all(); 方法 all() 是定义在 Eloquent/">
@@ -95,9 +95,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>使用 Laravel 框架的 Eloquent 对象进行数据库查询时，通常在最后一步使用 <code>get()</code> 方法获取数据。<br>貌似 Laravel 的数据库查询中同时也可以使用 <code>all()</code> 方法。<br>那么 <code>get()</code> 和 <code>all()</code> 有什么区别和联系？</p>
-<p>事实上，对于 <strong>不带查询条件</strong> 的数据库查询而言，两者是等价的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User::get();</span><br><span class="line">User::all();</span><br></pre></td></tr></table></figure></p>
-<p>方法 <code>all()</code> 是定义在 <code>Eloquent/Model</code> 类中的一个静态方法，它做的事情就是创建一个新的查询对象，然后调用它的 <code>get()</code> 方法。在使用 <code>all()</code> 的时候，你不能修改查询条件，只能选择取出的列。<br>可参考 <code>laravel/framework/src/Illuminate/Database/Eloquent/Model.php</code> 相关代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Get all of the models from the database.</span><br><span class="line"> *</span><br><span class="line"> * @param  array|mixed  $columns</span><br><span class="line"> * @return \Illuminate\Database\Eloquent\Collection|static[]</span><br><span class="line"> */</span><br><span class="line">public static function all($columns = [&apos;*&apos;])</span><br><span class="line">&#123;</span><br><span class="line">    return (new static)-&gt;newQuery()-&gt;get(</span><br><span class="line">        is_array($columns) ? $columns : func_get_args()</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>方法 <code>get()</code> 是定义在 <code>Eloquent/Builder</code> 类对象中的方法，如果需要修改查询条件，可以在其前面添加 <code>where</code> 子句等，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">User::where(&apos;name&apos;, &apos;Abc&apos;)-&gt;get();</span><br></pre></td></tr></table></figure></p>
+<p>事实上，对于 <strong>不带查询条件</strong> 的数据库查询而言，两者是等价的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">User::get();</div><div class="line">User::all();</div></pre></td></tr></table></figure></p>
+<p>方法 <code>all()</code> 是定义在 <code>Eloquent/Model</code> 类中的一个静态方法，它做的事情就是创建一个新的查询对象，然后调用它的 <code>get()</code> 方法。在使用 <code>all()</code> 的时候，你不能修改查询条件，只能选择取出的列。<br>可参考 <code>laravel/framework/src/Illuminate/Database/Eloquent/Model.php</code> 相关代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * Get all of the models from the database.</div><div class="line"> *</div><div class="line"> * @param  array|mixed  $columns</div><div class="line"> * @return \Illuminate\Database\Eloquent\Collection|static[]</div><div class="line"> */</div><div class="line">public static function all($columns = [&apos;*&apos;])</div><div class="line">&#123;</div><div class="line">    return (new static)-&gt;newQuery()-&gt;get(</div><div class="line">        is_array($columns) ? $columns : func_get_args()</div><div class="line">    );</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>方法 <code>get()</code> 是定义在 <code>Eloquent/Builder</code> 类对象中的方法，如果需要修改查询条件，可以在其前面添加 <code>where</code> 子句等，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">User::where(&apos;name&apos;, &apos;Abc&apos;)-&gt;get();</div></pre></td></tr></table></figure></p>
 <p>因此，对于需要查询的情况，只能使用 <code>get()</code> 方法；而对于一心只想从数据库表中取出所有数据的时候，可以直接使用 <code>all()</code>。<br>（它相比于使用 <code>get()</code> 方法，唯一的优势就是看起来比较装逼）。</p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
 <li><a href="https://stackoverflow.com/questions/34587457/difference-between-eloquent-modelget-and-all" target="_blank" rel="external">https://stackoverflow.com/questions/34587457/difference-between-eloquent-modelget-and-all</a></li>
@@ -106,7 +106,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/27/Laravel数据库查询中get-和all-的区别/" data-id="cke84v2m5009j1gsh9mq3ikzk" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/27/Laravel数据库查询中get-和all-的区别/" data-id="ckea490aj004z9e8t0a1mzc8c" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -187,6 +187,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -200,10 +204,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

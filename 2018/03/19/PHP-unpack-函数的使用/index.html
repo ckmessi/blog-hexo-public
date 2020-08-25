@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="最近工作中遇到需要使用base64_decode()解码加密过的base64字符串的问题，然而这个字符串是在Python语言中使用base64.b64encode方法加密的，在PHP中没有直接对应的解码方式，这时候就需要用到PHP的unpack()函数。 官方对于unpack()函数的解释是：从二进制字符串对数据进行解包。它的语法为：1unpack(format,data) 其中format必需，">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.984Z">
+<meta property="og:updated_time" content="2018-03-19T12:48:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PHP unpack()函数的使用">
 <meta name="twitter:description" content="最近工作中遇到需要使用base64_decode()解码加密过的base64字符串的问题，然而这个字符串是在Python语言中使用base64.b64encode方法加密的，在PHP中没有直接对应的解码方式，这时候就需要用到PHP的unpack()函数。 官方对于unpack()函数的解释是：从二进制字符串对数据进行解包。它的语法为：1unpack(format,data) 其中format必需，">
@@ -95,19 +95,19 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>最近工作中遇到需要使用<code>base64_decode()</code>解码加密过的base64字符串的问题，然而这个字符串是在<code>Python</code>语言中使用<code>base64.b64encode</code>方法加密的，在PHP中没有直接对应的解码方式，这时候就需要用到<code>PHP</code>的<code>unpack()</code>函数。</p>
-<p>官方对于<code>unpack()</code>函数的解释是：从二进制字符串对数据进行解包。<br>它的语法为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unpack(format,data)</span><br></pre></td></tr></table></figure></p>
+<p>官方对于<code>unpack()</code>函数的解释是：从二进制字符串对数据进行解包。<br>它的语法为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">unpack(format,data)</div></pre></td></tr></table></figure></p>
 <p>其中<code>format</code>必需，规定在解包数据时所使用的格式；<code>data</code>可选，规定被解包的二进制数据。</p>
 <p>format 参数的可能值：<br>a - NUL-padded string<br>A - SPACE-padded string<br>h - Hex string, low nibble first<br>H - Hex string, high nibble first<br>c - signed char<br>C - unsigned char<br>s - signed short (always 16 bit, machine byte order)<br>S - unsigned short (always 16 bit, machine byte order)<br>n - unsigned short (always 16 bit, big endian byte order)<br>v - unsigned short (always 16 bit, little endian byte order)<br>i - signed integer (machine dependent size and byte order)<br>I - unsigned integer (machine dependent size and byte order)<br>l - signed long (always 32 bit, machine byte order)<br>L - unsigned long (always 32 bit, machine byte order)<br>N - unsigned long (always 32 bit, big endian byte order)<br>V - unsigned long (always 32 bit, little endian byte order)<br>f - float (machine dependent size and representation)<br>d - double (machine dependent size and representation)<br>x - NUL byte<br>X - Back up one byte<br>@ - NUL-fill to absolute position</p>
 <p>有一些基础样例可以参考，摘自PHP官方手册。</p>
-<p>按照<code>char</code>和<code>unsigned short</code>进行解析，并且以<code>chars</code>和<code>int</code>为键保存结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$binarydata = &quot;\x04\x00\xa0\x00&quot;;</span><br><span class="line">$array = unpack(&quot;cchars/nint&quot;, $binarydata);</span><br><span class="line">print_r($array);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure></p>
-<p>结果是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Array</span><br><span class="line">(</span><br><span class="line">    [chars] =&gt; 4</span><br><span class="line">    [int] =&gt; 160</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
-<p>具体使用方案可以根据实际情况进行选择，比如将字符串按照<code>float</code>类型，128维长度数组，进行解析，则代码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$feature_array = unpack(&quot;f128&quot;, $feature_str);</span><br></pre></td></tr></table></figure></p>
-<p>得到的结果为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;1&quot;: -0.037321969866753,</span><br><span class="line">    &quot;2&quot;: -0.12857535481453,</span><br><span class="line">    &quot;3&quot;: 0.09706449508667,</span><br><span class="line">    &quot;4&quot;: 0.049328539520502,</span><br><span class="line">    &quot;5&quot;: 0.039704125374556,</span><br><span class="line">    ...,</span><br><span class="line">    &quot;128&quot;: -0.064088962972164</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>按照<code>char</code>和<code>unsigned short</code>进行解析，并且以<code>chars</code>和<code>int</code>为键保存结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">$binarydata = &quot;\x04\x00\xa0\x00&quot;;</div><div class="line">$array = unpack(&quot;cchars/nint&quot;, $binarydata);</div><div class="line">print_r($array);</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<p>结果是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Array</div><div class="line">(</div><div class="line">    [chars] =&gt; 4</div><div class="line">    [int] =&gt; 160</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p>具体使用方案可以根据实际情况进行选择，比如将字符串按照<code>float</code>类型，128维长度数组，进行解析，则代码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$feature_array = unpack(&quot;f128&quot;, $feature_str);</div></pre></td></tr></table></figure></p>
+<p>得到的结果为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;1&quot;: -0.037321969866753,</div><div class="line">    &quot;2&quot;: -0.12857535481453,</div><div class="line">    &quot;3&quot;: 0.09706449508667,</div><div class="line">    &quot;4&quot;: 0.049328539520502,</div><div class="line">    &quot;5&quot;: 0.039704125374556,</div><div class="line">    ...,</div><div class="line">    &quot;128&quot;: -0.064088962972164</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/" data-id="cke84v2mn00an1gshczkkvm86" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/" data-id="ckea490ba006v9e8tpv9ppgrb" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -188,6 +188,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -201,10 +205,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

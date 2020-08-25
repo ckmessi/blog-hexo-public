@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2017/06/21/Hexo配合Github-Pages部署个人博客/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在使用Hexo搭建个人博客系统后，很自然的需求是要将其发布到网上供读者访问。此时需要进行Hexo个人博客的部署。常规的方案是部署到Github上。 常规方法官方文档是这样写的：Install hexo-deployer-git1npm install hexo-deployer-git --save Edit settings.12345deploy:  type: git  repo: &amp;lt;">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.910Z">
+<meta property="og:updated_time" content="2017-06-21T03:01:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo配合Github Pages部署个人博客">
 <meta name="twitter:description" content="在使用Hexo搭建个人博客系统后，很自然的需求是要将其发布到网上供读者访问。此时需要进行Hexo个人博客的部署。常规的方案是部署到Github上。 常规方法官方文档是这样写的：Install hexo-deployer-git1npm install hexo-deployer-git --save Edit settings.12345deploy:  type: git  repo: &amp;lt;">
@@ -95,13 +95,13 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>在使用Hexo搭建个人博客系统后，很自然的需求是要将其发布到网上供读者访问。此时需要进行Hexo个人博客的部署。<br>常规的方案是部署到Github上。</p>
-<h2 id="常规方法"><a href="#常规方法" class="headerlink" title="常规方法"></a>常规方法</h2><p>官方文档是这样写的：<br>Install hexo-deployer-git<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure></p>
-<p>Edit settings.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: &lt;repository url&gt;</span><br><span class="line">  branch: [branch]</span><br><span class="line">  message: [message]</span><br></pre></td></tr></table></figure></p>
+<h2 id="常规方法"><a href="#常规方法" class="headerlink" title="常规方法"></a>常规方法</h2><p>官方文档是这样写的：<br>Install hexo-deployer-git<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install hexo-deployer-git --save</div></pre></td></tr></table></figure></p>
+<p>Edit settings.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">deploy:</div><div class="line">  type: git</div><div class="line">  repo: &lt;repository url&gt;</div><div class="line">  branch: [branch]</div><div class="line">  message: [message]</div></pre></td></tr></table></figure></p>
 <p>Option    Description<br>repo    GitHub/Bitbucket/Coding/GitLab repository URL<br>branch    Branch name. The deployer will detect the branch automatically if you are using GitHub or GitCafe.<br>message    Customize commit message </p>
 <p>通过搜索也可以得到的相关教程博客：<br><a href="http://blog.csdn.net/gdutxiaoxu/article/details/53576018" target="_blank" rel="external">手把手教你用Hexo+Github 搭建属于自己的博客 - gdutxiaoxu的博客</a><br><a href="https://linghucong.js.org/2016/04/15/2016-04-15-hexo-github-pages-blog/" target="_blank" rel="external">手把手教你使用Hexo + Github Pages搭建个人独立博客</a><br><a href="https://xuanwo.org/2015/03/26/hexo-intor/" target="_blank" rel="external">史上最详细的Hexo博客搭建图文教程</a></p>
-<p>其中大多数教程都是复述如何使用hexo deploy命令进行部署，即<br>修改_config.yml文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:[username]/[username].github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure></p>
-<p>然后执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo deploy</span><br></pre></td></tr></table></figure></p>
-<p>可能需要提前安装扩展：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure></p>
+<p>其中大多数教程都是复述如何使用hexo deploy命令进行部署，即<br>修改_config.yml文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">deploy:</div><div class="line">  type: git</div><div class="line">  repo: git@github.com:[username]/[username].github.io.git</div><div class="line">  branch: master</div></pre></td></tr></table></figure></p>
+<p>然后执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo deploy</div></pre></td></tr></table></figure></p>
+<p>可能需要提前安装扩展：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install hexo-deployer-git --save</div></pre></td></tr></table></figure></p>
 <p>命令通常是用来帮助一键完成的，这种方式简洁、快速，能够提供“隐形”的服务，使用户能够在不需要完全了解其工作原理情况下完成任务。<br>但是这种情况有一个弊端，即无法“自由”地控制相关操作的细节。<br>因此，接下来希望从原理角度探索一下命令hexo deploy的具体操作，并实现自由模式的手动部署hexo到github。</p>
 <h2 id="hexo-deploy部署到Github上的原理"><a href="#hexo-deploy部署到Github上的原理" class="headerlink" title="hexo deploy部署到Github上的原理"></a>hexo deploy部署到Github上的原理</h2><p>使用hexo deploy命令将博客内容部署到Github上的原理可以总结为以下三点：</p>
 <ul>
@@ -117,9 +117,9 @@
 </ol>
 <h2 id="博客放置次级目录的可行性验证"><a href="#博客放置次级目录的可行性验证" class="headerlink" title="博客放置次级目录的可行性验证"></a>博客放置次级目录的可行性验证</h2><p>但有些时候我们并不希望将博客部署到根目录<code>[username].github.io</code>下，因为个人主页可能包含多方面内容，如about页面，主页时间轴等，博客只是其中一项。</p>
 <p>我们使用nginx服务器简单模拟一下静态文件的访问情况。<br>如果我们直接将nginx的目录指向<code>/path/to/hexo/public/</code>，此时使用<code>localhost:4001/</code>能够访问到正常的博客页面<br>如果我们直接将nginx的目录指向<code>/path/to/hexo/</code>，此时使用<code>localhost:4001/public/</code>能够访问到页面，但是css全乱了。   </p>
-<p>究其原因是由于hexo generate的时候，将所有js和css文件的路径设置为以/css/*.css形式，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel=&quot;stylesheet&quot; href=&quot;/css/style.css&quot;&gt;</span><br></pre></td></tr></table></figure></p>
-<p>这时候关键在配置项<code>_config.yml</code>中的配置项root，修改其为/public/<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo generate</span><br></pre></td></tr></table></figure></p>
-<p>再访问localhost:4001/public，正常显示！<br>可以看到index.html文件中的css文件路径都变成了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel=&quot;stylesheet&quot; href=&quot;/public/css/style.css&quot;&gt;</span><br></pre></td></tr></table></figure></p>
+<p>究其原因是由于hexo generate的时候，将所有js和css文件的路径设置为以/css/*.css形式，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;link rel=&quot;stylesheet&quot; href=&quot;/css/style.css&quot;&gt;</div></pre></td></tr></table></figure></p>
+<p>这时候关键在配置项<code>_config.yml</code>中的配置项root，修改其为/public/<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo generate</div></pre></td></tr></table></figure></p>
+<p>再访问localhost:4001/public，正常显示！<br>可以看到index.html文件中的css文件路径都变成了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;link rel=&quot;stylesheet&quot; href=&quot;/public/css/style.css&quot;&gt;</div></pre></td></tr></table></figure></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
 <li><code>hexo deploy</code>的原理是设定好Github仓库目录，自动完成提交等操作</li>
 <li>可以通过生成静态文件，并手动提交到Github仓库的方式，手动完成部署工作</li>
@@ -139,7 +139,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/21/Hexo配合Github-Pages部署个人博客/" data-id="cke84v2j4002f1gshyndgznqd" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/06/21/Hexo配合Github-Pages部署个人博客/" data-id="ckea4909i002q9e8te76sqr50" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li></ul>
@@ -220,6 +220,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -233,10 +237,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>

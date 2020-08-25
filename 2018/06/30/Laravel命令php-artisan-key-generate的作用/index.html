@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2018/06/30/Laravel命令php-artisan-key-generate的作用/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在部署一个新的 Laravel 项目时，常规的步骤是拷贝一份 .env.example 文件为 .env 文件，继而使用命令 php artisan key:generate 。这个命令会在 .env 文件中生成一项配置项 APP_KEY，形如：1APP_KEY=base64:jtU7o5zfIC0GiXe+rwR6iyD2hy3EzMuUfj1vVTGVIOc= 这个命令的作用在框架文档中描述如">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.950Z">
+<meta property="og:updated_time" content="2018-06-30T10:14:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Laravel命令php artisan key:generate的作用">
 <meta name="twitter:description" content="在部署一个新的 Laravel 项目时，常规的步骤是拷贝一份 .env.example 文件为 .env 文件，继而使用命令 php artisan key:generate 。这个命令会在 .env 文件中生成一项配置项 APP_KEY，形如：1APP_KEY=base64:jtU7o5zfIC0GiXe+rwR6iyD2hy3EzMuUfj1vVTGVIOc= 这个命令的作用在框架文档中描述如">
@@ -94,12 +94,10 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在部署一个新的 <code>Laravel</code> 项目时，常规的步骤是拷贝一份 <code>.env.example</code> 文件为 <code>.env</code> 文件，继而使用命令 <code>php artisan key:generate</code> 。<br>这个命令会在 <code>.env</code> 文件中生成一项配置项 <code>APP_KEY</code>，形如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">APP_KEY=base64:jtU7o5zfIC0GiXe+rwR6iyD2hy3EzMuUfj1vVTGVIOc=</span><br></pre></td></tr></table></figure></p>
+        <p>在部署一个新的 <code>Laravel</code> 项目时，常规的步骤是拷贝一份 <code>.env.example</code> 文件为 <code>.env</code> 文件，继而使用命令 <code>php artisan key:generate</code> 。<br>这个命令会在 <code>.env</code> 文件中生成一项配置项 <code>APP_KEY</code>，形如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">APP_KEY=base64:jtU7o5zfIC0GiXe+rwR6iyD2hy3EzMuUfj1vVTGVIOc=</div></pre></td></tr></table></figure></p>
 <p>这个命令的作用在<a href="https://laravel.com/docs/5.6/installation#configuration" target="_blank" rel="external">框架文档</a>中描述如下：</p>
 <blockquote>
 <p>Application Key<br>The next thing you should do after installing Laravel is set your application key to a random string. If you installed Laravel via Composer or the Laravel installer, this key has already been set for you by the php artisan key:generate command.<br>Typically, this string should be 32 characters long. The key can be set in the .env environment file. If you have not renamed the .env.example file to .env, you should do that now. If the application key is not set, your user sessions and other encrypted data will not be secure!</p>
-</blockquote>
-<blockquote>
 <p>这是一个32位长度的字符串，在 <code>.env</code> 文件中设置。如果不设置这个应用密钥，用户 <code>session</code> 和其它的加密数据可能会不安全！</p>
 </blockquote>
 <p>即这个 <code>key</code> 是一个随机字符串，用于框架中的加密服务，类似于一个当前应用专属的加密盐，从而确保信息的安全。</p>
@@ -107,7 +105,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/06/30/Laravel命令php-artisan-key-generate的作用/" data-id="cke84v2jr004e1gshbqh3kmmr" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/06/30/Laravel命令php-artisan-key-generate的作用/" data-id="ckea490ag004u9e8tgt00qcti" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -188,6 +186,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
@@ -201,10 +203,6 @@
         
           <li>
             <a href="/blog-hexo/2020/07/21/Windows右键菜单中添加用VSCode打开选项/">Windows右键菜单中添加用VSCode打开选项</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/">处理Windows编辑的文件在Linux系统中多出^M的办法</a>
           </li>
         
       </ul>
