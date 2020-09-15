@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/02/13/使用SSH搭建端口转发的两个应用场景/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在实际场景中，在需要访问内网地址时，可能会遇到两个场景：  需要在本机访问内网某个IP+端口； 需要在公网访问内网某个IP+端口；  需要注意的是，无论哪种方式，都至少需要一台 中转服务器 已经具备了访问 内网服务器 的SSH通道。即在某认情况下，能够通过这台 中转服务器 SSH连接到 内网服务器 上：1ssh username@[cloud-server-ip] -p [ssh-port] 明确">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.117Z">
+<meta property="og:updated_time" content="2019-02-13T06:17:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用SSH搭建端口转发的两个应用场景">
 <meta name="twitter:description" content="在实际场景中，在需要访问内网地址时，可能会遇到两个场景：  需要在本机访问内网某个IP+端口； 需要在公网访问内网某个IP+端口；  需要注意的是，无论哪种方式，都至少需要一台 中转服务器 已经具备了访问 内网服务器 的SSH通道。即在某认情况下，能够通过这台 中转服务器 SSH连接到 内网服务器 上：1ssh username@[cloud-server-ip] -p [ssh-port] 明确">
@@ -99,7 +99,7 @@
 <li>需要在本机访问内网某个IP+端口；</li>
 <li>需要在公网访问内网某个IP+端口；</li>
 </ol>
-<p>需要注意的是，无论哪种方式，都至少需要一台 <code>中转服务器</code> 已经具备了访问 <code>内网服务器</code> 的SSH通道。<br>即在某认情况下，能够通过这台 <code>中转服务器</code> SSH连接到 <code>内网服务器</code> 上：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh username@[cloud-server-ip] -p [ssh-port]</span><br></pre></td></tr></table></figure></p>
+<p>需要注意的是，无论哪种方式，都至少需要一台 <code>中转服务器</code> 已经具备了访问 <code>内网服务器</code> 的SSH通道。<br>即在某认情况下，能够通过这台 <code>中转服务器</code> SSH连接到 <code>内网服务器</code> 上：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh username@[cloud-server-ip] -p [ssh-port]</div></pre></td></tr></table></figure></p>
 <p>明确几个概念：</p>
 <ul>
 <li><code>本机</code> ：操作者当前使用的机器；</li>
@@ -107,8 +107,8 @@
 <li><code>内网服务器</code> ：能够通过 <code>中转服务器</code> SSH转发连接上的一台内网服务器；</li>
 <li><code>内网目标服务器</code> ：在内网中，不能直接访问，但可以通过 <code>内网服务器</code> 访问到的目标服务器；</li>
 </ul>
-<h2 id="场景1：在本机访问内网IP-端口"><a href="#场景1：在本机访问内网IP-端口" class="headerlink" title="场景1：在本机访问内网IP+端口"></a>场景1：在本机访问内网IP+端口</h2><p>比如，在内网通过访问 <code>http://192.168.1.11:3333</code> 能够访问 Git 仓库所在的 Gitlab 网址。若希望在 <code>本机</code> 也能够访问 Gitlab 网址，则可以使用SSH建立一个端口转发。<br>在这种应用场景下，只需要搭建 <code>目标内网服务器IP+端口</code> 到 <code>本机</code> 的端口转发即可，但由于 <code>本机</code> 无法直接连接 <code>内网目标服务器</code> ，因此需要通过 <code>中转服务器</code> 及 <code>内网服务器</code> 作为跳板机桥梁，使用上中转服务器的SSH通道转发。实际上一条命令进行了两次端口转发。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -L 0.0.0.0:[target-port]:[internal-ip]:[target-port] username@[cloud-server-ip] -p [ssh-port]</span><br></pre></td></tr></table></figure></p>
-<p>比如以下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -L 0.0.0.0:3333:192.168.1.11 username@[cloud-server-ip] -p [ssh-port]</span><br></pre></td></tr></table></figure></p>
+<h2 id="场景1：在本机访问内网IP-端口"><a href="#场景1：在本机访问内网IP-端口" class="headerlink" title="场景1：在本机访问内网IP+端口"></a>场景1：在本机访问内网IP+端口</h2><p>比如，在内网通过访问 <code>http://192.168.1.11:3333</code> 能够访问 Git 仓库所在的 Gitlab 网址。若希望在 <code>本机</code> 也能够访问 Gitlab 网址，则可以使用SSH建立一个端口转发。<br>在这种应用场景下，只需要搭建 <code>目标内网服务器IP+端口</code> 到 <code>本机</code> 的端口转发即可，但由于 <code>本机</code> 无法直接连接 <code>内网目标服务器</code> ，因此需要通过 <code>中转服务器</code> 及 <code>内网服务器</code> 作为跳板机桥梁，使用上中转服务器的SSH通道转发。实际上一条命令进行了两次端口转发。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh -L 0.0.0.0:[target-port]:[internal-ip]:[target-port] username@[cloud-server-ip] -p [ssh-port]</div></pre></td></tr></table></figure></p>
+<p>比如以下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh -L 0.0.0.0:3333:192.168.1.11 username@[cloud-server-ip] -p [ssh-port]</div></pre></td></tr></table></figure></p>
 <p>这样可以实现在本地访问 <code>127.0.0.1:3333</code> ，实质上访问的是内网服务器 <code>192.168.1.11</code> 的 <code>3333</code> 端口。<br>原理实际上是先通过 <code>中转服务器</code> 建立 <code>本机</code> 与 <code>内网服务器</code> 的连接，然后将 <code>内网目标服务器</code> 的端口转发到 <code>本机</code> 某端口。</p>
 <h2 id="场景2：在公网访问内网IP-端口"><a href="#场景2：在公网访问内网IP-端口" class="headerlink" title="场景2：在公网访问内网IP+端口"></a>场景2：在公网访问内网IP+端口</h2><p>比如，需要使其它人能够在公网访问内网 <code>192.168.1.20</code> 服务器的 12308 端口。这时候需要借用 <code>中转服务器</code>，假定其IP地址为 <code>cloud-server-ip</code> ，使其它人在公网访问 <code>cloud-server-ip:12308</code> 时，实际访问的是内网 <code>192.168.1.20:12308</code> 的内容。<br>在这种应用场景下，通常需要搭建 <code>目标内网IP+端口</code> 到 <code>中转服务器</code> 的端口转发。<br>此时使用方式通常分为两步：</p>
 <ol>
@@ -120,13 +120,13 @@
 <li>能够通过 <code>中转服务器</code> SSH连接到 <code>内网服务器</code> 上，这是之前提到的前提；</li>
 <li>在 <code>内网服务器</code> 上能够连接 <code>中转服务器</code> ，这就要求 <code>内网服务器</code> 能够访问公网且有对应的密码或公钥；</li>
 </ol>
-<p>首先连接到 <code>内网服务器</code> ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh username@[cloud-server-ip] -p [ssh-port]</span><br></pre></td></tr></table></figure></p>
-<p>在 <code>内网服务器</code> 搭建 SSH 转发：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -CgNT username@[cloud-server-ip] -R 0.0.0.0:[target-port2]:[internal-ip]:[target-port1]</span><br></pre></td></tr></table></figure></p>
+<p>首先连接到 <code>内网服务器</code> ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh username@[cloud-server-ip] -p [ssh-port]</div></pre></td></tr></table></figure></p>
+<p>在 <code>内网服务器</code> 搭建 SSH 转发：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh -CgNT username@[cloud-server-ip] -R 0.0.0.0:[target-port2]:[internal-ip]:[target-port1]</div></pre></td></tr></table></figure></p>
 <p>这样通过 <code>[cloud-server-ip]:[target-port2]</code> 能够访问到内网的 <code>[internal-ip]:[target-port1]</code> 。</p>
-<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>如果遇到以下错误，可能是因为目标机器（中转服务器）的 <code>12307</code> 端口被占用了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Warning: remote port forwarding failed for listen port 12307</span><br></pre></td></tr></table></figure></p>
-<p>参考 <a href="https://stackoverflow.com/questions/11818131/warning-remote-port-forwarding-failed-for-listen-port-52698" target="_blank" rel="external">这个问题</a> 的答案：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Further Explanation: Once one ssh connection has been established, subsequent connections will produce a message:</span><br><span class="line">Warning: remote port forwarding failed for listen port 52698</span><br><span class="line">This message is harmless, as the forward can only be set up once and one forward will work for all ssh connections to the same machine. The original ssh session that opened the forward will stay open when you exit the shell until all remote editing sessions are finished.</span><br></pre></td></tr></table></figure></p>
-<p>知道原因可能在于已经有建立了一个SSH连接。<br>此时在 <code>中转服务器</code> 上，可以使用 <code>sudo lsof -i:12307</code> 查看端口占用情况：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME</span><br><span class="line">sshd 6029 username 10u IPv4 19945329 0t0 TCP *:12307 (LISTEN)</span><br></pre></td></tr></table></figure></p>
-<p>使用命令 <code>ps aux | grep 6029</code> 查看该进程的详细信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">username 6029 0.0 0.2 95372 5060 ? S 11:05 0:00 sshd: username</span><br><span class="line">username 6516 0.0 0.0 14196 940 pts/2 S+ 11:17 0:00 grep --color=auto --exclude-dir=.bzr --exclude-dir=CVS --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn 6029</span><br></pre></td></tr></table></figure></p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>如果遇到以下错误，可能是因为目标机器（中转服务器）的 <code>12307</code> 端口被占用了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Warning: remote port forwarding failed for listen port 12307</div></pre></td></tr></table></figure></p>
+<p>参考 <a href="https://stackoverflow.com/questions/11818131/warning-remote-port-forwarding-failed-for-listen-port-52698" target="_blank" rel="external">这个问题</a> 的答案：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Further Explanation: Once one ssh connection has been established, subsequent connections will produce a message:</div><div class="line">Warning: remote port forwarding failed for listen port 52698</div><div class="line">This message is harmless, as the forward can only be set up once and one forward will work for all ssh connections to the same machine. The original ssh session that opened the forward will stay open when you exit the shell until all remote editing sessions are finished.</div></pre></td></tr></table></figure></p>
+<p>知道原因可能在于已经有建立了一个SSH连接。<br>此时在 <code>中转服务器</code> 上，可以使用 <code>sudo lsof -i:12307</code> 查看端口占用情况：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME</div><div class="line">sshd 6029 username 10u IPv4 19945329 0t0 TCP *:12307 (LISTEN)</div></pre></td></tr></table></figure></p>
+<p>使用命令 <code>ps aux | grep 6029</code> 查看该进程的详细信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">username 6029 0.0 0.2 95372 5060 ? S 11:05 0:00 sshd: username</div><div class="line">username 6516 0.0 0.0 14196 940 pts/2 S+ 11:17 0:00 grep --color=auto --exclude-dir=.bzr --exclude-dir=CVS --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn 6029</div></pre></td></tr></table></figure></p>
 <p>使用命令关闭进程 <code>kill -9 6029</code>，这时候再 <code>sudo lsof -i:12307</code> 不会出现端口占用，再执行上述搭建命令即可。</p>
 <p>注意：如果是 <code>中转服务器</code> 是阿里云服务器，还要记得将端口加入允许安全组中，才能被外网访问。</p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://www.cnblogs.com/CEO-H/p/7794306.html" target="_blank" rel="external">https://www.cnblogs.com/CEO-H/p/7794306.html</a><br><a href="https://stackoverflow.com/questions/11818131/warning-remote-port-forwarding-failed-for-listen-port-52698" target="_blank" rel="external">https://stackoverflow.com/questions/11818131/warning-remote-port-forwarding-failed-for-listen-port-52698</a></p>
@@ -134,7 +134,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/13/使用SSH搭建端口转发的两个应用场景/" data-id="ckewl1zeo00ct10sh8at8ajex" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/02/13/使用SSH搭建端口转发的两个应用场景/" data-id="ckf44v6gj00bkhh8t0we4ffps" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li></ul>
@@ -215,6 +215,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -228,10 +232,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

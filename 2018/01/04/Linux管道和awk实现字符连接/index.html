@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2018/01/04/Linux管道和awk实现字符连接/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="背景在工作中遇到一个需求，快速将某个目录下的所有文件的完整路径输出，每行一个文件路径。遇到这个需求时，非常直观的两个想法是：  ls命令：在Linux操作系统中，用ls能够列举目录下所有文件的列表 &amp;gt;重定向符号：使用重定向符号能够将输出结果重定向到目标文件中  然而存在一个问题，ls命令只列出了文件名称，相比于完整目录还缺少目录的路径。 awk简介awk是Linux一个强大的文本分析工具，使">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.965Z">
+<meta property="og:updated_time" content="2018-01-04T11:47:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux管道和awk实现字符连接">
 <meta name="twitter:description" content="背景在工作中遇到一个需求，快速将某个目录下的所有文件的完整路径输出，每行一个文件路径。遇到这个需求时，非常直观的两个想法是：  ls命令：在Linux操作系统中，用ls能够列举目录下所有文件的列表 &amp;gt;重定向符号：使用重定向符号能够将输出结果重定向到目标文件中  然而存在一个问题，ls命令只列出了文件名称，相比于完整目录还缺少目录的路径。 awk简介awk是Linux一个强大的文本分析工具，使">
@@ -100,18 +100,18 @@
 <li><code>&gt;</code>重定向符号：使用重定向符号能够将输出结果重定向到目标文件中</li>
 </ol>
 <p>然而存在一个问题，<code>ls</code>命令只列出了文件名称，相比于完整目录还缺少目录的路径。</p>
-<h2 id="awk简介"><a href="#awk简介" class="headerlink" title="awk简介"></a><code>awk</code>简介</h2><p><code>awk</code>是Linux一个强大的文本分析工具，使用方法为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk &apos;&#123;pattern + action&#125;&apos; &#123;filenames&#125;</span><br></pre></td></tr></table></figure></p>
-<p>其中<code>pattern</code>表示AWK在数据中查找的内容，而<code>action</code>是找到匹配内容是所执行的命令。花括号<code>{}</code>不需要始终出现，但可以用于根据特定的模式对一系列指令进行分组。<br><code>awk</code>的工作流程是，读入有’\n’换行符分割的记录，然后将记录按指定的域分隔符划分域，填充域。<code>$0</code>表示所有域，<code>$1</code>表示第一个域，<code>$n</code>表示第n个域。默认域分隔符是<code>空白键</code>或<code>tab键</code>。<br>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk &apos;&#123;print &quot;1234&quot;$1&quot;6&quot;$2&#125;&apos;</span><br></pre></td></tr></table></figure></p>
-<p>然后输入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">5 7</span><br></pre></td></tr></table></figure></p>
-<p>输出结果为<code>1234567</code>。<br>也可以使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;5 7&quot; | awk &apos;&#123;print &quot;1234&quot;$1&quot;6&quot;$2&#125;&apos;</span><br></pre></td></tr></table></figure></p>
+<h2 id="awk简介"><a href="#awk简介" class="headerlink" title="awk简介"></a><code>awk</code>简介</h2><p><code>awk</code>是Linux一个强大的文本分析工具，使用方法为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">awk &apos;&#123;pattern + action&#125;&apos; &#123;filenames&#125;</div></pre></td></tr></table></figure></p>
+<p>其中<code>pattern</code>表示AWK在数据中查找的内容，而<code>action</code>是找到匹配内容是所执行的命令。花括号<code>{}</code>不需要始终出现，但可以用于根据特定的模式对一系列指令进行分组。<br><code>awk</code>的工作流程是，读入有’\n’换行符分割的记录，然后将记录按指定的域分隔符划分域，填充域。<code>$0</code>表示所有域，<code>$1</code>表示第一个域，<code>$n</code>表示第n个域。默认域分隔符是<code>空白键</code>或<code>tab键</code>。<br>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">awk &apos;&#123;print &quot;1234&quot;$1&quot;6&quot;$2&#125;&apos;</div></pre></td></tr></table></figure></p>
+<p>然后输入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">5 7</div></pre></td></tr></table></figure></p>
+<p>输出结果为<code>1234567</code>。<br>也可以使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo &quot;5 7&quot; | awk &apos;&#123;print &quot;1234&quot;$1&quot;6&quot;$2&#125;&apos;</div></pre></td></tr></table></figure></p>
 <p>同样输出<code>1234567</code>。</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>根据管道和<code>awk</code>工具的特点，我们可以针对问题提出如下解决方案：<br>假设目标目录为<code>path/to/dir</code>，要生成一个文件<code>list.txt</code>，文件中每一行是目录下文件的完整目录名：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls path/to/dir | awk &apos;&#123;print &quot;path/to/dir&quot;$1&#125;&apos; &gt; list.txt</span><br></pre></td></tr></table></figure></p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>根据管道和<code>awk</code>工具的特点，我们可以针对问题提出如下解决方案：<br>假设目标目录为<code>path/to/dir</code>，要生成一个文件<code>list.txt</code>，文件中每一行是目录下文件的完整目录名：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ls path/to/dir | awk &apos;&#123;print &quot;path/to/dir&quot;$1&#125;&apos; &gt; list.txt</div></pre></td></tr></table></figure></p>
 <p>即可完成。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/04/Linux管道和awk实现字符连接/" data-id="ckewl1zcw006010shhuaxbzxu" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/04/Linux管道和awk实现字符连接/" data-id="ckf44v6dp005thh8tue2nroz2" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li></ul>
@@ -192,6 +192,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -205,10 +209,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

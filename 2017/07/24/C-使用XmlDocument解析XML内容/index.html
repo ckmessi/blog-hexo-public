@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2017/07/24/C-使用XmlDocument解析XML内容/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在实际应用中，我们通常需要对XML格式的文件进行一些处理。在C#语言中，我们可以使用XmlDocument类执行相关的操作。 载入一个XML节点，其中xmlStr是XML格式内容的字符串，filepath是XML文件路径：123XmlDocument xml = new XmlDocument();xml.LoadXml(xmlStr);xml.Load(filePath); 使用递归地方法遍历每">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.862Z">
+<meta property="og:updated_time" content="2017-07-24T15:08:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C#使用XmlDocument解析XML内容">
 <meta name="twitter:description" content="在实际应用中，我们通常需要对XML格式的文件进行一些处理。在C#语言中，我们可以使用XmlDocument类执行相关的操作。 载入一个XML节点，其中xmlStr是XML格式内容的字符串，filepath是XML文件路径：123XmlDocument xml = new XmlDocument();xml.LoadXml(xmlStr);xml.Load(filePath); 使用递归地方法遍历每">
@@ -95,14 +95,14 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>在实际应用中，我们通常需要对XML格式的文件进行一些处理。在C#语言中，我们可以使用XmlDocument类执行相关的操作。</p>
-<p>载入一个XML节点，其中<code>xmlStr</code>是XML格式内容的字符串，<code>filepath</code>是XML文件路径：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">XmlDocument xml = new XmlDocument();</span><br><span class="line">xml.LoadXml(xmlStr);</span><br><span class="line">xml.Load(filePath);</span><br></pre></td></tr></table></figure></p>
-<p>使用递归地方法遍历每个节点及属性：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">XmlDocument xml = new XmlDocument();</span><br><span class="line">xml.LoadXml(xmlStr);</span><br><span class="line">XmlNode node = (XmlNode)xml.DocumentElement;</span><br><span class="line">handleNode(node);</span><br><span class="line"></span><br><span class="line">private static void handleNode(XmlNode node)</span><br><span class="line">&#123;</span><br><span class="line">    XmlAttributeCollection attributes = node.Attributes;</span><br><span class="line">    if (attributes != null)</span><br><span class="line">    &#123;</span><br><span class="line">        foreach (XmlAttribute attr in attributes)</span><br><span class="line">        &#123;</span><br><span class="line">            String guid = attemptToConvertToStdGuid(attr.Value);</span><br><span class="line">            if (guid.Equals(attr.Value) == false)</span><br><span class="line">            &#123;</span><br><span class="line">                // if the attr.Value has been reformated, change the value.</span><br><span class="line">                node.Attributes[attr.Name].Value = guid;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (node.HasChildNodes)</span><br><span class="line">    &#123;</span><br><span class="line">        foreach (XmlNode child in node.ChildNodes)</span><br><span class="line">        &#123;</span><br><span class="line">            handleNode(child);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;                </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>载入一个XML节点，其中<code>xmlStr</code>是XML格式内容的字符串，<code>filepath</code>是XML文件路径：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">XmlDocument xml = new XmlDocument();</div><div class="line">xml.LoadXml(xmlStr);</div><div class="line">xml.Load(filePath);</div></pre></td></tr></table></figure></p>
+<p>使用递归地方法遍历每个节点及属性：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">XmlDocument xml = new XmlDocument();</div><div class="line">xml.LoadXml(xmlStr);</div><div class="line">XmlNode node = (XmlNode)xml.DocumentElement;</div><div class="line">handleNode(node);</div><div class="line"></div><div class="line">private static void handleNode(XmlNode node)</div><div class="line">&#123;</div><div class="line">    XmlAttributeCollection attributes = node.Attributes;</div><div class="line">    if (attributes != null)</div><div class="line">    &#123;</div><div class="line">        foreach (XmlAttribute attr in attributes)</div><div class="line">        &#123;</div><div class="line">            String guid = attemptToConvertToStdGuid(attr.Value);</div><div class="line">            if (guid.Equals(attr.Value) == false)</div><div class="line">            &#123;</div><div class="line">                // if the attr.Value has been reformated, change the value.</div><div class="line">                node.Attributes[attr.Name].Value = guid;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    if (node.HasChildNodes)</div><div class="line">    &#123;</div><div class="line">        foreach (XmlNode child in node.ChildNodes)</div><div class="line">        &#123;</div><div class="line">            handleNode(child);</div><div class="line">        &#125;</div><div class="line">    &#125;                </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>基本的使用语句如上所示，更进一步的操作可以对应查找相关文档。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/24/C-使用XmlDocument解析XML内容/" data-id="ckewl1zat000i10shtb9nqtf8" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/24/C-使用XmlDocument解析XML内容/" data-id="ckf44v6ak000jhh8teu6pmwgc" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li></ul>
@@ -183,6 +183,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -196,10 +200,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

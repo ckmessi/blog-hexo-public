@@ -68,6 +68,76 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Git常用撤销命令总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/07/26/Git常用撤销命令总结/" class="article-date">
+  <time datetime="2017-07-26T12:56:19.000Z" itemprop="datePublished">2017-07-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/07/26/Git常用撤销命令总结/">Git常用撤销命令总结</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在使用Git时，很多时候我们会遇到需要相关的撤销命令。这有可能是因为误执行了<code>git add</code>或<code>git commit</code>操作，也有可能是之前执行了相关操作后，发现内容并不是我们真正想要的。然而Git在不同状态下所需要执行的撤销命令是不同的，容易混淆，这里对常用的撤销命令进行总结。</p>
+<h2 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h2><p>在git仓库中，通常文件会有5种状态（不考虑未untracked files）的情况：</p>
+<ol>
+<li>未修改，与仓库内容保持一致</li>
+<li>修改、但未执行git add。（Changes not staged for commit）</li>
+<li>修改、并执行了git add，但未执行git commit。（Changes to be committed）</li>
+<li>修改、并执行了<code>git add</code> &amp; <code>git commit</code>，但未执行<code>git push</code>推送到远程。</li>
+<li>修改、并执行了<code>git add</code> &amp; <code>git commit</code> &amp; <code>git push</code></li>
+</ol>
+<p>其中状态0、1的文件位于<code>工作区</code>，状态2的文件位于<code>暂存区</code>，状态3、4的文件已经被提交到了<code>仓库</code>中。</p>
+<p>接下来分析处于各种状态下的撤销命令。</p>
+<h2 id="撤销命令分类"><a href="#撤销命令分类" class="headerlink" title="撤销命令分类"></a>撤销命令分类</h2><h4 id="状态0的撤销"><a href="#状态0的撤销" class="headerlink" title="状态0的撤销"></a>状态0的撤销</h4><p>对于状态0，不存在需要使用撤销命令的场景。</p>
+<h4 id="状态1的撤销"><a href="#状态1的撤销" class="headerlink" title="状态1的撤销"></a>状态1的撤销</h4><p>对于状态1，是指修改了版本库中的某些文件内容，希望撤销这些修改，使其恢复到与仓库原内容一致的情况。<br><em>注：如果修改的文件不在版本库中（Untracked files），只需要不对这个文件执行<code>git add</code>操作，即不会影响Git仓库的使用。</em><br>这时需要使用的命令是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">checkout -- [filename]</div></pre></td></tr></table></figure></p>
+<p>如果希望撤销所有这种类型文件的修改，可以使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git checkout -- .</div></pre></td></tr></table></figure></p>
+<p>注意，<code>git checkout -- [filename]</code>命令中的<code>--</code>很重要，没有<code>--</code>，就变成了“切换到另一个分支”的命令，在分支管理中会再次遇到git checkout命令。</p>
+<h4 id="状态2的撤销"><a href="#状态2的撤销" class="headerlink" title="状态2的撤销"></a>状态2的撤销</h4><p>对于状态2，是指修改了版本库中的内容，并执行了<code>git add</code>将其添加到暂存区了，此时进行撤销操作的目的是将其从暂存区移除（即回到没有<code>git add</code>之前的状态）。<br>这时需要使用的命令是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git reset HEAD [filename]</div></pre></td></tr></table></figure></p>
+<p>若想将修改内容都一起撤销，可参考状态1的情况，执行<code>git reset HEAD [filename] &amp; git checkout -- [filename]</code></p>
+<h4 id="状态3的撤销"><a href="#状态3的撤销" class="headerlink" title="状态3的撤销"></a>状态3的撤销</h4><p>对于状态3，是指修改了版本库中的内容，并执行了<code>git add</code> &amp; <code>git commit</code>，此时进行撤销操作目的是恢复到上一个commit版本（或上某个commit版本），同时修改的内容还存在（或消失）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git reset --hard|--soft|--mixed HEAD^</div><div class="line">git reset --hard|--soft|--mixed [commit_id]</div></pre></td></tr></table></figure></p>
+<p><code>git reset</code>命令实质上是重设版本，<code>HEAD^</code>表示上一个版本，<code>commit_id</code>可以在<code>git log</code>中看到。<br><code>--hard</code>参数表示，将重设目标<code>commit_id</code>后工作区的所有改变都丢弃，并把HEAD指向<code>commit_id</code>。这个模式的效果是，所有修改都丢弃，代码回滚到<code>commit_id</code>版本，且工作区是干净的。<br><code>--soft</code>参数表示，不重设Index和工作区，仅仅把HEAD指向<code>commit_id</code>。这个模式的效果是，从<code>commit_id</code>之后的修改都会显示在<code>Changes to be committed</code>（即状态2）中。<br><code>--mixed</code>参数表示，仅重设Index，不重设工作区。这个模式的效果是，从<code>commit_id</code>之后的修改会显示在<code>Changes not staged for commit</code>（即状态1）中。<br>总结一下：<br>从状态3=&gt;状态2，使用<code>git reset --soft HEAD^</code><br>从状态3=&gt;状态1，使用<code>git reset --mixed HEAD^</code><br>从状态3=&gt;状态0，使用<code>git reset --hard HEAD^</code></p>
+<h4 id="状态4的撤销"><a href="#状态4的撤销" class="headerlink" title="状态4的撤销"></a>状态4的撤销</h4><p>对于已经执行<code>git add</code> &amp; <code>git commit</code> &amp; <code>git push</code>的操作，想要撤销其实是非常困难的。别人还没有来得及pull这个分支。<br>在别人还没有来得及pull这个分支的前提下，解决方法是使用<code>状态3的撤销</code>，并将最新内容再次推送到远程分支。<br>如果提示说版本落后于远端版本，需要在push时使用<code>--force</code>参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push origin [branch_name] --force</div></pre></td></tr></table></figure></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在不考虑远程分支及合并等情况下，本地工作Git目录中的内容可能处于5种状态，针对这5种状态进行撤销操作的命令如下：</p>
+<ul>
+<li>状态0（未修改）：不需要撤销</li>
+<li>状态1（修改）：<code>git checkout -- [filename]</code></li>
+<li>状态2（修改，并<code>git add</code>）：<code>git reset HEAD [filename]</code></li>
+<li>状态3（修改，并<code>git add</code> &amp; <code>git commit</code>）：<code>git reset --hard|--mixed|--soft HEAD^ [filename]</code></li>
+<li>状态4（修改，并<code>git add</code> &amp; <code>git commit</code> &amp; <code>git push</code>）：参考状态3进行撤销，并执行<code>git push --force</code></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/07/26/Git常用撤销命令总结/" data-id="ckf44v6bx0023hh8tw5avlclz" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-C-使用正则表达式在字符串中查找子串" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2017/07/25/C-使用正则表达式在字符串中查找子串/" class="article-date">
@@ -94,19 +164,19 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="基础使用方法"><a href="#基础使用方法" class="headerlink" title="基础使用方法"></a>基础使用方法</h2><p>首先定义字符串和正则表达式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">string pattern = &quot;[a-zA-Z0-9]&#123;2&#125;&quot;;</span><br><span class="line">Regex patternRex = new Regex(pattern);</span><br><span class="line">string str = &quot;1234567890abcdefghij&quot;;</span><br></pre></td></tr></table></figure></p>
-<p>使用<code>Regex</code>对象的<code>IsMatch</code>函数，能够直接输出是否匹配的布尔值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bool result = patternRex.IsMatch(str);</span><br></pre></td></tr></table></figure></p>
-<p>使用<code>Regex</code>对象的<code>Matches</code>函数（或者<code>Regex</code>类的<code>Matches</code>静态方法），可以找到字符串中所有满足正则表达式的子串。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">foreach (Match mch in patternRex.Matches(str))</span><br><span class="line">&#123;</span><br><span class="line">	string x = mch.Value.Trim();</span><br><span class="line">	Console.WriteLine(x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>类似的，使用下面的方法也能得到同样的结果。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">foreach (Match mch in Regex.Matches(str, patternRex))</span><br><span class="line">&#123;</span><br><span class="line">	string x = mch.Value.Trim();</span><br><span class="line">	Console.WriteLine(x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <h2 id="基础使用方法"><a href="#基础使用方法" class="headerlink" title="基础使用方法"></a>基础使用方法</h2><p>首先定义字符串和正则表达式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">string pattern = &quot;[a-zA-Z0-9]&#123;2&#125;&quot;;</div><div class="line">Regex patternRex = new Regex(pattern);</div><div class="line">string str = &quot;1234567890abcdefghij&quot;;</div></pre></td></tr></table></figure></p>
+<p>使用<code>Regex</code>对象的<code>IsMatch</code>函数，能够直接输出是否匹配的布尔值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bool result = patternRex.IsMatch(str);</div></pre></td></tr></table></figure></p>
+<p>使用<code>Regex</code>对象的<code>Matches</code>函数（或者<code>Regex</code>类的<code>Matches</code>静态方法），可以找到字符串中所有满足正则表达式的子串。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">foreach (Match mch in patternRex.Matches(str))</div><div class="line">&#123;</div><div class="line">	string x = mch.Value.Trim();</div><div class="line">	Console.WriteLine(x);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>类似的，使用下面的方法也能得到同样的结果。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">foreach (Match mch in Regex.Matches(str, patternRex))</div><div class="line">&#123;</div><div class="line">	string x = mch.Value.Trim();</div><div class="line">	Console.WriteLine(x);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>需要注意的是，匹配出来的所有结果之间是不能重复的，即如果字符串<code>abc</code>中的<code>ab</code>已经匹配，不会再匹配<code>bc</code>。<br><code>1234567890abcdefghij</code>使用<code>[a-zA-Z0-9]{2}</code>进行匹配的结果会是：<br><code>12</code>,<code>34</code>,<code>56</code>,<code>78</code>,…<br>而不是<br><code>12</code>,<code>23</code>,<code>34</code>,<code>45</code>,…</p>
-<h2 id="特殊匹配需求"><a href="#特殊匹配需求" class="headerlink" title="特殊匹配需求"></a>特殊匹配需求</h2><p>实际中需求可能是这样的，需要找到一段字母数字组成的8位字符串，它可能出现在字符串的任何位置，但最多只可能出现一次。<br>上述这种形式转化为形式化描述是，找到一段8位字母数字字符串，要么其前后没有内容，要么其前后的字符不是字母数字。<br>再转化为正则表达式的形式为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(([^a-zA-Z0-9])+|^)[a-zA-Z0-9]&#123;8&#125;(([^a-zA-Z0-9])+|$)</span><br></pre></td></tr></table></figure></p>
-<p>但使用这种正则表达式进行筛选后，可能会包含前后的”_”、”-“等字符串，需要进行二次提纯。<br>代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">string pattern = &quot;(([^a-zA-Z0-9])+|^)[a-zA-Z0-9]&#123;8&#125;(([^a-zA-Z0-9])+|$)&quot;;</span><br><span class="line">Regex patternRex = new Regex(patternRex);</span><br><span class="line">if(patternRex.Matches(str).Count == 1)</span><br><span class="line">&#123;</span><br><span class="line">	Match mch = patternRex.Matches(str)[0];</span><br><span class="line">	string x = mch.Value.Trim();</span><br><span class="line">	string purePattern = &quot;[a-zA-Z0-9]&#123;32&#125;&quot;;</span><br><span class="line">	Regex purePatternRex = new Regex(purePattern);</span><br><span class="line">	if(purePatternRex.Matches(x).Count == 1)</span><br><span class="line">	&#123;</span><br><span class="line">		Match sub = purePatternRex.Matches(x)[0];</span><br><span class="line">		string subStr = sub.Value.Trim;</span><br><span class="line">		return subStr;</span><br><span class="line">	&#125;</span><br><span class="line">	else</span><br><span class="line">	&#123;</span><br><span class="line">		// 理论上不可能进入这个分支</span><br><span class="line">		return &quot;&quot;;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">else</span><br><span class="line">&#123;</span><br><span class="line">	return &quot;&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="特殊匹配需求"><a href="#特殊匹配需求" class="headerlink" title="特殊匹配需求"></a>特殊匹配需求</h2><p>实际中需求可能是这样的，需要找到一段字母数字组成的8位字符串，它可能出现在字符串的任何位置，但最多只可能出现一次。<br>上述这种形式转化为形式化描述是，找到一段8位字母数字字符串，要么其前后没有内容，要么其前后的字符不是字母数字。<br>再转化为正则表达式的形式为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(([^a-zA-Z0-9])+|^)[a-zA-Z0-9]&#123;8&#125;(([^a-zA-Z0-9])+|$)</div></pre></td></tr></table></figure></p>
+<p>但使用这种正则表达式进行筛选后，可能会包含前后的”_”、”-“等字符串，需要进行二次提纯。<br>代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">string pattern = &quot;(([^a-zA-Z0-9])+|^)[a-zA-Z0-9]&#123;8&#125;(([^a-zA-Z0-9])+|$)&quot;;</div><div class="line">Regex patternRex = new Regex(patternRex);</div><div class="line">if(patternRex.Matches(str).Count == 1)</div><div class="line">&#123;</div><div class="line">	Match mch = patternRex.Matches(str)[0];</div><div class="line">	string x = mch.Value.Trim();</div><div class="line">	string purePattern = &quot;[a-zA-Z0-9]&#123;32&#125;&quot;;</div><div class="line">	Regex purePatternRex = new Regex(purePattern);</div><div class="line">	if(purePatternRex.Matches(x).Count == 1)</div><div class="line">	&#123;</div><div class="line">		Match sub = purePatternRex.Matches(x)[0];</div><div class="line">		string subStr = sub.Value.Trim;</div><div class="line">		return subStr;</div><div class="line">	&#125;</div><div class="line">	else</div><div class="line">	&#123;</div><div class="line">		// 理论上不可能进入这个分支</div><div class="line">		return &quot;&quot;;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">else</div><div class="line">&#123;</div><div class="line">	return &quot;&quot;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>使用C#中<code>Regex</code>对象的<code>Matches</code>函数，或者<code>Regex</code>类的<code>Matches</code>静态方法，能够快速查找可能存在的满足正则表达式的子串。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/25/C-使用正则表达式在字符串中查找子串/" data-id="ckewl1zao000f10shfok561c0" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/25/C-使用正则表达式在字符串中查找子串/" data-id="ckf44v6am000ohh8tf4hwm8qx" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
@@ -145,14 +215,14 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>在实际应用中，我们通常需要对XML格式的文件进行一些处理。在C#语言中，我们可以使用XmlDocument类执行相关的操作。</p>
-<p>载入一个XML节点，其中<code>xmlStr</code>是XML格式内容的字符串，<code>filepath</code>是XML文件路径：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">XmlDocument xml = new XmlDocument();</span><br><span class="line">xml.LoadXml(xmlStr);</span><br><span class="line">xml.Load(filePath);</span><br></pre></td></tr></table></figure></p>
-<p>使用递归地方法遍历每个节点及属性：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">XmlDocument xml = new XmlDocument();</span><br><span class="line">xml.LoadXml(xmlStr);</span><br><span class="line">XmlNode node = (XmlNode)xml.DocumentElement;</span><br><span class="line">handleNode(node);</span><br><span class="line"></span><br><span class="line">private static void handleNode(XmlNode node)</span><br><span class="line">&#123;</span><br><span class="line">    XmlAttributeCollection attributes = node.Attributes;</span><br><span class="line">    if (attributes != null)</span><br><span class="line">    &#123;</span><br><span class="line">        foreach (XmlAttribute attr in attributes)</span><br><span class="line">        &#123;</span><br><span class="line">            String guid = attemptToConvertToStdGuid(attr.Value);</span><br><span class="line">            if (guid.Equals(attr.Value) == false)</span><br><span class="line">            &#123;</span><br><span class="line">                // if the attr.Value has been reformated, change the value.</span><br><span class="line">                node.Attributes[attr.Name].Value = guid;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (node.HasChildNodes)</span><br><span class="line">    &#123;</span><br><span class="line">        foreach (XmlNode child in node.ChildNodes)</span><br><span class="line">        &#123;</span><br><span class="line">            handleNode(child);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;                </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>载入一个XML节点，其中<code>xmlStr</code>是XML格式内容的字符串，<code>filepath</code>是XML文件路径：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">XmlDocument xml = new XmlDocument();</div><div class="line">xml.LoadXml(xmlStr);</div><div class="line">xml.Load(filePath);</div></pre></td></tr></table></figure></p>
+<p>使用递归地方法遍历每个节点及属性：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">XmlDocument xml = new XmlDocument();</div><div class="line">xml.LoadXml(xmlStr);</div><div class="line">XmlNode node = (XmlNode)xml.DocumentElement;</div><div class="line">handleNode(node);</div><div class="line"></div><div class="line">private static void handleNode(XmlNode node)</div><div class="line">&#123;</div><div class="line">    XmlAttributeCollection attributes = node.Attributes;</div><div class="line">    if (attributes != null)</div><div class="line">    &#123;</div><div class="line">        foreach (XmlAttribute attr in attributes)</div><div class="line">        &#123;</div><div class="line">            String guid = attemptToConvertToStdGuid(attr.Value);</div><div class="line">            if (guid.Equals(attr.Value) == false)</div><div class="line">            &#123;</div><div class="line">                // if the attr.Value has been reformated, change the value.</div><div class="line">                node.Attributes[attr.Name].Value = guid;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    if (node.HasChildNodes)</div><div class="line">    &#123;</div><div class="line">        foreach (XmlNode child in node.ChildNodes)</div><div class="line">        &#123;</div><div class="line">            handleNode(child);</div><div class="line">        &#125;</div><div class="line">    &#125;                </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>基本的使用语句如上所示，更进一步的操作可以对应查找相关文档。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/24/C-使用XmlDocument解析XML内容/" data-id="ckewl1zat000i10shtb9nqtf8" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/24/C-使用XmlDocument解析XML内容/" data-id="ckf44v6ak000jhh8teu6pmwgc" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li></ul>
@@ -191,22 +261,22 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>在后台代码中，通常会遇到读写Excel表格的情况。在Laravel框架中，有一个插件<a href="https://github.com/Maatwebsite/Laravel-Excel" target="_blank" rel="external">Maatwebsite</a>能够比较全面地完成这种任务。</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装Maatwebsite只需按照正常的Composer组件安装方式即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer install Maatwebsite --save-dev</span><br></pre></td></tr></table></figure></p>
-<p>然后在<code>config/app.php</code>中添加<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Maatwebsite\Excel\ExcelServiceProvider::class,</span><br></pre></td></tr></table></figure></p>
-<p>并添加Alias<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&apos;Excel&apos; =&gt; Maatwebsite\Excel\Facades\Excel::class,</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装Maatwebsite只需按照正常的Composer组件安装方式即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer install Maatwebsite --save-dev</div></pre></td></tr></table></figure></p>
+<p>然后在<code>config/app.php</code>中添加<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Maatwebsite\Excel\ExcelServiceProvider::class,</div></pre></td></tr></table></figure></p>
+<p>并添加Alias<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&apos;Excel&apos; =&gt; Maatwebsite\Excel\Facades\Excel::class,</div></pre></td></tr></table></figure></p>
 <p>之后就可以在代码中引用<code>use Maatwebsite\Excel\Facades\Excel;</code>，并使用类似<code>Excel::create...</code>的语句</p>
-<p>对于Maatwebsite的配置，可以使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan vendor:publish --provider=&quot;Maatwebsite\Excel\ExcelServiceProvider&quot;</span><br></pre></td></tr></table></figure></p>
+<p>对于Maatwebsite的配置，可以使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">php artisan vendor:publish --provider=&quot;Maatwebsite\Excel\ExcelServiceProvider&quot;</div></pre></td></tr></table></figure></p>
 <p>这样会在<code>config</code>文件夹生成<code>excel.php</code>配置文件，相关配置可以在其中修改。之后我们用到导出Excel表格时，路径之所以在<code>storage/exports/[filename]</code>，就是因为这个配置文件中的定义。</p>
-<h2 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h2><p>单纯考虑按行读出Excel文件的内容，可以使用以下代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Excel::load($file_path, function($reader) use ($variable) &#123;</span><br><span class="line">	$reader = $reader-&gt;getSheet(0);//excel第一张sheet</span><br><span class="line">	$results = $reader-&gt;toArray();</span><br><span class="line">	for($i = 0; $i &lt; count($results); $i++)&#123;</span><br><span class="line">	    $row = $results[$i];</span><br><span class="line">	    $customer_name = $row[0];</span><br><span class="line">	    $customer_telephone = $row[1];</span><br><span class="line">	    $customer_address = $row[2];</span><br><span class="line">	    // ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h2><p>单纯考虑按行读出Excel文件的内容，可以使用以下代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Excel::load($file_path, function($reader) use ($variable) &#123;</div><div class="line">	$reader = $reader-&gt;getSheet(0);//excel第一张sheet</div><div class="line">	$results = $reader-&gt;toArray();</div><div class="line">	for($i = 0; $i &lt; count($results); $i++)&#123;</div><div class="line">	    $row = $results[$i];</div><div class="line">	    $customer_name = $row[0];</div><div class="line">	    $customer_telephone = $row[1];</div><div class="line">	    $customer_address = $row[2];</div><div class="line">	    // ...</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>其中<code>$results</code>保存着所有行，而<code>$row</code>保存着对应每一行的所有列。</p>
-<h2 id="导出"><a href="#导出" class="headerlink" title="导出"></a>导出</h2><p>单纯考虑将一个二维矩阵导出为一个Excel的一个Sheet，可以<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Excel::create(&apos;filename&apos;, function($excel) use ($matrix)&#123;</span><br><span class="line">    $excel-&gt;sheet(&apos;sheet_name&apos;, function($sheet) use ($matrix)&#123;</span><br><span class="line">        $sheet-&gt;rows($matrix);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;)-&gt;store(&apos;xls&apos;);</span><br></pre></td></tr></table></figure></p>
+<h2 id="导出"><a href="#导出" class="headerlink" title="导出"></a>导出</h2><p>单纯考虑将一个二维矩阵导出为一个Excel的一个Sheet，可以<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Excel::create(&apos;filename&apos;, function($excel) use ($matrix)&#123;</div><div class="line">    $excel-&gt;sheet(&apos;sheet_name&apos;, function($sheet) use ($matrix)&#123;</div><div class="line">        $sheet-&gt;rows($matrix);</div><div class="line">    &#125;);</div><div class="line">&#125;)-&gt;store(&apos;xls&apos;);</div></pre></td></tr></table></figure></p>
 <p>这样就会将matrix中二维数组的内容，按一行一行的形式写出到Excel表中</p>
 <h4 id="存储和下载的差别"><a href="#存储和下载的差别" class="headerlink" title="存储和下载的差别"></a>存储和下载的差别</h4><p>注意到之前代码中最后的一语句是<code>-&gt;store(&#39;xls&#39;)</code>，这表示以<code>xls</code>文件格式存储。<br>如果是Web应用，可以尝试<code>-&gt;export(&#39;xls&#39;)</code>，这表示以<code>xls</code>文件格式下载。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/22/Laravel使用Maatwebsite操作Excel/" data-id="ckewl1zci004f10shsdt3cefg" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/22/Laravel使用Maatwebsite操作Excel/" data-id="ckf44v6da004ohh8tidmtgxva" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -265,7 +335,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/20/C-的访问权限修饰符/" data-id="ckewl1z9v000610sho7zprzkm" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/20/C-的访问权限修饰符/" data-id="ckf44v6aq000uhh8tayb3e9d5" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C#</a></li></ul>
@@ -307,13 +377,13 @@
 <p>可以使用下面这个语句设置编辑模式：<br><code>Set-PSReadlineOptional -EditMode Emacs</code></p>
 <p>此外，在切换路径的时候，默认按<code>Tab</code>键只会从第一个目录开始遍历，不会根据当前输入进行补全，也是比较烦人的设置。   </p>
 <p>可以通过以下语句设置<code>Tab</code>键的作用：<br><code>Set-PSReadlineKeyHandler -Key Tab -Function TabCompleteNext</code></p>
-<p>将上述两个语句加入到<code>$profile</code>文件中，即可设置<code>PowerShell</code>启动时自动执行这两个设置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Set-PSReadlineOptional -EditMode Emacs </span><br><span class="line">Set-PSReadlineKeyHandler -Key Tab -Function TabCompleteNext</span><br></pre></td></tr></table></figure></p>
+<p>将上述两个语句加入到<code>$profile</code>文件中，即可设置<code>PowerShell</code>启动时自动执行这两个设置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Set-PSReadlineOptional -EditMode Emacs </div><div class="line">Set-PSReadlineKeyHandler -Key Tab -Function TabCompleteNext</div></pre></td></tr></table></figure></p>
 <p>以上。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/19/PowerShell实现光标快速移动操作和自动补全/" data-id="ckewl1zdb007w10sh7sl7fo6x" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/19/PowerShell实现光标快速移动操作和自动补全/" data-id="ckf44v6ek007uhh8tx9ozdyeg" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li></ul>
@@ -358,7 +428,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/19/npm的package-json一些使用常识/" data-id="ckewl1zdr00ai10shwf3q0oi8" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/19/npm的package-json一些使用常识/" data-id="ckf44v6g100ashh8tsykpj3b5" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li></ul>
@@ -399,7 +469,7 @@
         <h2 id="什么是Grunt？"><a href="#什么是Grunt？" class="headerlink" title="什么是Grunt？"></a>什么是Grunt？</h2><p>Javascript的任务运行器（The Javascript Task Runner）</p>
 <p>为什么需要使用任务运行器？<br>自动化。当执行重复任务如压缩、编译、单元测试等的工作越少，工作就越轻松。只要通过配置Gruntfile文件，任务运行器就能帮助你以几乎零付出的代价完成这些平庸的事情。</p>
 <p>为什么使用Grunt<br>Grunt的生态系统很大，并且每天还在不断增长。基于成千上百的插件可供选择，能够使用Grunt自动完成许多工作。如果没有人构建你所需要的，制作并发布自己的Grunt插件也是一件轻而易举的事情。</p>
-<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>首先安装Grunt的命令行界面grunt-cli（Grunt’s command line interface (CLI) ）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g grunt-cli</span><br></pre></td></tr></table></figure></p>
+<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>首先安装Grunt的命令行界面grunt-cli（Grunt’s command line interface (CLI) ）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g grunt-cli</div></pre></td></tr></table></figure></p>
 <p>Grunt项目中通常会有两个文件：<br><code>package.json</code><br><code>Gruntfile</code> 可能是Gruntfile.js或Gruntfile.coffee，用于配置或定义tasks并载入Grunt插件。</p>
 <h3 id="Package-json"><a href="#Package-json" class="headerlink" title="Package.json"></a>Package.json</h3><p>npm包所使用的依赖库文件。</p>
 <h3 id="GruntFile-js"><a href="#GruntFile-js" class="headerlink" title="GruntFile.js"></a>GruntFile.js</h3><p>GruntFile由以下四部分组成：</p>
@@ -409,13 +479,13 @@
 <li>载入Grunt插件和任务（Loading Grunt plugins and tasks）</li>
 <li>自定义任务（Custom tasks）</li>
 </ul>
-<h5 id="样例文件"><a href="#样例文件" class="headerlink" title="样例文件"></a>样例文件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">module.exports = function(grunt) &#123;</span><br><span class="line"></span><br><span class="line">  // Project configuration.</span><br><span class="line">  grunt.initConfig(&#123;</span><br><span class="line">    pkg: grunt.file.readJSON(&apos;package.json&apos;),</span><br><span class="line">    uglify: &#123;</span><br><span class="line">      options: &#123;</span><br><span class="line">        banner: &apos;/*! &lt;%= pkg.name %&gt; &lt;%= grunt.template.today(&quot;yyyy-mm-dd&quot;) %&gt; */\n&apos;</span><br><span class="line">      &#125;,</span><br><span class="line">      build: &#123;</span><br><span class="line">        src: &apos;src/&lt;%= pkg.name %&gt;.js&apos;,</span><br><span class="line">        dest: &apos;build/&lt;%= pkg.name %&gt;.min.js&apos;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  // Load the plugin that provides the &quot;uglify&quot; task.</span><br><span class="line">  grunt.loadNpmTasks(&apos;grunt-contrib-uglify&apos;);</span><br><span class="line"></span><br><span class="line">  // Default task(s).</span><br><span class="line">  grunt.registerTask(&apos;default&apos;, [&apos;uglify&apos;]);</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h5 id="包装函数"><a href="#包装函数" class="headerlink" title="包装函数"></a>包装函数</h5><p>每一个Gruntfile都使用这种基础格式，所有你自己的Grunt代码必须定义在这个函数以内。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">module.exports = function(grunt) &#123;</span><br><span class="line">  // Do grunt-related things in here</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h5 id="样例文件"><a href="#样例文件" class="headerlink" title="样例文件"></a>样例文件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">module.exports = function(grunt) &#123;</div><div class="line"></div><div class="line">  // Project configuration.</div><div class="line">  grunt.initConfig(&#123;</div><div class="line">    pkg: grunt.file.readJSON(&apos;package.json&apos;),</div><div class="line">    uglify: &#123;</div><div class="line">      options: &#123;</div><div class="line">        banner: &apos;/*! &lt;%= pkg.name %&gt; &lt;%= grunt.template.today(&quot;yyyy-mm-dd&quot;) %&gt; */\n&apos;</div><div class="line">      &#125;,</div><div class="line">      build: &#123;</div><div class="line">        src: &apos;src/&lt;%= pkg.name %&gt;.js&apos;,</div><div class="line">        dest: &apos;build/&lt;%= pkg.name %&gt;.min.js&apos;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">  // Load the plugin that provides the &quot;uglify&quot; task.</div><div class="line">  grunt.loadNpmTasks(&apos;grunt-contrib-uglify&apos;);</div><div class="line"></div><div class="line">  // Default task(s).</div><div class="line">  grunt.registerTask(&apos;default&apos;, [&apos;uglify&apos;]);</div><div class="line"></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h5 id="包装函数"><a href="#包装函数" class="headerlink" title="包装函数"></a>包装函数</h5><p>每一个Gruntfile都使用这种基础格式，所有你自己的Grunt代码必须定义在这个函数以内。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">module.exports = function(grunt) &#123;</div><div class="line">  // Do grunt-related things in here</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
 <h5 id="项目和任务配置"><a href="#项目和任务配置" class="headerlink" title="项目和任务配置"></a>项目和任务配置</h5><p>大多数Grunt任务依赖于定义在grunt.initConfig方法的配置数据。<br><code>&lt;% %&gt;</code>模板字符串能够引用配置的属性，这样文件路径、文件列表等内容能够通过这种方式定义以减少重复。<br>如大多数任务一样，uglify任务期望它的配置数据以相同名称的属性定义。</p>
-<h5 id="载入Grunt插件和任务"><a href="#载入Grunt插件和任务" class="headerlink" title="载入Grunt插件和任务"></a>载入Grunt插件和任务</h5><p>大多数常用的任务如<a href="https://github.com/gruntjs/grunt-contrib-concat" target="_blank" rel="external">连接（concatenation）</a>、<a href="https://github.com/gruntjs/grunt-contrib-uglify" target="_blank" rel="external">压缩（minification）</a>和<a href="https://github.com/gruntjs/grunt-contrib-jshint" target="_blank" rel="external">lint</a>都是可用的grunt插件。<br>只要一个插件在package.json中指定为依赖包，并且通过npm install安装，它就能够在你的Gruntfile中以简单的命令使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// Load the plugin that provides the &quot;uglify&quot; task.</span><br><span class="line">grunt.loadNpmTasks(&apos;grunt-contrib-uglify&apos;);</span><br></pre></td></tr></table></figure></p>
+<h5 id="载入Grunt插件和任务"><a href="#载入Grunt插件和任务" class="headerlink" title="载入Grunt插件和任务"></a>载入Grunt插件和任务</h5><p>大多数常用的任务如<a href="https://github.com/gruntjs/grunt-contrib-concat" target="_blank" rel="external">连接（concatenation）</a>、<a href="https://github.com/gruntjs/grunt-contrib-uglify" target="_blank" rel="external">压缩（minification）</a>和<a href="https://github.com/gruntjs/grunt-contrib-jshint" target="_blank" rel="external">lint</a>都是可用的grunt插件。<br>只要一个插件在package.json中指定为依赖包，并且通过npm install安装，它就能够在你的Gruntfile中以简单的命令使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// Load the plugin that provides the &quot;uglify&quot; task.</div><div class="line">grunt.loadNpmTasks(&apos;grunt-contrib-uglify&apos;);</div></pre></td></tr></table></figure></p>
 <p>注意：<code>grunt -help</code>命令将列出所有可用的任务。</p>
-<h5 id="自定义任务"><a href="#自定义任务" class="headerlink" title="自定义任务"></a>自定义任务</h5><p>你能够配置使Grunt默认运行一个或多个任务，通过定义一个<code>default</code>的任务。在下面的样例中，在命令行中没有指定任务执行grunt，将运行<code>uglify</code>任务。这在功能上与显式地直接执行<code>grunt uglify</code>或者<code>grunt default</code>是一样的。任意数量的任务可以被指定在数组中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// Default task(s).</span><br><span class="line">grunt.registerTask(&apos;default&apos;, [&apos;uglify&apos;]);</span><br></pre></td></tr></table></figure></p>
-<p>如果你的项目需要一个Grunt插件不曾提供的任务，你可以在<code>Gruntfile</code>中定义自定义任务。比如，下面的<code>GruntFile</code>指定了一个完全自定义的<code>default</code>任务，甚至不使用任务配置。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">module.exports = function(grunt) &#123;</span><br><span class="line"></span><br><span class="line">  // A very basic default task.</span><br><span class="line">  grunt.registerTask(&apos;default&apos;, &apos;Log some stuff.&apos;, function() &#123;</span><br><span class="line">    grunt.log.write(&apos;Logging some stuff...&apos;).ok();</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h5 id="自定义任务"><a href="#自定义任务" class="headerlink" title="自定义任务"></a>自定义任务</h5><p>你能够配置使Grunt默认运行一个或多个任务，通过定义一个<code>default</code>的任务。在下面的样例中，在命令行中没有指定任务执行grunt，将运行<code>uglify</code>任务。这在功能上与显式地直接执行<code>grunt uglify</code>或者<code>grunt default</code>是一样的。任意数量的任务可以被指定在数组中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// Default task(s).</div><div class="line">grunt.registerTask(&apos;default&apos;, [&apos;uglify&apos;]);</div></pre></td></tr></table></figure></p>
+<p>如果你的项目需要一个Grunt插件不曾提供的任务，你可以在<code>Gruntfile</code>中定义自定义任务。比如，下面的<code>GruntFile</code>指定了一个完全自定义的<code>default</code>任务，甚至不使用任务配置。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">module.exports = function(grunt) &#123;</div><div class="line"></div><div class="line">  // A very basic default task.</div><div class="line">  grunt.registerTask(&apos;default&apos;, &apos;Log some stuff.&apos;, function() &#123;</div><div class="line">    grunt.log.write(&apos;Logging some stuff...&apos;).ok();</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
 <p>自定义项目指定的任务不需要在<code>Gruntfile</code>中指定；它们能够在外部的<code>.js</code>文件中定义，并通过<code>grunt.loadTasks</code>方法导入。</p>
 <h2 id="Grunt的使用习惯"><a href="#Grunt的使用习惯" class="headerlink" title="Grunt的使用习惯"></a>Grunt的使用习惯</h2><p>传统的文件夹结构特征会包含这些文件夹：<code>src</code>、<code>dist</code>和<code>test</code>。</p>
 <ul>
@@ -442,7 +512,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/19/Grunt入门/" data-id="ckewl1zby002l10shqhrpv29i" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/19/Grunt入门/" data-id="ckf44v6c1002ahh8tb3omcr72" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -485,19 +555,19 @@
 <ol>
 <li>使用mysqldump命令导出</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -h [host] -u[user_name] &apos;-p[password]&apos; [database_name] &gt; [output].dump</span><br><span class="line">mysqldump -h localhost -ulionel &apos;-plionel&apos; lionelDB &gt; output.dump</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysqldump -h [host] -u[user_name] &apos;-p[password]&apos; [database_name] &gt; [output].dump</div><div class="line">mysqldump -h localhost -ulionel &apos;-plionel&apos; lionelDB &gt; output.dump</div></pre></td></tr></table></figure>
 <p>是的，这里比较坑的是，那个<code>-u</code>和<code>-p</code>的后头没有空格！没有空格，就是和具体的<code>user_name</code>以及<code>password</code>粘在一起的。不知道是无心之失，还是有意为之。<br><code>-p</code>那个地方加不加单引号，主要是根据密码内容来的，如果密码内容有特殊字符会有其它含义，可能导致语句中断，因此加上单引号能够避免这种情况的发生。   </p>
-<ol start="2">
+<ol>
 <li>使用mysql导入</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -h [host] -u[user_name] &apos;-p[password]&apos; [new_database_name] &lt; [output].dump</span><br><span class="line">mysqldump -h localhost -ulionel &apos;-plionel&apos; lionelDB_copy &lt; output.dump</span><br></pre></td></tr></table></figure>
-<p>但是这样貌似会执行，但没有生成表和内容。<br>解决方案是将mysqldump命令换成mysql，直接执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -h localhost -ulionel &apos;-lionel&apos; lionelDB_copy &lt; output.dump</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysqldump -h [host] -u[user_name] &apos;-p[password]&apos; [new_database_name] &lt; [output].dump</div><div class="line">mysqldump -h localhost -ulionel &apos;-plionel&apos; lionelDB_copy &lt; output.dump</div></pre></td></tr></table></figure>
+<p>但是这样貌似会执行，但没有生成表和内容。<br>解决方案是将mysqldump命令换成mysql，直接执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -h localhost -ulionel &apos;-lionel&apos; lionelDB_copy &lt; output.dump</div></pre></td></tr></table></figure></p>
 <p>这样就完成了。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/07/使用mysqldump快速拷贝一个数据库/" data-id="ckewl1zeo00c910sha1nk4vvb" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/07/使用mysqldump快速拷贝一个数据库/" data-id="ckf44v6h000cnhh8t0eent1kw" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li></ul>
@@ -536,79 +606,22 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>最近遇到一个问题，在测试服上测通了的代码，推到正式服之后却出现莫名其妙的问题。后来经多方查找，终于发现原来是正式服的php版本和测试服的不一致。测试服是php7，而正式服是php5.6。<br>这样就有了升级php版本的需求。<br>结合服务器使用的是Apache2，这里大概列举一下升级相关的步骤。    </p>
-<h2 id="安装php7"><a href="#安装php7" class="headerlink" title="安装php7"></a>安装php7</h2><p>在Ubuntu下安装php7还是比较容易的，如果是Ubuntu16，自带php7的源，可以直接使用apt-get进行安装；如果是Ubuntu14，则需要先手动添加如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install -y language-pack-en-base </span><br><span class="line">$ sudo LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php</span><br></pre></td></tr></table></figure></p>
-<p>如果说add-apt-repository command not find，则可能需要：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install software-properties-common </span><br><span class="line">sudo apt-get install python-software-properties（实测这一句可能多余）</span><br></pre></td></tr></table></figure></p>
-<p>更新源列表：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get update</span><br></pre></td></tr></table></figure></p>
-<p>然后安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install php7.0</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装php7"><a href="#安装php7" class="headerlink" title="安装php7"></a>安装php7</h2><p>在Ubuntu下安装php7还是比较容易的，如果是Ubuntu16，自带php7的源，可以直接使用apt-get进行安装；如果是Ubuntu14，则需要先手动添加如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install -y language-pack-en-base </div><div class="line">$ sudo LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php</div></pre></td></tr></table></figure></p>
+<p>如果说add-apt-repository command not find，则可能需要：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install software-properties-common </div><div class="line">sudo apt-get install python-software-properties（实测这一句可能多余）</div></pre></td></tr></table></figure></p>
+<p>更新源列表：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get update</div></pre></td></tr></table></figure></p>
+<p>然后安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install php7.0</div></pre></td></tr></table></figure></p>
 <p>对应地，安装php7.0-fpm、php7.0-mysql等许多插件。</p>
-<h2 id="设置apache关联"><a href="#设置apache关联" class="headerlink" title="设置apache关联"></a>设置apache关联</h2><p>尽管安装了php7，但apache服务器默认关联的php还是php5，在这种情况下需要使用以下命令进行修改。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo a2dismod php5.6;</span><br><span class="line">sudo a2enmod php7.0; </span><br><span class="line">sudo service apache2 restart</span><br></pre></td></tr></table></figure></p>
+<h2 id="设置apache关联"><a href="#设置apache关联" class="headerlink" title="设置apache关联"></a>设置apache关联</h2><p>尽管安装了php7，但apache服务器默认关联的php还是php5，在这种情况下需要使用以下命令进行修改。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo a2dismod php5.6;</div><div class="line">sudo a2enmod php7.0; </div><div class="line">sudo service apache2 restart</div></pre></td></tr></table></figure></p>
 <p>这样就完成了apache关联php的版本转换。</p>
 <h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>在升级后，需要安装需要插件确保服务器的正常运行。<br>使用<code>php -m</code>可以查看当前已经安装的模块，缺少任何模块时，可以通过<code>apt-get install php7.0-xxx</code>进行安装。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/06/Apache配置php5升级为php7/" data-id="ckewl1za4000910sh4sxxtio9" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/06/Apache配置php5升级为php7/" data-id="ckf44v69q0004hh8tp94yajmk" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Hexo个人博客使用流程" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2017/06/28/Hexo个人博客使用流程/" class="article-date">
-  <time datetime="2017-06-28T02:11:19.000Z" itemprop="datePublished">2017-06-28</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2017/06/28/Hexo个人博客使用流程/">Hexo个人博客使用流程</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这一段时间一直在使用Hexo搭建个人博客，此前研究了Hexo配合Github-Pages进行部署、Hexo添加图片、Hexo进行版本控制等相关内容。这篇文章主要总结一下Hexo个人博客的整体流程使用规范。   </p>
-<p>首先，我们把个人博客部分划分为三部分：</p>
-<ol>
-<li>【仓库1】Hexo源文件，保存着博客内容的原生内容及Hexo项目自身的配置信息</li>
-<li>【仓库2】Hexo生成文件，保存着根据主题模板生成的静态网页内容。</li>
-<li>【仓库3】Github-Pages个人主页，用于使用[username].github.io域名访问</li>
-</ol>
-<p>其中【仓库3】中可能不只包含【仓库2】的内容，使用Git的submodule方法添加【仓库2】作为其子目录。</p>
-<p>基于上述划分，我们可以得出个人博客使用时的基本流程：</p>
-<ol>
-<li>撰写Hexo源文件，完成后提交到【仓库1】</li>
-<li>在确认生成内容无误后，使用<code>Hexo generate</code>生成<code>public</code>目录（可修改名称），提交至【仓库2】</li>
-<li>在【仓库3】中的【仓库2】目录下拉取最新内容，然后合并到【仓库3】中，提交。</li>
-</ol>
-<p>此时【仓库3】中的【仓库2】内容保存着最新生成的静态网页内容，可使用<code>[username].github.io/[blog-project]</code>域名访问到。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/06/28/Hexo个人博客使用流程/" data-id="ckewl1zbp002j10shcrw1ravl" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li></ul>
 
     </footer>
   </div>
@@ -674,6 +687,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -687,10 +704,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

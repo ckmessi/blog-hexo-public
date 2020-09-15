@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/03/07/Java使用反射测试私用方法/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在单元测试中，如果希望对某个类的私有方法进行测试，则需要使用反射的方式进行。假设存在某个类的代码如下：12345public class A &amp;#123;    private String privateMethodF(String str)&amp;#123;        return str;    &amp;#125;&amp;#125; 测试代码的基本逻辑如下：12345678910public class">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.925Z">
+<meta property="og:updated_time" content="2019-03-07T09:18:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java使用反射测试私用方法">
 <meta name="twitter:description" content="在单元测试中，如果希望对某个类的私有方法进行测试，则需要使用反射的方式进行。假设存在某个类的代码如下：12345public class A &amp;#123;    private String privateMethodF(String str)&amp;#123;        return str;    &amp;#125;&amp;#125; 测试代码的基本逻辑如下：12345678910public class">
@@ -94,16 +94,16 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在单元测试中，如果希望对某个类的私有方法进行测试，则需要使用反射的方式进行。<br>假设存在某个类的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public class A &#123;</span><br><span class="line">    private String privateMethodF(String str)&#123;</span><br><span class="line">        return str;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>测试代码的基本逻辑如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class UnitTest &#123;</span><br><span class="line">    ClassA objectA;</span><br><span class="line">    @Test</span><br><span class="line">    public void testPrivateMethod()&#123;</span><br><span class="line">        Method methodF = objectA.getClass().getDeclaredMethod(“privateMethodF”, String.class);</span><br><span class="line">        methodF.setAccessible(true);</span><br><span class="line">        String result = (String)methodF.invoke(objectA, “parameterString”);</span><br><span class="line">        // TODO: assert something</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>基本思路是使用 <code>getDeclaredMethod</code> 获取私有方法，并通过 <code>setAccessible</code> 设置其可访问。<br>调用接口的方式是通过 <code>invoke</code> 方法，其中第一个参数是目标类，第二个参数是调用方法中需要传递的参数。<br>如果私有方法有多个参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public class A &#123;</span><br><span class="line">    private String privateMethodF2(ClassB objB, List&lt;String&gt; strList, Integer num)&#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>则测试代码应该对应修改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class UnitTest &#123;</span><br><span class="line">    ClassA objectA;</span><br><span class="line">    @Test</span><br><span class="line">    public void testPrivateMethod()&#123;</span><br><span class="line">        Method methodF2 = objectA.getClass().getDeclaredMethod(“privateMethodF2”, new Class[]&#123;ClassB.class, List.class, Integer.class);</span><br><span class="line">        methodF2.setAccessible(true);</span><br><span class="line">        ClassB objB = new ClassB();</span><br><span class="line">        List&lt;String&gt; strList = new ArrayList&lt;String&gt;();</span><br><span class="line">        String result = (String)methodF2.invoke(objectA, new Object[]&#123;objB, strList, 1&#125;);</span><br><span class="line">        // TODO: assert something</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <p>在单元测试中，如果希望对某个类的私有方法进行测试，则需要使用反射的方式进行。<br>假设存在某个类的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public class A &#123;</div><div class="line">    private String privateMethodF(String str)&#123;</div><div class="line">        return str;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>测试代码的基本逻辑如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class UnitTest &#123;</div><div class="line">    ClassA objectA;</div><div class="line">    @Test</div><div class="line">    public void testPrivateMethod()&#123;</div><div class="line">        Method methodF = objectA.getClass().getDeclaredMethod(“privateMethodF”, String.class);</div><div class="line">        methodF.setAccessible(true);</div><div class="line">        String result = (String)methodF.invoke(objectA, “parameterString”);</div><div class="line">        // TODO: assert something</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>基本思路是使用 <code>getDeclaredMethod</code> 获取私有方法，并通过 <code>setAccessible</code> 设置其可访问。<br>调用接口的方式是通过 <code>invoke</code> 方法，其中第一个参数是目标类，第二个参数是调用方法中需要传递的参数。<br>如果私有方法有多个参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public class A &#123;</div><div class="line">    private String privateMethodF2(ClassB objB, List&lt;String&gt; strList, Integer num)&#123;</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>则测试代码应该对应修改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class UnitTest &#123;</div><div class="line">    ClassA objectA;</div><div class="line">    @Test</div><div class="line">    public void testPrivateMethod()&#123;</div><div class="line">        Method methodF2 = objectA.getClass().getDeclaredMethod(“privateMethodF2”, new Class[]&#123;ClassB.class, List.class, Integer.class);</div><div class="line">        methodF2.setAccessible(true);</div><div class="line">        ClassB objB = new ClassB();</div><div class="line">        List&lt;String&gt; strList = new ArrayList&lt;String&gt;();</div><div class="line">        String result = (String)methodF2.invoke(objectA, new Object[]&#123;objB, strList, 1&#125;);</div><div class="line">        // TODO: assert something</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://blog.csdn.net/qq_36688928/article/details/84337765" target="_blank" rel="external">https://blog.csdn.net/qq_36688928/article/details/84337765</a><br><a href="https://www.cnblogs.com/freedommovie/p/5731636.html" target="_blank" rel="external">https://www.cnblogs.com/freedommovie/p/5731636.html</a><br><a href="https://blog.csdn.net/caib1109/article/details/51338743" target="_blank" rel="external">https://blog.csdn.net/caib1109/article/details/51338743</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/03/07/Java使用反射测试私用方法/" data-id="ckewl1zc7003g10shbr71fp28" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/03/07/Java使用反射测试私用方法/" data-id="ckf44v6cm003nhh8tso7vq2sc" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -184,6 +184,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -197,10 +201,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2018/08/14/搭建SSH端口转发反向代理/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在许多情况下，会存在这样一种情况  机器 A1 和机器 A2 处于同一个内网中，能够互相访问 机器 B1 处于外网环境 机器 C1 作为客户端处于外网环境。  在这种情况下：  A1 和 A2 能够互相访问，并且能够访问 B1 ； 但 B1 不能访问 A1 或 A2 ； C1 只能访问 B1 ，不能访问 A1 或 A2 。  最浅显的例子就是 A1 和 A2 是公司内网服务器，B1 是公有云上的服">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.248Z">
+<meta property="og:updated_time" content="2018-08-14T12:29:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="搭建SSH端口转发反向代理">
 <meta name="twitter:description" content="在许多情况下，会存在这样一种情况  机器 A1 和机器 A2 处于同一个内网中，能够互相访问 机器 B1 处于外网环境 机器 C1 作为客户端处于外网环境。  在这种情况下：  A1 和 A2 能够互相访问，并且能够访问 B1 ； 但 B1 不能访问 A1 或 A2 ； C1 只能访问 B1 ，不能访问 A1 或 A2 。  最浅显的例子就是 A1 和 A2 是公司内网服务器，B1 是公有云上的服">
@@ -107,10 +107,10 @@
 <li><code>C1</code> 只能访问 <code>B1</code> ，不能访问 <code>A1</code> 或 <code>A2</code> 。</li>
 </ul>
 <p>最浅显的例子就是 <code>A1</code> 和 <code>A2</code> 是公司内网服务器，<code>B1</code> 是公有云上的服务器，而 <code>C1</code> 是用户的手机。<br>通常情况下 <code>C1</code> 只能访问到 <code>B1</code> 。<br>若希望 <code>C1</code> 能够访问 <code>A1</code> 或 <code>A2</code> ，则可以使用SSH搭建一条代理转发。<br>在 <code>需要被访问</code> 的机器 <code>A1</code> 或 <code>A2</code> 上执行 <code>ssh</code> 命令如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -CfgNT server_B [-i ~/.ssh/rsa.id_rsa] -R 0.0.0.0:[server_B_port]:[target_ip]:[target_port]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh -CfgNT server_B [-i ~/.ssh/rsa.id_rsa] -R 0.0.0.0:[server_B_port]:[target_ip]:[target_port]</div></pre></td></tr></table></figure>
 <p>比如中转服务器 <code>B1</code> 的IP地址值为 <code>ip</code> ，则 <code>server_B</code> 的值为 <code>username@ip</code> ，在 <code>B1</code> 使用的端口号设置为 <code>server_B_port</code> 的值；<code>target_ip</code> 和 <code>target_port</code> 则是相对于当前机器（<code>A1</code> 或 <code>A2</code>）而言，因此可以写一个内网地址，比如希望访问本机的 <code>8080</code> 端口，则 <code>target_ip</code> 的值为 <code>127.0.0.1</code> ，而 <code>target_port</code> 的值为 <code>8080</code>。</p>
-<p>综上所述，整体的命令可能是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -CfgNT 166.111.80.80 -i ~/.ssh/rsa.id_rsa -R 0.0.0.0:8888:127.0.0.1:8080</span><br></pre></td></tr></table></figure></p>
-<p>此外，如果需要在机器 <code>C1</code> 上访问机器 <code>B1</code>的端口，还需要设置 <code>B1</code> 机器的配置，修改 <code>/etc/ssh/sshd_config</code> 文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GatewayPorts yes</span><br></pre></td></tr></table></figure></p>
+<p>综上所述，整体的命令可能是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh -CfgNT 166.111.80.80 -i ~/.ssh/rsa.id_rsa -R 0.0.0.0:8888:127.0.0.1:8080</div></pre></td></tr></table></figure></p>
+<p>此外，如果需要在机器 <code>C1</code> 上访问机器 <code>B1</code>的端口，还需要设置 <code>B1</code> 机器的配置，修改 <code>/etc/ssh/sshd_config</code> 文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">GatewayPorts yes</div></pre></td></tr></table></figure></p>
 <p>在机器 <code>A1</code> 上执行这个命令（注意 <code>A1</code> 需要有访问 <code>B1</code> 的权限）。执行完这个命令后，会运行一个 <code>ssh</code> 服务，此时在机器 <code>C1</code> 可以访问 <code>166.111.80.80:8888</code> 地址，实质上它会被映射到机器 <code>A1</code> 的 <code>127.0.0.1:8080</code> 。</p>
 <p>其中 <code>ssh</code> 命令的参数 <code>-CfgNT</code> 各项的解释如下：</p>
 <ul>
@@ -120,7 +120,7 @@
 <li><code>N</code> ：不执行远程命令，用于转发端口</li>
 <li><code>T</code> ：禁止分配伪终端</li>
 </ul>
-<p>还可以有一些参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-o ServerAliveInterval=45 -o TCPKeepAlive=yes -o ExitOnForwardFailure=yes&quot;</span><br></pre></td></tr></table></figure></p>
+<p>还可以有一些参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-o ServerAliveInterval=45 -o TCPKeepAlive=yes -o ExitOnForwardFailure=yes&quot;</div></pre></td></tr></table></figure></p>
 <p>其中 <code>ServerAliveInterval</code> 参数表示设置一个时间间隔（秒），表示当客户端在经过这个时间间隔没有接收到服务器的数据后，将发送一个消息请求服务器返回响应。类似于客户端每隔一段时间给服务器发一个心跳。</p>
 <blockquote>
 <p>ServerAliveInterval Sets a timeout interval in seconds after which if no data has been received from the server, ssh(1) will send a message through the encrypted channel to request a response from the server.</p>
@@ -136,7 +136,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/14/搭建SSH端口转发反向代理/" data-id="ckewl1zhp00ln10shczi6essr" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/08/14/搭建SSH端口转发反向代理/" data-id="ckf44v6lc00o6hh8tei7lylhp" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li></ul>
@@ -217,6 +217,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -230,10 +234,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

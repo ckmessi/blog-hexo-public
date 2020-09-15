@@ -16,7 +16,7 @@
 <meta property="og:description" content="Vuetify 是基于 Vue 的 UI 库，集成了许多现成的组件。 安装首先创建一个 Vue.js 项目1vue create learn-vuetify  使用命令行添加 Vuetify：1vue add vuetify 命令执行后，观察项目内的差异，可以发现：  package.json 中添加了 vuetify 依赖，另外还有 sass、sass-loader、vue-cli-plugin">
 <meta property="og:image" content="http://ckmessi.github.io/blog-hexo/2020/07/10/初识Vuetify/1.png">
 <meta property="og:image" content="http://ckmessi.github.io/blog-hexo/2020/07/10/初识Vuetify/2.png">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.224Z">
+<meta property="og:updated_time" content="2020-07-10T04:41:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初识Vuetify">
 <meta name="twitter:description" content="Vuetify 是基于 Vue 的 UI 库，集成了许多现成的组件。 安装首先创建一个 Vue.js 项目1vue create learn-vuetify  使用命令行添加 Vuetify：1vue add vuetify 命令执行后，观察项目内的差异，可以发现：  package.json 中添加了 vuetify 依赖，另外还有 sass、sass-loader、vue-cli-plugin">
@@ -98,9 +98,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p><a href="https://vuetifyjs.com/en/getting-started/quick-start/" target="_blank" rel="external">Vuetify</a> 是基于 Vue 的 UI 库，集成了许多现成的组件。</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>首先创建一个 Vue.js 项目<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vue create learn-vuetify</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>首先创建一个 Vue.js 项目<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vue create learn-vuetify</div></pre></td></tr></table></figure></p>
 <img src="/blog-hexo/2020/07/10/初识Vuetify/1.png" alt="Vue基础示例页面" title="Vue基础示例页面">
-<p>使用命令行添加 <code>Vuetify</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vue add vuetify</span><br></pre></td></tr></table></figure></p>
+<p>使用命令行添加 <code>Vuetify</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vue add vuetify</div></pre></td></tr></table></figure></p>
 <p>命令执行后，观察项目内的差异，可以发现：</p>
 <ul>
 <li><code>package.json</code> 中添加了 <code>vuetify</code> 依赖，另外还有 <code>sass</code>、<code>sass-loader</code>、<code>vue-cli-plugin-vuetify</code> 和 <code>vuetify-loader</code> 等开发依赖项；</li>
@@ -113,7 +113,7 @@
 <li>多了一个 <code>src/assets/logo.svg</code> 资源文件</li>
 </ul>
 <img src="/blog-hexo/2020/07/10/初识Vuetify/2.png" alt="添加Vuetify后的示例页面" title="添加Vuetify后的示例页面">
-<p>如果在使用 <code>vue add vuetify</code> 命令之前已经是 <code>npm run serve</code> 状态，可能会抛出错误，此时中止并执行启动即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ERROR  Failed to compile with 1 errors                                                   </span><br><span class="line">This dependency was not found:</span><br><span class="line">* vuetify/lib in ./src/plugins/vuetify.js</span><br><span class="line">To install it, you can run: npm install --save vuetify/lib</span><br></pre></td></tr></table></figure></p>
+<p>如果在使用 <code>vue add vuetify</code> 命令之前已经是 <code>npm run serve</code> 状态，可能会抛出错误，此时中止并执行启动即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ERROR  Failed to compile with 1 errors                                                   </div><div class="line">This dependency was not found:</div><div class="line">* vuetify/lib in ./src/plugins/vuetify.js</div><div class="line">To install it, you can run: npm install --save vuetify/lib</div></pre></td></tr></table></figure></p>
 <p>除此之外，<code>vuetify</code> 还可以通过 <code>Nuxt install</code>、<code>Webpack install</code> 或 <code>Electron</code> 等方式安装或引入。</p>
 <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>对于 Vuetify 的使用，可以类似于大多数前端样式库。<br>比如：</p>
 <ul>
@@ -121,8 +121,8 @@
 <li>UI组件，可以参考 <a href="https://vuetifyjs.com/en/components/api-explorer/" target="_blank" rel="external">这里</a></li>
 <li>指令，可以参考 <a href="https://vuetifyjs.com/en/directives/click-outside/" target="_blank" rel="external">这里</a></li>
 </ul>
-<p>比如创建一个按钮：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;el-button type=&quot;primary&quot;&gt;按钮1&lt;/el-button&gt;</span><br><span class="line">&lt;v-btn color=&quot;primary&quot;&gt;按钮2&lt;/v-btn&gt;</span><br></pre></td></tr></table></figure></p>
-<p>比如创建一个横幅：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;v-alert type=&quot;warning&gt;xxxx&lt;/v-alert&gt;</span><br></pre></td></tr></table></figure></p>
+<p>比如创建一个按钮：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;el-button type=&quot;primary&quot;&gt;按钮1&lt;/el-button&gt;</div><div class="line">&lt;v-btn color=&quot;primary&quot;&gt;按钮2&lt;/v-btn&gt;</div></pre></td></tr></table></figure></p>
+<p>比如创建一个横幅：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;v-alert type=&quot;warning&gt;xxxx&lt;/v-alert&gt;</div></pre></td></tr></table></figure></p>
 <p>使用方式和 Element-UI 基本一致。</p>
 <p>除了基础样式库（如 Element-UI）能够实现的 Layout 和 UI 组件之外，Vuetify 更多处理的是框架和兼容性方面的问题。<br>在后续文章中详细分析值得学习的部分。</p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
@@ -132,7 +132,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/10/初识Vuetify/" data-id="ckewl1zha00kw10sh0s0kudlk" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/10/初识Vuetify/" data-id="ckf44v6hp00ebhh8ts5dc74ix" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vuetify/">Vuetify</a></li></ul>
@@ -213,6 +213,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -226,10 +230,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

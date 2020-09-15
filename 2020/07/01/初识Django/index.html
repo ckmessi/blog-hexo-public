@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2020/07/01/初识Django/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="使用 pip 安装：1&amp;gt; pip install Django 查看版本：12&amp;gt; python -m django --version3.0.7 如果正确安装了，将看到安装的版本号；否则，将看到 No module named django。 创建一个项目可以使用内置的命令创建项目1django-admin startproject [projectName] 需要注意这里 [proj">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.208Z">
+<meta property="og:updated_time" content="2020-07-01T10:05:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初识Django">
 <meta name="twitter:description" content="使用 pip 安装：1&amp;gt; pip install Django 查看版本：12&amp;gt; python -m django --version3.0.7 如果正确安装了，将看到安装的版本号；否则，将看到 No module named django。 创建一个项目可以使用内置的命令创建项目1django-admin startproject [projectName] 需要注意这里 [proj">
@@ -94,11 +94,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>使用 <code>pip</code> 安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; pip install Django</span><br></pre></td></tr></table></figure></p>
-<p>查看版本：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; python -m django --version</span><br><span class="line">3.0.7</span><br></pre></td></tr></table></figure></p>
+        <p>使用 <code>pip</code> 安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt; pip install Django</div></pre></td></tr></table></figure></p>
+<p>查看版本：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt; python -m django --version</div><div class="line">3.0.7</div></pre></td></tr></table></figure></p>
 <p>如果正确安装了，将看到安装的版本号；否则，将看到 <code>No module named django</code>。</p>
-<h2 id="创建一个项目"><a href="#创建一个项目" class="headerlink" title="创建一个项目"></a>创建一个项目</h2><p>可以使用内置的命令创建项目<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">django-admin startproject [projectName]</span><br></pre></td></tr></table></figure></p>
-<p>需要注意这里 <code>[projectName]</code> 中不能带有减号 <code>-</code>，这与其它语言略有不同。这一点是为了保证之后的 <code>module</code> 名称是有效的。<br>假定 <code>[projectName]</code> 名称为 <code>mysite</code>，执行成功后，会在当前目录生成一个 <code>mysite</code> 的目录，结构如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysite/</span><br><span class="line">    manage.py</span><br><span class="line">    mysite/</span><br><span class="line">        __init__.py</span><br><span class="line">        settings.py</span><br><span class="line">        urls.py</span><br><span class="line">        asgi.py</span><br><span class="line">        wsgi.py</span><br></pre></td></tr></table></figure></p>
+<h2 id="创建一个项目"><a href="#创建一个项目" class="headerlink" title="创建一个项目"></a>创建一个项目</h2><p>可以使用内置的命令创建项目<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">django-admin startproject [projectName]</div></pre></td></tr></table></figure></p>
+<p>需要注意这里 <code>[projectName]</code> 中不能带有减号 <code>-</code>，这与其它语言略有不同。这一点是为了保证之后的 <code>module</code> 名称是有效的。<br>假定 <code>[projectName]</code> 名称为 <code>mysite</code>，执行成功后，会在当前目录生成一个 <code>mysite</code> 的目录，结构如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">mysite/</div><div class="line">    manage.py</div><div class="line">    mysite/</div><div class="line">        __init__.py</div><div class="line">        settings.py</div><div class="line">        urls.py</div><div class="line">        asgi.py</div><div class="line">        wsgi.py</div></pre></td></tr></table></figure></p>
 <p>其中里面那个 <code>mysite</code> 是一个包，下面放了一些 Web 服务器开发常用的文件，比如 <code>urls.py</code>、<code>settings.py</code> 等；<code>manage.py</code> 则是一个入口，用于启动项目。</p>
 <p>这些文件的含义可以参考官方文档：</p>
 <ul>
@@ -109,22 +109,22 @@
 <li><code>mysite/asgi.py</code>：对于 ASGI 兼容的 Web 服务器的入口；</li>
 <li><code>mysite/wsgi.py</code>：对于 WSGI 兼容的 Web 服务器的入口；</li>
 </ul>
-<h2 id="启动项目"><a href="#启动项目" class="headerlink" title="启动项目"></a>启动项目</h2><p>使用命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py runserver</span><br></pre></td></tr></table></figure></p>
-<p>如果一切顺利，在浏览器启动 <code>127.0.0.1:8000</code>，应该能看到一个 Django 项目的默认欢迎页面 <code>The install worked successfully! Congratulations!</code><br>可以使用 <code>python manage.py runserver [host:port]</code> 指定端口号，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py runserver 0.0.0.0:8889</span><br></pre></td></tr></table></figure></p>
+<h2 id="启动项目"><a href="#启动项目" class="headerlink" title="启动项目"></a>启动项目</h2><p>使用命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python manage.py runserver</div></pre></td></tr></table></figure></p>
+<p>如果一切顺利，在浏览器启动 <code>127.0.0.1:8000</code>，应该能看到一个 Django 项目的默认欢迎页面 <code>The install worked successfully! Congratulations!</code><br>可以使用 <code>python manage.py runserver [host:port]</code> 指定端口号，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python manage.py runserver 0.0.0.0:8889</div></pre></td></tr></table></figure></p>
 <h2 id="创建一个应用"><a href="#创建一个应用" class="headerlink" title="创建一个应用"></a>创建一个应用</h2><p>到目前为止，已经创建并启动了一个 <code>mysite</code> 项目，能够通过浏览器访问到。<br>在此基础上，可以创建一个新的应用。关于 <code>项目</code>（project） 和 <code>应用</code>（app）的差别，Django 官方的解释是一个项目中可能包含多个应用，而一个应用也可能位于多个项目中。  </p>
-<p>可以使用 <code>manage.py</code> 交互式地创建应用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py startapp polls</span><br></pre></td></tr></table></figure></p>
-<p>其效果就是在项目根目录下添加了一个 <code>polls</code> 目录。与 <code>mysite</code> 目录类似，<code>polls</code> 目录也已经按照业界主流的通常方式，组织好了一些目录和文件结构：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">polls/</span><br><span class="line">    __init__.py</span><br><span class="line">    admin.py</span><br><span class="line">    apps.py</span><br><span class="line">    migrations/</span><br><span class="line">        __init__.py</span><br><span class="line">    models.py</span><br><span class="line">    tests.py</span><br><span class="line">    views.py</span><br></pre></td></tr></table></figure></p>
-<p>可以在 <code>polls/views.py</code> 中，添加一个最简单的接口：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from django.http import HttpResponse</span><br><span class="line">def index(request):</span><br><span class="line">    return HttpResponse(&quot;Hello, world. You&apos;re at the polls index method.&quot;)</span><br></pre></td></tr></table></figure></p>
-<p>为了访问这个视图，我们需要有一个URL的配置定义，在 <code>polls</code> 目录下创建一个文件 <code>urls.py</code> ，并添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from django.urls import path</span><br><span class="line">from . import views</span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(&apos;&apos;, views.index, name=&apos;index&apos;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
-<p>其中 <code>path()</code> 方法的三个参数，分别指定了 URL 的内容，导向的方法，和这个路由的名称。<br>除此之外，在 <code>mysite/urls.py</code> 中，需要引入这个 <code>polls/url.py</code> 文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from django.contrib import admin</span><br><span class="line">from django.urls import include, path</span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(&apos;polls/&apos;, include(&apos;polls.urls&apos;)),</span><br><span class="line">    path(&apos;admin/&apos;, admin.site.urls),</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>可以使用 <code>manage.py</code> 交互式地创建应用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python manage.py startapp polls</div></pre></td></tr></table></figure></p>
+<p>其效果就是在项目根目录下添加了一个 <code>polls</code> 目录。与 <code>mysite</code> 目录类似，<code>polls</code> 目录也已经按照业界主流的通常方式，组织好了一些目录和文件结构：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">polls/</div><div class="line">    __init__.py</div><div class="line">    admin.py</div><div class="line">    apps.py</div><div class="line">    migrations/</div><div class="line">        __init__.py</div><div class="line">    models.py</div><div class="line">    tests.py</div><div class="line">    views.py</div></pre></td></tr></table></figure></p>
+<p>可以在 <code>polls/views.py</code> 中，添加一个最简单的接口：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">from django.http import HttpResponse</div><div class="line">def index(request):</div><div class="line">    return HttpResponse(&quot;Hello, world. You&apos;re at the polls index method.&quot;)</div></pre></td></tr></table></figure></p>
+<p>为了访问这个视图，我们需要有一个URL的配置定义，在 <code>polls</code> 目录下创建一个文件 <code>urls.py</code> ，并添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">from django.urls import path</div><div class="line">from . import views</div><div class="line">urlpatterns = [</div><div class="line">    path(&apos;&apos;, views.index, name=&apos;index&apos;),</div><div class="line">]</div></pre></td></tr></table></figure></p>
+<p>其中 <code>path()</code> 方法的三个参数，分别指定了 URL 的内容，导向的方法，和这个路由的名称。<br>除此之外，在 <code>mysite/urls.py</code> 中，需要引入这个 <code>polls/url.py</code> 文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">from django.contrib import admin</div><div class="line">from django.urls import include, path</div><div class="line">urlpatterns = [</div><div class="line">    path(&apos;polls/&apos;, include(&apos;polls.urls&apos;)),</div><div class="line">    path(&apos;admin/&apos;, admin.site.urls),</div><div class="line">]</div></pre></td></tr></table></figure></p>
 <p>其中 <code>include</code> 方法允许URL配置的引用，类似于 <code>mysite/urls.py</code> 是一个总入口，将请求根据其 URL 的格式分发到各个应用的入口中。</p>
-<p>重新启动服务：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py runserver</span><br></pre></td></tr></table></figure></p>
+<p>重新启动服务：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python manage.py runserver</div></pre></td></tr></table></figure></p>
 <p>打开浏览器，访问 <code>http://127.0.0.1:8000/polls/</code>，可以看到在 <code>polls/view.py</code> 文件中 <code>index</code> 方法里返回的字符串内容。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/01/初识Django/" data-id="ckewl1zgu00jy10shqlle6ked" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/01/初识Django/" data-id="ckf44v6hf00dnhh8tpjz8u1ts" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Django/">Django</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -205,6 +205,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -218,10 +222,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

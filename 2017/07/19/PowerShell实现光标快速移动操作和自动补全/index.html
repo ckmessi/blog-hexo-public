@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2017/07/19/PowerShell实现光标快速移动操作和自动补全/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在Windows的PowerShell操作界面中，使用Ctrl+a并不能将光标移动到当前行首，同理Ctrl+e也不能将光标移动到行尾。这很蛋疼。 可以使用下面这个语句设置编辑模式：Set-PSReadlineOptional -EditMode Emacs 此外，在切换路径的时候，默认按Tab键只会从第一个目录开始遍历，不会根据当前输入进行补全，也是比较烦人的设置。    可以通过以下语句设置Ta">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.995Z">
+<meta property="og:updated_time" content="2017-08-02T11:35:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PowerShell实现光标快速移动操作和自动补全">
 <meta name="twitter:description" content="在Windows的PowerShell操作界面中，使用Ctrl+a并不能将光标移动到当前行首，同理Ctrl+e也不能将光标移动到行尾。这很蛋疼。 可以使用下面这个语句设置编辑模式：Set-PSReadlineOptional -EditMode Emacs 此外，在切换路径的时候，默认按Tab键只会从第一个目录开始遍历，不会根据当前输入进行补全，也是比较烦人的设置。    可以通过以下语句设置Ta">
@@ -98,13 +98,13 @@
 <p>可以使用下面这个语句设置编辑模式：<br><code>Set-PSReadlineOptional -EditMode Emacs</code></p>
 <p>此外，在切换路径的时候，默认按<code>Tab</code>键只会从第一个目录开始遍历，不会根据当前输入进行补全，也是比较烦人的设置。   </p>
 <p>可以通过以下语句设置<code>Tab</code>键的作用：<br><code>Set-PSReadlineKeyHandler -Key Tab -Function TabCompleteNext</code></p>
-<p>将上述两个语句加入到<code>$profile</code>文件中，即可设置<code>PowerShell</code>启动时自动执行这两个设置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Set-PSReadlineOptional -EditMode Emacs </span><br><span class="line">Set-PSReadlineKeyHandler -Key Tab -Function TabCompleteNext</span><br></pre></td></tr></table></figure></p>
+<p>将上述两个语句加入到<code>$profile</code>文件中，即可设置<code>PowerShell</code>启动时自动执行这两个设置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Set-PSReadlineOptional -EditMode Emacs </div><div class="line">Set-PSReadlineKeyHandler -Key Tab -Function TabCompleteNext</div></pre></td></tr></table></figure></p>
 <p>以上。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/19/PowerShell实现光标快速移动操作和自动补全/" data-id="ckewl1zdb007w10sh7sl7fo6x" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/19/PowerShell实现光标快速移动操作和自动补全/" data-id="ckf44v6ek007uhh8tx9ozdyeg" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li></ul>
@@ -185,6 +185,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -198,10 +202,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

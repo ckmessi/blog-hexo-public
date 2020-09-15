@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2018/09/21/Ubuntu-16-04-升级OpenSSH/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="Ubuntu 16.04 系统默认安装的 OpenSSH 版本为 7.2 ，这个版本存在许多安全漏洞。 在一些安全扫描过程中，有可能抛出相关的警告。 为了避免系统处于危险，可以对 OpenSSH 进行升级。 使用 ssh -V 可以查看当前 OpenSSH 的版本：12➜ ~ ssh -VOpenSSH_7.2p2 Ubuntu-4ubuntu2.2, OpenSSL 1.0.2g 1 Mar 2">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.063Z">
+<meta property="og:updated_time" content="2018-09-21T06:18:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ubuntu 16.04 升级OpenSSH">
 <meta name="twitter:description" content="Ubuntu 16.04 系统默认安装的 OpenSSH 版本为 7.2 ，这个版本存在许多安全漏洞。 在一些安全扫描过程中，有可能抛出相关的警告。 为了避免系统处于危险，可以对 OpenSSH 进行升级。 使用 ssh -V 可以查看当前 OpenSSH 的版本：12➜ ~ ssh -VOpenSSH_7.2p2 Ubuntu-4ubuntu2.2, OpenSSL 1.0.2g 1 Mar 2">
@@ -97,15 +97,15 @@
         <p>Ubuntu 16.04 系统默认安装的 <code>OpenSSH</code> 版本为 <code>7.2</code> ，这个版本存在许多安全漏洞。</p>
 <p>在一些安全扫描过程中，有可能抛出相关的警告。</p>
 <p>为了避免系统处于危险，可以对 <code>OpenSSH</code> 进行升级。</p>
-<p>使用 <code>ssh -V</code> 可以查看当前 <code>OpenSSH</code> 的版本：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜ ~ ssh -V</span><br><span class="line">OpenSSH_7.2p2 Ubuntu-4ubuntu2.2, OpenSSL 1.0.2g 1 Mar 2016</span><br></pre></td></tr></table></figure></p>
-<p>使用如下命令升级 <code>OpenSSH</code> 。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install -y build-essential libssl-dev zlib1g-dev</span><br><span class="line">wget &quot;http://mirrors.evowise.com/pub/OpenBSD/OpenSSH/portable/openssh-7.4p1.tar.gz&quot;</span><br><span class="line">tar xfz openssh-7.4p1.tar.gz</span><br><span class="line">cd openssh-7.4p1</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure></p>
+<p>使用 <code>ssh -V</code> 可以查看当前 <code>OpenSSH</code> 的版本：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜ ~ ssh -V</div><div class="line">OpenSSH_7.2p2 Ubuntu-4ubuntu2.2, OpenSSL 1.0.2g 1 Mar 2016</div></pre></td></tr></table></figure></p>
+<p>使用如下命令升级 <code>OpenSSH</code> 。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">sudo apt install -y build-essential libssl-dev zlib1g-dev</div><div class="line">wget &quot;http://mirrors.evowise.com/pub/OpenBSD/OpenSSH/portable/openssh-7.4p1.tar.gz&quot;</div><div class="line">tar xfz openssh-7.4p1.tar.gz</div><div class="line">cd openssh-7.4p1</div><div class="line">./configure</div><div class="line">make</div><div class="line">sudo make install</div></pre></td></tr></table></figure></p>
 <p>然后重新打开终端，再次查看，可以看到 <code>OpenSSH</code> 的版本已经升级到 <code>7.4</code> 了。</p>
 <p>参考资料：<br><a href="https://gist.github.com/techgaun/df66d37379df37838482c4c3470bc48e" target="_blank" rel="external">https://gist.github.com/techgaun/df66d37379df37838482c4c3470bc48e</a><br><a href="https://my.oschina.net/u/1177171/blog/1862530" target="_blank" rel="external">https://my.oschina.net/u/1177171/blog/1862530</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/21/Ubuntu-16-04-升级OpenSSH/" data-id="ckewl1zdr009b10sh5uekink6" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/09/21/Ubuntu-16-04-升级OpenSSH/" data-id="ckf44v6fe009jhh8t3ese1j0x" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li></ul>
@@ -186,6 +186,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -199,10 +203,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/09/11/Laravel读写YAML格式文件/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="背景.yaml 格式是配置文件一种常用的格式，很经常会遇到针对 .yaml 格式信息的解析和封装。 使用在 Laravel 框架中，可以使用 symfony/yaml 对 .yaml 格式的信息或文件进行操作。首先通过命令安装这个插件：1composer require symfony/yaml 解析可以使用 Yaml::parse() 方法解析 .yaml 格式的字符串：12$value = Y">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.960Z">
+<meta property="og:updated_time" content="2019-09-11T11:36:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Laravel读写YAML格式文件">
 <meta name="twitter:description" content="背景.yaml 格式是配置文件一种常用的格式，很经常会遇到针对 .yaml 格式信息的解析和封装。 使用在 Laravel 框架中，可以使用 symfony/yaml 对 .yaml 格式的信息或文件进行操作。首先通过命令安装这个插件：1composer require symfony/yaml 解析可以使用 Yaml::parse() 方法解析 .yaml 格式的字符串：12$value = Y">
@@ -95,21 +95,21 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p><code>.yaml</code> 格式是配置文件一种常用的格式，很经常会遇到针对 <code>.yaml</code> 格式信息的解析和封装。</p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>在 Laravel 框架中，可以使用 <code>symfony/yaml</code> 对 <code>.yaml</code> 格式的信息或文件进行操作。<br>首先通过命令安装这个插件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require symfony/yaml</span><br></pre></td></tr></table></figure></p>
-<h4 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h4><p>可以使用 <code>Yaml::parse()</code> 方法解析 <code>.yaml</code> 格式的字符串：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$value = Yaml::parse(&quot;foo: bar&quot;);</span><br><span class="line">// $value = [&apos;foo&apos; =&gt; &apos;bar&apos;]</span><br></pre></td></tr></table></figure></p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>在 Laravel 框架中，可以使用 <code>symfony/yaml</code> 对 <code>.yaml</code> 格式的信息或文件进行操作。<br>首先通过命令安装这个插件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer require symfony/yaml</div></pre></td></tr></table></figure></p>
+<h4 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h4><p>可以使用 <code>Yaml::parse()</code> 方法解析 <code>.yaml</code> 格式的字符串：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$value = Yaml::parse(&quot;foo: bar&quot;);</div><div class="line">// $value = [&apos;foo&apos; =&gt; &apos;bar&apos;]</div></pre></td></tr></table></figure></p>
 <p>如果在解析过程中发生错误，将会抛出一个 <code>Symfony\Component\Yaml\Exception\ParseException</code> 异常。</p>
-<h4 id="解析文件"><a href="#解析文件" class="headerlink" title="解析文件"></a>解析文件</h4><p>可以直接使用 <code>Yaml::parseFile()</code> 方法解析文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$value = Yaml::parseFile(&apos;/path/to/file.yaml&apos;);</span><br></pre></td></tr></table></figure></p>
-<h4 id="生成yaml文件"><a href="#生成yaml文件" class="headerlink" title="生成yaml文件"></a>生成yaml文件</h4><p>使用 <code>Yaml::dump()</code> 可以将数据转换为 <code>.yaml</code> 格式的内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$array = [</span><br><span class="line">    &apos;foo&apos; =&gt; &apos;bar&apos;,</span><br><span class="line">    &apos;bar&apos; =&gt; [</span><br><span class="line">        &apos;foo&apos; =&gt; &apos;bar&apos;,</span><br><span class="line">        &apos;bar&apos; =&gt; &apos;baz&apos;</span><br><span class="line">    ],</span><br><span class="line">];</span><br><span class="line">$yaml = Yaml::dump($array);</span><br><span class="line">file_put_contents(&apos;/path/to/file.yaml&apos;, $yaml);</span><br></pre></td></tr></table></figure></p>
-<p>如果解析过程中发生异常，会抛出一个 <code>Symfony\Component\Yaml\Exception\DumpException</code> 异常。<br>解析完成后，文件中的内容应该是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">foo: bar</span><br><span class="line">bar:</span><br><span class="line">    foo: bar</span><br><span class="line">    bar: baz</span><br></pre></td></tr></table></figure></p>
-<h2 id="其它参数"><a href="#其它参数" class="headerlink" title="其它参数"></a>其它参数</h2><p>在使用 <code>Yaml::dump()</code> 方法过程中，可能需要注意一些参数。<br>比如第二个参数 <code>inline</code>，由于 YAML 格式支持两种表示数组的方式（展开/行内），如果将 <code>inline</code> 的值设置为 <code>1</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo Yaml::dump($array, 1);</span><br></pre></td></tr></table></figure></p>
-<p>得到的结果将会是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">foo: bar</span><br><span class="line">bar: &#123; foo: bar, bar: baz &#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="解析文件"><a href="#解析文件" class="headerlink" title="解析文件"></a>解析文件</h4><p>可以直接使用 <code>Yaml::parseFile()</code> 方法解析文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$value = Yaml::parseFile(&apos;/path/to/file.yaml&apos;);</div></pre></td></tr></table></figure></p>
+<h4 id="生成yaml文件"><a href="#生成yaml文件" class="headerlink" title="生成yaml文件"></a>生成yaml文件</h4><p>使用 <code>Yaml::dump()</code> 可以将数据转换为 <code>.yaml</code> 格式的内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$array = [</div><div class="line">    &apos;foo&apos; =&gt; &apos;bar&apos;,</div><div class="line">    &apos;bar&apos; =&gt; [</div><div class="line">        &apos;foo&apos; =&gt; &apos;bar&apos;,</div><div class="line">        &apos;bar&apos; =&gt; &apos;baz&apos;</div><div class="line">    ],</div><div class="line">];</div><div class="line">$yaml = Yaml::dump($array);</div><div class="line">file_put_contents(&apos;/path/to/file.yaml&apos;, $yaml);</div></pre></td></tr></table></figure></p>
+<p>如果解析过程中发生异常，会抛出一个 <code>Symfony\Component\Yaml\Exception\DumpException</code> 异常。<br>解析完成后，文件中的内容应该是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">foo: bar</div><div class="line">bar:</div><div class="line">    foo: bar</div><div class="line">    bar: baz</div></pre></td></tr></table></figure></p>
+<h2 id="其它参数"><a href="#其它参数" class="headerlink" title="其它参数"></a>其它参数</h2><p>在使用 <code>Yaml::dump()</code> 方法过程中，可能需要注意一些参数。<br>比如第二个参数 <code>inline</code>，由于 YAML 格式支持两种表示数组的方式（展开/行内），如果将 <code>inline</code> 的值设置为 <code>1</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo Yaml::dump($array, 1);</div></pre></td></tr></table></figure></p>
+<p>得到的结果将会是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">foo: bar</div><div class="line">bar: &#123; foo: bar, bar: baz &#125;</div></pre></td></tr></table></figure></p>
 <p>第三个参数 <code>indent</code> 声明了缩进的空格数，默认使用 <code>4</code> 个空格进行缩进。</p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://symfony.com/doc/current/components/yaml.html" target="_blank" rel="external">https://symfony.com/doc/current/components/yaml.html</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/09/11/Laravel读写YAML格式文件/" data-id="ckewl1zct005n10shha56dcvu" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/09/11/Laravel读写YAML格式文件/" data-id="ckf44v6dl005khh8tvvlxx30t" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -190,6 +190,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -203,10 +207,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

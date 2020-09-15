@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2017/11/14/Laravel模拟创建Request/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在使用Laravel框架时，有的Unit Test可能希望模拟一个HTTP请求，方便地对特定组件的各个功能进行测试。比如，如果要测试一个中间件对于IP地址黑名单的屏蔽，对于白名单API的通过，对于白名单账号的判断等等。此时，如何在代码中模拟创建一个自定义的Request，就是非常重要的步骤。 通过查询文档，知道可以使用Request::create()方法创建，具体使用方式如下：1$request">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.957Z">
+<meta property="og:updated_time" content="2017-11-14T14:12:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Laravel模拟创建Request">
 <meta name="twitter:description" content="在使用Laravel框架时，有的Unit Test可能希望模拟一个HTTP请求，方便地对特定组件的各个功能进行测试。比如，如果要测试一个中间件对于IP地址黑名单的屏蔽，对于白名单API的通过，对于白名单账号的判断等等。此时，如何在代码中模拟创建一个自定义的Request，就是非常重要的步骤。 通过查询文档，知道可以使用Request::create()方法创建，具体使用方式如下：1$request">
@@ -95,17 +95,17 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>在使用Laravel框架时，有的Unit Test可能希望模拟一个HTTP请求，方便地对特定组件的各个功能进行测试。比如，如果要测试一个中间件对于IP地址黑名单的屏蔽，对于白名单API的通过，对于白名单账号的判断等等。<br>此时，如何在代码中模拟创建一个自定义的Request，就是非常重要的步骤。</p>
-<p>通过查询文档，知道可以使用<code>Request::create()</code>方法创建，具体使用方式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$request = Request::create(&apos;/api/index&apos;, &apos;GET&apos;);</span><br></pre></td></tr></table></figure></p>
-<p>当我们需要模拟IP地址等信息时，就需要更加清晰地了解<code>create()</code>静态方法的具体内容。<br><code>Request</code>类实质是继承自<code>vendor/symfony/http-foundation/Request.php</code>，打开这个文件，查找到<code>create()</code>函数所在的位置，可以看到这个函数的原型：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public static function create($uri, $method = &apos;GET&apos;, $parameters = array(), $cookies = array(), $files = array(), $server = array(), $content = null)</span><br><span class="line">&#123;</span><br><span class="line">    $server = array_replace(array(</span><br><span class="line">        &apos;SERVER_NAME&apos; =&gt; &apos;localhost&apos;,</span><br><span class="line">        &apos;SERVER_PORT&apos; =&gt; 80,</span><br><span class="line">        &apos;HTTP_HOST&apos; =&gt; &apos;localhost&apos;,</span><br><span class="line">        &apos;HTTP_USER_AGENT&apos; =&gt; &apos;Symfony/3.X&apos;,</span><br><span class="line">        &apos;HTTP_ACCEPT&apos; =&gt; &apos;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&apos;,</span><br><span class="line">        &apos;HTTP_ACCEPT_LANGUAGE&apos; =&gt; &apos;en-us,en;q=0.5&apos;,</span><br><span class="line">        &apos;HTTP_ACCEPT_CHARSET&apos; =&gt; &apos;ISO-8859-1,utf-8;q=0.7,*;q=0.7&apos;,</span><br><span class="line">        &apos;REMOTE_ADDR&apos; =&gt; &apos;127.0.0.1&apos;,</span><br><span class="line">        &apos;SCRIPT_NAME&apos; =&gt; &apos;&apos;,</span><br><span class="line">        &apos;SCRIPT_FILENAME&apos; =&gt; &apos;&apos;,</span><br><span class="line">        &apos;SERVER_PROTOCOL&apos; =&gt; &apos;HTTP/1.1&apos;,</span><br><span class="line">        &apos;REQUEST_TIME&apos; =&gt; time(),</span><br><span class="line">    ), $server);</span><br><span class="line">    $server[&apos;PATH_INFO&apos;] = &apos;&apos;;</span><br><span class="line">    $server[&apos;REQUEST_METHOD&apos;] = strtoupper($method);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>通过查询文档，知道可以使用<code>Request::create()</code>方法创建，具体使用方式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$request = Request::create(&apos;/api/index&apos;, &apos;GET&apos;);</div></pre></td></tr></table></figure></p>
+<p>当我们需要模拟IP地址等信息时，就需要更加清晰地了解<code>create()</code>静态方法的具体内容。<br><code>Request</code>类实质是继承自<code>vendor/symfony/http-foundation/Request.php</code>，打开这个文件，查找到<code>create()</code>函数所在的位置，可以看到这个函数的原型：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public static function create($uri, $method = &apos;GET&apos;, $parameters = array(), $cookies = array(), $files = array(), $server = array(), $content = null)</div><div class="line">&#123;</div><div class="line">    $server = array_replace(array(</div><div class="line">        &apos;SERVER_NAME&apos; =&gt; &apos;localhost&apos;,</div><div class="line">        &apos;SERVER_PORT&apos; =&gt; 80,</div><div class="line">        &apos;HTTP_HOST&apos; =&gt; &apos;localhost&apos;,</div><div class="line">        &apos;HTTP_USER_AGENT&apos; =&gt; &apos;Symfony/3.X&apos;,</div><div class="line">        &apos;HTTP_ACCEPT&apos; =&gt; &apos;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&apos;,</div><div class="line">        &apos;HTTP_ACCEPT_LANGUAGE&apos; =&gt; &apos;en-us,en;q=0.5&apos;,</div><div class="line">        &apos;HTTP_ACCEPT_CHARSET&apos; =&gt; &apos;ISO-8859-1,utf-8;q=0.7,*;q=0.7&apos;,</div><div class="line">        &apos;REMOTE_ADDR&apos; =&gt; &apos;127.0.0.1&apos;,</div><div class="line">        &apos;SCRIPT_NAME&apos; =&gt; &apos;&apos;,</div><div class="line">        &apos;SCRIPT_FILENAME&apos; =&gt; &apos;&apos;,</div><div class="line">        &apos;SERVER_PROTOCOL&apos; =&gt; &apos;HTTP/1.1&apos;,</div><div class="line">        &apos;REQUEST_TIME&apos; =&gt; time(),</div><div class="line">    ), $server);</div><div class="line">    $server[&apos;PATH_INFO&apos;] = &apos;&apos;;</div><div class="line">    $server[&apos;REQUEST_METHOD&apos;] = strtoupper($method);</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>依据参数列表的格式，通过配置不同的参数可以模拟提交方式<code>GET</code>或<code>POST</code>，传递的参数<code>parameter</code>等。</p>
-<p>注意到函数中首先使用了一个<code>array_replace</code>函数对参数<code>$server</code>进行操作，<code>array_replace</code>函数的含义是：如果第二个参数中的相关键值，则将其取代第一个参数中的对应键值。因此，如果要模拟一个IP地址的访问，我们可以构建一个包含<code>REMOTE_ADDR</code>的<code>$server</code>参数，传入<code>create</code>函数中即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> $server = array(</span><br><span class="line">    &apos;REMOTE_ADDR&apos; =&gt; &apos;127.0.0.123&apos;</span><br><span class="line">);</span><br><span class="line">$request = Request::create(&apos;/index&apos;, &apos;GET&apos;, array(), array(), array(), $server, null);</span><br></pre></td></tr></table></figure></p>
-<p>模拟<code>POST</code>传递某些参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$request = Request::create(&apos;/index&apos;, &apos;POST&apos;, array(&apos;user_id&apos; =&gt; &apos;user1861&apos;));</span><br></pre></td></tr></table></figure></p>
+<p>注意到函数中首先使用了一个<code>array_replace</code>函数对参数<code>$server</code>进行操作，<code>array_replace</code>函数的含义是：如果第二个参数中的相关键值，则将其取代第一个参数中的对应键值。因此，如果要模拟一个IP地址的访问，我们可以构建一个包含<code>REMOTE_ADDR</code>的<code>$server</code>参数，传入<code>create</code>函数中即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"> $server = array(</div><div class="line">    &apos;REMOTE_ADDR&apos; =&gt; &apos;127.0.0.123&apos;</div><div class="line">);</div><div class="line">$request = Request::create(&apos;/index&apos;, &apos;GET&apos;, array(), array(), array(), $server, null);</div></pre></td></tr></table></figure></p>
+<p>模拟<code>POST</code>传递某些参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$request = Request::create(&apos;/index&apos;, &apos;POST&apos;, array(&apos;user_id&apos; =&gt; &apos;user1861&apos;));</div></pre></td></tr></table></figure></p>
 <p>使用代码模拟创建Request的方法大抵如此。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/11/14/Laravel模拟创建Request/" data-id="ckewl1zcu005q10shnubrd8yv" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/11/14/Laravel模拟创建Request/" data-id="ckf44v6dh0057hh8ttca8ow5u" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -186,6 +186,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -199,10 +203,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

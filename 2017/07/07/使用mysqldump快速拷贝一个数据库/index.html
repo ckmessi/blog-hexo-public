@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2017/07/07/使用mysqldump快速拷贝一个数据库/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="工作背景在工作中会遇到这样一个情况：在正式服发现的bug在测试服上无法复现，或者正式服的数据有差错等问题。在这种情况下，如果直接使用正式服进行调试，是非常冒险的；比较好的方案是构建一份线上数据库的复本，在开发环境下进行bug的修复工作。    实现方案要快速实现数据库内容的拷贝，可以使用mysqldump命令。具体使用步骤有两步：  使用mysqldump命令导出  12mysqldump -h">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.142Z">
+<meta property="og:updated_time" content="2017-07-07T15:43:36.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用mysqldump快速拷贝一个数据库">
 <meta name="twitter:description" content="工作背景在工作中会遇到这样一个情况：在正式服发现的bug在测试服上无法复现，或者正式服的数据有差错等问题。在这种情况下，如果直接使用正式服进行调试，是非常冒险的；比较好的方案是构建一份线上数据库的复本，在开发环境下进行bug的修复工作。    实现方案要快速实现数据库内容的拷贝，可以使用mysqldump命令。具体使用步骤有两步：  使用mysqldump命令导出  12mysqldump -h">
@@ -99,19 +99,19 @@
 <ol>
 <li>使用mysqldump命令导出</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -h [host] -u[user_name] &apos;-p[password]&apos; [database_name] &gt; [output].dump</span><br><span class="line">mysqldump -h localhost -ulionel &apos;-plionel&apos; lionelDB &gt; output.dump</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysqldump -h [host] -u[user_name] &apos;-p[password]&apos; [database_name] &gt; [output].dump</div><div class="line">mysqldump -h localhost -ulionel &apos;-plionel&apos; lionelDB &gt; output.dump</div></pre></td></tr></table></figure>
 <p>是的，这里比较坑的是，那个<code>-u</code>和<code>-p</code>的后头没有空格！没有空格，就是和具体的<code>user_name</code>以及<code>password</code>粘在一起的。不知道是无心之失，还是有意为之。<br><code>-p</code>那个地方加不加单引号，主要是根据密码内容来的，如果密码内容有特殊字符会有其它含义，可能导致语句中断，因此加上单引号能够避免这种情况的发生。   </p>
-<ol start="2">
+<ol>
 <li>使用mysql导入</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -h [host] -u[user_name] &apos;-p[password]&apos; [new_database_name] &lt; [output].dump</span><br><span class="line">mysqldump -h localhost -ulionel &apos;-plionel&apos; lionelDB_copy &lt; output.dump</span><br></pre></td></tr></table></figure>
-<p>但是这样貌似会执行，但没有生成表和内容。<br>解决方案是将mysqldump命令换成mysql，直接执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -h localhost -ulionel &apos;-lionel&apos; lionelDB_copy &lt; output.dump</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysqldump -h [host] -u[user_name] &apos;-p[password]&apos; [new_database_name] &lt; [output].dump</div><div class="line">mysqldump -h localhost -ulionel &apos;-plionel&apos; lionelDB_copy &lt; output.dump</div></pre></td></tr></table></figure>
+<p>但是这样貌似会执行，但没有生成表和内容。<br>解决方案是将mysqldump命令换成mysql，直接执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -h localhost -ulionel &apos;-lionel&apos; lionelDB_copy &lt; output.dump</div></pre></td></tr></table></figure></p>
 <p>这样就完成了。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/07/07/使用mysqldump快速拷贝一个数据库/" data-id="ckewl1zeo00c910sha1nk4vvb" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/07/07/使用mysqldump快速拷贝一个数据库/" data-id="ckf44v6h000cnhh8t0eent1kw" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li></ul>
@@ -192,6 +192,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -205,10 +209,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

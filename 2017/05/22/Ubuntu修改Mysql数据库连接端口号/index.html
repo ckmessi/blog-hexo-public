@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2017/05/22/Ubuntu修改Mysql数据库连接端口号/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在实际情况中，为了避免不避要的攻击，最好更换Mysql数据库的默认端口号3306为其它端口号。    基本的更换步骤如下：找到mysql的配置文件，使用locate my.cnf命令可以查找my.cnf文件所在位置。使用vim进行编辑vim /etc/mysql/my.cnf，查找port = 3306所在位置。一共有两行:123[client]port            = 3306sock">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.065Z">
+<meta property="og:updated_time" content="2017-07-11T14:07:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ubuntu修改Mysql数据库连接端口号">
 <meta name="twitter:description" content="在实际情况中，为了避免不避要的攻击，最好更换Mysql数据库的默认端口号3306为其它端口号。    基本的更换步骤如下：找到mysql的配置文件，使用locate my.cnf命令可以查找my.cnf文件所在位置。使用vim进行编辑vim /etc/mysql/my.cnf，查找port = 3306所在位置。一共有两行:123[client]port            = 3306sock">
@@ -95,15 +95,15 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>在实际情况中，为了避免不避要的攻击，最好更换Mysql数据库的默认端口号3306为其它端口号。   </p>
-<p>基本的更换步骤如下：<br>找到mysql的配置文件，使用<code>locate my.cnf</code>命令可以查找my.cnf文件所在位置。<br>使用vim进行编辑<code>vim /etc/mysql/my.cnf</code>，查找<code>port = 3306</code>所在位置。<br>一共有两行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[client]</span><br><span class="line">port            = 3306</span><br><span class="line">socket          = /var/run/mysqld/mysqld.sock</span><br></pre></td></tr></table></figure></p>
-<p>以及<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">#</span><br><span class="line"># * Basic Settings</span><br><span class="line">#</span><br><span class="line">user            = mysql</span><br><span class="line">pid-file        = /var/run/mysqld/mysqld.pid</span><br><span class="line">socket          = /var/run/mysqld/mysqld.sock</span><br><span class="line">port            = 3306</span><br><span class="line">basedir         = /usr</span><br><span class="line">datadir         = /var/lib/mysql</span><br><span class="line">tmpdir          = /tmp</span><br><span class="line">lc-messages-dir = /usr/share/mysql</span><br></pre></td></tr></table></figure></p>
+<p>基本的更换步骤如下：<br>找到mysql的配置文件，使用<code>locate my.cnf</code>命令可以查找my.cnf文件所在位置。<br>使用vim进行编辑<code>vim /etc/mysql/my.cnf</code>，查找<code>port = 3306</code>所在位置。<br>一共有两行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[client]</div><div class="line">port            = 3306</div><div class="line">socket          = /var/run/mysqld/mysqld.sock</div></pre></td></tr></table></figure></p>
+<p>以及<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[mysqld]</div><div class="line">#</div><div class="line"># * Basic Settings</div><div class="line">#</div><div class="line">user            = mysql</div><div class="line">pid-file        = /var/run/mysqld/mysqld.pid</div><div class="line">socket          = /var/run/mysqld/mysqld.sock</div><div class="line">port            = 3306</div><div class="line">basedir         = /usr</div><div class="line">datadir         = /var/lib/mysql</div><div class="line">tmpdir          = /tmp</div><div class="line">lc-messages-dir = /usr/share/mysql</div></pre></td></tr></table></figure></p>
 <p>这两处的3306替换为新端口号即可。</p>
 <p>然后重启mysql服务：<code>service mysqld restart</code></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/05/22/Ubuntu修改Mysql数据库连接端口号/" data-id="ckewl1zdr009i10shmw0blbvo" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/05/22/Ubuntu修改Mysql数据库连接端口号/" data-id="ckf44v6ff009mhh8trba72875" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li></ul>
@@ -184,6 +184,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -197,10 +201,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

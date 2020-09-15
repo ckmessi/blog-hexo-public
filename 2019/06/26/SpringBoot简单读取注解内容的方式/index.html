@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/06/26/SpringBoot简单读取注解内容的方式/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="背景在 Spring Boot 项目开发中，我们通常会使用许多注解来完成相关的配置。最常见的注解是 Controller 文件中，对外提供 API 接口的访问地址：12345678@RequestMapping(&amp;quot;/root/url/v1/&amp;quot;)public class TestController &amp;#123;    @GetMapping(&amp;quot;health/check">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.048Z">
+<meta property="og:updated_time" content="2019-06-26T07:21:36.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringBoot简单读取注解内容的方式">
 <meta name="twitter:description" content="背景在 Spring Boot 项目开发中，我们通常会使用许多注解来完成相关的配置。最常见的注解是 Controller 文件中，对外提供 API 接口的访问地址：12345678@RequestMapping(&amp;quot;/root/url/v1/&amp;quot;)public class TestController &amp;#123;    @GetMapping(&amp;quot;health/check">
@@ -94,18 +94,18 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在 Spring Boot 项目开发中，我们通常会使用许多注解来完成相关的配置。<br>最常见的注解是 Controller 文件中，对外提供 API 接口的访问地址：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(&quot;/root/url/v1/&quot;)</span><br><span class="line">public class TestController &#123;</span><br><span class="line">    @GetMapping(&quot;health/check&quot;)</span><br><span class="line">    String healthCheck()&#123;</span><br><span class="line">        return &quot;ok&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在 Spring Boot 项目开发中，我们通常会使用许多注解来完成相关的配置。<br>最常见的注解是 Controller 文件中，对外提供 API 接口的访问地址：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(&quot;/root/url/v1/&quot;)</div><div class="line">public class TestController &#123;</div><div class="line">    @GetMapping(&quot;health/check&quot;)</div><div class="line">    String healthCheck()&#123;</div><div class="line">        return &quot;ok&quot;;</div><div class="line">    &#125;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>这里的 <code>RequestMapping</code> 和 <code>@GetMapping</code> 声明了该 Controller 下的接口 URL  相关信息。<br>有时我们可能需要动态读取这些信息，这时候就需要使用到 Spring Boot 读取注解的方式。</p>
-<h2 id="解决方式"><a href="#解决方式" class="headerlink" title="解决方式"></a>解决方式</h2><h4 id="类注解的读取"><a href="#类注解的读取" class="headerlink" title="类注解的读取"></a>类注解的读取</h4><p>对于类上的注解，通常使用 <code>class</code> 的 <code>getAnnotation</code> 方法获取：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RequestMapping requestMapping = TestController.class.getAnnotation(RequestMapping.class);</span><br><span class="line">String[] requestMappingValues = requestMapping.value();</span><br><span class="line">// ...</span><br></pre></td></tr></table></figure></p>
+<h2 id="解决方式"><a href="#解决方式" class="headerlink" title="解决方式"></a>解决方式</h2><h4 id="类注解的读取"><a href="#类注解的读取" class="headerlink" title="类注解的读取"></a>类注解的读取</h4><p>对于类上的注解，通常使用 <code>class</code> 的 <code>getAnnotation</code> 方法获取：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">RequestMapping requestMapping = TestController.class.getAnnotation(RequestMapping.class);</div><div class="line">String[] requestMappingValues = requestMapping.value();</div><div class="line">// ...</div></pre></td></tr></table></figure></p>
 <p>如果在类上没有 <code>RequestMapping</code> 类型的注解，则 <code>getAnnotation</code> 方法得到的返回值是个 <code>null</code> 。</p>
-<h4 id="方法注解的读取"><a href="#方法注解的读取" class="headerlink" title="方法注解的读取"></a>方法注解的读取</h4><p>对于方法上的注解，读取方式相对麻烦一些，因为需要先获取到方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Method m =TestController.class.getMethod(&quot;healthCheck&quot;, String.class);</span><br><span class="line">GetMapping getMapping = m.getAnnotation(GetMapping.class);</span><br><span class="line">String[] getMappingValues = getMapping.value();</span><br><span class="line">// ...</span><br></pre></td></tr></table></figure></p>
+<h4 id="方法注解的读取"><a href="#方法注解的读取" class="headerlink" title="方法注解的读取"></a>方法注解的读取</h4><p>对于方法上的注解，读取方式相对麻烦一些，因为需要先获取到方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Method m =TestController.class.getMethod(&quot;healthCheck&quot;, String.class);</div><div class="line">GetMapping getMapping = m.getAnnotation(GetMapping.class);</div><div class="line">String[] getMappingValues = getMapping.value();</div><div class="line">// ...</div></pre></td></tr></table></figure></p>
 <p>在上述过程中，获取方法的操作 <code>getMethod</code> 通常需要使用 <code>try...catch...</code> 包起来，因为可能抛出 <code>NoSuchMethodException</code> 异常。  </p>
 <h2 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h2><p><a href="https://stackoverflow.com/questions/20192552/get-value-of-a-parameter-of-an-annotation-in-java" target="_blank" rel="external">https://stackoverflow.com/questions/20192552/get-value-of-a-parameter-of-an-annotation-in-java</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/26/SpringBoot简单读取注解内容的方式/" data-id="ckewl1zdb008u10shp1hpj65b" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/06/26/SpringBoot简单读取注解内容的方式/" data-id="ckf44v6f60095hh8t9ots4zzz" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
@@ -186,6 +186,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -199,10 +203,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

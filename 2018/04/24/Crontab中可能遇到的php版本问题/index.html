@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2018/04/24/Crontab中可能遇到的php版本问题/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在工作中遇到需要添加定时任务的问题， Laravel 框架提供了特性 Task Schedule 。 参考文档可知，其实 Laravel 的 Scheduler 是基于系统定时任务的，因此需要添加如下代码至系统的定时任务列表中。1* * * * * php /path-to-your-project/artisan schedule:run &amp;gt;&amp;gt; /dev/null 2&amp;gt;&amp;amp">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.869Z">
+<meta property="og:updated_time" content="2018-04-24T03:57:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Crontab中可能遇到的php版本问题">
 <meta name="twitter:description" content="在工作中遇到需要添加定时任务的问题， Laravel 框架提供了特性 Task Schedule 。 参考文档可知，其实 Laravel 的 Scheduler 是基于系统定时任务的，因此需要添加如下代码至系统的定时任务列表中。1* * * * * php /path-to-your-project/artisan schedule:run &amp;gt;&amp;gt; /dev/null 2&amp;gt;&amp;amp">
@@ -95,19 +95,19 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>在工作中遇到需要添加定时任务的问题， Laravel 框架提供了特性 <a href="https://laravel.com/docs/5.5/scheduling" target="_blank" rel="external">Task Schedule</a> 。</p>
-<p>参考文档可知，其实 Laravel 的 <code>Scheduler</code> 是基于系统定时任务的，因此需要添加如下代码至系统的定时任务列表中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* * * * * php /path-to-your-project/artisan schedule:run &gt;&gt; /dev/null 2&gt;&amp;1</span><br></pre></td></tr></table></figure></p>
+<p>参考文档可知，其实 Laravel 的 <code>Scheduler</code> 是基于系统定时任务的，因此需要添加如下代码至系统的定时任务列表中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">* * * * * php /path-to-your-project/artisan schedule:run &gt;&gt; /dev/null 2&gt;&amp;1</div></pre></td></tr></table></figure></p>
 <p>在 Linux 操作系统中，通常可以通过 <code>crontab -e</code> 命令编辑定时任务列表，编辑完成后，使用 <code>crontab -l</code> 查看当前存在的定时任务。</p>
 <p>然而在实现过程中遇到了一些问题，设定了相关 <code>crontab</code> 任务，却貌似没有真正执行。</p>
-<p>将上述代码中的 <code>&gt;&gt; /dev/null 2&gt;&amp;1</code> 替换为重定向到错误日志文件，可以看到内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Parse error: parse error in /path-to-your-projectl/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php on line 233</span><br></pre></td></tr></table></figure></p>
-<p>查看对应文件的 <code>233</code> 行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if (is_string($arguments[0])) &#123;</span><br><span class="line">    return app(&apos;cache&apos;)-&gt;get($arguments[0], $arguments[1] ?? null);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>将上述代码中的 <code>&gt;&gt; /dev/null 2&gt;&amp;1</code> 替换为重定向到错误日志文件，可以看到内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Parse error: parse error in /path-to-your-projectl/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php on line 233</div></pre></td></tr></table></figure></p>
+<p>查看对应文件的 <code>233</code> 行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if (is_string($arguments[0])) &#123;</div><div class="line">    return app(&apos;cache&apos;)-&gt;get($arguments[0], $arguments[1] ?? null);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>大概是因为其中使用了符号 <code>??</code> ，这是 <code>PHP7</code> 的特性，在 <code>PHP5</code> 中是会报错的。</p>
 <p>此时大概定位了问题大概在于PHP的版本。</p>
-<p>使用 <code>which php</code> 可以查看当前可执行文件 <code>php</code> 命令的真实指向：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/bin/php</span><br></pre></td></tr></table></figure></p>
-<p>使用 <code>where php</code> 可以查看所有所有命令 <code>php</code> 的内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/bin/php</span><br><span class="line">/usr/bin/php</span><br></pre></td></tr></table></figure></p>
-<p>使用 <code>whereis php</code> 可以查看命令 <code>php</code>的指向是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usr/bin/php</span><br></pre></td></tr></table></figure></p>
+<p>使用 <code>which php</code> 可以查看当前可执行文件 <code>php</code> 命令的真实指向：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/usr/local/bin/php</div></pre></td></tr></table></figure></p>
+<p>使用 <code>where php</code> 可以查看所有所有命令 <code>php</code> 的内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/usr/local/bin/php</div><div class="line">/usr/bin/php</div></pre></td></tr></table></figure></p>
+<p>使用 <code>whereis php</code> 可以查看命令 <code>php</code>的指向是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">usr/bin/php</div></pre></td></tr></table></figure></p>
 <p>可以看出，系统中的 php 版本是很混乱的。</p>
-<p>使用命令 <code>ls -la /usr/local/bin/php</code> 可得：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lrwxr-xr-x  1 admin  admin  33 11 22 20:32 /usr/local/bin/php -&gt; ../Cellar/php70/7.0.25_17/bin/php</span><br></pre></td></tr></table></figure></p>
-<p>使用命令 <code>ls -la /usr/bin/php</code> 可得：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-rwxr-xr-x  1 root  wheel  10577264  7  9  2016 /usr/bin/php</span><br></pre></td></tr></table></figure></p>
+<p>使用命令 <code>ls -la /usr/local/bin/php</code> 可得：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lrwxr-xr-x  1 admin  admin  33 11 22 20:32 /usr/local/bin/php -&gt; ../Cellar/php70/7.0.25_17/bin/php</div></pre></td></tr></table></figure></p>
+<p>使用命令 <code>ls -la /usr/bin/php</code> 可得：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-rwxr-xr-x  1 root  wheel  10577264  7  9  2016 /usr/bin/php</div></pre></td></tr></table></figure></p>
 <p>不一样。</p>
 <p>说明 <code>crontab</code> 调用的可能是 <code>/usr/bin/php</code> 命令。</p>
 <p>修复方式是，将定时任务脚本中的命令 <code>php</code> 替换为绝对路径 <code>/usr/local/bin/php</code> ，就可以正常调用了。</p>
@@ -115,7 +115,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/04/24/Crontab中可能遇到的php版本问题/" data-id="ckewl1zax000o10shi31bus8l" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/04/24/Crontab中可能遇到的php版本问题/" data-id="ckf44v6av0010hh8tyoxcy0dt" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -196,6 +196,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -209,10 +213,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

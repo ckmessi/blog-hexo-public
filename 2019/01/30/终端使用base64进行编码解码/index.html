@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/01/30/终端使用base64进行编码解码/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="大多数终端环境都有 base64 命令，功能是将一段文本按照特定格式进行编码。 base64 是一种基于64个可打印字符来表示二进制数据的表示方法。由于 64 = 2^6 ，因此每6个比特位可以代表一个打印字符。3个字节有24个比特，需要使用4个base64单元来表示，即4个可打印字符能够表示3个字节。base64编码通常用于处理文本数据的场合，能够表示、传输、存储一些二进制数据。完整的base6">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.252Z">
+<meta property="og:updated_time" content="2019-01-30T06:25:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="终端使用base64进行编码解码">
 <meta name="twitter:description" content="大多数终端环境都有 base64 命令，功能是将一段文本按照特定格式进行编码。 base64 是一种基于64个可打印字符来表示二进制数据的表示方法。由于 64 = 2^6 ，因此每6个比特位可以代表一个打印字符。3个字节有24个比特，需要使用4个base64单元来表示，即4个可打印字符能够表示3个字节。base64编码通常用于处理文本数据的场合，能够表示、传输、存储一些二进制数据。完整的base6">
@@ -96,16 +96,16 @@
       
         <p>大多数终端环境都有 <code>base64</code> 命令，功能是将一段文本按照特定格式进行编码。</p>
 <p><code>base64</code> 是一种基于64个可打印字符来表示二进制数据的表示方法。<br>由于 <code>64 = 2^6</code> ，因此每6个比特位可以代表一个打印字符。3个字节有24个比特，需要使用4个base64单元来表示，即4个可打印字符能够表示3个字节。<br>base64编码通常用于处理文本数据的场合，能够表示、传输、存储一些二进制数据。<br>完整的base64定义可见 <a href="https://tools.ietf.org/html/rfc1421" target="_blank" rel="external">RFC 1421</a> 和 <a href="https://www.ietf.org/rfc/rfc2045.txt" target="_blank" rel="external">RFC 2045</a>。</p>
-<p>在终端中，我们可以使用 <code>base64</code> 命令进行一些简单的编码解码工作。<br>比如编码一段字符串：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜ ~ echo &quot;Hello, world&quot; | base64</span><br><span class="line">SGVsbG8sIHdvcmxkCg==</span><br></pre></td></tr></table></figure></p>
-<p>解码一段字符串：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜ ~ echo SGVsbG8sIHdvcmxkCg== | base64 --decode</span><br><span class="line">Hello, world</span><br></pre></td></tr></table></figure></p>
-<p>获得一个文件中的文本内容的base64编码结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ ~ echo &quot;Hello, world&quot; &gt; temp.txt</span><br><span class="line">➜ ~ base64 temp.txt</span><br><span class="line">SGVsbG8sIHdvcmxkCg==</span><br></pre></td></tr></table></figure></p>
-<p>事实上，我们可以使用一个标准的格式来表示简单的内容，能够筛选掉许多不懂得该技术的人员。<br>例如，在招聘精通Linux的技术人员时，如果希望贴出简历投递邮箱为 <a href="mailto:`recruiter@company.ai" target="_blank" rel="external">`recruiter@company.ai</a>` ，可以换成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo cmVjcnVpdGVyQGNvbXBhbnkuYWkK | base64 --decode</span><br></pre></td></tr></table></figure></p>
+<p>在终端中，我们可以使用 <code>base64</code> 命令进行一些简单的编码解码工作。<br>比如编码一段字符串：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜ ~ echo &quot;Hello, world&quot; | base64</div><div class="line">SGVsbG8sIHdvcmxkCg==</div></pre></td></tr></table></figure></p>
+<p>解码一段字符串：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜ ~ echo SGVsbG8sIHdvcmxkCg== | base64 --decode</div><div class="line">Hello, world</div></pre></td></tr></table></figure></p>
+<p>获得一个文件中的文本内容的base64编码结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜ ~ echo &quot;Hello, world&quot; &gt; temp.txt</div><div class="line">➜ ~ base64 temp.txt</div><div class="line">SGVsbG8sIHdvcmxkCg==</div></pre></td></tr></table></figure></p>
+<p>事实上，我们可以使用一个标准的格式来表示简单的内容，能够筛选掉许多不懂得该技术的人员。<br>例如，在招聘精通Linux的技术人员时，如果希望贴出简历投递邮箱为 <code>recruiter@company.ai</code> ，可以换成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo cmVjcnVpdGVyQGNvbXBhbnkuYWkK | base64 --decode</div></pre></td></tr></table></figure></p>
 <p>这样能够有效地过滤掉那些看不懂的人啦。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/01/30/终端使用base64进行编码解码/" data-id="ckewl1zhp00lx10shchac90d8" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/01/30/终端使用base64进行编码解码/" data-id="ckf44v6l400nuhh8t52z1pvn7" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/base64/">base64</a></li></ul>
@@ -186,6 +186,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -199,10 +203,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

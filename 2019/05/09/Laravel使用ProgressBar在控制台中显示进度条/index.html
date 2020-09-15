@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/05/09/Laravel使用ProgressBar在控制台中显示进度条/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="背景在 Laravel 的 Console Command 程序中，通常会使用 Symfony 的包进行进度条的显示。通常可以通过以下代码完成：1234567$users = App\User::all();$bar = $this-&amp;gt;output-&amp;gt;createProgressBar(count($users));foreach ($users as $user) &amp;#123;">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.947Z">
+<meta property="og:updated_time" content="2019-05-09T01:43:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Laravel使用ProgressBar在控制台中显示进度条">
 <meta name="twitter:description" content="背景在 Laravel 的 Console Command 程序中，通常会使用 Symfony 的包进行进度条的显示。通常可以通过以下代码完成：1234567$users = App\User::all();$bar = $this-&amp;gt;output-&amp;gt;createProgressBar(count($users));foreach ($users as $user) &amp;#123;">
@@ -94,20 +94,20 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在 Laravel 的 Console Command 程序中，通常会使用 <code>Symfony</code> 的包进行进度条的显示。<br>通常可以通过以下代码完成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$users = App\User::all();</span><br><span class="line">$bar = $this-&gt;output-&gt;createProgressBar(count($users));</span><br><span class="line">foreach ($users as $user) &#123;</span><br><span class="line">    $this-&gt;performTask($user);</span><br><span class="line">    $bar-&gt;advance();</span><br><span class="line">&#125;</span><br><span class="line">$bar-&gt;finish();</span><br></pre></td></tr></table></figure></p>
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在 Laravel 的 Console Command 程序中，通常会使用 <code>Symfony</code> 的包进行进度条的显示。<br>通常可以通过以下代码完成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$users = App\User::all();</div><div class="line">$bar = $this-&gt;output-&gt;createProgressBar(count($users));</div><div class="line">foreach ($users as $user) &#123;</div><div class="line">    $this-&gt;performTask($user);</div><div class="line">    $bar-&gt;advance();</div><div class="line">&#125;</div><div class="line">$bar-&gt;finish();</div></pre></td></tr></table></figure></p>
 <p>不过，有时候业务代码并不直接写在 Command 类中，而是写在其继承子类里，这时候的 <code>$this-&gt;output</code> 可能没有 <code>createProgressBar</code> 方法，因此不能直接使用 Laravel 提供的方式，这时候可以直接使用 <code>Symfony</code> 的 <code>ProgressBar</code> 类。</p>
-<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// create</span><br><span class="line">$progress_bar = new ProgressBar($output, $total);</span><br><span class="line">// advance</span><br><span class="line">$progress_bar-&gt;advance();</span><br><span class="line">// finish</span><br><span class="line">$progress_bar-&gt;finish();</span><br></pre></td></tr></table></figure>
+<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// create</div><div class="line">$progress_bar = new ProgressBar($output, $total);</div><div class="line">// advance</div><div class="line">$progress_bar-&gt;advance();</div><div class="line">// finish</div><div class="line">$progress_bar-&gt;finish();</div></pre></td></tr></table></figure>
 <p>其中 <code>$output</code> 类型应该是 <code>Symfony\Component\Console\Output\ConsoleOutput</code> 。<br>使用上述三条语句，能够完成简单的进度条显示。</p>
-<h2 id="修改样式"><a href="#修改样式" class="headerlink" title="修改样式"></a>修改样式</h2><p>正常情况下，控制台中显示的进度条外观可能是这样的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">169/185 [=========================&gt;--]91%</span><br><span class="line">183/185 [===========================&gt;] 98%</span><br><span class="line">184/185 [===========================&gt;] 99%</span><br><span class="line">185/185 [============================] 100%</span><br></pre></td></tr></table></figure></p>
-<p>其中 <code>已完成字符</code> 是 <code>=</code>， <code>未完成字符</code> 是 <code>-</code>（参考进度条在96%时），进度符号为 <code>&gt;</code> 。<br>可以使用下述语句在代码中指定显示样式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// the finished part of the bar</span><br><span class="line">$progress_bar-&gt;setBarCharacter(&apos;&lt;comment&gt;=&lt;/comment&gt;&apos;);</span><br><span class="line">// the unfinished part of the bar</span><br><span class="line">$progress_bar-&gt;setEmptyBarCharacter(&apos; &apos;);</span><br><span class="line">// the progress character</span><br><span class="line">$progress_bar-&gt;setProgressCharacter(&apos;|&apos;);</span><br></pre></td></tr></table></figure></p>
-<p>这样的效果将会是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">169/185 [=========================| ] 91%</span><br><span class="line">183/185 [===========================|] 98%</span><br><span class="line">184/185 [===========================|] 99%</span><br><span class="line">185/185 [============================] 100%</span><br></pre></td></tr></table></figure></p>
+<h2 id="修改样式"><a href="#修改样式" class="headerlink" title="修改样式"></a>修改样式</h2><p>正常情况下，控制台中显示的进度条外观可能是这样的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">169/185 [=========================&gt;--]91%</div><div class="line">183/185 [===========================&gt;] 98%</div><div class="line">184/185 [===========================&gt;] 99%</div><div class="line">185/185 [============================] 100%</div></pre></td></tr></table></figure></p>
+<p>其中 <code>已完成字符</code> 是 <code>=</code>， <code>未完成字符</code> 是 <code>-</code>（参考进度条在96%时），进度符号为 <code>&gt;</code> 。<br>可以使用下述语句在代码中指定显示样式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// the finished part of the bar</div><div class="line">$progress_bar-&gt;setBarCharacter(&apos;&lt;comment&gt;=&lt;/comment&gt;&apos;);</div><div class="line">// the unfinished part of the bar</div><div class="line">$progress_bar-&gt;setEmptyBarCharacter(&apos; &apos;);</div><div class="line">// the progress character</div><div class="line">$progress_bar-&gt;setProgressCharacter(&apos;|&apos;);</div></pre></td></tr></table></figure></p>
+<p>这样的效果将会是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">169/185 [=========================| ] 91%</div><div class="line">183/185 [===========================|] 98%</div><div class="line">184/185 [===========================|] 99%</div><div class="line">185/185 [============================] 100%</div></pre></td></tr></table></figure></p>
 <p>可以看到，<code>已完成字符</code> 设置依然为 <code>=</code> ，<code>未完成字符</code> 修改为 <code>[space]</code>（空格），进度符号为 <code>|</code> 。</p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://laravel.com/docs/5.5/artisan#writing-output" target="_blank" rel="external">https://laravel.com/docs/5.5/artisan#writing-output</a><br><a href="https://symfony.com/doc/current/components/console/helpers/progressbar.html" target="_blank" rel="external">https://symfony.com/doc/current/components/console/helpers/progressbar.html</a><br><a href="https://www.cnblogs.com/eleven24/p/9134303.html" target="_blank" rel="external">https://www.cnblogs.com/eleven24/p/9134303.html</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/05/09/Laravel使用ProgressBar在控制台中显示进度条/" data-id="ckewl1zcj004i10shk7c390oq" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/05/09/Laravel使用ProgressBar在控制台中显示进度条/" data-id="ckf44v6d9004khh8tsi1siuki" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -188,6 +188,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -201,10 +205,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

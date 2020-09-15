@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/04/15/Java中关于Integer对象比较的分析/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="背景有一道流传已久的 Java 知识基础题：123456789101112131415Integer i = 100;Integer j = 100;System.out.print(i == j); Integer i = 128;Integer j = 128;System.out.print(i == j); Integer i = new Integer(100);Integer j =">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.922Z">
+<meta property="og:updated_time" content="2019-04-15T09:59:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java中关于Integer对象比较的分析">
 <meta name="twitter:description" content="背景有一道流传已久的 Java 知识基础题：123456789101112131415Integer i = 100;Integer j = 100;System.out.print(i == j); Integer i = 128;Integer j = 128;System.out.print(i == j); Integer i = new Integer(100);Integer j =">
@@ -94,10 +94,10 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>有一道流传已久的 Java 知识基础题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Integer i = 100;</span><br><span class="line">Integer j = 100;</span><br><span class="line">System.out.print(i == j); </span><br><span class="line">Integer i = 128;</span><br><span class="line">Integer j = 128;</span><br><span class="line">System.out.print(i == j); </span><br><span class="line">Integer i = new Integer(100);</span><br><span class="line">Integer j = new Integer(100);</span><br><span class="line">System.out.print(i == j);</span><br><span class="line">Integer i = new Integer(100);</span><br><span class="line">int j = 100；</span><br><span class="line">System.out.print(i == j);</span><br><span class="line">Integer i = new Integer(100);</span><br><span class="line">Integer j = 100;</span><br><span class="line">System.out.print(i == j);</span><br></pre></td></tr></table></figure></p>
-<p>正确答案是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">true</span><br><span class="line">false</span><br><span class="line">false</span><br><span class="line">true</span><br><span class="line">false</span><br></pre></td></tr></table></figure></p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>整型对象 Integer 有 2 种初始化方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Integer num1 = new Integer(100);</span><br><span class="line">Integer num2 = 100;</span><br></pre></td></tr></table></figure></p>
-<p>整型变量有 1 种初始化方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int num3 = 100;</span><br></pre></td></tr></table></figure></p>
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>有一道流传已久的 Java 知识基础题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">Integer i = 100;</div><div class="line">Integer j = 100;</div><div class="line">System.out.print(i == j); </div><div class="line">Integer i = 128;</div><div class="line">Integer j = 128;</div><div class="line">System.out.print(i == j); </div><div class="line">Integer i = new Integer(100);</div><div class="line">Integer j = new Integer(100);</div><div class="line">System.out.print(i == j);</div><div class="line">Integer i = new Integer(100);</div><div class="line">int j = 100；</div><div class="line">System.out.print(i == j);</div><div class="line">Integer i = new Integer(100);</div><div class="line">Integer j = 100;</div><div class="line">System.out.print(i == j);</div></pre></td></tr></table></figure></p>
+<p>正确答案是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">true</div><div class="line">false</div><div class="line">false</div><div class="line">true</div><div class="line">false</div></pre></td></tr></table></figure></p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>整型对象 Integer 有 2 种初始化方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Integer num1 = new Integer(100);</div><div class="line">Integer num2 = 100;</div></pre></td></tr></table></figure></p>
+<p>整型变量有 1 种初始化方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">int num3 = 100;</div></pre></td></tr></table></figure></p>
 <p>这三种初始化的结果：<br>1）直接创建一个新的值为 <code>100</code> 的 <code>Integer</code> 对象；<br>2）*获取或创建值为 <code>100</code> 的 <code>Integer</code> 对象；<br>3）获得一个值为 <code>100</code> 的 <code>int</code> 类型变量；<br>其中第（2）点由于 Integer 缓存机制的问题，当数值 -128 &lt; x &lt; 127 时会尝试执行类似 <code>firstOrCreate</code> 的操作；当数值在上述范围之外时，一定会创建新的对象。</p>
 <p>使用 <code>==</code> 号针对不同的 <code>Integer</code> 对象或 <code>int</code> 变量进行相等判断时，根据等号两侧的情况有不同的逻辑：<br>1）当 <code>==</code> 号左右两侧都是 <code>Integer</code> 对象时，判断两个对象的内存地址是否相等；<br>2）当 <code>==</code> 号左右两侧都是 <code>int</code> 变量时，判断两个变量的值是否相等；<br>3）当 <code>==</code> 号左右两侧分别是 <code>Integer</code> 对象和 <code>int</code> 变量时，判断 <code>Integer</code> 对象的值是否与 <code>int</code> 变量的值相等。</p>
 <p>回头看之前的题目：</p>
@@ -142,7 +142,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/04/15/Java中关于Integer对象比较的分析/" data-id="ckewl1zc5003a10shnvr65w18" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/04/15/Java中关于Integer对象比较的分析/" data-id="ckf44v6cl003khh8tnxvmj8gw" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -223,6 +223,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -236,10 +240,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

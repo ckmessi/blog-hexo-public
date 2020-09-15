@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在Linux命令行中，可以使用 hexdump 命令输出文件的十六进制编码。 功能hexdump 命令主要用来查看二进制文件的十六进制编码，但不限于二进制文件。 使用方式命令的基本使用方式为：hexdump [选项] [文件] 。比如：1hexdump -C filename.txt 参数选项主要可选参数选项如下：  -n length：格式化输出文件的前length个字节 -C：输出规范的十六进">
 <meta property="og:image" content="http://ckmessi.github.io/blog-hexo/2019/02/14/使用hexdump输出文件的十六进制编码/hexdumpmessi.png">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.134Z">
+<meta property="og:updated_time" content="2019-02-14T06:38:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用hexdump输出文件的十六进制编码">
 <meta name="twitter:description" content="在Linux命令行中，可以使用 hexdump 命令输出文件的十六进制编码。 功能hexdump 命令主要用来查看二进制文件的十六进制编码，但不限于二进制文件。 使用方式命令的基本使用方式为：hexdump [选项] [文件] 。比如：1hexdump -C filename.txt 参数选项主要可选参数选项如下：  -n length：格式化输出文件的前length个字节 -C：输出规范的十六进">
@@ -98,7 +98,7 @@
       
         <p>在Linux命令行中，可以使用 <code>hexdump</code> 命令输出文件的十六进制编码。</p>
 <h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><p><code>hexdump</code> 命令主要用来查看二进制文件的十六进制编码，但不限于二进制文件。</p>
-<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><p>命令的基本使用方式为：<code>hexdump [选项] [文件]</code> 。<br>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexdump -C filename.txt</span><br></pre></td></tr></table></figure></p>
+<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><p>命令的基本使用方式为：<code>hexdump [选项] [文件]</code> 。<br>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexdump -C filename.txt</div></pre></td></tr></table></figure></p>
 <h2 id="参数选项"><a href="#参数选项" class="headerlink" title="参数选项"></a>参数选项</h2><p>主要可选参数选项如下：</p>
 <ul>
 <li>-n length：格式化输出文件的前length个字节</li>
@@ -111,20 +111,20 @@
 <li>-s：从偏移量开始输出</li>
 <li>-v：避免省略重复字符时显示的<code>*</code>字符</li>
 </ul>
-<p>比如对于一个简单的文本文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">abc</span><br><span class="line">d</span><br><span class="line">123</span><br><span class="line">4</span><br></pre></td></tr></table></figure></p>
-<p>使用不带参数选项的命令可以输出其十六进制编码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ ~ hexdump file.txt</span><br><span class="line">0000000 61 62 63 0a 64 0a 31 32 33 0a 34 0a</span><br><span class="line">000000c</span><br></pre></td></tr></table></figure></p>
+<p>比如对于一个简单的文本文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">abc</div><div class="line">d</div><div class="line">123</div><div class="line">4</div></pre></td></tr></table></figure></p>
+<p>使用不带参数选项的命令可以输出其十六进制编码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜ ~ hexdump file.txt</div><div class="line">0000000 61 62 63 0a 64 0a 31 32 33 0a 34 0a</div><div class="line">000000c</div></pre></td></tr></table></figure></p>
 <p>可以看出，其中的 <code>61</code>、<code>62</code>、<code>63</code> 就是字符 <code>a</code>、<code>b</code>、<code>c</code> 的ASCII编码 <code>65</code>、<code>66</code>、<code>67</code> 的十六进制表示；而 <code>0a</code> 转换为十进制的值是 <code>10</code> ，正是换行符在ASCII字符中的表示。</p>
-<p>如果带上 <code>-c</code> 参数，则输出结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ ~ hexdump -c file.txt</span><br><span class="line">0000000 a b c \n d \n 1 2 3 \n 4 \n</span><br><span class="line">000000c</span><br></pre></td></tr></table></figure></p>
+<p>如果带上 <code>-c</code> 参数，则输出结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜ ~ hexdump -c file.txt</div><div class="line">0000000 a b c \n d \n 1 2 3 \n 4 \n</div><div class="line">000000c</div></pre></td></tr></table></figure></p>
 <p>可以看出，以单字节字符显示后，能够更加具备可读性。</p>
-<p>使用 <code>-Cv</code> 参数，能够更加直观地查看其规范的十六进制和ASCII码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ ~ hexdump -Cv file.txt</span><br><span class="line">00000000 61 62 63 0a 64 0a 31 32 33 0a 34 0a |abc.d.123.4.|</span><br><span class="line">0000000c</span><br></pre></td></tr></table></figure></p>
-<p>当然，比较酷炫的可以直接显示图片的十六进制编码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexdump messi.jpg</span><br></pre></td></tr></table></figure></p>
+<p>使用 <code>-Cv</code> 参数，能够更加直观地查看其规范的十六进制和ASCII码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜ ~ hexdump -Cv file.txt</div><div class="line">00000000 61 62 63 0a 64 0a 31 32 33 0a 34 0a |abc.d.123.4.|</div><div class="line">0000000c</div></pre></td></tr></table></figure></p>
+<p>当然，比较酷炫的可以直接显示图片的十六进制编码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexdump messi.jpg</div></pre></td></tr></table></figure></p>
 <p>显示结果为：<br><img src="/blog-hexo/2019/02/14/使用hexdump输出文件的十六进制编码/hexdumpmessi.png" alt="示例图" title="示例图"></p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://blog.csdn.net/yzhang6_10/article/details/81588282" target="_blank" rel="external">https://blog.csdn.net/yzhang6_10/article/details/81588282</a><br><a href="https://www.cnblogs.com/mayou18/p/9558440.html" target="_blank" rel="external">https://www.cnblogs.com/mayou18/p/9558440.html</a><br><a href="https://blog.csdn.net/huanhuanq1209/article/details/80900289" target="_blank" rel="external">https://blog.csdn.net/huanhuanq1209/article/details/80900289</a><br><a href="https://www.cnblogs.com/dplearning/p/6860067.html" target="_blank" rel="external">https://www.cnblogs.com/dplearning/p/6860067.html</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/02/14/使用hexdump输出文件的十六进制编码/" data-id="ckewl1zeo00cg10shlkb0z77w" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/02/14/使用hexdump输出文件的十六进制编码/" data-id="ckf44v6gw00cchh8t2wsppb02" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/hexdump/">hexdump</a></li></ul>
@@ -205,6 +205,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -218,10 +222,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

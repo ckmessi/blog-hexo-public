@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/11/28/初识FastAPI/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="简介FastAPI 是一款基于 Python 3.6+ 的高效 Web 应用框架，能够快速搭建 API 服务器。在 Python 语言范畴内，FastAPI 可以作为一个快速搭建后台服务器的框架选择。 快速安装FastAPI 基于 Python 3.6+，它的安装非常简单，基于 pip 命令直接执行即可：1pip install fastapi 它同时需要一个 ASGI 服务器，比如 Uvicor">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.216Z">
+<meta property="og:updated_time" content="2019-11-28T11:28:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初识FastAPI">
 <meta name="twitter:description" content="简介FastAPI 是一款基于 Python 3.6+ 的高效 Web 应用框架，能够快速搭建 API 服务器。在 Python 语言范畴内，FastAPI 可以作为一个快速搭建后台服务器的框架选择。 快速安装FastAPI 基于 Python 3.6+，它的安装非常简单，基于 pip 命令直接执行即可：1pip install fastapi 它同时需要一个 ASGI 服务器，比如 Uvicor">
@@ -95,20 +95,20 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><a href="https://fastapi.tiangolo.com/" target="_blank" rel="external">FastAPI</a> 是一款基于 Python 3.6+ 的高效 Web 应用框架，能够快速搭建 API 服务器。<br>在 Python 语言范畴内，FastAPI 可以作为一个快速搭建后台服务器的框架选择。</p>
-<h2 id="快速安装"><a href="#快速安装" class="headerlink" title="快速安装"></a>快速安装</h2><p>FastAPI 基于 Python 3.6+，它的安装非常简单，基于 <code>pip</code> 命令直接执行即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install fastapi</span><br></pre></td></tr></table></figure></p>
-<p>它同时需要一个 ASGI 服务器，比如 <code>Uvicorn</code> 或 <code>Hypercom</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install uvicorn</span><br></pre></td></tr></table></figure></p>
-<h2 id="基本使用方式"><a href="#基本使用方式" class="headerlink" title="基本使用方式"></a>基本使用方式</h2><p>创建一个 <code>main.py</code> 文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">from fastapi import FastAPI</span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line">@app.get(&quot;/&quot;)</span><br><span class="line">def read_root():</span><br><span class="line">    return &#123;&quot;Hello&quot;: &quot;World&quot;&#125;</span><br><span class="line"></span><br><span class="line">@app.get(&quot;/items/&#123;item_id&#125;&quot;)</span><br><span class="line">def read_item(item_id: int, q: str = None):</span><br><span class="line">    return &#123;&quot;item_id&quot;: item_id, &quot;q&quot;: q&#125;</span><br></pre></td></tr></table></figure></p>
-<p>执行以下命令启动服务器：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uvicorn main:app --reload</span><br></pre></td></tr></table></figure></p>
+<h2 id="快速安装"><a href="#快速安装" class="headerlink" title="快速安装"></a>快速安装</h2><p>FastAPI 基于 Python 3.6+，它的安装非常简单，基于 <code>pip</code> 命令直接执行即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install fastapi</div></pre></td></tr></table></figure></p>
+<p>它同时需要一个 ASGI 服务器，比如 <code>Uvicorn</code> 或 <code>Hypercom</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install uvicorn</div></pre></td></tr></table></figure></p>
+<h2 id="基本使用方式"><a href="#基本使用方式" class="headerlink" title="基本使用方式"></a>基本使用方式</h2><p>创建一个 <code>main.py</code> 文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">from fastapi import FastAPI</div><div class="line">app = FastAPI()</div><div class="line"></div><div class="line">@app.get(&quot;/&quot;)</div><div class="line">def read_root():</div><div class="line">    return &#123;&quot;Hello&quot;: &quot;World&quot;&#125;</div><div class="line"></div><div class="line">@app.get(&quot;/items/&#123;item_id&#125;&quot;)</div><div class="line">def read_item(item_id: int, q: str = None):</div><div class="line">    return &#123;&quot;item_id&quot;: item_id, &quot;q&quot;: q&#125;</div></pre></td></tr></table></figure></p>
+<p>执行以下命令启动服务器：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">uvicorn main:app --reload</div></pre></td></tr></table></figure></p>
 <p>其中 <code>main</code> 是脚本名称，而 <code>app</code> 是在 <code>main.py</code> 文件中生成的 <code>FastAPI()</code> 实例对象名，<code>--reload</code> 参数表示自动监视代码的改变并更新程序。</p>
 <p>打开浏览器，访问 <code>http://127.0.0.1:8000</code>，可以看到简洁的 JSON 格式返回值：<code>{&quot;Hello&quot;: &quot;World&quot;}</code>。<br>如果在浏览器中访问 <code>http://127.0.0.1:8000/docs</code>，就可以看到一个漂亮的接口文档。在这份文档中列举了所有可以访问的接口，以及接口的访问方式、参数、返回值、错误信息等。甚至可以直接在页面上点击 <code>Try it out</code> 按钮执行这个 API 请求。</p>
 <h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><p>关于 FastAPI，它最重要的特点就是简洁易用，另外它还有一些特性是令我很惊喜的。<br>比如集成了 <code>OpenAPI</code> 和 <code>Swagger UI</code>，能够对每个路由自动生成相关的格式文档，这样基本可以不需要额外撰写接口文档，只需要按照相关格式正确定义数据类型即可。<br>在 <code>Swagger UI</code> 提供的文档页面上甚至可以直接执行 API 请求，减少了以往调试过程中需要使用页面或 POSTMAN 等请求发送工具的麻烦。<br>FastAPI 会使用 <code>Pydantic</code> 进行数据的格式验证，这部分可以减少许多检查请求参数合法性的代码。</p>
-<h2 id="基本框架搭建"><a href="#基本框架搭建" class="headerlink" title="基本框架搭建"></a>基本框架搭建</h2><p>通常搭建一个后台服务器，最基础的部分就是数据库表的迁移和特定对象的CRUD。<br>在 FastAPI 中，可以使用 <code>SQLAlchemy</code> 提供的 ORM 完成数据模型的定义及数据库操作，使用 <code>Alembic</code> 完成数据库表的迁移及版本控制，此前撰写的 <a href="mailto:`@app.get" target="_blank" rel="external">`@app.get</a>(“/“)<code>方法即是路由，它所修饰的方法可以理解为传统意义上</code>Controller` 完成的功能。在上述基本功能实现后，一套数据从创建、写入到读取的流程就走通了，能够快速搭建一个可用的 API 服务器。<br>而 FastAPI 本身还有很多功能，值得挖掘。</p>
+<h2 id="基本框架搭建"><a href="#基本框架搭建" class="headerlink" title="基本框架搭建"></a>基本框架搭建</h2><p>通常搭建一个后台服务器，最基础的部分就是数据库表的迁移和特定对象的CRUD。<br>在 FastAPI 中，可以使用 <code>SQLAlchemy</code> 提供的 ORM 完成数据模型的定义及数据库操作，使用 <code>Alembic</code> 完成数据库表的迁移及版本控制，此前撰写的 <code>@app.get(&quot;/&quot;)</code> 方法即是路由，它所修饰的方法可以理解为传统意义上 <code>Controller</code> 完成的功能。在上述基本功能实现后，一套数据从创建、写入到读取的流程就走通了，能够快速搭建一个可用的 API 服务器。<br>而 FastAPI 本身还有很多功能，值得挖掘。</p>
 <h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="https://fastapi.tiangolo.com/" target="_blank" rel="external">https://fastapi.tiangolo.com/</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/11/28/初识FastAPI/" data-id="ckewl1zgu00k810shouatjjhd" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/11/28/初识FastAPI/" data-id="ckf44v6hg00dqhh8tzu8ttei2" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/FastAPI/">FastAPI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -189,6 +189,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -202,10 +206,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

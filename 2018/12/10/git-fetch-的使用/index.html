@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2018/12/10/git-fetch-的使用/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在使用 git 的过程中，可能会使用到 git fetch 命令，这个命令与 git pull 很相似。 git fetch 命令与 git 仓库中配置文件 .git/FETCH_HEAD 息息相关。 .git/FETCH_HEAD 文件是一个版本链接，记录在本地的一个文件中，指向着目前已经从远程仓库取下来的分支的末端版本。 使用命令 vim .git/FETCH_HEAD 可以查看内容：1b37">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.087Z">
+<meta property="og:updated_time" content="2018-12-10T09:21:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="git fetch 的使用">
 <meta name="twitter:description" content="在使用 git 的过程中，可能会使用到 git fetch 命令，这个命令与 git pull 很相似。 git fetch 命令与 git 仓库中配置文件 .git/FETCH_HEAD 息息相关。 .git/FETCH_HEAD 文件是一个版本链接，记录在本地的一个文件中，指向着目前已经从远程仓库取下来的分支的末端版本。 使用命令 vim .git/FETCH_HEAD 可以查看内容：1b37">
@@ -97,7 +97,7 @@
         <p>在使用 <code>git</code> 的过程中，可能会使用到 <code>git fetch</code> 命令，这个命令与 <code>git pull</code> 很相似。</p>
 <p><code>git fetch</code> 命令与 git 仓库中配置文件 <code>.git/FETCH_HEAD</code> 息息相关。</p>
 <p><code>.git/FETCH_HEAD</code> 文件是一个版本链接，记录在本地的一个文件中，指向着目前已经从远程仓库取下来的分支的末端版本。</p>
-<p>使用命令 <code>vim .git/FETCH_HEAD</code> 可以查看内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b37eecb8bc92843a3613b7e85a94d515af18d72b    branch &apos;master&apos; of https://github.com/ckmessi/blog-hexo</span><br></pre></td></tr></table></figure></p>
+<p>使用命令 <code>vim .git/FETCH_HEAD</code> 可以查看内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">b37eecb8bc92843a3613b7e85a94d515af18d72b    branch &apos;master&apos; of https://github.com/ckmessi/blog-hexo</div></pre></td></tr></table></figure></p>
 <p><code>git fetch</code> 命令的实质，就是将远程仓库的信息写入到 <code>.git/FETCH_HEAD</code> 文件中。<br>如果执行了 <code>git fetch</code> 或 <code>git fetch origin</code> ，在 <code>FETCH_HEAD</code> 文件中显示的是 <code>origin</code> 远端分支的情况；如果执行了 <code>git fetch upstream</code> ，在 <code>FETCH_HEAD</code> 文件中显示的是 <code>upstream</code> 对应远端分支的情况。</p>
 <p>而 <code>git pull</code> 命令的实质操作流程，是基于本地的 <code>FETCH_HEAD</code> 记录，比对本地的与远程仓库的版本号，使用 <code>git fetch</code> 获取当前指向的远程分支的后续版本的数据，然后利用 <code>git merge</code> 将其与本地的当前分支合并。</p>
 <p>因此，可以部分理解为：<code>git pull</code> = <code>git fetch</code> + <code>git merge</code> </p>
@@ -106,7 +106,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/12/10/git-fetch-的使用/" data-id="ckewl1zdr00a810shr3q1ywvw" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/12/10/git-fetch-的使用/" data-id="ckf44v6fx00alhh8twx5gcvoz" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -187,6 +187,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -200,10 +204,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

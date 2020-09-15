@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2020/08/26/Python使用OpenCV将图片帧拼接视频/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="背景在实际工作中，可能需要读取视频，对其中每一帧画面进行相关的图像处理，然后再拼接成视频。图片的处理过程和方式可以各种可样，最终都免不了需要拼接成视频，使用 opencv-python 可以完成这个功能。 解决方案假定已经获取到处理完成的图片集合，可以使用 cv2.VideoWriter 类将其拼接成视频：1234567def concat_video(frame_array, save_file">
-<meta property="og:updated_time" content="2020-09-10T08:58:51.826Z">
+<meta property="og:updated_time" content="2020-08-26T15:26:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python使用OpenCV将图片帧拼接视频">
 <meta name="twitter:description" content="背景在实际工作中，可能需要读取视频，对其中每一帧画面进行相关的图像处理，然后再拼接成视频。图片的处理过程和方式可以各种可样，最终都免不了需要拼接成视频，使用 opencv-python 可以完成这个功能。 解决方案假定已经获取到处理完成的图片集合，可以使用 cv2.VideoWriter 类将其拼接成视频：1234567def concat_video(frame_array, save_file">
@@ -95,7 +95,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在实际工作中，可能需要读取视频，对其中每一帧画面进行相关的图像处理，然后再拼接成视频。<br>图片的处理过程和方式可以各种可样，最终都免不了需要拼接成视频，使用 opencv-python 可以完成这个功能。</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>假定已经获取到处理完成的图片集合，可以使用 <code>cv2.VideoWriter</code> 类将其拼接成视频：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">def concat_video(frame_array, save_file, size=(640, 480), fps=50):</span><br><span class="line">    file_path = save_file</span><br><span class="line">    fourcc = cv2.VideoWriter_fourcc(*&apos;mp4v&apos;)</span><br><span class="line">    video = cv2.VideoWriter(file_path, fourcc, fps, size)</span><br><span class="line">    for img in frame_array:</span><br><span class="line">        video.write(img)</span><br><span class="line">    video.release()</span><br></pre></td></tr></table></figure></p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>假定已经获取到处理完成的图片集合，可以使用 <code>cv2.VideoWriter</code> 类将其拼接成视频：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">def concat_video(frame_array, save_file, size=(640, 480), fps=50):</div><div class="line">    file_path = save_file</div><div class="line">    fourcc = cv2.VideoWriter_fourcc(*&apos;mp4v&apos;)</div><div class="line">    video = cv2.VideoWriter(file_path, fourcc, fps, size)</div><div class="line">    for img in frame_array:</div><div class="line">        video.write(img)</div><div class="line">    video.release()</div></pre></td></tr></table></figure></p>
 <p>其中使用的 4 个参数中，</p>
 <ul>
 <li><code>file_path</code> 表示保存的视频文件路径；</li>
@@ -112,7 +112,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/08/26/Python使用OpenCV将图片帧拼接视频/" data-id="ckewl1zdb007z10shli4tsw88" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/08/26/Python使用OpenCV将图片帧拼接视频/" data-id="ckf44v6eq0087hh8turmpbtta" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/OpenCV/">OpenCV</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -193,6 +193,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -206,10 +210,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

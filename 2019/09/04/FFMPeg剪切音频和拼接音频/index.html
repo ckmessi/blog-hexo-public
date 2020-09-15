@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/09/04/FFMPeg剪切音频和拼接音频/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="截取音频使用如下命令可以指定音频从某时间点开始，持续多长时间：1ffmpeg -i source_mp3.mp3 -ss [start_time] -t [duration_time] -acodec copy output_mp3.mp3 比如下面将从 00:01:12 开始，持续时长 1 分钟 42 秒：1ffmpeg -i source_mp3.mp3 -ss 00:01:12 -t 00:">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.875Z">
+<meta property="og:updated_time" content="2019-09-04T13:07:36.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FFMPeg剪切音频和拼接音频">
 <meta name="twitter:description" content="截取音频使用如下命令可以指定音频从某时间点开始，持续多长时间：1ffmpeg -i source_mp3.mp3 -ss [start_time] -t [duration_time] -acodec copy output_mp3.mp3 比如下面将从 00:01:12 开始，持续时长 1 分钟 42 秒：1ffmpeg -i source_mp3.mp3 -ss 00:01:12 -t 00:">
@@ -94,24 +94,24 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="截取音频"><a href="#截取音频" class="headerlink" title="截取音频"></a>截取音频</h2><p>使用如下命令可以指定音频从某时间点开始，持续多长时间：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i source_mp3.mp3 -ss [start_time] -t [duration_time] -acodec copy output_mp3.mp3</span><br></pre></td></tr></table></figure></p>
-<p>比如下面将从 <code>00:01:12</code> 开始，持续时长 <code>1</code> 分钟 <code>42</code> 秒：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i source_mp3.mp3 -ss 00:01:12 -t 00:01:42 -acodec copy output_mp3.mp3</span><br></pre></td></tr></table></figure></p>
+        <h2 id="截取音频"><a href="#截取音频" class="headerlink" title="截取音频"></a>截取音频</h2><p>使用如下命令可以指定音频从某时间点开始，持续多长时间：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ffmpeg -i source_mp3.mp3 -ss [start_time] -t [duration_time] -acodec copy output_mp3.mp3</div></pre></td></tr></table></figure></p>
+<p>比如下面将从 <code>00:01:12</code> 开始，持续时长 <code>1</code> 分钟 <code>42</code> 秒：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ffmpeg -i source_mp3.mp3 -ss 00:01:12 -t 00:01:42 -acodec copy output_mp3.mp3</div></pre></td></tr></table></figure></p>
 <h2 id="拼接音频"><a href="#拼接音频" class="headerlink" title="拼接音频"></a>拼接音频</h2><p>在截取音频的需求之上，还可能需要拼接音频。<br>通常使用方式是在当前工作目录 <code>work_dir</code> 下放置所有要拼接的音频：</p>
 <ul>
 <li>1.mp3</li>
 <li>2.mp3</li>
 <li>3.mp3</li>
-<li>…<br>然后用一个文本文件 <code>list.txt</code> 组织它们，每行一个音频文件：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">file &apos;1.mp3&apos;</span><br><span class="line">file &apos;2.mp3&apos;</span><br><span class="line">file &apos;3.mp3&apos;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<li>…<br>然后用一个文本文件 <code>list.txt</code> 组织它们，每行一个音频文件：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">file &apos;1.mp3&apos;</div><div class="line">file &apos;2.mp3&apos;</div><div class="line">file &apos;3.mp3&apos;</div><div class="line">...</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>然后在当前工作目录下输入命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -f concat -safe 0 -i list.txt -c copy output3.mp3</span><br></pre></td></tr></table></figure></p>
+<p>然后在当前工作目录下输入命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ffmpeg -f concat -safe 0 -i list.txt -c copy output3.mp3</div></pre></td></tr></table></figure></p>
 <p>就能将上述多个音频文件按照文件中的顺序拼接成一个大音频文件了。</p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://blog.zinewow.com/post/192.html" target="_blank" rel="external">http://blog.zinewow.com/post/192.html</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/09/04/FFMPeg剪切音频和拼接音频/" data-id="ckewl1zba001g10sho8c05p4j" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/09/04/FFMPeg剪切音频和拼接音频/" data-id="ckf44v6b4001bhh8tt1hxhf1w" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/FFMpeg/">FFMpeg</a></li></ul>
@@ -192,6 +192,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -205,10 +209,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

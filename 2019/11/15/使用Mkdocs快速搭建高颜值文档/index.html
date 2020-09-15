@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://ckmessi.github.io/blog-hexo/2019/11/15/使用Mkdocs快速搭建高颜值文档/4.png">
 <meta property="og:image" content="http://ckmessi.github.io/blog-hexo/2019/11/15/使用Mkdocs快速搭建高颜值文档/5.png">
 <meta property="og:image" content="http://ckmessi.github.io/blog-hexo/2019/11/15/使用Mkdocs快速搭建高颜值文档/6.png">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.104Z">
+<meta property="og:updated_time" content="2019-11-15T08:11:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Mkdocs快速搭建高颜值文档">
 <meta name="twitter:description" content="简介一直在寻找一种撰写项目文档的最佳方式，希望使撰写文档更加便捷、查看文档更加方便，同时更好地管理文档的版本控制。传统方案可能是使用 Word 等办公软件撰写文件，然后把文件发送给对方。这种方法有诸多不便：  对方必须下载或缓存文件才能查看，造成设备空间浪费； 跨平台友好性不足，对方的操作系统如果与创建者不同，则无法打开或无法编辑； 文档不断修改，只能以文件名后缀 _v2、_v3 用于区分版本，相">
@@ -112,20 +112,20 @@
 <p>文档源文件以 Markdown 格式撰写，通过一个简单的 YAML 文件进行配置。在撰写文档的过程中，可以实时地预览生成的文档效果。</p>
 <p>Mkdocs通过配置文件管理主题样式，有许多成熟的样式模板可供选择，也完全可以自己构建一套样式。</p>
 <p>由于 Mkdocs 能够生成静态页面，因此文档可以被方便地部署在 GitHub 页面、Amazon S3 或其它任何地方。</p>
-<h2 id="安装和使用"><a href="#安装和使用" class="headerlink" title="安装和使用"></a>安装和使用</h2><h4 id="0-简单的安装方法"><a href="#0-简单的安装方法" class="headerlink" title="0. 简单的安装方法"></a>0. 简单的安装方法</h4><p>Mkdocs 的安装非常简洁，基于 Python Package 管理器一键安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install mkdocs</span><br></pre></td></tr></table></figure></p>
-<p>Mkdocs 支持 Python 2.7, 3.4, 3.5, 3.6, 3.7 和 pypy，安装完成后可以使用以下命令验证是否安装成功：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> ➜ ~ mkdocs --version</span><br><span class="line">mkdocs, version 1.0.4</span><br></pre></td></tr></table></figure></p>
-<h4 id="1-创建项目"><a href="#1-创建项目" class="headerlink" title="1. 创建项目"></a>1. 创建项目</h4><p>使用 <code>mkdocs new [project_name]</code> 可以创建一个文档项目：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdocs new learn-mkdocs</span><br></pre></td></tr></table></figure></p>
-<p>会创建一个新文件夹 <code>learn-mkdocs</code>，里面就包含一个文件夹和一个配置文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ learn-mkdocs tree .</span><br><span class="line">.</span><br><span class="line">├── docs</span><br><span class="line">│ └── index.md</span><br><span class="line">└── mkdocs.yml</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装和使用"><a href="#安装和使用" class="headerlink" title="安装和使用"></a>安装和使用</h2><h4 id="0-简单的安装方法"><a href="#0-简单的安装方法" class="headerlink" title="0. 简单的安装方法"></a>0. 简单的安装方法</h4><p>Mkdocs 的安装非常简洁，基于 Python Package 管理器一键安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install mkdocs</div></pre></td></tr></table></figure></p>
+<p>Mkdocs 支持 Python 2.7, 3.4, 3.5, 3.6, 3.7 和 pypy，安装完成后可以使用以下命令验证是否安装成功：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"> ➜ ~ mkdocs --version</div><div class="line">mkdocs, version 1.0.4</div></pre></td></tr></table></figure></p>
+<h4 id="1-创建项目"><a href="#1-创建项目" class="headerlink" title="1. 创建项目"></a>1. 创建项目</h4><p>使用 <code>mkdocs new [project_name]</code> 可以创建一个文档项目：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdocs new learn-mkdocs</div></pre></td></tr></table></figure></p>
+<p>会创建一个新文件夹 <code>learn-mkdocs</code>，里面就包含一个文件夹和一个配置文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">➜ learn-mkdocs tree .</div><div class="line">.</div><div class="line">├── docs</div><div class="line">│ └── index.md</div><div class="line">└── mkdocs.yml</div></pre></td></tr></table></figure></p>
 <p>其中 <code>docs</code> 文件夹用于放置文档源文件，<code>mkdocs.yml</code> 是整个文档项目的配置文件。</p>
-<h4 id="2-启动文档服务器"><a href="#2-启动文档服务器" class="headerlink" title="2. 启动文档服务器"></a>2. 启动文档服务器</h4><p>Mkdocs 内嵌服务器用于预览文档，在项目根目录下执行 <code>mkdocs serve</code> 可以启动服务器：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜ mkdocs serve</span><br><span class="line">INFO - Building documentation...</span><br><span class="line">INFO - Cleaning site directory</span><br><span class="line">[I 191115 11:55:33 server:296] Serving on http://127.0.0.1:8000</span><br><span class="line">[I 191115 11:55:33 handlers:62] Start watching changes</span><br><span class="line">[I 191115 11:55:33 handlers:64] Start detecting changes</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-启动文档服务器"><a href="#2-启动文档服务器" class="headerlink" title="2. 启动文档服务器"></a>2. 启动文档服务器</h4><p>Mkdocs 内嵌服务器用于预览文档，在项目根目录下执行 <code>mkdocs serve</code> 可以启动服务器：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">➜ mkdocs serve</div><div class="line">INFO - Building documentation...</div><div class="line">INFO - Cleaning site directory</div><div class="line">[I 191115 11:55:33 server:296] Serving on http://127.0.0.1:8000</div><div class="line">[I 191115 11:55:33 handlers:62] Start watching changes</div><div class="line">[I 191115 11:55:33 handlers:64] Start detecting changes</div></pre></td></tr></table></figure></p>
 <p>打开浏览器访问 <code>http://127.0.0.1:8000</code> 地址，即可看到当前文档：<br><img src="/blog-hexo/2019/11/15/使用Mkdocs快速搭建高颜值文档/1.png" alt="文档效果图" title="文档效果图"></p>
-<h4 id="3-修改文档"><a href="#3-修改文档" class="headerlink" title="3. 修改文档"></a>3. 修改文档</h4><p>服务器支持自动加载功能，这意味着改动文档保存文件后，页面上会立刻刷新。<br>比如修改 <code>docs/index.md</code> 中的内容，在最后加上一句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">## Hello, Mkdocs</span><br><span class="line">I&apos;m fine, thank you.</span><br></pre></td></tr></table></figure></p>
+<h4 id="3-修改文档"><a href="#3-修改文档" class="headerlink" title="3. 修改文档"></a>3. 修改文档</h4><p>服务器支持自动加载功能，这意味着改动文档保存文件后，页面上会立刻刷新。<br>比如修改 <code>docs/index.md</code> 中的内容，在最后加上一句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">## Hello, Mkdocs</div><div class="line">I&apos;m fine, thank you.</div></pre></td></tr></table></figure></p>
 <p>页面变成了：<br><img src="/blog-hexo/2019/11/15/使用Mkdocs快速搭建高颜值文档/2.png" alt="文档效果图" title="文档效果图"></p>
 <h2 id="更多特性"><a href="#更多特性" class="headerlink" title="更多特性"></a>更多特性</h2><h4 id="修改网页名称"><a href="#修改网页名称" class="headerlink" title="修改网页名称"></a>修改网页名称</h4><p>在 <code>mkdocs.yaml</code> 文件中，默认只有一项配置项 <code>site_name</code>，修改之后会影响页面的标题。<br><img src="/blog-hexo/2019/11/15/使用Mkdocs快速搭建高颜值文档/3.png" alt="文档页面名称" title="文档页面名称"></p>
 <h4 id="添加文档"><a href="#添加文档" class="headerlink" title="添加文档"></a>添加文档</h4><p>直接在 <code>docs</code> 目录下添加一个 Markdown 格式的文件，即可添加一份文档。<br>在默认主题中，不同文档标题会在最上方的导航栏显示，当前文档内部结构会在左侧目录树显示。选择不同的样式模板后，可以有更自由的显示方式。<br><img src="/blog-hexo/2019/11/15/使用Mkdocs快速搭建高颜值文档/4.png" alt="多文档效果图" title="多文档效果图"></p>
-<h4 id="添加导航"><a href="#添加导航" class="headerlink" title="添加导航"></a>添加导航</h4><p>修改 <code>mkdocs.yml</code> 文件，可以为各个文档添加其在导航菜单中的名称：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">site_name: mkdocs-site</span><br><span class="line">nav:</span><br><span class="line">  - Home: index.md</span><br><span class="line">  - About: about.md</span><br></pre></td></tr></table></figure></p>
+<h4 id="添加导航"><a href="#添加导航" class="headerlink" title="添加导航"></a>添加导航</h4><p>修改 <code>mkdocs.yml</code> 文件，可以为各个文档添加其在导航菜单中的名称：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">site_name: mkdocs-site</div><div class="line">nav:</div><div class="line">  - Home: index.md</div><div class="line">  - About: about.md</div></pre></td></tr></table></figure></p>
 <img src="/blog-hexo/2019/11/15/使用Mkdocs快速搭建高颜值文档/5.png" alt="导航栏效果图" title="导航栏效果图">
-<h4 id="修改主题"><a href="#修改主题" class="headerlink" title="修改主题"></a>修改主题</h4><p>在 <code>mkdocs.yml</code> 文件中可以指定主题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">site_name: mkdocs-site</span><br><span class="line">nav:</span><br><span class="line">  - Home: index.md</span><br><span class="line">  - About: about.md</span><br><span class="line">theme: readthedocs</span><br></pre></td></tr></table></figure></p>
+<h4 id="修改主题"><a href="#修改主题" class="headerlink" title="修改主题"></a>修改主题</h4><p>在 <code>mkdocs.yml</code> 文件中可以指定主题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">site_name: mkdocs-site</div><div class="line">nav:</div><div class="line">  - Home: index.md</div><div class="line">  - About: about.md</div><div class="line">theme: readthedocs</div></pre></td></tr></table></figure></p>
 <p>可以发现，文档页面变成了非常经典的 ReadTheDocs 文档风格：<br><img src="/blog-hexo/2019/11/15/使用Mkdocs快速搭建高颜值文档/6.png" alt="修改主题" title="修改主题"></p>
 <h4 id="构建页面"><a href="#构建页面" class="headerlink" title="构建页面"></a>构建页面</h4><p>使用 <code>mkdocs build</code> 能够将当前文档内容构建成一个静态页面，然后就可以部署到各种服务器上了。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>使用 Mkdocs 能够快速简洁搭建一套项目文档，撰写写只需要在 Markdown 文件中整理好文档内容，并选择合适的主题风格，就可以快速预览或部署文档。</p>
@@ -134,7 +134,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/11/15/使用Mkdocs快速搭建高颜值文档/" data-id="ckewl1zej00bo10shy42x0jl2" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/11/15/使用Mkdocs快速搭建高颜值文档/" data-id="ckf44v6gr00bvhh8te0svv64d" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mkdocs/">Mkdocs</a></li></ul>
@@ -215,6 +215,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -228,10 +232,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

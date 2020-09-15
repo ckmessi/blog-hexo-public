@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2019/12/16/初识Supervisor/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="Supervisor 是一个客户端/服务器系统，允许用户在类 UNIX 操作系统中监控一系列进程。 安装：可以使用 apt-get 安装：1sudo apt-get install supervisor 也可以使用 pip 安装：1pip install supervisor 需要注意的是，根据 官方文档 的介绍，apt-get 安装的发布包会落后于在 PyPI 发布的官方包，此外用户还反馈 Ub">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.222Z">
+<meta property="og:updated_time" content="2019-12-16T03:34:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初识Supervisor">
 <meta name="twitter:description" content="Supervisor 是一个客户端/服务器系统，允许用户在类 UNIX 操作系统中监控一系列进程。 安装：可以使用 apt-get 安装：1sudo apt-get install supervisor 也可以使用 pip 安装：1pip install supervisor 需要注意的是，根据 官方文档 的介绍，apt-get 安装的发布包会落后于在 PyPI 发布的官方包，此外用户还反馈 Ub">
@@ -95,39 +95,39 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p><code>Supervisor</code> 是一个客户端/服务器系统，允许用户在类 UNIX 操作系统中监控一系列进程。</p>
-<h2 id="安装："><a href="#安装：" class="headerlink" title="安装："></a>安装：</h2><p>可以使用 <code>apt-get</code> 安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install supervisor</span><br></pre></td></tr></table></figure></p>
-<p>也可以使用 <code>pip</code> 安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install supervisor</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装："><a href="#安装：" class="headerlink" title="安装："></a>安装：</h2><p>可以使用 <code>apt-get</code> 安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install supervisor</div></pre></td></tr></table></figure></p>
+<p>也可以使用 <code>pip</code> 安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install supervisor</div></pre></td></tr></table></figure></p>
 <p>需要注意的是，根据 <a href="supervisord.org/installing.html">官方文档</a> 的介绍，<code>apt-get</code> 安装的发布包会落后于在 PyPI 发布的官方包，此外用户还反馈 Ubuntu 16.04 中的 Supervisor 发布包有与此前版本不一致的行为。</p>
 <h2 id="准备配置文件"><a href="#准备配置文件" class="headerlink" title="准备配置文件"></a>准备配置文件</h2><p>当 Supervisor 安装完成后，可以执行命令 <code>echo_supervisord_conf</code>，这个命令会在命令行打印样例配置文件的信息。</p>
-<p>确认要开始使用时，可以通过重定向的方式，将其写入一个配置文件中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo_supervisord_conf &gt; /path/to/supervisord.conf</span><br></pre></td></tr></table></figure></p>
+<p>确认要开始使用时，可以通过重定向的方式，将其写入一个配置文件中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo_supervisord_conf &gt; /path/to/supervisord.conf</div></pre></td></tr></table></figure></p>
 <p>官方推荐是将其写入 <code>/etc/supervisord.conf</code> 文件，事实上更好的方式是将其放在自定义的目录中，然后在启动 <code>supervisord</code> 命令的时候使用 <code>-c</code> 参数指定配置文件的位置，这样能够更加明确当前 <code>supervisord</code> 所使用的配置信息。</p>
 <p>关于 <code>supervisord.conf</code> 的配置项含义在样例文件中非常详细，其中比较关键的主要有：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[unix_http_server]</span><br><span class="line">file=/tmp/supervisor.sock</span><br><span class="line">...</span><br><span class="line">[supervisord]</span><br><span class="line">logfile=/tmp/supervisord.log</span><br><span class="line">pidfile=/tmp/supervisord.pid</span><br><span class="line">...</span><br><span class="line">[include]</span><br><span class="line">files= path/to.directory/*.conf</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[unix_http_server]</div><div class="line">file=/tmp/supervisor.sock</div><div class="line">...</div><div class="line">[supervisord]</div><div class="line">logfile=/tmp/supervisord.log</div><div class="line">pidfile=/tmp/supervisord.pid</div><div class="line">...</div><div class="line">[include]</div><div class="line">files= path/to.directory/*.conf</div><div class="line">...</div></pre></td></tr></table></figure>
 <p>其中 <code>[unix_http_server]</code> 模块的 <code>/tmp/supervisor.sock</code> 是配置 UNIX Socket 文件路径，使用 <code>supervisorctl</code> 客户端连接时会使用到。</p>
 <p>而 <code>[supervisord]</code> 模块的 <code>logfile</code> 和 <code>pidfile</code> 是 Supervisor 服务端进程的日志文件路径及进程对应的 PID 文件，PID 文件通常会用于向进程发送信号。</p>
 <p>若开启 <code>include</code> 模块配置，可以指定子配置文件，通常在实际使用中会每一个将使用 <code>Supervisor</code> 管理的项目会对应拥有一个 <code>[project-name].conf</code> 配置文件。<br>（这与 nginx 下为每个站点单独创建一个 <code>.conf</code> 配置文件很类似）。</p>
-<p>项目对应的 <code>[project-name].conf</code> 文件内容主要为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[program:&#123;project-name&#125;]</span><br><span class="line">user=root #进程运行的用户身份</span><br><span class="line">command=/home/username/project/bin/xxx # 执行的命令</span><br><span class="line">stderr_logfile=/path/to/log1 # 标准输出日志文件路径</span><br><span class="line">stdout_logfile=/path/to/log2 # 错误输出日志文件路径</span><br><span class="line">directory=/path/to/project # 项目所在目录路径</span><br><span class="line">autostart=true # 是否自动启动  </span><br><span class="line">autorestart=true # 是否自动重启</span><br></pre></td></tr></table></figure></p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>启动 Supervisor 服务端：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">supvervisord -c conf.d</span><br></pre></td></tr></table></figure></p>
+<p>项目对应的 <code>[project-name].conf</code> 文件内容主要为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[program:&#123;project-name&#125;]</div><div class="line">user=root #进程运行的用户身份</div><div class="line">command=/home/username/project/bin/xxx # 执行的命令</div><div class="line">stderr_logfile=/path/to/log1 # 标准输出日志文件路径</div><div class="line">stdout_logfile=/path/to/log2 # 错误输出日志文件路径</div><div class="line">directory=/path/to/project # 项目所在目录路径</div><div class="line">autostart=true # 是否自动启动  </div><div class="line">autorestart=true # 是否自动重启</div></pre></td></tr></table></figure></p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>启动 Supervisor 服务端：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">supvervisord -c conf.d</div></pre></td></tr></table></figure></p>
 <p>这句命令从执行效果上看会生成三个东西：</p>
 <ul>
 <li>1）会在对应路径生成 <code>supervisor.sock</code> 文件；</li>
 <li>2）会在对应路径生成 <code>supervisord.log</code> 文件，保存当前 <code>supervisord</code> 进程的配置信息；</li>
 <li>3）会在对应路径生成 <code>supvervisord.pid</code> 文件，保存当前 <code>supervisord</code> 进程的ID。</li>
 </ul>
-<p>如果需要关闭刚刚启动的 <code>supervisord</code> 进程，可以使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kill -s SIGQUIT [supervisord_pid]</span><br></pre></td></tr></table></figure></p>
+<p>如果需要关闭刚刚启动的 <code>supervisord</code> 进程，可以使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kill -s SIGQUIT [supervisord_pid]</div></pre></td></tr></table></figure></p>
 <p>关闭后，对应上述三个文件中的 <code>supervisor.sock</code> 和 <code>supervisord.pid</code> 文件会消失，只保留日志文件。</p>
 <h2 id="使用客户端控制"><a href="#使用客户端控制" class="headerlink" title="使用客户端控制"></a>使用客户端控制</h2><p><code>supervisorctl</code> 是 <code>supervisord</code> 的命令行客户端工具，可以使用 <code>supervisorctl</code> 对 <code>supervisord</code> 进行相关控制。</p>
-<p>可以直接进入客户端命令行程序（类似于 <code>MySQL</code> 命令行客户端）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">supervisorctl -c [config_file]</span><br></pre></td></tr></table></figure></p>
+<p>可以直接进入客户端命令行程序（类似于 <code>MySQL</code> 命令行客户端）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">supervisorctl -c [config_file]</div></pre></td></tr></table></figure></p>
 <p>注意要指定与启动 <code>supervisor</code> 进程相同的配置文件，否则会抛出错误（因为它找不着服务端无法连接上）。</p>
-<p>在命令行客户端中可以执行各类命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">status # 查看当前状态，会显示出控制的所有子进程</span><br><span class="line">pid # 查看对应 supervisord 进程的进程ID</span><br><span class="line">reload # 重启 supervisord 进程</span><br><span class="line">start &lt;name&gt; # 启动某个进程</span><br><span class="line">stop &lt;name&gt; # 关闭某个进程</span><br></pre></td></tr></table></figure></p>
-<p>当然也可以不进入命令行客户端直接操作，比如以下命令会直接显示当前状态：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">supervisorctl -c [config-file] status</span><br></pre></td></tr></table></figure></p>
+<p>在命令行客户端中可以执行各类命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">status # 查看当前状态，会显示出控制的所有子进程</div><div class="line">pid # 查看对应 supervisord 进程的进程ID</div><div class="line">reload # 重启 supervisord 进程</div><div class="line">start &lt;name&gt; # 启动某个进程</div><div class="line">stop &lt;name&gt; # 关闭某个进程</div></pre></td></tr></table></figure></p>
+<p>当然也可以不进入命令行客户端直接操作，比如以下命令会直接显示当前状态：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">supervisorctl -c [config-file] status</div></pre></td></tr></table></figure></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Supervisor 是一个监控子进程的程序，使用它可以监控一系列子进程，每个子进程可以用一个 <code>.conf</code> 文件进行配置。使用 <code>supervisord</code> 可以启动服务端程序，使用 <code>supervisorctl</code> 可以启动客户端对 <code>supervisord</code> 进行相关控制操作。</p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://supervisord.org/introduction.html" target="_blank" rel="external">http://supervisord.org/introduction.html</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/12/16/初识Supervisor/" data-id="ckewl1zha00kq10sh85zs0u9p" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/12/16/初识Supervisor/" data-id="ckf44v6hn00e8hh8tok9ddiua" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/【Supervisor-Linux/">【Supervisor, Linux]</a></li></ul>
@@ -208,6 +208,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -221,10 +225,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2020/07/02/Element-UI针对文件上传添加表单校验/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="背景在使用 Element-UI 绘制前端页面时，通常会使用到表单校验的功能，能够快速地针对用户输入的信息进行自定义规则的校验及错误提示。 不过查看 ElementUI官网 可以发现，在表单检查的示例中并没有关于文件上传类型的示例代码。事实上，如果在表单中使用 文件上传组件 ，会发现即使是最基础的 required 校验规则也会出问题。 如果这个表单被赋予了 required 规则（即必须填写），">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.873Z">
+<meta property="og:updated_time" content="2020-07-02T15:32:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Element-UI针对文件上传添加表单校验">
 <meta name="twitter:description" content="背景在使用 Element-UI 绘制前端页面时，通常会使用到表单校验的功能，能够快速地针对用户输入的信息进行自定义规则的校验及错误提示。 不过查看 ElementUI官网 可以发现，在表单检查的示例中并没有关于文件上传类型的示例代码。事实上，如果在表单中使用 文件上传组件 ，会发现即使是最基础的 required 校验规则也会出问题。 如果这个表单被赋予了 required 规则（即必须填写），">
@@ -99,15 +99,15 @@
 <p>如果这个表单被赋予了 <code>required</code> 规则（即必须填写），则会出现相关的错误提示，并且当用户上传文件后，这个提示依然不会消失。<br>初步分析是 ElementUI 框架自身的限制，没有处理这种情况。   </p>
 <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>如果在表单中需要有文件上传，且又希望用到表单校验的功能，要怎么办呢？<br>在网上搜索相关的内容，可以找到若干篇相似的回答，大概的含义是，需要在文件上传组件的 <code>on-success</code> 钩子方法中调用 <code>this.$refs.xxx.clearValidate()</code> 方法，来实现上传文件后清除表单错误提示信息的功能。</p>
 <p>这些解决方法都存在一个问题，就是如果用户上传了文件又把它移除了，则校验信息回不来了。  </p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>因此，如果希望实现简单的有/无校验，需要在 <code>on-success</code> 和 <code>on-remove</code> 方法中同步添加逻辑。<br>对于文件上传组件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;el-upload</span><br><span class="line">   ...</span><br><span class="line">   :on-success=&quot;handleSuccess&quot;</span><br><span class="line">   :on-remove=&quot;handleRemove&quot;</span><br><span class="line">   ...</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></p>
-<p>在两个方法中添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">handleSuccess() &#123;</span><br><span class="line">    const refKey = ...;</span><br><span class="line">    if(this.$refs &amp;&amp; this.refs[refKey] &amp;&amp; this.refs[refKey][0])&#123;</span><br><span class="line">         this.$refs[refKey][0].clearValidate();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">handleRemove() &#123;</span><br><span class="line">    const refKey = ...;</span><br><span class="line">    if(this.$refs &amp;&amp; this.refs[refKey] &amp;&amp; this.refs[refKey][0])&#123;</span><br><span class="line">         this.$refs[refKey][0].validate();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>因此，如果希望实现简单的有/无校验，需要在 <code>on-success</code> 和 <code>on-remove</code> 方法中同步添加逻辑。<br>对于文件上传组件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;el-upload</div><div class="line">   ...</div><div class="line">   :on-success=&quot;handleSuccess&quot;</div><div class="line">   :on-remove=&quot;handleRemove&quot;</div><div class="line">   ...</div><div class="line">&gt;</div></pre></td></tr></table></figure></p>
+<p>在两个方法中添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">handleSuccess() &#123;</div><div class="line">    const refKey = ...;</div><div class="line">    if(this.$refs &amp;&amp; this.refs[refKey] &amp;&amp; this.refs[refKey][0])&#123;</div><div class="line">         this.$refs[refKey][0].clearValidate();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">handleRemove() &#123;</div><div class="line">    const refKey = ...;</div><div class="line">    if(this.$refs &amp;&amp; this.refs[refKey] &amp;&amp; this.refs[refKey][0])&#123;</div><div class="line">         this.$refs[refKey][0].validate();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>这样可以实现在上传文件后错误提示消息，在移除文件后又会恢复错误信息。<br>这种方法依然有局限性，仅限于处理单个文件上传的场景，对于允许上传文件列表的情况又会有新的bug。</p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://blog.csdn.net/abcde158308/article/details/80578909" target="_blank" rel="external">https://blog.csdn.net/abcde158308/article/details/80578909</a><br><a href="https://juejin.im/post/5d5de2546fb9a06b0703c369" target="_blank" rel="external">https://juejin.im/post/5d5de2546fb9a06b0703c369</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/02/Element-UI针对文件上传添加表单校验/" data-id="ckewl1zb2000z10shx2v1w7s9" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/02/Element-UI针对文件上传添加表单校验/" data-id="ckf44v6b00015hh8tz6sdl2xn" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -188,6 +188,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -201,10 +205,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

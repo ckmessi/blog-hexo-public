@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2018/09/17/Linux用户免密码sudo执行命令/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="如果希望远程从服务器上下载文件，并删除相关文件，主要步骤可能如下：  ssh远程到服务器执行zip命令 将zip文件下载到本地 比对服务器zip文件和本地zip文件的md5值是否一致，确保下载文件完整性 删除服务器上的相关文件  其中最后一步，由于待删除的文件可能不属于当前用户，可能需要使用 sudo 命令才可以删除。 然而远程执行 sudo 命令时，如果要求输入密码会比较麻烦，因此需要有一种免密">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.964Z">
+<meta property="og:updated_time" content="2018-09-17T10:56:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux用户免密码sudo执行命令">
 <meta name="twitter:description" content="如果希望远程从服务器上下载文件，并删除相关文件，主要步骤可能如下：  ssh远程到服务器执行zip命令 将zip文件下载到本地 比对服务器zip文件和本地zip文件的md5值是否一致，确保下载文件完整性 删除服务器上的相关文件  其中最后一步，由于待删除的文件可能不属于当前用户，可能需要使用 sudo 命令才可以删除。 然而远程执行 sudo 命令时，如果要求输入密码会比较麻烦，因此需要有一种免密">
@@ -103,8 +103,8 @@
 </ul>
 <p>其中最后一步，由于待删除的文件可能不属于当前用户，可能需要使用 <code>sudo</code> 命令才可以删除。</p>
 <p>然而远程执行 <code>sudo</code> 命令时，如果要求输入密码会比较麻烦，因此需要有一种免密码 <code>sudo</code> 执行命令的方式。</p>
-<p>通常我们赋予某位用户 <code>sudo</code> 权限时，是使用root用户在 <code>/etc/sudoers</code> 文件中添加一行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[user_name] ALL=(ALL:ALL) ALL</span><br></pre></td></tr></table></figure></p>
-<p>如果希望某位用户执行所有 <code>sudo</code> 命令时，都能够免密码，则方法是添加 <code>NOPASSWD:</code> 修饰：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[user_name] ALL=(ALL:ALL) NOPASSWD: ALL</span><br></pre></td></tr></table></figure></p>
+<p>通常我们赋予某位用户 <code>sudo</code> 权限时，是使用root用户在 <code>/etc/sudoers</code> 文件中添加一行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[user_name] ALL=(ALL:ALL) ALL</div></pre></td></tr></table></figure></p>
+<p>如果希望某位用户执行所有 <code>sudo</code> 命令时，都能够免密码，则方法是添加 <code>NOPASSWD:</code> 修饰：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[user_name] ALL=(ALL:ALL) NOPASSWD: ALL</div></pre></td></tr></table></figure></p>
 <p>事实上，上述这一行配置中，每一个元素的含义是：</p>
 <ul>
 <li>第一个 <code>[user_name]</code> 指代适用对象，可以写用户名称，也可以写组名称（组名称用 <code>%</code> 前缀开始）；</li>
@@ -113,13 +113,13 @@
 <li>关于 <code>NOPASSWD:</code> 修饰符的作用是免密输入；</li>
 <li>最后一个 <code>ALL</code> 的含义是执行的命令，如果是 <code>ALL</code> 则是所有命令，如果希望有限制可以写成特定命令。</li>
 </ul>
-<p>所以，如果希望使用户能够执行某些命令时免密，可以修改最后一栏的参数为对应命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user_name ALL=(ALL:ALL) NOPASSWORD: /path/to/command/cmd.sh</span><br></pre></td></tr></table></figure></p>
+<p>所以，如果希望使用户能够执行某些命令时免密，可以修改最后一栏的参数为对应命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">user_name ALL=(ALL:ALL) NOPASSWORD: /path/to/command/cmd.sh</div></pre></td></tr></table></figure></p>
 <p>这样用户在执行 <code>sudo ./path/to/command/cmd.sh</code> 命令时，可以免密码；而执行其它 <code>sudo [command]</code> 时，依然需要输入密码。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/17/Linux用户免密码sudo执行命令/" data-id="ckewl1zcw006310shhkw9llkw" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/09/17/Linux用户免密码sudo执行命令/" data-id="ckf44v6dn005nhh8t5hjjkhdc" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li></ul>
@@ -200,6 +200,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -213,10 +217,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

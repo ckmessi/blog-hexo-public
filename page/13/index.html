@@ -68,6 +68,68 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-使用Element-UI组件Pagination遇到的一个坑" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/" class="article-date">
+  <time datetime="2018-06-27T12:20:00.000Z" itemprop="datePublished">2018-06-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/">使用Element-UI组件Pagination遇到的一个坑</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近在使用 <a href="http://element.eleme.io/#/zh-CN/component/pagination" target="_blank" rel="external">Elment UI Pagination</a> 时遇到一个问题。</p>
+<h2 id="业务逻辑"><a href="#业务逻辑" class="headerlink" title="业务逻辑"></a>业务逻辑</h2><p>通常使用 <code>ElPagination</code> 是结合表格进行使用的，即表格内的数据为分页数据，当用户点击不同分页按钮时，对应获取特定页的数据，加载到表格中。</p>
+<p>为了实现这个逻辑，采用的方案是使用变量 <code>current_page</code> 保存当前 <code>Vue</code> 页面所在的页数，并实现以下逻辑：</p>
+<ul>
+<li>在组件 <code>ElPagination</code> 的 <code>prop</code> 定义中，设置 <code>:current-page=current_page</code>，即将分页器的当前页码绑定为本地变量 <code>current_page</code> 的值。</li>
+<li>初始进入页面时，用 <code>路由参数值</code> 初始化 <code>current_page</code> 的值，并获取数据；</li>
+<li>点击分页按钮切换页面时，触发事件响应 <code>@current-change</code> 的回调函数 ，将 <code>current_page</code> 设置为对应的值，并修改<code>路由参数值</code> ，并获取数据；</li>
+<li>获取数据的逻辑：获取<code>路由参数值</code> ，并以此调用API获取数据。</li>
+</ul>
+<p>之所以每次 <code>current_page</code> 的值发生变化，需要同时修改 <code>路由参数对应值</code> ，是希望将这个状态变化信息添加到路由参数中，反应在页面URL里。这样当页面发生跳转，执行返回时，能够保留此前的页面状态。</p>
+<p>举例而言，操作如下：</p>
+<ol>
+<li>打开第 <code>1</code> 页，此时路由参数中没有 <code>current_page</code> 值，默认变量 <code>current_page</code> 值为 <code>1</code> ，获取第 <code>1</code> 页数据，组件 <code>ElPagination</code> 中 <code>prop</code> 的 <code>currentPage</code> 值为 <code>1</code> ；</li>
+<li>点击分页按钮切换到第 <code>2</code> 页，此时触发事件响应 <code>@current-change</code> 的回调函数 ，将 <code>current_page</code> 设置为 <code>2</code> ，并修改<code>路由参数值</code>，获取数据时获取到第 <code>2</code> 页数据，组件 <code>ElPagination</code> 中 <code>prop</code> 的 <code>currentPage</code> 值为 <code>2</code> ；</li>
+<li>点击页面中某个按钮进入详情页；</li>
+<li>点击返回，此时URL回到第2步的状态，保留了<code>路由参数值</code>为 <code>2</code> ，获取数据，获取第 <code>2</code> 页数据。</li>
+</ol>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>然而，这里问题出现了，尽管获取到的第 <code>2</code> 页数据，但组件 <code>ElPagination</code> 却停留在第 <code>1</code> 页的状态。<br>仔细查看发现，是它的子组件 <code>ElPager</code>的 <code>prop</code> 中的 <code>currentPage</code> 还停留在 <code>1</code> ，为什么会这样呢？</p>
+<p>排查了半天，发现终极原因是组件 <code>ElPagination</code> 在更新时，会自动修改这个值，导致我们通过<code>路由参数值</code>设置的 <code>current_page</code> 值被覆盖了。</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>最后发现罪魁祸首是因为组件 <code>ElPagination</code> 的其中一个 <code>prop</code> 项 <code>total</code> 影响的。<br>组件 <code>ElPagination</code> 有一个逻辑，当 <code>total</code> 的值小于 <code>page-size</code> 值时，页码属性 <code>current-page</code> 会强行重置为 <code>1</code> 。<br>因此，解决方案是使用<code>路由参数值</code>初始化 <code>current_page</code> 的值时，要同时设置 <code>total</code> 的值为 <code>page-size * current_page</code> 这样能够使 <code>current-page</code> 属性不会被重置。<br>而获取数据完成后，自然会获取到准确的 <code>total</code> 值，此后不会再受到影响。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/06/27/使用Element-UI组件Pagination遇到的一个坑/" data-id="ckf44v6gc00b3hh8t5nqwmncx" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-一个简单的中国大陆身份证号码验证工具" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2018/06/11/一个简单的中国大陆身份证号码验证工具/" class="article-date">
@@ -111,8 +173,8 @@
 <h2 id="GitHub项目"><a href="#GitHub项目" class="headerlink" title="GitHub项目"></a>GitHub项目</h2><p>在项目中，有时候需要对用户的身份证号进行验证，或根据身份证获取其相关信息。<br>这时有一些开源库可以帮助我们完成这个操作。</p>
 <p>首先介绍一个项目：<a href="https://github.com/cn/GB2260" target="_blank" rel="external">https://github.com/cn/GB2260</a><br>这个项目包含了中华人民共和国国家标准 GB/T 2260 行政区划代码，可以依据这些数据构建自己的项目数据库。<br>这套数据对应不同语言的接口包括Python、JavaScript、Ruby、Java、PHP、Go等主流语言。</p>
 <p>另外还有一个专门针对身份证号获取信息的项目：<a href="https://github.com/ofcold/identity-card" target="_blank" rel="external">https://github.com/ofcold/identity-card</a></p>
-<p>在Laravel项目中，使用<code>composer</code>进行安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require ofcold/identity-card</span><br></pre></td></tr></table></figure></p>
-<p>通过<code>make</code>方法构建一个身份证号对象后，可以调用API获取信息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$idCard = Ofcold\IdentityCard\IdentityCard::make(&apos;320106198310290811&apos;, &apos;en&apos;);</span><br><span class="line">// Use locale, Current supported zh-cn,en</span><br><span class="line">// $idCard = Ofcold\IdentityCard\IdentityCard::make(&apos;320106198310290811&apos;, &apos;zh-cn&apos;);</span><br><span class="line">if ( $idCard === false ) &#123;</span><br><span class="line">    return &apos;您的身份证号码不正确&apos;;</span><br><span class="line">&#125;</span><br><span class="line">$area = $idCard-&gt;getArea();</span><br><span class="line">$gender = $idCard-&gt;getGender();</span><br><span class="line">$birthday = $idCard-&gt;getBirthday();</span><br><span class="line">$age = $idCard-&gt;getAge();</span><br><span class="line">$constellation = $idCard-&gt;getConstellation();</span><br></pre></td></tr></table></figure></p>
+<p>在Laravel项目中，使用<code>composer</code>进行安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer require ofcold/identity-card</div></pre></td></tr></table></figure></p>
+<p>通过<code>make</code>方法构建一个身份证号对象后，可以调用API获取信息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$idCard = Ofcold\IdentityCard\IdentityCard::make(&apos;320106198310290811&apos;, &apos;en&apos;);</div><div class="line">// Use locale, Current supported zh-cn,en</div><div class="line">// $idCard = Ofcold\IdentityCard\IdentityCard::make(&apos;320106198310290811&apos;, &apos;zh-cn&apos;);</div><div class="line">if ( $idCard === false ) &#123;</div><div class="line">    return &apos;您的身份证号码不正确&apos;;</div><div class="line">&#125;</div><div class="line">$area = $idCard-&gt;getArea();</div><div class="line">$gender = $idCard-&gt;getGender();</div><div class="line">$birthday = $idCard-&gt;getBirthday();</div><div class="line">$age = $idCard-&gt;getAge();</div><div class="line">$constellation = $idCard-&gt;getConstellation();</div></pre></td></tr></table></figure></p>
 <p>对应可以使用的API有：</p>
 <ul>
 <li>getArea():string 获取地区</li>
@@ -134,7 +196,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/06/11/一个简单的中国大陆身份证号码验证工具/" data-id="ckewl1ze700ap10sh477yqa92" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/06/11/一个简单的中国大陆身份证号码验证工具/" data-id="ckf44v6g300azhh8ts0784fto" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -172,17 +234,17 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在使用<code>Laravel</code>的<code>migration</code>特性时，如果选择单独给某个数据库表添加一列，需要在<code>migration</code>脚本的<code>up</code>函数中填写：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Schema::table(&apos;table_name&apos;, function (Blueprint $table) &#123;</span><br><span class="line">    $table-&gt;string(&apos;column_name&apos;)-&gt;nullable()-&gt;comment(&apos;&apos;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<p>对应的，<code>down</code>函数中需要设置对应的<code>dropColumn</code>操作：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Schema::table(&apos;table_name&apos;, function (Blueprint $table) &#123;</span><br><span class="line">    $table-&gt;dropColumn(&apos;column_name&apos;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<p>在使用<code>php artisan migrate:rollback</code>命令时，如果使用的数据库是<code>mysql</code>，没有问题；但如果使用的数据库是<code>sqlite</code>，则有可能报错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error: Class &apos;Doctrine\DBAL\Driver\PDOSqlite\Driver&apos; not found</span><br></pre></td></tr></table></figure></p>
-<p>经过查找，可知这是缺少了一个依赖包，在移除列功能的过程中需要该依赖包。<br>使用命令安装依赖包<code>doctrine/dbal</code>即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require doctrine/dbal</span><br></pre></td></tr></table></figure></p>
+        <p>在使用<code>Laravel</code>的<code>migration</code>特性时，如果选择单独给某个数据库表添加一列，需要在<code>migration</code>脚本的<code>up</code>函数中填写：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Schema::table(&apos;table_name&apos;, function (Blueprint $table) &#123;</div><div class="line">    $table-&gt;string(&apos;column_name&apos;)-&gt;nullable()-&gt;comment(&apos;&apos;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>对应的，<code>down</code>函数中需要设置对应的<code>dropColumn</code>操作：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Schema::table(&apos;table_name&apos;, function (Blueprint $table) &#123;</div><div class="line">    $table-&gt;dropColumn(&apos;column_name&apos;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>在使用<code>php artisan migrate:rollback</code>命令时，如果使用的数据库是<code>mysql</code>，没有问题；但如果使用的数据库是<code>sqlite</code>，则有可能报错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Error: Class &apos;Doctrine\DBAL\Driver\PDOSqlite\Driver&apos; not found</div></pre></td></tr></table></figure></p>
+<p>经过查找，可知这是缺少了一个依赖包，在移除列功能的过程中需要该依赖包。<br>使用命令安装依赖包<code>doctrine/dbal</code>即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer require doctrine/dbal</div></pre></td></tr></table></figure></p>
 <p>问题解决。</p>
 <p>参考链接：<a href="https://github.com/rappasoft/laravel-5-boilerplate/issues/785" target="_blank" rel="external">https://github.com/rappasoft/laravel-5-boilerplate/issues/785</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/31/Laravel-migration添加column使用Sqlite可能遇到的错误/" data-id="ckewl1zcb003s10shy558gic9" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/05/31/Laravel-migration添加column使用Sqlite可能遇到的错误/" data-id="ckf44v6cw003zhh8tbnehkr9m" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -221,7 +283,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>在使用Git获取仓库中的项目时，通常可以选择用SSH或HTTP方式。<br>两种克隆方式对应的URL也不一样。以Github为例，选择Clone with SSH时，对应的URL为：</p>
-<p><a href="mailto:git@github.com" target="_blank" rel="external">git@github.com</a>:ckmessi/ckmessi.github.io.git<br>而选择Clone with HTTPS时，对应的URL为：</p>
+<p>git@github.com:ckmessi/ckmessi.github.io.git<br>而选择Clone with HTTPS时，对应的URL为：</p>
 <p><a href="https://github.com/ckmessi/ckmessi.github.io.git" target="_blank" rel="external">https://github.com/ckmessi/ckmessi.github.io.git</a><br>两种方式的区别在于：</p>
 <p>使用SSH方式时，需要预先配置ssh key相关信息，克隆过程实质上建立了一个SSH连接（就像远程免密登录服务器一样）；如果在配置ssh key时没有设置密码，则每次push时不需要验证密码。<br>使用HTTP方式时，可以不经任何验证克隆该项目的数据，但在每次push的时候，都需要验证用户名和密码。<br>类似于SSH是一项永久性操作，而HTTP只是快速构建临时可读的方案。</p>
 <p>因此，在实际工作中，如果要频繁地获取并提交修改，应该使用SSH方式；如果只是将项目克隆下来随意浏览，不需要提交修改操作，则使用HTTP更方便。</p>
@@ -229,7 +291,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/" data-id="ckewl1zbf001r10shgiz23js1" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/" data-id="ckf44v6bh001thh8t0w8gjn0h" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -272,17 +334,17 @@
 <blockquote>
 <p>Guzzle can maintain a cookie session for you if instructed using the cookies request option. When sending a request, the cookies option must be set to an instance of GuzzleHttp\Cookie\CookieJarInterface.</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// Use a specific cookie jar</span><br><span class="line">$jar = new \GuzzleHttp\Cookie\CookieJar;</span><br><span class="line">$r = $client-&gt;request(&apos;GET&apos;, &apos;http://httpbin.org/cookies&apos;, [</span><br><span class="line">    &apos;cookies&apos; =&gt; $jar</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// Use a specific cookie jar</div><div class="line">$jar = new \GuzzleHttp\Cookie\CookieJar;</div><div class="line">$r = $client-&gt;request(&apos;GET&apos;, &apos;http://httpbin.org/cookies&apos;, [</div><div class="line">    &apos;cookies&apos; =&gt; $jar</div><div class="line">]);</div></pre></td></tr></table></figure>
 <blockquote>
 <p>You can set cookies to true in a client constructor if you would like to use a shared cookie jar for all requests.</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// Use a shared client cookie jar</span><br><span class="line">$client = new \GuzzleHttp\Client([&apos;cookies&apos; =&gt; true]);</span><br><span class="line">$r = $client-&gt;request(&apos;GET&apos;, &apos;http://httpbin.org/cookies&apos;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// Use a shared client cookie jar</div><div class="line">$client = new \GuzzleHttp\Client([&apos;cookies&apos; =&gt; true]);</div><div class="line">$r = $client-&gt;request(&apos;GET&apos;, &apos;http://httpbin.org/cookies&apos;);</div></pre></td></tr></table></figure>
 <p>这样，通过携带 <code>Cookies</code> 的方式，可以解决 <code>Guzzle</code> 调用API接口需要登录状态的问题。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/" data-id="ckewl1zec00b010shz6ac5p70" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/" data-id="ckf44v6gf00bahh8tvs2n851u" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -321,19 +383,19 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>在工作中遇到需要添加定时任务的问题， Laravel 框架提供了特性 <a href="https://laravel.com/docs/5.5/scheduling" target="_blank" rel="external">Task Schedule</a> 。</p>
-<p>参考文档可知，其实 Laravel 的 <code>Scheduler</code> 是基于系统定时任务的，因此需要添加如下代码至系统的定时任务列表中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* * * * * php /path-to-your-project/artisan schedule:run &gt;&gt; /dev/null 2&gt;&amp;1</span><br></pre></td></tr></table></figure></p>
+<p>参考文档可知，其实 Laravel 的 <code>Scheduler</code> 是基于系统定时任务的，因此需要添加如下代码至系统的定时任务列表中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">* * * * * php /path-to-your-project/artisan schedule:run &gt;&gt; /dev/null 2&gt;&amp;1</div></pre></td></tr></table></figure></p>
 <p>在 Linux 操作系统中，通常可以通过 <code>crontab -e</code> 命令编辑定时任务列表，编辑完成后，使用 <code>crontab -l</code> 查看当前存在的定时任务。</p>
 <p>然而在实现过程中遇到了一些问题，设定了相关 <code>crontab</code> 任务，却貌似没有真正执行。</p>
-<p>将上述代码中的 <code>&gt;&gt; /dev/null 2&gt;&amp;1</code> 替换为重定向到错误日志文件，可以看到内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Parse error: parse error in /path-to-your-projectl/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php on line 233</span><br></pre></td></tr></table></figure></p>
-<p>查看对应文件的 <code>233</code> 行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if (is_string($arguments[0])) &#123;</span><br><span class="line">    return app(&apos;cache&apos;)-&gt;get($arguments[0], $arguments[1] ?? null);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>将上述代码中的 <code>&gt;&gt; /dev/null 2&gt;&amp;1</code> 替换为重定向到错误日志文件，可以看到内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Parse error: parse error in /path-to-your-projectl/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php on line 233</div></pre></td></tr></table></figure></p>
+<p>查看对应文件的 <code>233</code> 行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if (is_string($arguments[0])) &#123;</div><div class="line">    return app(&apos;cache&apos;)-&gt;get($arguments[0], $arguments[1] ?? null);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>大概是因为其中使用了符号 <code>??</code> ，这是 <code>PHP7</code> 的特性，在 <code>PHP5</code> 中是会报错的。</p>
 <p>此时大概定位了问题大概在于PHP的版本。</p>
-<p>使用 <code>which php</code> 可以查看当前可执行文件 <code>php</code> 命令的真实指向：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/bin/php</span><br></pre></td></tr></table></figure></p>
-<p>使用 <code>where php</code> 可以查看所有所有命令 <code>php</code> 的内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/bin/php</span><br><span class="line">/usr/bin/php</span><br></pre></td></tr></table></figure></p>
-<p>使用 <code>whereis php</code> 可以查看命令 <code>php</code>的指向是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usr/bin/php</span><br></pre></td></tr></table></figure></p>
+<p>使用 <code>which php</code> 可以查看当前可执行文件 <code>php</code> 命令的真实指向：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/usr/local/bin/php</div></pre></td></tr></table></figure></p>
+<p>使用 <code>where php</code> 可以查看所有所有命令 <code>php</code> 的内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/usr/local/bin/php</div><div class="line">/usr/bin/php</div></pre></td></tr></table></figure></p>
+<p>使用 <code>whereis php</code> 可以查看命令 <code>php</code>的指向是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">usr/bin/php</div></pre></td></tr></table></figure></p>
 <p>可以看出，系统中的 php 版本是很混乱的。</p>
-<p>使用命令 <code>ls -la /usr/local/bin/php</code> 可得：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lrwxr-xr-x  1 admin  admin  33 11 22 20:32 /usr/local/bin/php -&gt; ../Cellar/php70/7.0.25_17/bin/php</span><br></pre></td></tr></table></figure></p>
-<p>使用命令 <code>ls -la /usr/bin/php</code> 可得：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-rwxr-xr-x  1 root  wheel  10577264  7  9  2016 /usr/bin/php</span><br></pre></td></tr></table></figure></p>
+<p>使用命令 <code>ls -la /usr/local/bin/php</code> 可得：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lrwxr-xr-x  1 admin  admin  33 11 22 20:32 /usr/local/bin/php -&gt; ../Cellar/php70/7.0.25_17/bin/php</div></pre></td></tr></table></figure></p>
+<p>使用命令 <code>ls -la /usr/bin/php</code> 可得：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-rwxr-xr-x  1 root  wheel  10577264  7  9  2016 /usr/bin/php</div></pre></td></tr></table></figure></p>
 <p>不一样。</p>
 <p>说明 <code>crontab</code> 调用的可能是 <code>/usr/bin/php</code> 命令。</p>
 <p>修复方式是，将定时任务脚本中的命令 <code>php</code> 替换为绝对路径 <code>/usr/local/bin/php</code> ，就可以正常调用了。</p>
@@ -341,7 +403,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/04/24/Crontab中可能遇到的php版本问题/" data-id="ckewl1zax000o10shi31bus8l" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/04/24/Crontab中可能遇到的php版本问题/" data-id="ckf44v6av0010hh8tyoxcy0dt" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -380,14 +442,14 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>众所周知，Python有许多机器学习的插件，如<code>scikit-learn</code>。而在PHP中，如果希望完成一些距离的计算，也有一些现成的库，介绍一个机器学习扩展库<a href="https://github.com/php-ai/php-ml" target="_blank" rel="external">php-ml</a>。</p>
-<p>通过composer安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require php-ai/php-ml</span><br></pre></td></tr></table></figure></p>
-<p>然后就可以直接使用各种库函数了，如果要使用欧几里德距离：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use Phpml\Math\Distance\Euclidean;</span><br><span class="line"></span><br><span class="line">$euclidean = new Euclidean();</span><br><span class="line">$euclidean_ids = $euclidean-&gt;distance($array_1, $array_2);</span><br></pre></td></tr></table></figure></p>
+<p>通过composer安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer require php-ai/php-ml</div></pre></td></tr></table></figure></p>
+<p>然后就可以直接使用各种库函数了，如果要使用欧几里德距离：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">use Phpml\Math\Distance\Euclidean;</div><div class="line"></div><div class="line">$euclidean = new Euclidean();</div><div class="line">$euclidean_ids = $euclidean-&gt;distance($array_1, $array_2);</div></pre></td></tr></table></figure></p>
 <p>其它使用方法可以参考官方文档。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/27/PHP使用php-ml完成距离计算/" data-id="ckewl1zdb007t10shqt8uhwtm" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/27/PHP使用php-ml完成距离计算/" data-id="ckf44v6eg007jhh8texn34ul5" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -427,13 +489,13 @@
       
         <p>在PHP中，有一种情况可能由于悬挂引用造成的bug。</p>
 <p>如果希望在遍历过程中操作数组的每个元素，可以在 <a href="http://www.php.net/manual/en/control-structures.foreach.php" target="_blank" rel="external"><code>foreach</code></a> 循环中使用引用。比如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$arr = array(1, 2, 3, 4);</span><br><span class="line">foreach ($arr as &amp;$value) &#123;</span><br><span class="line">    $value = $value * 2;</span><br><span class="line">&#125;</span><br><span class="line">// $arr 变量的值现在是 array(2, 4, 6, 8)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$arr = array(1, 2, 3, 4);</div><div class="line">foreach ($arr as &amp;$value) &#123;</div><div class="line">    $value = $value * 2;</div><div class="line">&#125;</div><div class="line">// $arr 变量的值现在是 array(2, 4, 6, 8)</div></pre></td></tr></table></figure>
 <p>问题在于，如果不小心的话，可能造成一些意料之外的副作用和不良后果。在上述样例的代码执行之后， <code>$value</code> 变量将停留在当前作用域中，保持着对数组最后一个元素的引用。因此，后续有关 <code>$value</code> 变量的操作都可能在不经意间修改了数组最后一个元素的值。</p>
 <p>需要记住 <code>foreach</code> 并没有创建一个全新的作用域。上述样例中的 <code>$value</code> 是在脚本代码顶级作用域的一个 <em>引用</em> 。 在 <code>foreach</code> 的每次迭代时，将设置这个引用指向 <code>$array</code> 数组的下一个元素。当循环结束时， <code>$value</code>依然指向着 <code>$array</code> 的最后一个元素，停留在了作用域中。</p>
 <p>下面是一个可能导致模棱两可、令人费解的 bug 的示例。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$array = [1, 2, 3];</span><br><span class="line">echo implode(&apos;,&apos;, $array), &quot;\n&quot;;</span><br><span class="line"></span><br><span class="line">foreach ($array as &amp;$value) &#123;&#125;    // 通过引用的方式</span><br><span class="line">echo implode(&apos;,&apos;, $array), &quot;\n&quot;;</span><br><span class="line"></span><br><span class="line">foreach ($array as $value) &#123;&#125;     // 通过值访问（拷贝）</span><br><span class="line">echo implode(&apos;,&apos;, $array), &quot;\n&quot;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$array = [1, 2, 3];</div><div class="line">echo implode(&apos;,&apos;, $array), &quot;\n&quot;;</div><div class="line"></div><div class="line">foreach ($array as &amp;$value) &#123;&#125;    // 通过引用的方式</div><div class="line">echo implode(&apos;,&apos;, $array), &quot;\n&quot;;</div><div class="line"></div><div class="line">foreach ($array as $value) &#123;&#125;     // 通过值访问（拷贝）</div><div class="line">echo implode(&apos;,&apos;, $array), &quot;\n&quot;;</div></pre></td></tr></table></figure>
 <p>上述代码将输出以下内容：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1,2,3</span><br><span class="line">1,2,3</span><br><span class="line">1,2,2</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">1,2,3</div><div class="line">1,2,3</div><div class="line">1,2,2</div></pre></td></tr></table></figure>
 <p>没看错，这里并没有拼写错误。最后一行的最后一个元素确实是2，不是3。</p>
 <p>在经历第一个 <code>foreach</code> 循环时， <code>$array</code> 不曾被改变 ，<code>$value</code> 作为一个悬挂的引用被遗留下来，指向了 <code>$array</code> 数组的最后一个元素。（因为这个 <code>foreach</code> 循环通过<em>引用</em>的方式访问 <code>$value</code>）</p>
 <p>结果，当我们经历第二个 <code>foreach</code> 循环时，“奇怪的事情”发生了。由于 <code>$value</code> 现在是通过值访问（即<em>拷贝</em>方式），在循环的每一步， <code>foreach</code> 按顺序<em>拷贝</em> <code>$array</code> 中的每一个元素到 <code>$value</code> 中。因此，以下是第二个 <code>foreach</code> 循环中每一步所发生的事情：</p>
@@ -443,12 +505,12 @@
 <li><em>第3步：</em> 拷贝 <code>$array[2]</code> (这个元素的值现在是”2”) 到 <code>$value</code> （此时依然是 <code>$array[2]</code> 的引用）， 因此现在 <code>$array[2]</code> 依然等于2，而 <code>$array</code> 现在包含的元素是 [1, 2, 2]。</li>
 </ul>
 <p>如果既希望拥有在 <code>foreach</code> 循环中使用引用所带来的便利，又不想承担上述这类问题带来的风险，可以在<code>foreach</code> 循环之后立刻对变量调用 <code>unset()</code> 方法，移除引用。举例而言：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$arr = array(1, 2, 3, 4);</span><br><span class="line">foreach ($arr as &amp;$value) &#123;</span><br><span class="line">    $value = $value * 2;</span><br><span class="line">&#125;</span><br><span class="line">unset($value);   // $value 不再是 $arr[3] 的引用</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$arr = array(1, 2, 3, 4);</div><div class="line">foreach ($arr as &amp;$value) &#123;</div><div class="line">    $value = $value * 2;</div><div class="line">&#125;</div><div class="line">unset($value);   // $value 不再是 $arr[3] 的引用</div></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/26/PHP中警惕悬挂引用可能引起的bug/" data-id="ckewl1zcw007c10sh3hglp25z" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/26/PHP中警惕悬挂引用可能引起的bug/" data-id="ckf44v6ee007ghh8tgp70j3ms" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -489,7 +551,7 @@
         <p>Larvel5.5 默认的404页面比较普通，在实际中可能需要输出个性化的404页面。</p>
 <img src="/blog-hexo/2018/03/24/Laravel个性化404页面/1.png" alt="Laravel5.5的默认404页面" title="Laravel5.5的默认404页面">
 <p>根据<a href="https://laravel.com/docs/5.5/errors#custom-http-error-pages" target="_blank" rel="external">官方文档</a>，可以通过创建一个<code>resources/views/errors/404.blade.php</code>文件，实现自定义的404错误页面。</p>
-<p>查看相关源码，在文件<code>Illuminate\Foundation\Exceptions\Handler.php</code>中，可知其原理如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">protected function renderHttpException(HttpException $e)</span><br><span class="line">   &#123;</span><br><span class="line">       $status = $e-&gt;getStatusCode();</span><br><span class="line"></span><br><span class="line">       $paths = collect(config(&apos;view.paths&apos;));</span><br><span class="line"></span><br><span class="line">       view()-&gt;replaceNamespace(&apos;errors&apos;, $paths-&gt;map(function ($path) &#123;</span><br><span class="line">           return &quot;&#123;$path&#125;/errors&quot;;</span><br><span class="line">       &#125;)-&gt;push(__DIR__.&apos;/views&apos;)-&gt;all());</span><br><span class="line"></span><br><span class="line">       if (view()-&gt;exists($view = &quot;errors::&#123;$status&#125;&quot;)) &#123;</span><br><span class="line">           return response()-&gt;view($view, [&apos;exception&apos; =&gt; $e], $status, $e-&gt;getHeaders());</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       return $this-&gt;convertExceptionToResponse($e);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>查看相关源码，在文件<code>Illuminate\Foundation\Exceptions\Handler.php</code>中，可知其原理如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">protected function renderHttpException(HttpException $e)</div><div class="line">   &#123;</div><div class="line">       $status = $e-&gt;getStatusCode();</div><div class="line"></div><div class="line">       $paths = collect(config(&apos;view.paths&apos;));</div><div class="line"></div><div class="line">       view()-&gt;replaceNamespace(&apos;errors&apos;, $paths-&gt;map(function ($path) &#123;</div><div class="line">           return &quot;&#123;$path&#125;/errors&quot;;</div><div class="line">       &#125;)-&gt;push(__DIR__.&apos;/views&apos;)-&gt;all());</div><div class="line"></div><div class="line">       if (view()-&gt;exists($view = &quot;errors::&#123;$status&#125;&quot;)) &#123;</div><div class="line">           return response()-&gt;view($view, [&apos;exception&apos; =&gt; $e], $status, $e-&gt;getHeaders());</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       return $this-&gt;convertExceptionToResponse($e);</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
 <p>这个方法<code>renderHttpException</code>的功能故名思义是渲染Http请求异常的。<br>其中会先收集<code>view</code>文件夹（这在<code>config/view.php</code>文件中定义）下所有文件集合，默认会在<code>resources/views/errors</code>文件夹下，查找是否有与<code>$status</code>相同的文件名称。若有，则输出这个页面；否则执行默认的异常渲染操作。   </p>
 <p>这就是为什么通过添加<code>resources/views/errors/404.blade.php</code>文件就能自定义404页面的原理。类似的，如果希望自定义503错误页面，则对应添加一个<code>503.blade.php</code>即可。   </p>
 <p>以上。</p>
@@ -497,7 +559,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/24/Laravel个性化404页面/" data-id="ckewl1zce004010shgx3wxiv9" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/24/Laravel个性化404页面/" data-id="ckf44v6d7004ghh8tvq3g13di" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -536,77 +598,22 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>最近工作中遇到需要使用<code>base64_decode()</code>解码加密过的base64字符串的问题，然而这个字符串是在<code>Python</code>语言中使用<code>base64.b64encode</code>方法加密的，在PHP中没有直接对应的解码方式，这时候就需要用到<code>PHP</code>的<code>unpack()</code>函数。</p>
-<p>官方对于<code>unpack()</code>函数的解释是：从二进制字符串对数据进行解包。<br>它的语法为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unpack(format,data)</span><br></pre></td></tr></table></figure></p>
+<p>官方对于<code>unpack()</code>函数的解释是：从二进制字符串对数据进行解包。<br>它的语法为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">unpack(format,data)</div></pre></td></tr></table></figure></p>
 <p>其中<code>format</code>必需，规定在解包数据时所使用的格式；<code>data</code>可选，规定被解包的二进制数据。</p>
 <p>format 参数的可能值：<br>a - NUL-padded string<br>A - SPACE-padded string<br>h - Hex string, low nibble first<br>H - Hex string, high nibble first<br>c - signed char<br>C - unsigned char<br>s - signed short (always 16 bit, machine byte order)<br>S - unsigned short (always 16 bit, machine byte order)<br>n - unsigned short (always 16 bit, big endian byte order)<br>v - unsigned short (always 16 bit, little endian byte order)<br>i - signed integer (machine dependent size and byte order)<br>I - unsigned integer (machine dependent size and byte order)<br>l - signed long (always 32 bit, machine byte order)<br>L - unsigned long (always 32 bit, machine byte order)<br>N - unsigned long (always 32 bit, big endian byte order)<br>V - unsigned long (always 32 bit, little endian byte order)<br>f - float (machine dependent size and representation)<br>d - double (machine dependent size and representation)<br>x - NUL byte<br>X - Back up one byte<br>@ - NUL-fill to absolute position</p>
 <p>有一些基础样例可以参考，摘自PHP官方手册。</p>
-<p>按照<code>char</code>和<code>unsigned short</code>进行解析，并且以<code>chars</code>和<code>int</code>为键保存结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$binarydata = &quot;\x04\x00\xa0\x00&quot;;</span><br><span class="line">$array = unpack(&quot;cchars/nint&quot;, $binarydata);</span><br><span class="line">print_r($array);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure></p>
-<p>结果是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Array</span><br><span class="line">(</span><br><span class="line">    [chars] =&gt; 4</span><br><span class="line">    [int] =&gt; 160</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
-<p>具体使用方案可以根据实际情况进行选择，比如将字符串按照<code>float</code>类型，128维长度数组，进行解析，则代码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$feature_array = unpack(&quot;f128&quot;, $feature_str);</span><br></pre></td></tr></table></figure></p>
-<p>得到的结果为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;1&quot;: -0.037321969866753,</span><br><span class="line">    &quot;2&quot;: -0.12857535481453,</span><br><span class="line">    &quot;3&quot;: 0.09706449508667,</span><br><span class="line">    &quot;4&quot;: 0.049328539520502,</span><br><span class="line">    &quot;5&quot;: 0.039704125374556,</span><br><span class="line">    ...,</span><br><span class="line">    &quot;128&quot;: -0.064088962972164</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>按照<code>char</code>和<code>unsigned short</code>进行解析，并且以<code>chars</code>和<code>int</code>为键保存结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">$binarydata = &quot;\x04\x00\xa0\x00&quot;;</div><div class="line">$array = unpack(&quot;cchars/nint&quot;, $binarydata);</div><div class="line">print_r($array);</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<p>结果是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Array</div><div class="line">(</div><div class="line">    [chars] =&gt; 4</div><div class="line">    [int] =&gt; 160</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p>具体使用方案可以根据实际情况进行选择，比如将字符串按照<code>float</code>类型，128维长度数组，进行解析，则代码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$feature_array = unpack(&quot;f128&quot;, $feature_str);</div></pre></td></tr></table></figure></p>
+<p>得到的结果为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;1&quot;: -0.037321969866753,</div><div class="line">    &quot;2&quot;: -0.12857535481453,</div><div class="line">    &quot;3&quot;: 0.09706449508667,</div><div class="line">    &quot;4&quot;: 0.049328539520502,</div><div class="line">    &quot;5&quot;: 0.039704125374556,</div><div class="line">    ...,</div><div class="line">    &quot;128&quot;: -0.064088962972164</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/" data-id="ckewl1zcw006u10sh6s5slw23" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/" data-id="ckf44v6e80072hh8t1ff11jtu" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Nginx-PHP上传大文件场景需要注意的配置" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" class="article-date">
-  <time datetime="2018-03-08T11:49:12.000Z" itemprop="datePublished">2018-03-08</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/">Nginx+PHP上传大文件场景需要注意的配置</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在使用nginx+php作为后台服务器时，如果遇到需要上传文件的业务逻辑，需要注意两者对文件的限制大小。</p>
-<h2 id="Ngnix配置"><a href="#Ngnix配置" class="headerlink" title="Ngnix配置"></a>Ngnix配置</h2><p>首先，有可能遇到的情况是，前端网页上传文件时报错了；而后台服务器没有接到访问请求。这是由于nginx对客户端的body大小的限制，请求会中断在nginx，无法到达php。默认情况下，上传大文件可能造成错误<code>413 Request Entity Too Large</code>的情况。</p>
-<p>在<code>nginx.conf</code>中，添加一行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">client_max_body_size 20m</span><br></pre></td></tr></table></figure></p>
-<p><code>client_max_body_size</code>的默认值为<code>1m</code>，上述语句表示客户端可以上传的最大body大小为20Mb。</p>
-<p>至于在哪个层级下设置，查找到一篇博客是这样说的：</p>
-<blockquote>
-<p>可以选择在http{ }中设置：client_max_body_size 20m;<br>也可以选择在server{ }中设置：client_max_body_size 20m;<br>还可以选择在location{ }中设置：client_max_body_size 20m;<br>三者到区别是：http{} 中控制着所有nginx收到的请求。而报文大小限制设置在server｛｝中，则控制该server收到的请求报文大小，同理，如果配置在location中，则报文大小限制，只对匹配了location 路由规则的请求生效。</p>
-</blockquote>
-<h2 id="PHP配置"><a href="#PHP配置" class="headerlink" title="PHP配置"></a>PHP配置</h2><p>解决nginx的配置问题后，还有可能在php代码中出现获取不到提交文件的问题。这是由于php对于文件大小也有限制。</p>
-<p>在<code>php.ini</code>中，相关需要考虑的参数在<code>File Uploads</code>区域，有如下几个：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">file_uploads = On</span><br><span class="line">upload_max_filesize = 2M</span><br><span class="line">post_max_size = 8M</span><br></pre></td></tr></table></figure></p>
-<p>其中<code>file_uploads</code>表示开启文件上传，<code>upload_max_filesize</code>限制最大文件大小，<code>post_max_size</code>限制了一次POST请求数据的大小。   </p>
-<p>某篇博客中提，一般来说，设置好上述参数后，在网络正常的情况下，上传小于8M的文件是不成问题的。但如果上传大文件的话，只设置上述还不一定能行的通，因为还有响应时间的限制。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">max_execution_time 600 每个PHP页面运行的最大时间值(秒)，默认30秒 </span><br><span class="line">max_input_time 600 每个PHP页面接收数据所需的最大时间，默认60秒 </span><br><span class="line">memory_limit 8m 每个PHP页面所吃掉的最大内存，默认8M</span><br></pre></td></tr></table></figure></p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://blog.csdn.net/li396864285/article/details/53522828" target="_blank" rel="external">http://blog.csdn.net/li396864285/article/details/53522828</a><br><a href="http://blog.csdn.net/webnoties/article/details/17266651" target="_blank" rel="external">http://blog.csdn.net/webnoties/article/details/17266651</a><br><a href="https://www.jianshu.com/p/9a4a423e1ca6" target="_blank" rel="external">https://www.jianshu.com/p/9a4a423e1ca6</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" data-id="ckewl1zcw006m10shv3nseimn" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
 
     </footer>
   </div>
@@ -672,6 +679,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -685,10 +696,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

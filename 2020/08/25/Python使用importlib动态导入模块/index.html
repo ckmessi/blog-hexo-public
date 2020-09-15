@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2020/08/25/Python使用importlib动态导入模块/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="背景在使用 Python 导入模块的过程中，有时模块的名称和路径不是固定的，是根据配置文件读取获得的。这时候需要使用 importlib 库动态导入模块。 解决方案需要根据配置文件获取的内容包括：  模块文件路径 模块名称 模块内部的类名或方法名  对于 Python 3.5+ 的场景，应该使用：123456import importlib.utilspec = importlib.util.sp">
-<meta property="og:updated_time" content="2020-09-10T08:58:51.826Z">
+<meta property="og:updated_time" content="2020-08-25T15:59:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python使用importlib动态导入模块">
 <meta name="twitter:description" content="背景在使用 Python 导入模块的过程中，有时模块的名称和路径不是固定的，是根据配置文件读取获得的。这时候需要使用 importlib 库动态导入模块。 解决方案需要根据配置文件获取的内容包括：  模块文件路径 模块名称 模块内部的类名或方法名  对于 Python 3.5+ 的场景，应该使用：123456import importlib.utilspec = importlib.util.sp">
@@ -101,9 +101,9 @@
 <li>模块名称</li>
 <li>模块内部的类名或方法名</li>
 </ul>
-<p>对于 Python 3.5+ 的场景，应该使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import importlib.util</span><br><span class="line">spec = importlib.util.spec_from_file_location(&quot;module_name&quot;, &quot;/path/to/module_file.py&quot;)</span><br><span class="line">foo = importlib.util.module_from_spec(spec)</span><br><span class="line">spec.loader.exec_module(foo)</span><br><span class="line"># call module member</span><br><span class="line">foo.MyClass()</span><br></pre></td></tr></table></figure></p>
-<p>如果模块中的方法也是动态的，可以使用 <code>get_attr</code> 方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">params = [1, 2, 3]</span><br><span class="line">method = &quot;myMethod&quot;</span><br><span class="line">getattr(foo, method)(*params)</span><br></pre></td></tr></table></figure></p>
-<p>其效果可以等价于以下常规的编程方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from xxx import moudle_name</span><br><span class="line">module_name.myMethod(*params)</span><br></pre></td></tr></table></figure></p>
+<p>对于 Python 3.5+ 的场景，应该使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">import importlib.util</div><div class="line">spec = importlib.util.spec_from_file_location(&quot;module_name&quot;, &quot;/path/to/module_file.py&quot;)</div><div class="line">foo = importlib.util.module_from_spec(spec)</div><div class="line">spec.loader.exec_module(foo)</div><div class="line"># call module member</div><div class="line">foo.MyClass()</div></pre></td></tr></table></figure></p>
+<p>如果模块中的方法也是动态的，可以使用 <code>get_attr</code> 方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">params = [1, 2, 3]</div><div class="line">method = &quot;myMethod&quot;</div><div class="line">getattr(foo, method)(*params)</div></pre></td></tr></table></figure></p>
+<p>其效果可以等价于以下常规的编程方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">from xxx import moudle_name</div><div class="line">module_name.myMethod(*params)</div></pre></td></tr></table></figure></p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
 <li><a href="https://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path" target="_blank" rel="external">https://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path</a></li>
 <li><a href="https://stackoverflow.com/questions/3190583/python-call-a-function-in-a-module-dynamically" target="_blank" rel="external">https://stackoverflow.com/questions/3190583/python-call-a-function-in-a-module-dynamically</a></li>
@@ -112,7 +112,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/08/25/Python使用importlib动态导入模块/" data-id="ckewl1zdb008310shy61nw2is" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/08/25/Python使用importlib动态导入模块/" data-id="ckf44v6ez008phh8te7q85qei" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -193,6 +193,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -206,10 +210,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2017/10/09/Git-tag的使用/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="基本概念Git Tag故名思义是给Git打标签，可以对某一时间点上的版本打上标签。在发布软件版本的时候，常用于标记某个特定版本的提交，方便查找和管理。 主要命令显示标签git tag 显示所有标签git tag -l 对标签名称进行特定过滤，如git tag -l &amp;#39;v1.4.2.*&amp;#39; 只显示v1.4.2系列的标签 新建标签Git使用的标签有两种类型：轻量级的（lightweigh">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.881Z">
+<meta property="og:updated_time" content="2017-10-09T13:36:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git tag的使用">
 <meta name="twitter:description" content="基本概念Git Tag故名思义是给Git打标签，可以对某一时间点上的版本打上标签。在发布软件版本的时候，常用于标记某个特定版本的提交，方便查找和管理。 主要命令显示标签git tag 显示所有标签git tag -l 对标签名称进行特定过滤，如git tag -l &amp;#39;v1.4.2.*&amp;#39; 只显示v1.4.2系列的标签 新建标签Git使用的标签有两种类型：轻量级的（lightweigh">
@@ -97,24 +97,24 @@
         <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>Git Tag故名思义是给Git打标签，可以对某一时间点上的版本打上标签。<br>在发布软件版本的时候，常用于标记某个特定版本的提交，方便查找和管理。</p>
 <h2 id="主要命令"><a href="#主要命令" class="headerlink" title="主要命令"></a>主要命令</h2><h4 id="显示标签"><a href="#显示标签" class="headerlink" title="显示标签"></a>显示标签</h4><p><code>git tag</code> 显示所有标签<br><code>git tag -l</code> 对标签名称进行特定过滤，如<br><code>git tag -l &#39;v1.4.2.*&#39;</code> 只显示v1.4.2系列的标签</p>
 <h4 id="新建标签"><a href="#新建标签" class="headerlink" title="新建标签"></a>新建标签</h4><p>Git使用的标签有两种类型：轻量级的（lightweight）和含附注的（annotated）。<br>轻量级标签是指向特定提交对象的引用（类似于一个Alias，方便记忆）；含附注标签实际上是存储在仓库中的独立对象，有自身的检验和信息，包含标签名字、电子邮件地址、日期、说明等，同时还允许使用GNU Privacy Guard(GPG)来签署或验证。<br>通常建议使用含附注标签，以便保留相关信息。</p>
-<h6 id="轻量级标签"><a href="#轻量级标签" class="headerlink" title="轻量级标签"></a>轻量级标签</h6><p>轻量级标签实际上就是一个保存着对应提交对象的校验和信息的文件。创建轻量级标签时，不需要相关选项，直接给出标签名答即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag v2.1</span><br></pre></td></tr></table></figure></p>
-<h6 id="含附注标签"><a href="#含附注标签" class="headerlink" title="含附注标签"></a>含附注标签</h6><p>创建含附注标签的方式使用<code>-a</code>选项指定标签名称，并使用<code>-m</code>选项添加附注说明。<br><code>git tag -a [version] -m &#39;[annotation information]&#39;</code>，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag -a v1.2 -m &apos;this version is for publish blablabla&apos;</span><br></pre></td></tr></table></figure></p>
+<h6 id="轻量级标签"><a href="#轻量级标签" class="headerlink" title="轻量级标签"></a>轻量级标签</h6><p>轻量级标签实际上就是一个保存着对应提交对象的校验和信息的文件。创建轻量级标签时，不需要相关选项，直接给出标签名答即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git tag v2.1</div></pre></td></tr></table></figure></p>
+<h6 id="含附注标签"><a href="#含附注标签" class="headerlink" title="含附注标签"></a>含附注标签</h6><p>创建含附注标签的方式使用<code>-a</code>选项指定标签名称，并使用<code>-m</code>选项添加附注说明。<br><code>git tag -a [version] -m &#39;[annotation information]&#39;</code>，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git tag -a v1.2 -m &apos;this version is for publish blablabla&apos;</div></pre></td></tr></table></figure></p>
 <p>类似于<code>git commit</code>时的<code>-m</code>选项，如果没有给出，Git会启动文本编辑软件提供输入标签说明。</p>
 <h4 id="显示特定标签信息"><a href="#显示特定标签信息" class="headerlink" title="显示特定标签信息"></a>显示特定标签信息</h4><p>使用<code>git show [tagname]</code>可以显示特定标签的相关信息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git show v1.2</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git show v1.2</div></pre></td></tr></table></figure>
 <h4 id="签署标签"><a href="#签署标签" class="headerlink" title="签署标签"></a>签署标签</h4><p>如果有自己的私钥，可以使用GPG来签署标签，只需要把之前的<code>-a</code>改为<code>-s</code>即可<br>`git tag -s [version] -m ‘[annotation information]’，比如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag -a v1.2 -m &apos;this version is a signed blablabla&apos;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git tag -a v1.2 -m &apos;this version is a signed blablabla&apos;</div></pre></td></tr></table></figure>
 <h4 id="验证标签"><a href="#验证标签" class="headerlink" title="验证标签"></a>验证标签</h4><p>使用<code>git tag -v [tagname]</code>可以验证已经签署的标签，这个命令会调用GPG来验证签名，需要拥有签署者的公钥，存放在keyring中，才能验证。</p>
 <h4 id="后期加注标签"><a href="#后期加注标签" class="headerlink" title="后期加注标签"></a>后期加注标签</h4><p>可以对之前某次提交添加加注标签，方法是在创建标签时添加上提交的md5值<code>git tag -a [version] -m &#39;[annotation information] [commit_id]</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag -a v1.2 af98ce0</span><br></pre></td></tr></table></figure>
-<h4 id="分享标签"><a href="#分享标签" class="headerlink" title="分享标签"></a>分享标签</h4><p>默认情况下，<code>git push</code>不会将标签信息推送到远程服务器，需要显示添加命令<code>git push [branch] [tagname]</code>，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin v1.5</span><br></pre></td></tr></table></figure></p>
-<p>如果要一次性把所有本地新增的标签都推上去，可以使用<code>--tags</code>选项：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin --tags</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git tag -a v1.2 af98ce0</div></pre></td></tr></table></figure>
+<h4 id="分享标签"><a href="#分享标签" class="headerlink" title="分享标签"></a>分享标签</h4><p>默认情况下，<code>git push</code>不会将标签信息推送到远程服务器，需要显示添加命令<code>git push [branch] [tagname]</code>，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push origin v1.5</div></pre></td></tr></table></figure></p>
+<p>如果要一次性把所有本地新增的标签都推上去，可以使用<code>--tags</code>选项：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push origin --tags</div></pre></td></tr></table></figure></p>
 <h2 id="常用方案"><a href="#常用方案" class="headerlink" title="常用方案"></a>常用方案</h2><p>在产品发布里程碑版本后，给其打上一个标签，以便需要时候查看和快速切换。<br>从本质上讲，就是使用一个<code>tag</code>记录某次提交的语义信息，通过直接用<code>tag</code>而不是<code>commit_id</code>的方法检索到对应的某次提交。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2017/10/09/Git-tag的使用/" data-id="ckewl1zbc001k10sh6fk07c16" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2017/10/09/Git-tag的使用/" data-id="ckf44v6b7001fhh8t6juebrda" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -195,6 +195,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -208,10 +212,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

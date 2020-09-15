@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="使用grep命令指定文件在指定文件中查找相关字符串，可以使用grep命令：1grep [target_str] [target_file] 比如查找后台访问日志中，调用接口v1/user/profile/2的所有记录：1grep v1/user/profile/2 storage/logs/laravel-2016-11-25.log 指定文件夹在指定文件夹中查找相关字符串，可以使用带参数的gre">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.961Z">
+<meta property="og:updated_time" content="2018-01-12T05:44:53.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux命令在文件中查找字符串">
 <meta name="twitter:description" content="使用grep命令指定文件在指定文件中查找相关字符串，可以使用grep命令：1grep [target_str] [target_file] 比如查找后台访问日志中，调用接口v1/user/profile/2的所有记录：1grep v1/user/profile/2 storage/logs/laravel-2016-11-25.log 指定文件夹在指定文件夹中查找相关字符串，可以使用带参数的gre">
@@ -94,11 +94,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="使用grep命令"><a href="#使用grep命令" class="headerlink" title="使用grep命令"></a>使用<code>grep</code>命令</h2><h4 id="指定文件"><a href="#指定文件" class="headerlink" title="指定文件"></a>指定文件</h4><p>在指定文件中查找相关字符串，可以使用<code>grep</code>命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep [target_str] [target_file]</span><br></pre></td></tr></table></figure></p>
-<p>比如查找后台访问日志中，调用接口<code>v1/user/profile/2</code>的所有记录：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep v1/user/profile/2 storage/logs/laravel-2016-11-25.log</span><br></pre></td></tr></table></figure></p>
-<h4 id="指定文件夹"><a href="#指定文件夹" class="headerlink" title="指定文件夹"></a>指定文件夹</h4><p>在指定文件夹中查找相关字符串，可以使用带参数的<code>grep</code>命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -rnw [target_dir] -e [target_str]</span><br></pre></td></tr></table></figure></p>
+        <h2 id="使用grep命令"><a href="#使用grep命令" class="headerlink" title="使用grep命令"></a>使用<code>grep</code>命令</h2><h4 id="指定文件"><a href="#指定文件" class="headerlink" title="指定文件"></a>指定文件</h4><p>在指定文件中查找相关字符串，可以使用<code>grep</code>命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">grep [target_str] [target_file]</div></pre></td></tr></table></figure></p>
+<p>比如查找后台访问日志中，调用接口<code>v1/user/profile/2</code>的所有记录：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">grep v1/user/profile/2 storage/logs/laravel-2016-11-25.log</div></pre></td></tr></table></figure></p>
+<h4 id="指定文件夹"><a href="#指定文件夹" class="headerlink" title="指定文件夹"></a>指定文件夹</h4><p>在指定文件夹中查找相关字符串，可以使用带参数的<code>grep</code>命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">grep -rnw [target_dir] -e [target_str]</div></pre></td></tr></table></figure></p>
 <p>其中<code>-r</code>或<code>-R</code>表示递归向下搜索，<code>-n</code>是显示匹配行号，<code>-w</code>表示匹配整个字符。</p>
-<h2 id="使用find命令结合grep命令"><a href="#使用find命令结合grep命令" class="headerlink" title="使用find命令结合grep命令"></a>使用<code>find</code>命令结合<code>grep</code>命令</h2><p>在一堆文件中查找相关字符串及其出现的文件，可以使用<code>find</code>命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find [dir_path] -type f -exec grep -H [target_str] &#123;&#125; \;</span><br></pre></td></tr></table></figure></p>
+<h2 id="使用find命令结合grep命令"><a href="#使用find命令结合grep命令" class="headerlink" title="使用find命令结合grep命令"></a>使用<code>find</code>命令结合<code>grep</code>命令</h2><p>在一堆文件中查找相关字符串及其出现的文件，可以使用<code>find</code>命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">find [dir_path] -type f -exec grep -H [target_str] &#123;&#125; \;</div></pre></td></tr></table></figure></p>
 <p>其中<code>find</code>命令是Linux中常用的查找命令，后面接着的<code>-exec grep ... {} \;</code>表示执行<code>grep</code>命令，注意后面的<code>{} \;</code>是必须的。grep</p>
 <p>这类命令还是以实际使用场景为准，具体问题查询具体的参数语法即可。</p>
 <p>参考链接：<a href="https://stackoverflow.com/questions/16956810/how-do-i-find-all-files-containing-specific-text-on-linux" target="_blank" rel="external">https://stackoverflow.com/questions/16956810/how-do-i-find-all-files-containing-specific-text-on-linux</a></p>
@@ -106,7 +106,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="ckewl1zcs005j10sh8ndh3n1a" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="ckf44v6do005qhh8ttbq6e62n" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li></ul>
@@ -187,6 +187,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -200,10 +204,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

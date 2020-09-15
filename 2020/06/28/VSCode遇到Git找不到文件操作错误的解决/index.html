@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="在使用 VSCode 的 Source Control 工具时，出现错误：1Git: fatal: xxx: &amp;apos;xxx&amp;apos; is outside repository  查看 Git log 可以看到错误的详细信息：12&amp;gt; git add -A -- d:\Code\xx\ValidateHelper.jsfatal: d:\Code\xx\ValidateHelper.j">
 <meta property="og:image" content="http://ckmessi.github.io/blog-hexo/2020/06/28/VSCode遇到Git找不到文件操作错误的解决/1.png">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.072Z">
+<meta property="og:updated_time" content="2020-06-28T04:03:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="VSCode遇到Git找不到文件操作错误的解决">
 <meta name="twitter:description" content="在使用 VSCode 的 Source Control 工具时，出现错误：1Git: fatal: xxx: &amp;apos;xxx&amp;apos; is outside repository  查看 Git log 可以看到错误的详细信息：12&amp;gt; git add -A -- d:\Code\xx\ValidateHelper.jsfatal: d:\Code\xx\ValidateHelper.j">
@@ -96,18 +96,18 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在使用 VSCode 的 <code>Source Control</code> 工具时，出现错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Git: fatal: xxx: &apos;xxx&apos; is outside repository</span><br></pre></td></tr></table></figure></p>
+        <p>在使用 VSCode 的 <code>Source Control</code> 工具时，出现错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Git: fatal: xxx: &apos;xxx&apos; is outside repository</div></pre></td></tr></table></figure></p>
 <img src="/blog-hexo/2020/06/28/VSCode遇到Git找不到文件操作错误的解决/1.png" alt="错误示例" title="错误示例">
-<p>查看 Git log 可以看到错误的详细信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; git add -A -- d:\Code\xx\ValidateHelper.js</span><br><span class="line">fatal: d:\Code\xx\ValidateHelper.js: &apos;d:\Code\xx\ValidateHelper.js&apos; is outside repository</span><br></pre></td></tr></table></figure></p>
-<p>这里错误原因于，所有的盘符 <code>d:\</code> 变成了小写的，导致找不着。<br>因为其它盘符是 <code>D:\</code> 的命令都能正确执行，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git ls-tree -l HEAD -- D:\Code\xx\tslint.json</span><br></pre></td></tr></table></figure></p>
+<p>查看 Git log 可以看到错误的详细信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt; git add -A -- d:\Code\xx\ValidateHelper.js</div><div class="line">fatal: d:\Code\xx\ValidateHelper.js: &apos;d:\Code\xx\ValidateHelper.js&apos; is outside repository</div></pre></td></tr></table></figure></p>
+<p>这里错误原因于，所有的盘符 <code>d:\</code> 变成了小写的，导致找不着。<br>因为其它盘符是 <code>D:\</code> 的命令都能正确执行，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git ls-tree -l HEAD -- D:\Code\xx\tslint.json</div></pre></td></tr></table></figure></p>
 <p>触发这个错误的原因，是 Windows 下某个版本的 Git 存在缺陷，无法正确处理盘符的情况。<br>解决方案有两个：<br>1）升级 Git 到最新版本，据说有效；<br>2）配置 <code>core.ignorecase</code>；</p>
-<p>使用 <code>git config --list</code> 查看 <code>core.ignorecase</code> 的值，如果是 <code>false</code>，将其修改为 <code>true</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config core.ignorecase true</span><br></pre></td></tr></table></figure></p>
+<p>使用 <code>git config --list</code> 查看 <code>core.ignorecase</code> 的值，如果是 <code>false</code>，将其修改为 <code>true</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git config core.ignorecase true</div></pre></td></tr></table></figure></p>
 <p>这样操作时就不会抛错了。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/06/28/VSCode遇到Git找不到文件操作错误的解决/" data-id="ckewl1zdr00af10shjm7lqgm8" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/06/28/VSCode遇到Git找不到文件操作错误的解决/" data-id="ckf44v6fk009shh8tkx5oubc7" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/VS-Code/">VS Code</a></li></ul>
@@ -188,6 +188,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -201,10 +205,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

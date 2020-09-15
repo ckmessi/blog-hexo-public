@@ -8,13 +8,13 @@
   <title>处理Windows编辑的文件在Linux系统中多出^M的办法 | 不止是一位程序员</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="背景项目中添加了一个 .sh 脚本文件，在 Windows 系统中编辑后上传到 Git 服务器，在 Linux 环境中使用时发现 Shell 抛奇奇怪怪的错。经过排查后确定，是由于 Windows 系统中编辑的文件换行符与 Unix 系统不同导致的。通过 cat -v [filename] 可以查看到文件内容的末尾带有 ^M 字符。这个字符在普通代码文件中不会有影响，但对于 Shell 脚本而言会">
-<meta name="keywords" content="Linux,Windows,Shell">
+<meta name="keywords" content="Linux,Shell,Windows">
 <meta property="og:type" content="article">
 <meta property="og:title" content="处理Windows编辑的文件在Linux系统中多出^M的办法">
 <meta property="og:url" content="http://ckmessi.github.io/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="背景项目中添加了一个 .sh 脚本文件，在 Windows 系统中编辑后上传到 Git 服务器，在 Linux 环境中使用时发现 Shell 抛奇奇怪怪的错。经过排查后确定，是由于 Windows 系统中编辑的文件换行符与 Unix 系统不同导致的。通过 cat -v [filename] 可以查看到文件内容的末尾带有 ^M 字符。这个字符在普通代码文件中不会有影响，但对于 Shell 脚本而言会">
-<meta property="og:updated_time" content="2020-07-22T11:07:09.242Z">
+<meta property="og:updated_time" content="2020-07-15T13:59:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="处理Windows编辑的文件在Linux系统中多出^M的办法">
 <meta name="twitter:description" content="背景项目中添加了一个 .sh 脚本文件，在 Windows 系统中编辑后上传到 Git 服务器，在 Linux 环境中使用时发现 Shell 抛奇奇怪怪的错。经过排查后确定，是由于 Windows 系统中编辑的文件换行符与 Unix 系统不同导致的。通过 cat -v [filename] 可以查看到文件内容的末尾带有 ^M 字符。这个字符在普通代码文件中不会有影响，但对于 Shell 脚本而言会">
@@ -95,9 +95,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>项目中添加了一个 <code>.sh</code> 脚本文件，在 Windows 系统中编辑后上传到 Git 服务器，在 Linux 环境中使用时发现 Shell 抛奇奇怪怪的错。<br>经过排查后确定，是由于 Windows 系统中编辑的文件换行符与 Unix 系统不同导致的。<br>通过 <code>cat -v [filename]</code> 可以查看到文件内容的末尾带有 <code>^M</code> 字符。<br>这个字符在普通代码文件中不会有影响，但对于 Shell 脚本而言会造成错误。   </p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>使用 <code>sed</code> 命令直接替换文件内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -i &apos;s/^M//g&apos; filename</span><br></pre></td></tr></table></figure></p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>使用 <code>sed</code> 命令直接替换文件内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed -i &apos;s/^M//g&apos; filename</div></pre></td></tr></table></figure></p>
 <p>特别需要注意的是，<code>^M</code> 字符显示出来是两个字符 <code>^</code> 和 <code>M</code> 的组合，但上述替换中不能直接输入 <code>^M</code>，那样会查找到普通的字符 <code>M</code>，正确的输入方式是 <code>Ctrl + V</code>，然后 <code>Ctrl + M</code>。<br>完成替换后，可以使用 <code>cat -v [filename]</code> 再次查看，观察文件末尾的 <code>^M</code> 是否已经去除。</p>
-<p>网络上搜索的方案通常还会提到使用 <code>tr -d</code> 命令进行去除。<br>使用 <code>tr -d</code> 命令去除一些字符：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat -v [filename] | tr -d &apos;^M&apos;</span><br></pre></td></tr></table></figure></p>
+<p>网络上搜索的方案通常还会提到使用 <code>tr -d</code> 命令进行去除。<br>使用 <code>tr -d</code> 命令去除一些字符：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat -v [filename] | tr -d &apos;^M&apos;</div></pre></td></tr></table></figure></p>
 <p>然而实践中发现，如果这里的 <code>^M</code> 通过两个字符 <code>^</code> 和 <code>M</code> 输入，则会将文件中正常的大写 <code>M</code> 字符去除掉；如果这里的 <code>^M</code> 通过 <code>Ctrl + V</code>， <code>Ctrl + M</code> 方式输入，则输出的结果中依然还有特殊换行符 <code>^M</code>。<br>不知道是不是我哪里使用的方式不正确。</p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
 <li><a href="https://blog.csdn.net/u012122743/article/details/52332133" target="_blank" rel="external">https://blog.csdn.net/u012122743/article/details/52332133</a></li>
@@ -106,7 +106,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/" data-id="ckewl1zha00lg10sh8gfjq71r" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/" data-id="ckf44v6i200f3hh8tkq432vih" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li></ul>
@@ -187,6 +187,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -200,10 +204,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>

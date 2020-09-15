@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/index.html">
 <meta property="og:site_name" content="不止是一位程序员">
 <meta property="og:description" content="工作中遇到连接远程的MySQL数据库缓慢的情况，导致每次Ajax请求都需要10秒左右，很奇怪。如果从MySQL数据库所在服务器进行访问则很快。在同事的指导下，了解到可能是MySQL需要进行域名解析的原因。查询这篇文章可知，如果MySQL主机查询DNS很慢或是有很多客户端主机时会导致连接很慢。由于服务器不能够连接外网的，所以DNS解析是不可能完成的，也正是为什么连接这么慢的原因。 解决方法是在/et">
-<meta property="og:updated_time" content="2020-07-22T11:07:08.968Z">
+<meta property="og:updated_time" content="2018-03-24T07:34:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL连接缓慢的情况处理">
 <meta name="twitter:description" content="工作中遇到连接远程的MySQL数据库缓慢的情况，导致每次Ajax请求都需要10秒左右，很奇怪。如果从MySQL数据库所在服务器进行访问则很快。在同事的指导下，了解到可能是MySQL需要进行域名解析的原因。查询这篇文章可知，如果MySQL主机查询DNS很慢或是有很多客户端主机时会导致连接很慢。由于服务器不能够连接外网的，所以DNS解析是不可能完成的，也正是为什么连接这么慢的原因。 解决方法是在/et">
@@ -95,14 +95,14 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>工作中遇到连接远程的MySQL数据库缓慢的情况，导致每次Ajax请求都需要10秒左右，很奇怪。<br>如果从MySQL数据库所在服务器进行访问则很快。<br>在同事的指导下，了解到可能是MySQL需要进行域名解析的原因。<br>查询<a href="http://www.jb51.net/article/27616.htm" target="_blank" rel="external">这篇文章</a>可知，如果MySQL主机查询DNS很慢或是有很多客户端主机时会导致连接很慢。由于服务器不能够连接外网的，所以DNS解析是不可能完成的，也正是为什么连接这么慢的原因。</p>
-<p>解决方法是在<code>/etc/mysql/mysql.conf.d/mysqld.cnf</code>文件中，添加一行命令使MySQL不进行域名解析。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">skip-name-resolve</span><br></pre></td></tr></table></figure></p>
-<p>重启MySQL<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /etc/init.d/mysql restart</span><br></pre></td></tr></table></figure></p>
+<p>解决方法是在<code>/etc/mysql/mysql.conf.d/mysqld.cnf</code>文件中，添加一行命令使MySQL不进行域名解析。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">skip-name-resolve</div></pre></td></tr></table></figure></p>
+<p>重启MySQL<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo /etc/init.d/mysql restart</div></pre></td></tr></table></figure></p>
 <p>瞬间速度就快了。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="ckewl1zcw006a10shbiahg9bz" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="ckf44v6dv006ahh8tqu29zizc" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li></ul>
@@ -183,6 +183,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2020/09/15/Python模块调用中的超时处理/">Python模块调用中的超时处理</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2020/09/10/PyTorch的Tensor的筛选和排序操作/">PyTorch的Tensor的筛选和排序操作</a>
           </li>
         
@@ -196,10 +200,6 @@
         
           <li>
             <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/">Python使用importlib动态导入模块</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/08/24/使用crontab添加特定用户执行的定时任务/">使用crontab添加特定用户执行的定时任务</a>
           </li>
         
       </ul>
