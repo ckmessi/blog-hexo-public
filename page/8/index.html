@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -67,6 +67,60 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Axios发送Ajax请求至SpringBoot后台时参数匹配的一个问题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/07/04/Axios发送Ajax请求至SpringBoot后台时参数匹配的一个问题/" class="article-date">
+  <time datetime="2019-07-04T08:48:12.000Z" itemprop="datePublished">2019-07-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/07/04/Axios发送Ajax请求至SpringBoot后台时参数匹配的一个问题/">Axios发送Ajax请求至SpringBoot后台时参数匹配的一个问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>在 Vue.js 框架中使用 axios 给后台接口发送请求时，发现后台 Spring Boot 无法接收到参数。<br>在前端，发送请求的代码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">PutMethod: (params) =&gt; &#123;</div><div class="line">    return axios.put(&apos;/api/request/path&apos;, params);</div><div class="line">&#125;</div><div class="line">// params 的值为  &#123; paramSample: &apos;abcd&apos; &#125;</div></pre></td></tr></table></figure></p>
+<p>使用 <code>PUT</code> 方法，将参数放在了请求体 <code>Request Payload</code> 中。</p>
+<p>在 Spring Boot 后台，接口的定义方法为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public void putMethod(String paramSample) &#123;</div><div class="line"> log.info(paramSample);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这种情况下，Spring Boot 默认会从访问请求的 URL 中提取名称为 <code>paramSample</code> 的参数，但 <code>PUT</code> 方法没有将参数拼接到 URL 里，因此后台获取不到 axios 请求时的参数。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>在这种场景下，问题本质在于前后端对于参数传递的位置不一致造成的。<br>前端认为应该通过请求体传递参数，而后台认为应该从请求的 URL 中接收参数。<br>因此，修改方式可以从两个角度来考虑。</p>
+<h4 id="1-考虑修改后端"><a href="#1-考虑修改后端" class="headerlink" title="1.考虑修改后端"></a>1.考虑修改后端</h4><p>通常来说 <code>POST</code> 和 <code>PUT</code> 方法不会将参数暴露在 URL 中，因此可以考虑将后台接口修改为从请求体中获取参数。<br>具体的流程大概有以下几步：<br>添加一个实体类 <code>ParamEntity</code> ，其中成员变量定义为需要接收的参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">class ParamEntity &#123;</div><div class="line">    private String paramSample;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在 Controller 接口中，使用 <code>@RequestBody</code> 注解使参数能够获取到请求体的内容。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public Void putMethod(@RequestBody ParamEntity paramEntity)&#123;</div><div class="line"> // …</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后在参数变量 <code>paramEntity</code> 中获取对应的成员变量 <code>paramSample</code> ，即可获取对应参数的值。</p>
+<h4 id="2-考虑修改前端"><a href="#2-考虑修改前端" class="headerlink" title="2.考虑修改前端"></a>2.考虑修改前端</h4><p>有时候参数比较简单而接口较为繁多，为每一个接口声明一个实体类可能会有点麻烦。<br>这时可以直接采用在前端中将参数拼接到 URL 中的方案。</p>
+<p>平时使用 axios 进行 ajax 请求时，对于 <code>PUT</code> 方法主要是使用了前两个参数 <code>url</code> 和 <code>data</code> ，参考 axios 的官方文档，可以使用第三个参数 <code>config</code> 中的 <code>params</code> 参数项，类似于 <code>GET</code> 方法的第二个参数。<br>将<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">PutMethod: (params) =&gt; &#123;</div><div class="line"> return axis.put(`/api/request/path`, params);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>修改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">PutMethod: (params) =&gt; &#123;</div><div class="line"> return axis.put(`/api/request/path`, params, &#123;</div><div class="line">  params: params</div><div class="line"> &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>就会在 <code>PUT</code> 请求的 URL 中拼接上对应的参数，这时后台就可以使用原来的方案获取到参数了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/07/04/Axios发送Ajax请求至SpringBoot后台时参数匹配的一个问题/" data-id="ckhxl6qr4001dxj8ta49zdnec" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/axios/">axios</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-使用JSONServer快速搭建API服务器" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -108,7 +162,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/07/01/使用JSONServer快速搭建API服务器/" data-id="ckhvtqf9f00bom68tpw4m8y02" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/07/01/使用JSONServer快速搭建API服务器/" data-id="ckhxl6r3600hpxj8t7qamygca" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JSON/">JSON</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li></ul>
@@ -157,7 +211,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/26/SpringBoot简单读取注解内容的方式/" data-id="ckhvtqf89009bm68tqq3q0vue" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/06/26/SpringBoot简单读取注解内容的方式/" data-id="ckhxl6qwv009nxj8ttlvedb43" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
@@ -214,7 +268,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/24/SpringBoot使用-Async实现异步调用/" data-id="ckhvtqf8a009em68tzqgsw61w" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/06/24/SpringBoot使用-Async实现异步调用/" data-id="ckhxl6qwx009rxj8tpynprwjm" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
@@ -266,7 +320,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/15/Oracle数据库幂等性创建数据库表语句/" data-id="ckhvtqf7a0071m68tmttyebbq" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/06/15/Oracle数据库幂等性创建数据库表语句/" data-id="ckhxl6qvo0072xj8tpsjf8ngx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li></ul>
@@ -333,7 +387,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/" data-id="ckhvtqf4z001zm68ty3bowm9a" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/" data-id="ckhxl6qrr0022xj8te78dp3y8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
@@ -386,7 +440,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/05/SpringBoot运行jar包提示没有主清单属性的问题/" data-id="ckhvtqf8c009im68tih8f2cl1" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/06/05/SpringBoot运行jar包提示没有主清单属性的问题/" data-id="ckhxl6qwu009lxj8t7w5w0clk" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
@@ -445,7 +499,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/06/04/Composer管理依赖包限制PHP版本/" data-id="ckhvtqf40000xm68thtguetb1" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/06/04/Composer管理依赖包限制PHP版本/" data-id="ckhxl6qqq000sxj8tcbptke95" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Composer/">Composer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -495,7 +549,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/05/29/SpringCloud使用JdbcTemplate配置多数据源/" data-id="ckhvtqf8d009lm68tyey4vdvs" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/05/29/SpringCloud使用JdbcTemplate配置多数据源/" data-id="ckhxl6qwt009hxj8tdaky5tlo" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JdbcTemplate/">JdbcTemplate</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SpringCloud/">SpringCloud</a></li></ul>
@@ -553,61 +607,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/05/10/PHP中is-numeric和is-int的区别/" data-id="ckhvtqf7d007am68t660y01mv" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2019/05/10/PHP中is-numeric和is-int的区别/" data-id="ckhxl6qvs0079xj8t9l8c8c83" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Laravel使用ProgressBar在控制台中显示进度条" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2019/05/09/Laravel使用ProgressBar在控制台中显示进度条/" class="article-date">
-  <time datetime="2019-05-09T01:22:57.000Z" itemprop="datePublished">2019-05-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2019/05/09/Laravel使用ProgressBar在控制台中显示进度条/">Laravel使用ProgressBar在控制台中显示进度条</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在 Laravel 的 Console Command 程序中，通常会使用 <code>Symfony</code> 的包进行进度条的显示。<br>通常可以通过以下代码完成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$users = App\User::all();</div><div class="line">$bar = $this-&gt;output-&gt;createProgressBar(count($users));</div><div class="line">foreach ($users as $user) &#123;</div><div class="line">    $this-&gt;performTask($user);</div><div class="line">    $bar-&gt;advance();</div><div class="line">&#125;</div><div class="line">$bar-&gt;finish();</div></pre></td></tr></table></figure></p>
-<p>不过，有时候业务代码并不直接写在 Command 类中，而是写在其继承子类里，这时候的 <code>$this-&gt;output</code> 可能没有 <code>createProgressBar</code> 方法，因此不能直接使用 Laravel 提供的方式，这时候可以直接使用 <code>Symfony</code> 的 <code>ProgressBar</code> 类。</p>
-<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// create</div><div class="line">$progress_bar = new ProgressBar($output, $total);</div><div class="line">// advance</div><div class="line">$progress_bar-&gt;advance();</div><div class="line">// finish</div><div class="line">$progress_bar-&gt;finish();</div></pre></td></tr></table></figure>
-<p>其中 <code>$output</code> 类型应该是 <code>Symfony\Component\Console\Output\ConsoleOutput</code> 。<br>使用上述三条语句，能够完成简单的进度条显示。</p>
-<h2 id="修改样式"><a href="#修改样式" class="headerlink" title="修改样式"></a>修改样式</h2><p>正常情况下，控制台中显示的进度条外观可能是这样的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">169/185 [=========================&gt;--]91%</div><div class="line">183/185 [===========================&gt;] 98%</div><div class="line">184/185 [===========================&gt;] 99%</div><div class="line">185/185 [============================] 100%</div></pre></td></tr></table></figure></p>
-<p>其中 <code>已完成字符</code> 是 <code>=</code>， <code>未完成字符</code> 是 <code>-</code>（参考进度条在96%时），进度符号为 <code>&gt;</code> 。<br>可以使用下述语句在代码中指定显示样式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// the finished part of the bar</div><div class="line">$progress_bar-&gt;setBarCharacter(&apos;&lt;comment&gt;=&lt;/comment&gt;&apos;);</div><div class="line">// the unfinished part of the bar</div><div class="line">$progress_bar-&gt;setEmptyBarCharacter(&apos; &apos;);</div><div class="line">// the progress character</div><div class="line">$progress_bar-&gt;setProgressCharacter(&apos;|&apos;);</div></pre></td></tr></table></figure></p>
-<p>这样的效果将会是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">169/185 [=========================| ] 91%</div><div class="line">183/185 [===========================|] 98%</div><div class="line">184/185 [===========================|] 99%</div><div class="line">185/185 [============================] 100%</div></pre></td></tr></table></figure></p>
-<p>可以看到，<code>已完成字符</code> 设置依然为 <code>=</code> ，<code>未完成字符</code> 修改为 <code>[space]</code>（空格），进度符号为 <code>|</code> 。</p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://laravel.com/docs/5.5/artisan#writing-output" target="_blank" rel="external">https://laravel.com/docs/5.5/artisan#writing-output</a><br><a href="https://symfony.com/doc/current/components/console/helpers/progressbar.html" target="_blank" rel="external">https://symfony.com/doc/current/components/console/helpers/progressbar.html</a><br><a href="https://www.cnblogs.com/eleven24/p/9134303.html" target="_blank" rel="external">https://www.cnblogs.com/eleven24/p/9134303.html</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/05/09/Laravel使用ProgressBar在控制台中显示进度条/" data-id="ckhvtqf68004im68tcl5249cu" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
 
     </footer>
   </div>
@@ -620,7 +623,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/page/7/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="page-number" href="/blog-hexo/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/blog-hexo/page/9/">9</a><a class="page-number" href="/blog-hexo/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/19/">19</a><a class="extend next" rel="next" href="/blog-hexo/page/9/">weiter &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/7/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="page-number" href="/blog-hexo/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/blog-hexo/page/9/">9</a><a class="page-number" href="/blog-hexo/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/19/">19</a><a class="extend next" rel="next" href="/blog-hexo/page/9/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -629,7 +632,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -658,7 +661,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -668,9 +671,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2020/11/25/Python使用多进程加速数据处理/">Python使用多进程加速数据处理</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2020/11/24/Numpy使用花式索引操作数组/">Numpy使用花式索引操作数组</a>
@@ -686,10 +693,6 @@
         
           <li>
             <a href="/blog-hexo/2020/10/21/Python使用argparse传递参数/">Python使用argparse传递参数</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/10/17/Python使用concurrent并发编程/">Python使用concurrent并发编程</a>
           </li>
         
       </ul>

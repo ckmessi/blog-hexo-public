@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -67,6 +67,53 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Git克隆项目时SSH-HTTP方式的区别" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/" class="article-date">
+  <time datetime="2018-05-08T08:42:25.000Z" itemprop="datePublished">2018-05-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/">Git克隆项目时SSH/HTTP方式的区别</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在使用Git获取仓库中的项目时，通常可以选择用SSH或HTTP方式。<br>两种克隆方式对应的URL也不一样。以Github为例，选择Clone with SSH时，对应的URL为：</p>
+<p>git@github.com:ckmessi/ckmessi.github.io.git<br>而选择Clone with HTTPS时，对应的URL为：</p>
+<p><a href="https://github.com/ckmessi/ckmessi.github.io.git" target="_blank" rel="external">https://github.com/ckmessi/ckmessi.github.io.git</a><br>两种方式的区别在于：</p>
+<p>使用SSH方式时，需要预先配置ssh key相关信息，克隆过程实质上建立了一个SSH连接（就像远程免密登录服务器一样）；如果在配置ssh key时没有设置密码，则每次push时不需要验证密码。<br>使用HTTP方式时，可以不经任何验证克隆该项目的数据，但在每次push的时候，都需要验证用户名和密码。<br>类似于SSH是一项永久性操作，而HTTP只是快速构建临时可读的方案。</p>
+<p>因此，在实际工作中，如果要频繁地获取并提交修改，应该使用SSH方式；如果只是将项目克隆下来随意浏览，不需要提交修改操作，则使用HTTP更方便。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/05/08/Git克隆项目时SSH-HTTP方式的区别/" data-id="ckhxl6qrj001txj8txinvya7a" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-使用Guzzle访问API接口需要登录的解决方案" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -109,7 +156,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/" data-id="ckhvtqf9e00bkm68t6czipxs7" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/05/04/使用Guzzle访问API接口需要登录的解决方案/" data-id="ckhxl6r3700hsxj8tejs6c61a" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -168,7 +215,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/04/24/Crontab中可能遇到的php版本问题/" data-id="ckhvtqf3x000rm68t9xr1dj7t" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/04/24/Crontab中可能遇到的php版本问题/" data-id="ckhxl6qqo000pxj8tem9e2y3b" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -214,7 +261,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/27/PHP使用php-ml完成距离计算/" data-id="ckhvtqf7h007nm68t4fgt3trz" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/27/PHP使用php-ml完成距离计算/" data-id="ckhxl6qvy007nxj8tnbwu4lqk" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -275,7 +322,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/26/PHP中警惕悬挂引用可能引起的bug/" data-id="ckhvtqf7d007cm68t4zyhefxz" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/26/PHP中警惕悬挂引用可能引起的bug/" data-id="ckhxl6qvt007dxj8tier4x4gs" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -324,7 +371,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/24/Laravel个性化404页面/" data-id="ckhvtqf600041m68t8n5ankdg" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/24/Laravel个性化404页面/" data-id="ckhxl6qtq0044xj8tegpargdu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -375,7 +422,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/" data-id="ckhvtqf7b0074m68tke0hdqs9" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/19/PHP-unpack-函数的使用/" data-id="ckhxl6qvq0076xj8t0bnfmpwu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -430,7 +477,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" data-id="ckhvtqf75006lm68tb7l3owyx" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" data-id="ckhxl6qvi006nxj8tk4j692dt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -526,7 +573,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/03/01/初识AIDL/" data-id="ckhvtqfa100ddm68tn6xxbdf9" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/03/01/初识AIDL/" data-id="ckhxl6r4200jpxj8ttfqnvofr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li></ul>
@@ -621,56 +668,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" data-id="ckhvtqf5x003um68tkfno1bca" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" data-id="ckhxl6qtf003rxj8tde0adesh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-MySQL连接缓慢的情况处理" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2018/02/02/MySQL连接缓慢的情况处理/" class="article-date">
-  <time datetime="2018-02-02T09:50:06.000Z" itemprop="datePublished">2018-02-02</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2018/02/02/MySQL连接缓慢的情况处理/">MySQL连接缓慢的情况处理</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>工作中遇到连接远程的MySQL数据库缓慢的情况，导致每次Ajax请求都需要10秒左右，很奇怪。<br>如果从MySQL数据库所在服务器进行访问则很快。<br>在同事的指导下，了解到可能是MySQL需要进行域名解析的原因。<br>查询<a href="http://www.jb51.net/article/27616.htm" target="_blank" rel="external">这篇文章</a>可知，如果MySQL主机查询DNS很慢或是有很多客户端主机时会导致连接很慢。由于服务器不能够连接外网的，所以DNS解析是不可能完成的，也正是为什么连接这么慢的原因。</p>
-<p>解决方法是在<code>/etc/mysql/mysql.conf.d/mysqld.cnf</code>文件中，添加一行命令使MySQL不进行域名解析。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">skip-name-resolve</div></pre></td></tr></table></figure></p>
-<p>重启MySQL<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo /etc/init.d/mysql restart</div></pre></td></tr></table></figure></p>
-<p>瞬间速度就快了。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="ckhvtqf6v0064m68tlq03avby" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li></ul>
 
     </footer>
   </div>
@@ -683,7 +684,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/page/13/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/12/">12</a><a class="page-number" href="/blog-hexo/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/blog-hexo/page/15/">15</a><a class="page-number" href="/blog-hexo/page/16/">16</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/19/">19</a><a class="extend next" rel="next" href="/blog-hexo/page/15/">weiter &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/13/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/12/">12</a><a class="page-number" href="/blog-hexo/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/blog-hexo/page/15/">15</a><a class="page-number" href="/blog-hexo/page/16/">16</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/19/">19</a><a class="extend next" rel="next" href="/blog-hexo/page/15/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -692,7 +693,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -721,7 +722,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -731,9 +732,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2020/11/25/Python使用多进程加速数据处理/">Python使用多进程加速数据处理</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2020/11/24/Numpy使用花式索引操作数组/">Numpy使用花式索引操作数组</a>
@@ -749,10 +754,6 @@
         
           <li>
             <a href="/blog-hexo/2020/10/21/Python使用argparse传递参数/">Python使用argparse传递参数</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/10/17/Python使用concurrent并发编程/">Python使用concurrent并发编程</a>
           </li>
         
       </ul>
