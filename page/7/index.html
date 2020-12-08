@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -67,6 +67,64 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-初识YAML文件格式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/08/29/初识YAML文件格式/" class="article-date">
+  <time datetime="2019-08-29T11:16:32.000Z" itemprop="datePublished">2019-08-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/08/29/初识YAML文件格式/">初识YAML文件格式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p><code>YAML</code> 是一种可读性较高的用来表示数据序列化的格式，它参考了包括C语言和Python等在内的语言，有趣的是其缩写 <code>YAML</code> 的含义是 <code>YAML Ain&#39;t a Markup Language</code> （YAML 不是一种标记语言）。</p>
+<p>通常在 Spring Boot 框架中，会使用 <code>.yaml</code> 格式的文件定义配置信息。<br>在 Python 中也经常使用到，比如一个开源框架 <a href="https://github.com/NervanaSystems/distiller" target="_blank" rel="external">Distiller</a> 就使用 YAML 文件定义压缩策略。</p>
+<h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><p>YAML 文件基本的语法格式是以缩进代表层级关系，用冒号进行键值的分隔。</p>
+<ul>
+<li>YAML 内容大小写敏感；</li>
+<li>缩进只能使用空格，不能使用 <code>tab</code> 缩进符号；</li>
+<li>需要保持相同层级的左对齐，一般2个或4个空格；</li>
+</ul>
+<p>YAML 文件中允许表示三种格式：常量值、对象和数组。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">object1:</div><div class="line">    attribute1: value1</div><div class="line">    attribute2: value2</div><div class="line">constant: value</div><div class="line">list:</div><div class="line">    - element1</div><div class="line">    - element2</div></pre></td></tr></table></figure></p>
+<p>使用不断缩进的层次代表对象属性嵌套，使用冒号分隔键和值，使用短橫线加一个空格代表一个数组项。</p>
+<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>通常使用 <code>#</code> 符号标识一行注释，在 YAML 文件中只有行注释。</p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>YAML 还有一些特殊符号，比如 <code>---</code> 可以在一个YAML 文件中表示文档的开始和结束，分割不同的内容。<br>不过对于大多数配置文件而言，使用基础的上述格式语法，就能描述清楚配置项的定义。</p>
+<p>更多关于 YAML 文件格式的相关内容，可以参考 <a href="https://yaml.org/spec/1.2/spec.pdf" target="_blank" rel="external">官方文档</a>。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://www.jianshu.com/p/97222440cd08" target="_blank" rel="external">https://www.jianshu.com/p/97222440cd08</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/08/29/初识YAML文件格式/" data-id="ckifjfgck00ev1m8tiu81611p" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/YAML/">YAML</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Laravel使用Nginx作为代理服务器时的两点注意事项" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -115,7 +173,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/08/28/Laravel使用Nginx作为代理服务器时的两点注意事项/" data-id="ckiafmio6004gqu8tbnvtnwud" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/08/28/Laravel使用Nginx作为代理服务器时的两点注意事项/" data-id="ckifjfg84004m1m8tc9x9x1as" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -184,7 +242,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/08/19/最简单的Go测试代码样例/" data-id="ckiafmist00gjqu8t3adazq4m" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/08/19/最简单的Go测试代码样例/" data-id="ckifjfgdk00gn1m8td31054q1" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Go/">Go</a></li></ul>
@@ -249,7 +307,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/08/16/初识Docker/" data-id="ckiafmiry00e3qu8tuscefvnr" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/08/16/初识Docker/" data-id="ckifjfgci00er1m8tqb414x7r" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Docker/">Docker</a></li></ul>
@@ -304,7 +362,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/08/14/Maven项目pom-xml文件中packaging配置/" data-id="ckiafmios0067qu8t14tvmk09" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/08/14/Maven项目pom-xml文件中packaging配置/" data-id="ckifjfg8r00671m8tg7smrsnt" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Maven/">Maven</a></li></ul>
@@ -377,7 +435,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/08/12/使用MyBatisPlus操作数据库/" data-id="ckiafmira00c7qu8taxao9agi" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/08/12/使用MyBatisPlus操作数据库/" data-id="ckifjfgb900c81m8tdwtwe27r" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MyBatisPlus/">MyBatisPlus</a></li></ul>
@@ -436,7 +494,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/08/10/Go语言开发环境配置/" data-id="ckiafmioa004vqu8tzyr4tiym" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/08/10/Go语言开发环境配置/" data-id="ckifjfg6x00281m8tueksfn6e" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Go/">Go</a></li></ul>
@@ -516,7 +574,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/08/07/初识Flyway/" data-id="ckiafmis500eoqu8t10xtixwy" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/08/07/初识Flyway/" data-id="ckifjfgcd00eh1m8tvpsm8zbk" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Flyway/">Flyway</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -594,7 +652,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/08/06/初识MyBatisGenerator/" data-id="ckiafmis800eyqu8txmokfp0d" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/08/06/初识MyBatisGenerator/" data-id="ckifjfgch00eo1m8taq8xdlp6" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MyBatis/">MyBatis</a></li></ul>
@@ -654,89 +712,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/08/02/Java中使用Optional避免多条件判断/" data-id="ckiafming0035qu8t1wmkgwnx" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Java中BigDecimal的scale和precision" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2019/08/01/Java中BigDecimal的scale和precision/" class="article-date">
-  <time datetime="2019-08-01T09:48:49.000Z" itemprop="datePublished">2019-08-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2019/08/01/Java中BigDecimal的scale和precision/">Java中BigDecimal的scale和precision</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在Java中，经常使用 <code>BigDecimal</code> 类进行高精度的计算。   </p>
-<p><code>BigDecimal</code> 类有两项关键的属性：<code>scale</code> 和 <code>precision</code> ，其数值与 <code>BigDecimal</code> 的定义有关。</p>
-<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>一个 <code>BigDecimal</code> 对象由以下两个值确定：一个 <code>任意精度整型数</code> 和一个 <code>32位整数表示的尺度</code> ，它的值按照如下公式定义：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">value = unscaledValue * 10^&#123;-scale&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="Precision"><a href="#Precision" class="headerlink" title="Precision"></a>Precision</h2><p>其中 <code>precision</code> 表示  <code>unscaledValue</code> 中数字位数，比如对于数值 <code>123.45</code> ，其 <code>precision</code> 就是 <code>5</code>。<br>因此，<code>precision</code> 指示了任意精度整型数的长度，以下是一些相同 <code>scale</code> 情况下不同 <code>precision</code> 的例子：</p>
-<ul>
-<li>0.12345 = 12345 * 10^{-5}    // scale = 5, precision = 5</li>
-<li>0.12340 = 1234 * 10^{-5}    // scale = 5, precision = 4</li>
-<li>0.00001 = 1 * 10^{-5}    // scale = 5, precision = 1</li>
-</ul>
-<p>可以看出，在 <code>scale</code> 相同的情况下，<code>precision</code> 越大能够表示的数值越精确，这也符合 <code>precision</code> 英文含义。<br>一个特殊的场景是与 <code>0</code> 相等的数值（比如 <code>0.000</code>），它们的 <code>precision</code> 总是等于 <code>1</code> 。</p>
-<h2 id="Scale"><a href="#Scale" class="headerlink" title="Scale"></a>Scale</h2><p>对于 <code>scale</code>，如果它是零或正数，表示小数点右边数字的数量；如果是负数，则 <code>unscaledValue</code> 将乘以 10^{-scale} 。比如如果 <code>scale</code> 的值为 <code>-3</code> ，那么 <code>unscaledValue</code> 的值将乘以 <code>1000</code>。<br>即 <code>BigDecimal</code> 的值就是将对象中的 <code>unscaledValue</code> 乘以 <code>10^{-scale}</code> 。<br>以下是一些相同 <code>precision</code> 情况下（<code>unscaledValue</code> 也相同）不同 <code>scale</code> 的例子：</p>
-<ul>
-<li>对于 unscaledValue = 12345， 在 scale = 5 的情况下是 0.12345；</li>
-<li>对于 unscaledValue = 12345， 在 scale = 4 的情况下是 1.2345；</li>
-<li>对于 unscaledValue = 12345， 在 scale = 0 的情况下是 12345；</li>
-<li>对于 unscaledValue = 12345， 在 scale = -1 的情况下是 123450；</li>
-</ul>
-<p>但对于值相同的情况下，在设置不同 <code>scale</code> 的时候，其 <code>precision</code> 会自动变化：</p>
-<ul>
-<li>对于 12345， 在 scale = 5 的情况下是 12345.00000，其 <code>precision</code> 是 <code>10</code> ；</li>
-<li>对于 12345， 在 scale = 4 的情况下是 12345.0000，其 <code>precision</code> 是 <code>9</code>；</li>
-<li>对于 12345， 在 scale = 0 的情况下是 12345，其 <code>precision</code> 是 <code>5</code>；</li>
-<li>对于 12345， 在 scale = -1 的情况下是 1234 * 10^{1}，其 <code>precision</code> 是 <code>4</code> ；</li>
-</ul>
-<h2 id="设置-scale"><a href="#设置-scale" class="headerlink" title="设置 scale"></a>设置 scale</h2><p>使用 <code>BigDecimal</code> 的 <code>.setScale</code> 方法，可以给一个既定 <code>BigDecimal</code> 值设置尺度，同时会影响它的 <code>precision</code> 。<br>比如对于一个值为 <code>12345.6789</code> 的 <code>BigDecimal</code> 对象 <code>x</code> ，设置不同的 <code>scale</code> 可能导致不同的结果：</p>
-<ul>
-<li>x = x.setScale(1, BigDecimal.ROUND_CEILING);    // value = 12345.7, scale = 1, precision = 6；</li>
-<li>x = x.setScale(5);    // value = 12345.67890, scale = 5, precision = 10；</li>
-<li>x = x.setScale(-1, BigDecimal.ROUND_CEILING);    // value = 1.235E+4, scale = -1, precision = 4；<br>其中设置的 <code>scale</code> 比当前小时，需要添加第二个参数，表示舍弃时的方式；</li>
-</ul>
-<h2 id="设置-precision"><a href="#设置-precision" class="headerlink" title="设置 precision"></a>设置 precision</h2><p>使用 <code>BigDecimal</code> 的构造方法，在第二个参数中使用 <code>MathContext</code> 类，可以指定创建对象最大允许的 <code>precision</code> ，同时可能会影响它的 <code>scale</code> 。<br>比如用字符串值 <code>12345.6789</code> 创建 <code>BigDecimal</code> 对象 <code>x</code> ，设置不同的 MathContext 可能导致不同的结果：</p>
-<ul>
-<li>x = new BigDecimal(“12345.6789”, new MathContext(9));    // value = 12345.6789, scale = 4, precision = 9</li>
-<li>x = new BigDecimal(“12345.6789”, new MathContext(8));    // value = 12345.679, scale = 3, precision = 8</li>
-<li>x = new BigDecimal(“12345.6789”, new MathContext(5));    // value = 12345.6789, scale = 0, precision = 5</li>
-<li>x = new BigDecimal(“12345.6789”, new MathContext(2));    // value = 1.2E+4, scale = -3, precision = 2</li>
-<li>x = new BigDecimal(“12345.6789”, new MathContext(19));    // value = 12345.6789, scale = 4, precision = 9<br>可以看出，对于设置的 <code>MathContext</code> 如果大于当前的 <code>precision</code> ，则不会造成影响。</li>
-</ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>针对一个 <code>BigDecimal</code> 方法，我们可以使用 <code>scale</code> 和 <code>precision</code> 属性理解它的尺度和精度。<br>同时可以使用 <code>.setScale</code> 和 构造方法控制其 <code>scale</code> 和 <code>precision</code> 。</p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://stackoverflow.com/questions/35435691/bigdecimal-precision-and-scale" target="_blank" rel="external">https://stackoverflow.com/questions/35435691/bigdecimal-precision-and-scale</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/08/01/Java中BigDecimal的scale和precision/" data-id="ckiafmin9002rqu8tlejdvfzt" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/08/02/Java中使用Optional避免多条件判断/" data-id="ckifjfg7d00381m8tvoln11j7" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
@@ -752,7 +728,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/page/6/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/5/">5</a><a class="page-number" href="/blog-hexo/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/blog-hexo/page/8/">8</a><a class="page-number" href="/blog-hexo/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/19/">19</a><a class="extend next" rel="next" href="/blog-hexo/page/8/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/6/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/5/">5</a><a class="page-number" href="/blog-hexo/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/blog-hexo/page/8/">8</a><a class="page-number" href="/blog-hexo/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/19/">19</a><a class="extend next" rel="next" href="/blog-hexo/page/8/">weiter &raquo;</a>
   </nav>
 
 </section>
@@ -761,7 +737,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
+    <h3 class="widget-title">Kategorien</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -790,7 +766,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archiv</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -800,9 +776,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2020/12/08/Python使用Gooey创建界面/">Python使用Gooey创建界面</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2020/12/04/入门三维数据obj格式数据-md/">入门三维数据obj格式数据.md</a>
@@ -818,10 +798,6 @@
         
           <li>
             <a href="/blog-hexo/2020/11/24/Numpy使用花式索引操作数组/">Numpy使用花式索引操作数组</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/11/11/合并多个Excel文件到一个Excel工作簿/">合并多个Excel文件到一个Excel工作簿</a>
           </li>
         
       </ul>

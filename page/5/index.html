@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -67,6 +67,59 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Vue引用本地图片的几种方式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/12/12/Vue引用本地图片的几种方式/" class="article-date">
+  <time datetime="2019-12-12T07:56:48.000Z" itemprop="datePublished">2019-12-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/12/12/Vue引用本地图片的几种方式/">Vue引用本地图片的几种方式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在使用 <code>Vue.js</code> 框架的过程中，不可避免会需要引用本地图片。<br>如果是全局URL，直接将其链接值设置到相关组件的属性值中即可，但本地图片的路径稍微有点不一样，这篇笔记总结相关的操作方式。</p>
+<p>假定将图片文件放置在 <code>src/assets/img/</code> 文件夹下，测试图片的路径为 <code>src/asserts/img/test.png</code>。</p>
+<h2 id="在-css-中引用"><a href="#在-css-中引用" class="headerlink" title="在 css 中引用"></a>在 css 中引用</h2><p>页面中很有可能某块区域需要背景图片，此时通常填写 <code>css</code> 样式中的 <code>background-image</code> 完成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">.element-classname&#123;</div><div class="line">  background-image: url(&apos;~@/assets/img/test.png&apos;);</div><div class="line">  background-repeat: no-repeat no-repeat;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>其中 <code>@</code> 指代的路径是 <code>src</code>，注意与普通模块的标识方式不同的是，前面一定要添加 <code>~</code> 符号。</p>
+<h2 id="作为-img-元素的-src-属性引用"><a href="#作为-img-元素的-src-属性引用" class="headerlink" title="作为 img 元素的 src 属性引用"></a>作为 <code>img</code> 元素的 <code>src</code> 属性引用</h2><h4 id="引用方式1：直接写在-img-标签内"><a href="#引用方式1：直接写在-img-标签内" class="headerlink" title="引用方式1：直接写在 img 标签内"></a>引用方式1：直接写在 img 标签内</h4><p>可以直接根据当前文件的路径写对应的 <code>src</code> 属性值，这也是 <code>Vue.js</code> 框架模板首页 LOGO 的引入方式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;app&quot;&gt;</div><div class="line">    &lt;img src=&quot;./assets/logo.png&quot;&gt;</div><div class="line">    &lt;router-view/&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">...</div><div class="line">&lt;img src=&quot;../../assets/img/test.png&quot;&gt;</div></pre></td></tr></table></figure></p>
+<p>也可以使用绝对路径：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;img src=&quot;@/assets/logo.png&quot;&gt;</div></pre></td></tr></table></figure></p>
+<p>需要注意的是，不能够把 <code>@/asserts/logo.png</code> 用一个数据变量存储起来，然后绑定到 <code>src</code> 属性上。<br>比如下面这种方式是无法显示出图片的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">    &lt;div&gt;</div><div class="line">        &lt;img :src=&quot;imageUrl&quot;&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/template&gt;</div><div class="line">&lt;script&gt;</div><div class="line">export default &#123;</div><div class="line">  data() &#123;</div><div class="line">    return &#123;</div><div class="line">        imageUrl:&apos;@/asserts/logo.png&apos;,</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">&#125;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure></p>
+<p>如果需要编一配置，可以采用下面这种引用方式。</p>
+<h4 id="引用方式2"><a href="#引用方式2" class="headerlink" title="引用方式2"></a>引用方式2</h4><p>在 <code>data</code> 数据使用 <code>require</code> 引入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">    &lt;div&gt;</div><div class="line">          &lt;img class=&quot;title&quot; :src=&quot;imageUrl&quot;/&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/template&gt;</div><div class="line">&lt;script&gt;</div><div class="line">export default &#123;</div><div class="line">  data() &#123;</div><div class="line">    return &#123;</div><div class="line">        imageUrl: require(&apos;@/assets/img/test.png&apos;),</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="引用方式3"><a href="#引用方式3" class="headerlink" title="引用方式3"></a>引用方式3</h4><p>当然，也可以提前引入作为模块，然后用 <code>data</code> 数据与其绑定。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">    &lt;div&gt;</div><div class="line">          &lt;img class=&quot;title&quot; :src=&quot;imageUrl&quot;/&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/template&gt;</div><div class="line">&lt;script&gt;</div><div class="line">import imageUrl from &apos;@/assets/img/test.png&apos;</div><div class="line">export default &#123;</div><div class="line">  data() &#123;</div><div class="line">    return &#123;</div><div class="line">        imageUrl: imageUrl,</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇笔记总结了几种可行的 Vue.js 项目中引用本地图片的方式，对不同的场景可以选择对应的方案。  </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/12/12/Vue引用本地图片的几种方式/" data-id="ckifjfgao00av1m8t7cmvwjkd" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Pip安装包的几种模式" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -123,7 +176,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/12/06/Pip安装包的几种模式/" data-id="ckiafmipa007qqu8t01pwba6n" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/12/06/Pip安装包的几种模式/" data-id="ckifjfg97007i1m8tl8xs0jn8" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Pip/">Pip</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -175,7 +228,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/11/28/初识FastAPI/" data-id="ckiafmis300ekqu8tkvelilzp" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/11/28/初识FastAPI/" data-id="ckifjfgdn00gu1m8thmmhac84" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/FastAPI/">FastAPI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -247,7 +300,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/11/25/初识Alembic/" data-id="ckiafmirv00dvqu8tgmc53iv7" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/11/25/初识Alembic/" data-id="ckifjfgc500dv1m8tjw7jcjes" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Alembic/">Alembic</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SQLAlchemy/">SQLAlchemy</a></li></ul>
@@ -300,7 +353,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/11/21/Python使用nltk统计词频/" data-id="ckiafmipr008rqu8tvmiyqg3z" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/11/21/Python使用nltk统计词频/" data-id="ckifjfg9n008f1m8t9mnktec7" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -371,7 +424,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/11/15/使用Mkdocs快速搭建高颜值文档/" data-id="ckiafmir900c4qu8tjyenr4ky" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/11/15/使用Mkdocs快速搭建高颜值文档/" data-id="ckifjfgb700c41m8t32epv1pk" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mkdocs/">Mkdocs</a></li></ul>
@@ -450,7 +503,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/11/11/Laravel批量insert时数组维度的一个坑/" data-id="ckiafmioh005dqu8tp9sbu9ze" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/11/11/Laravel批量insert时数组维度的一个坑/" data-id="ckifjfg8b00501m8t3brl9kn0" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -499,7 +552,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/11/08/JavaScript中遍历日期及日期格式化/" data-id="ckiafmin5002hqu8tmfrx2ja8" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/11/08/JavaScript中遍历日期及日期格式化/" data-id="ckifjfg75002p1m8td44fs8mh" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li></ul>
@@ -577,7 +630,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/11/02/初识peewee/" data-id="ckiafmisc00fcqu8tuipcu75m" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/11/02/初识peewee/" data-id="ckifjfgcr00fc1m8tjaalevnq" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/peewee/">peewee</a></li></ul>
@@ -643,75 +696,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/10/30/初识cookiecutter/" data-id="ckiafmisb00f8qu8tny75k91o" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2019/10/30/初识cookiecutter/" data-id="ckifjfgcn00f21m8tienb385o" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/cookiecutter/">cookiecutter</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-使用heatmap-js生成热力图" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2019/10/29/使用heatmap-js生成热力图/" class="article-date">
-  <time datetime="2019-10-29T11:53:19.000Z" itemprop="datePublished">2019-10-29</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2019/10/29/使用heatmap-js生成热力图/">使用heatmap.js生成热力图</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在某些数据可视化需求下，我们需要根据给定的数据生成热力图。<br>使用 <a href="https://www.patrick-wied.at/static/heatmapjs/" target="_blank" rel="external">heatmap.js</a> 可以方便地完成这个功能。</p>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><code>heatmap.js</code> 不是追踪用户行为的脚本，它仅仅是基于用户喂给它的数据创建一个动态的热力图。<br> <a href="https://www.patrick-wied.at/static/heatmapjs/" target="_blank" rel="external">heatmap.js</a> 的官方网站最令人惊喜之处在于，它在网站背景上记录了用户鼠标的滑动区域，并生成热力图。在阅读其说明文档的不经意间，生成了一张反映了用户行为了热力图。<br><img src="/blog-hexo/2019/10/29/使用heatmap-js生成热力图/site.png" alt="示例图" title="示例图"></p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>参考 <a href="https://github.com/pa7/heatmap.js" target="_blank" rel="external">官方GitHub仓库相关说明</a> 可以使用 <code>npm</code> 快速安装。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install heatmap.js</div></pre></td></tr></table></figure></p>
-<p>其实 <code>heatmap.js</code> 包所包含的代码很简洁，主要就是两个类 <code>h337</code> 和 <code>heatmapInstance</code>。<br>其中 <code>h337</code> 是 <code>heatmap.js</code> 全局注册的主类对象，主要功能就是用于创建 <code>heatmapInstance</code> 实例，在创建的过程中通过一系列配置参数控制热力图的行为。<br>而 <code>heatmapInstance</code> 则主要用于加载数据，完成数据可视化的相关工作。<br>话说这个对象名 <code>h337</code> 起得也太随意了，一开始还以为是哪个水平较差的博主随手贴了自己的代码，代码中的变量名称还这么奔放，后来发现居然就是插件自己定义的。</p>
-<h2 id="使用样例"><a href="#使用样例" class="headerlink" title="使用样例"></a>使用样例</h2><p>首先在页面上需要有一个 <code>id</code> 为 <code>heatmapContainer</code> 的组件区域，然后使用 <code>h337</code> 创建一个 <code>heatmapInstance</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">// create configuration object</div><div class="line">var config = &#123;</div><div class="line">  container: document.getElementById(&apos;heatmapContainer&apos;),</div><div class="line">  radius: 10,</div><div class="line">  maxOpacity: .5,</div><div class="line">  minOpacity: 0,</div><div class="line">  blur: .75</div><div class="line">&#125;;</div><div class="line">// create heatmap with configuration</div><div class="line">var heatmapInstance = h337.create(config);</div></pre></td></tr></table></figure></p>
-<p>然后将数据绑定到 <code>heatmapInstance</code> 中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">// a single datapoint</div><div class="line">var dataPoint = &#123;</div><div class="line">  x: 5, // x coordinate of the datapoint, a number</div><div class="line">  y: 5, // y coordinate of the datapoint, a number</div><div class="line">  value: 100 // the value at datapoint(x, y)</div><div class="line">&#125;;</div><div class="line">heatmapInstance.addData(dataPoint);</div><div class="line">// multiple datapoints (for data initialization use setData!!)</div><div class="line">var dataPoints = [dataPoint, dataPoint, dataPoint, dataPoint];</div><div class="line">heatmapInstance.addData(dataPoints);</div></pre></td></tr></table></figure></p>
-<p>就这么简单，图形定义加上数据绑定，真正好的工具应该像它这样简洁易懂。</p>
-<h2 id="参数详解"><a href="#参数详解" class="headerlink" title="参数详解"></a>参数详解</h2><p>首先在创建 <code>heatmapInstance</code> 过程中，主要使用的参数有以下几个：</p>
-<ul>
-<li><code>container</code>：用于放置热力图画布的 DOM 节点；</li>
-<li><code>radius</code>：每个数据点具有的半径；</li>
-<li><code>opacity</code>：整个热力图的透明度；</li>
-<li><code>gradient</code>：表示梯度的对象，可以控制热力图的颜色；</li>
-<li><code>blur</code>：模糊因子，值越高梯度越平滑；</li>
-</ul>
-<p>在设置数据的过程中，数据的格式就比较简单。参数是一个表示数据点的数组，而每个数据点只包含三个属性：</p>
-<ul>
-<li><code>x</code>：横轴坐标值</li>
-<li><code>y</code>：纵轴坐标值</li>
-<li><code>value</code>：热度值</li>
-</ul>
-<h2 id="简单示例"><a href="#简单示例" class="headerlink" title="简单示例"></a>简单示例</h2><p>创建一个 <code>index.html</code> 空文件，将如下代码拷贝到文件中，使用浏览器打开即可查看一个最简单的示例：<br>（代码中引用了 <code>heatmap.js</code> 的CDN链接，需要联网环境。）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&apos;utf-8&apos;&gt;</div><div class="line">    &lt;meta http-equiv=&apos;X-UA-Compatible&apos; content=&apos;IE=edge&apos;&gt;</div><div class="line">    &lt;title&gt;heatmap.js example&lt;/title&gt;</div><div class="line">    &lt;meta name=&apos;viewport&apos; content=&apos;width=device-width, initial-scale=1&apos;&gt;</div><div class="line"></div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">    &lt;div&gt;</div><div class="line">        &lt;div&gt;Below is the heatmap diagram.&lt;/div&gt;</div><div class="line">        &lt;div id=&quot;heatmapContainer&quot; style=&quot;width: 500px; height: 300px; background-color: aqua;&quot;&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/body&gt;</div><div class="line"></div><div class="line">&lt;script src=&quot;https://cdn.bootcss.com/heatmap.js/2.0.0/heatmap.js&quot;&gt;&lt;/script&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    var config = &#123;</div><div class="line">        container: document.getElementById(&apos;heatmapContainer&apos;),</div><div class="line">        radius: 80,</div><div class="line">        maxOpacity: .8,</div><div class="line">        minOpacity: 0,</div><div class="line">        blur: .75</div><div class="line">    &#125;;</div><div class="line">    // create heatmap with configuration</div><div class="line">    var heatmapInstance = h337.create(config);</div><div class="line">    </div><div class="line">    var data = [</div><div class="line">        &#123; x: 100, y: 150, value: 50 &#125;,</div><div class="line">        &#123; x: 400, y: 15, value: 80 &#125;,</div><div class="line">        &#123; x: 10, y: 120, value: 20 &#125;,</div><div class="line">        &#123; x: 200, y: 95, value: 100 &#125;,</div><div class="line">    ]</div><div class="line">    heatmapInstance.setData(&#123;</div><div class="line">        max: 100,</div><div class="line">        data: data,</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://www.patrick-wied.at/static/heatmapjs/" target="_blank" rel="external">https://www.patrick-wied.at/static/heatmapjs/</a><br><a href="https://www.patrick-wied.at/static/heatmapjs/docs.html" target="_blank" rel="external">https://www.patrick-wied.at/static/heatmapjs/docs.html</a><br><a href="https://github.com/ckmessi/frontend-effect-assemble" target="_blank" rel="external">https://github.com/ckmessi/frontend-effect-assemble</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2019/10/29/使用heatmap-js生成热力图/" data-id="ckiafmirj00czqu8t2k1dlsc5" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/heatmap-js/">heatmap.js</a></li></ul>
 
     </footer>
   </div>
@@ -724,7 +712,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/page/4/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="page-number" href="/blog-hexo/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/19/">19</a><a class="extend next" rel="next" href="/blog-hexo/page/6/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/4/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="page-number" href="/blog-hexo/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/19/">19</a><a class="extend next" rel="next" href="/blog-hexo/page/6/">weiter &raquo;</a>
   </nav>
 
 </section>
@@ -733,7 +721,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
+    <h3 class="widget-title">Kategorien</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -762,7 +750,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archiv</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -772,9 +760,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2020/12/08/Python使用Gooey创建界面/">Python使用Gooey创建界面</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2020/12/04/入门三维数据obj格式数据-md/">入门三维数据obj格式数据.md</a>
@@ -790,10 +782,6 @@
         
           <li>
             <a href="/blog-hexo/2020/11/24/Numpy使用花式索引操作数组/">Numpy使用花式索引操作数组</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/11/11/合并多个Excel文件到一个Excel工作簿/">合并多个Excel文件到一个Excel工作簿</a>
           </li>
         
       </ul>
