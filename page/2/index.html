@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -67,6 +67,60 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Python使用多进程加速数据处理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/11/25/Python使用多进程加速数据处理/" class="article-date">
+  <time datetime="2020-11-25T15:51:22.000Z" itemprop="datePublished">2020-11-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/11/25/Python使用多进程加速数据处理/">Python使用多进程加速数据处理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在使用 Python 进行数据处理过程中，如果针对数据的操作是相互独立不依赖的，可以使用 Python 的多进程机制加速数据的处理。</p>
+<p>这里需要使用到 Python 的 <code>multiprocessing</code> 包。</p>
+<h2 id="基础用法"><a href="#基础用法" class="headerlink" title="基础用法"></a>基础用法</h2><p>先定义一个将要被分发给各个进程处理的任务方法 <code>do_job_1</code>，仅接收一个参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">def do_job_1(param1):</div><div class="line">    print(f&apos;do_job_1 with param: &#123;param1&#125;&apos;)</div><div class="line">    return param1 + 1</div></pre></td></tr></table></figure></p>
+<p>在主方法中，使用 <code>multiprocessing.Pool()</code> 生成进程池来处理上述方法，主要通过 <code>pool.imap</code> 方法实现，这个方法的第一个参数是任务函数名，第二个参数是参数数组。注意这是一个长度为 <code>n</code> 的数组，表示共有 <code>n</code> 个任务，而每个任务的处理函数只接收其中一个参数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">import nultiprocessing </div><div class="line"></div><div class="line">def main_work_1():</div><div class="line">    print(f&quot;start jobs with multiprocessing...&quot;)</div><div class="line">    with multiprocessing.Pool() as pool:</div><div class="line">        param1_array = [1, 2, 3, 4, 5]</div><div class="line">        results = list(tqdm(pool.imap(do_job_1, param1_array), total=len(param1_array)))</div><div class="line">    print(results)</div></pre></td></tr></table></figure>
+<p>输出结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">start jobs with multiprocessing...</div><div class="line">5it [00:00, 9.07it/s]</div><div class="line">do_job_1 with param: 1</div><div class="line">do_job_1 with param: 2</div><div class="line">do_job_1 with param: 3</div><div class="line">do_job_1 with param: 4</div><div class="line">do_job_1 with param: 5</div><div class="line">[2, 3, 4, 5, 6]</div></pre></td></tr></table></figure></p>
+<h2 id="多个参数"><a href="#多个参数" class="headerlink" title="多个参数"></a>多个参数</h2><p>上述方案只能用于传递一个参数，现实情况下大多数方法都需要传递多个参数，这时可以使用 <code>pool.starmap</code>方法。</p>
+<p>定义方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">def do_job_2(param1, param2, param3):</div><div class="line">    print(f&apos;do_job_2 with params: &#123;param1&#125;, &#123;param2&#125;, &#123;param3&#125;&apos;)</div><div class="line">    return param1 + 1, param2 + 2, param3 + &quot;_suffix&quot;</div></pre></td></tr></table></figure></p>
+<p>在主方法中使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">def main_work_2():</div><div class="line">    print(f&quot;start jobs with multiprocessing...&quot;)</div><div class="line">    with multiprocessing.Pool() as pool:</div><div class="line">        param1_array = [1, 2, 3, 4, 5]</div><div class="line">        param2_array = [100, 200, 300, 400, 500]</div><div class="line">        param3_array = [&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;d&apos;, &apos;e&apos;]</div><div class="line">        results = list(tqdm(pool.starmap(do_job_2, list(zip(param1_array, param2_array, param3_array))), total=len(param1_array)))</div><div class="line">    print(results)</div></pre></td></tr></table></figure></p>
+<p>需要将参数分别封装成长度为 <code>n</code> 的数组，然后通过 <code>list(zip(param1_array, param2_array, ...))</code> 的方式传入。<br>输出结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">start jobs with multiprocessing...</div><div class="line">do_job_2 with params: 1, 100, a</div><div class="line">do_job_2 with params: 2, 200, b</div><div class="line">do_job_2 with params: 3, 300, c</div><div class="line">do_job_2 with params: 4, 400, d</div><div class="line">do_job_2 with params: 5, 500, e</div><div class="line">100%|██████████| 5/5 [00:00&lt;?, ?it/s]</div><div class="line">[(2, 102, &apos;a_suffix&apos;), (3, 202, &apos;b_suffix&apos;), (4, 302, &apos;c_suffix&apos;), (5, 402, &apos;d_suffix&apos;), (6, 502, &apos;e_suffix&apos;)]</div></pre></td></tr></table></figure></p>
+<p>需要注意的是，<code>starmap</code> 方法天生是不支持 <code>tqdm</code> 装饰的，意味着无法看到进度条，如果希望能够使用 <code>tqdm</code>，可以添加下面的方法（来源于万能的 stackoverflow）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"># istarmap.py for Python &lt;3.8</div><div class="line">import multiprocessing.pool as mpp</div><div class="line"></div><div class="line">def istarmap(self, func, iterable, chunksize=1):</div><div class="line">    &quot;&quot;&quot;starmap-version of imap</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    if self._state != mpp.RUN:</div><div class="line">        raise ValueError(&quot;Pool not running&quot;)</div><div class="line"></div><div class="line">    if chunksize &lt; 1:</div><div class="line">        raise ValueError(</div><div class="line">            &quot;Chunksize must be 1+, not &#123;0:n&#125;&quot;.format(</div><div class="line">                chunksize))</div><div class="line"></div><div class="line">    task_batches = mpp.Pool._get_tasks(func, iterable, chunksize)</div><div class="line">    result = mpp.IMapIterator(self._cache)</div><div class="line">    self._taskqueue.put(</div><div class="line">        (</div><div class="line">            self._guarded_task_generation(result._job,</div><div class="line">                                          mpp.starmapstar,</div><div class="line">                                          task_batches),</div><div class="line">            result._set_length</div><div class="line">        ))</div><div class="line">    return (item for chunk in result for item in chunk)</div><div class="line">mpp.Pool.istarmap = istarmap</div></pre></td></tr></table></figure></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://stackoverflow.com/questions/57354700/starmap-combined-with-tqdm" target="_blank" rel="external">https://stackoverflow.com/questions/57354700/starmap-combined-with-tqdm</a><br><a href="https://blog.csdn.net/qq_15969343/article/details/84672527" target="_blank" rel="external">https://blog.csdn.net/qq_15969343/article/details/84672527</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/11/25/Python使用多进程加速数据处理/" data-id="ckjtyt42s008x118tr30m076m" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Numpy使用花式索引操作数组" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -119,7 +173,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/11/24/Numpy使用花式索引操作数组/" data-id="ckjslnci7006tlm8t8vfczt67" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/11/24/Numpy使用花式索引操作数组/" data-id="ckjtyt41u006l118t3lr6oj2s" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Numpy/">Numpy</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -177,7 +231,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/11/11/合并多个Excel文件到一个Excel工作簿/" data-id="ckjslncmp00g1lm8t65nmaokn" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/11/11/合并多个Excel文件到一个Excel工作簿/" data-id="ckjtyt45f00fz118tfrc07ije" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/VB/">VB</a></li></ul>
@@ -230,7 +284,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/11/02/Linux环境su到不能登录的用户/" data-id="ckjslnchl005nlm8tl6mwjznw" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/11/02/Linux环境su到不能登录的用户/" data-id="ckjtyt41i005r118t6hdl7cxs" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li></ul>
@@ -312,7 +366,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/10/21/Python使用argparse传递参数/" data-id="ckjslnciv008flm8t5rkhyld8" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/10/21/Python使用argparse传递参数/" data-id="ckjtyt42l008i118to3atyo95" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -365,7 +419,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/10/17/Python使用concurrent并发编程/" data-id="ckjslnciw008ilm8t8o04knpl" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/10/17/Python使用concurrent并发编程/" data-id="ckjtyt42i008c118t13cg4ip3" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -414,7 +468,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/10/12/使用Matplotlib绘制三维点图/" data-id="ckjslnckz00c8lm8t578epj8z" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/10/12/使用Matplotlib绘制三维点图/" data-id="ckjtyt44400c7118tdgz11yp2" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Matplotlib/">Matplotlib</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -463,7 +517,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/09/15/Python模块调用中的超时处理/" data-id="ckjslncj70092lm8t7wywev90" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/09/15/Python模块调用中的超时处理/" data-id="ckjtyt42v0096118tla3u32de" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -511,7 +565,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/09/10/PyTorch的Tensor的筛选和排序操作/" data-id="ckjslncir0085lm8t6aqdy72i" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/09/10/PyTorch的Tensor的筛选和排序操作/" data-id="ckjtyt42e0082118td2xgmmdt" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PyTorch/">PyTorch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -558,66 +612,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/09/01/Markdown折叠语法/" data-id="ckjslnchv0065lm8t6kuod61p" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/09/01/Markdown折叠语法/" data-id="ckjtyt41o0067118thotjjp9w" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Markdown/">Markdown</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Python使用OpenCV将图片帧拼接视频" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2020/08/26/Python使用OpenCV将图片帧拼接视频/" class="article-date">
-  <time datetime="2020-08-26T15:24:15.000Z" itemprop="datePublished">2020-08-26</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2020/08/26/Python使用OpenCV将图片帧拼接视频/">Python使用OpenCV将图片帧拼接视频</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在实际工作中，可能需要读取视频，对其中每一帧画面进行相关的图像处理，然后再拼接成视频。<br>图片的处理过程和方式可以各种可样，最终都免不了需要拼接成视频，使用 opencv-python 可以完成这个功能。</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>假定已经获取到处理完成的图片集合，可以使用 <code>cv2.VideoWriter</code> 类将其拼接成视频：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">def concat_video(frame_array, save_file, size=(640, 480), fps=50):</div><div class="line">    file_path = save_file</div><div class="line">    fourcc = cv2.VideoWriter_fourcc(*&apos;mp4v&apos;)</div><div class="line">    video = cv2.VideoWriter(file_path, fourcc, fps, size)</div><div class="line">    for img in frame_array:</div><div class="line">        video.write(img)</div><div class="line">    video.release()</div></pre></td></tr></table></figure></p>
-<p>其中使用的 4 个参数中，</p>
-<ul>
-<li><code>file_path</code> 表示保存的视频文件路径；</li>
-<li><code>fourcc</code> 表示 Four-Character Codes，代表四字符代码（four character code），是一种独立标示视频数据流格式的四字符代码。在输出 <code>.mp4</code> 格式时，使用 <code>*&#39;mp4v&#39;</code> 或者 <code>&#39;m&#39;, &#39;p&#39;, &#39;4&#39;, &#39;v&#39;</code> 表示（两者等价）；</li>
-<li><code>fps</code> 是输出视频的帧率，不同的帧率会导致输出视频的长度不同；</li>
-<li><code>size</code> 表示视频画面大小，注意要与图片的大小保持一致，否则会抛出错误 </li>
-</ul>
-<h2 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h2><ul>
-<li><a href="https://blog.csdn.net/u010420283/article/details/89706794" target="_blank" rel="external">https://blog.csdn.net/u010420283/article/details/89706794</a></li>
-<li><a href="https://blog.csdn.net/Bugest/article/details/81119980" target="_blank" rel="external">https://blog.csdn.net/Bugest/article/details/81119980</a></li>
-<li><a href="https://blog.csdn.net/zj360202/article/details/79026891" target="_blank" rel="external">https://blog.csdn.net/zj360202/article/details/79026891</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/08/26/Python使用OpenCV将图片帧拼接视频/" data-id="ckjslncis0088lm8tpc69jurm" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/OpenCV/">OpenCV</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
 
     </footer>
   </div>
@@ -630,7 +628,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/20/">20</a><a class="extend next" rel="next" href="/blog-hexo/page/3/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/20/">20</a><a class="extend next" rel="next" href="/blog-hexo/page/3/">weiter &raquo;</a>
   </nav>
 
 </section>
@@ -639,7 +637,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
+    <h3 class="widget-title">Kategorien</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -668,7 +666,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archiv</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -678,9 +676,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2021/01/12/Laravel自定义带日期滚动的日志器/">Laravel自定义带日期滚动的日志器</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2021/01/11/使用PyTorch3D自定义渲染图片/">使用PyTorch3D自定义渲染图片</a>
@@ -696,10 +698,6 @@
         
           <li>
             <a href="/blog-hexo/2020/12/31/初识faiss/">初识faiss</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/12/28/配置Laravel-Swagger/">配置Laravel-Swagger</a>
           </li>
         
       </ul>

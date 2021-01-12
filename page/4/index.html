@@ -57,7 +57,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -67,6 +67,65 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-初识FIGlet" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/07/04/初识FIGlet/" class="article-date">
+  <time datetime="2020-07-04T04:33:12.000Z" itemprop="datePublished">2020-07-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/07/04/初识FIGlet/">初识FIGlet</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="什么是FIGlet"><a href="#什么是FIGlet" class="headerlink" title="什么是FIGlet"></a>什么是FIGlet</h2><p><code>FIGlet</code> 是基于 ASCII 字符组成的字符画。</p>
+<img src="/blog-hexo/2020/07/04/初识FIGlet/figlet1.png" alt="FIGlet示意图" title="FIGlet示意图">
+<p>最通俗的 FIGlet 之一是坊间流传广泛的那张图：</p>
+<img src="/blog-hexo/2020/07/04/初识FIGlet/figlet2.png" alt="佛祖保佑" title="佛祖保佑">
+<h2 id="如何使用FIGlet"><a href="#如何使用FIGlet" class="headerlink" title="如何使用FIGlet"></a>如何使用FIGlet</h2><p>在不同平台、不同语言下，可以找到各种 FIGlet 相关的包。<br>比如在 Node.js 下安装包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install figlet</div></pre></td></tr></table></figure></p>
+<p>然后创建一个 <code>main.js</code> 文件，输入以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var figlet = require(&apos;figlet&apos;);</div><div class="line">figlet(&apos;Hello World!!&apos;, function(err, data) &#123;</div><div class="line">    if (err) &#123;</div><div class="line">        console.log(&apos;Something went wrong...&apos;);</div><div class="line">        console.dir(err);</div><div class="line">        return;</div><div class="line">    &#125;</div><div class="line">    console.log(data)</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>执行 <code>node main.js</code> 即可看到结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ node main.js</div><div class="line"></div><div class="line">  _   _      _ _        __        __         _     _ _ _</div><div class="line"></div><div class="line"> | | | | ___| | | ___   \ \      / /__  _ __| | __| | | |</div><div class="line"></div><div class="line"> | |_| |/ _ \ | |/ _ \   \ \ /\ / / _ \| &apos;__| |/ _` | | |</div><div class="line"></div><div class="line"> |  _  |  __/ | | (_) |   \ V  V / (_) | |  | | (_| |_|_|</div><div class="line"></div><div class="line"> |_| |_|\___|_|_|\___/     \_/\_/ \___/|_|  |_|\__,_(_|_)</div></pre></td></tr></table></figure></p>
+<img src="/blog-hexo/2020/07/04/初识FIGlet/figlet3.png" alt="输出效果" title="输出效果">
+<h2 id="Ubuntu-添加到欢迎页面"><a href="#Ubuntu-添加到欢迎页面" class="headerlink" title="Ubuntu 添加到欢迎页面"></a>Ubuntu 添加到欢迎页面</h2><p>首先可以使用 <code>apt-get</code> 安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt; sudo apt-get install figlet</div></pre></td></tr></table></figure></p>
+<p>安装完成后：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt; figlet abc</div></pre></td></tr></table></figure></p>
+<p>在 <code>oh-my-zsh</code> 的 <code>.zshrc</code> 文件中添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">figlet -f slant [xxx]</div></pre></td></tr></table></figure></p>
+<p>前提是系统存在 <code>figlet</code> 命令，否则会提示 <code>command not found: figlet</code>。<br>其中 <code>-f slant</code> 是为了添加倾斜字体的效果。</p>
+<p>之后每次 SSH 连接登录时，就会显示：<br><img src="/blog-hexo/2020/07/04/初识FIGlet/figlet4.png" alt="输出效果" title="输出效果"></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="http://www.figlet.org/" target="_blank" rel="external">http://www.figlet.org/</a></li>
+<li><a href="https://www.npmjs.com/package/figlet" target="_blank" rel="external">https://www.npmjs.com/package/figlet</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/07/04/初识FIGlet/" data-id="ckjtyt44x00ei118t8nhzx2qr" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/FIGlet/">FIGlet</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Element-UI针对文件上传添加表单校验" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -107,7 +166,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/02/Element-UI针对文件上传添加表单校验/" data-id="ckjslncex0015lm8tx94462mx" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/07/02/Element-UI针对文件上传添加表单校验/" data-id="ckjtyt3zh0019118t0g7rtto1" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -175,7 +234,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/01/初识Django/" data-id="ckjslncm100eilm8tye3ys698" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/07/01/初识Django/" data-id="ckjtyt44u00e7118tekkf9zir" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Django/">Django</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -224,7 +283,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/06/28/VSCode遇到Git找不到文件操作错误的解决/" data-id="ckjslnck600aplm8th9nh8vkb" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/06/28/VSCode遇到Git找不到文件操作错误的解决/" data-id="ckjtyt43i00ao118tkom8v9qe" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/VS-Code/">VS Code</a></li></ul>
@@ -280,7 +339,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/06/24/VSCode使用SFTP完成代码远程同步/" data-id="ckjslncjy00aclm8trfvxn2i5" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/06/24/VSCode使用SFTP完成代码远程同步/" data-id="ckjtyt43g00aj118t9dlwgmy6" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/VS-Code/">VS Code</a></li></ul>
@@ -340,7 +399,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/06/09/GitLab中添加代码覆盖率报告数值/" data-id="ckjslncf5001mlm8tj9my9b03" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/06/09/GitLab中添加代码覆盖率报告数值/" data-id="ckjtyt3zo001p118t3vjyz8ie" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Code-Coverage/">Code Coverage</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/GitLab/">GitLab</a></li></ul>
@@ -401,7 +460,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/06/03/Axios调用post请求同时上传文件和参数/" data-id="ckjslncdd000blm8t1fwm9dq3" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/06/03/Axios调用post请求同时上传文件和参数/" data-id="ckjtyt3ya000b118t1fr69oon" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/axios/">axios</a></li></ul>
@@ -454,7 +513,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/05/28/Laravel中添加路径参数限制规则/" data-id="ckjslncgx004flm8tvy6xeezc" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/05/28/Laravel中添加路径参数限制规则/" data-id="ckjtyt410004g118tskj35zin" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -539,7 +598,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/03/26/Shell中使用xargs批量操作文件/" data-id="ckjslncje009ilm8t0ur7m2q5" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/03/26/Shell中使用xargs批量操作文件/" data-id="ckjtyt433009c118t2jyr7n6k" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/xargs/">xargs</a></li></ul>
@@ -715,63 +774,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/01/16/Python匹配数值的正则表达式/" data-id="ckjslncj4008ylm8t0y1jcdqf" class="article-share-link">Share</a>
+      <a data-url="http://ckmessi.github.io/2020/01/16/Python匹配数值的正则表达式/" data-id="ckjtyt42t0090118tcyimzgx4" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-使用zip命令压缩文件夹时排除某些文件" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2020/01/13/使用zip命令压缩文件夹时排除某些文件/" class="article-date">
-  <time datetime="2020-01-13T08:32:23.000Z" itemprop="datePublished">2020-01-13</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2020/01/13/使用zip命令压缩文件夹时排除某些文件/">使用zip命令压缩文件夹时排除某些文件</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>工作中通常会需要将代码或相关资料压缩后上传到指定服务器，然而大多数情况下代码与日志文件、缓存文件、模型文件是放在同一个目录下，这些不需要被上传的文件很容易导致压缩速度缓慢、占用上传带宽等问题，因此最好能够在压缩的过程中将它们排除掉。</p>
-<h2 id="使用样例"><a href="#使用样例" class="headerlink" title="使用样例"></a>使用样例</h2><p>使用 <code>zip</code> 命令进行压缩时，可以使用 <code>-x</code> 选项参数指定排除的目录。<br>使用 <code>-x</code> 选项要注意以下两点：</p>
-<ol>
-<li>待排除目录要指定文件通配符，而不能是文件夹名称</li>
-<li>待排除目录路径要用双引号包起来。</li>
-</ol>
-<p>比如对于一个项目 <code>awesome-laravel</code> ，我希望压缩代码文件，不附带 <code>vendor</code> 依赖库，则可以使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zip -r awesome-laravel.zip awesome-laravel -x &quot;awesome-laravel/vendor/*&quot;</div></pre></td></tr></table></figure></p>
-<p>撰写以下命令<strong>无法</strong>达到排除效果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">zip -r awesome-laravel.zip awesome-laravel -x &quot;awesome-laravel/vendor/&quot;</div><div class="line">zip -r awesome-laravel.zip awesome-laravel -x awesome-laravel/vendor/</div></pre></td></tr></table></figure></p>
-<p>当然，对于 <code>-x</code> 参数也可以选择等号方式，也可以将其放到命令最开始，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">zip -r awesome-laravel.zip awesome-laravel -x=&quot;awesome-laravel/vendor/*&quot;</div><div class="line">zip -rx=&quot;awesome-laravel/vendor/*&quot; awesome-laravel.zip awesome-laravel</div></pre></td></tr></table></figure></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在使用 <code>zip</code> 命令对文件夹进行压缩时，可以使用 <code>-x</code> 选项参数排除某些文件夹，需要注意的是必须使用通配符表示所有文件，并且路径需要用双引号 <code>&quot;</code> 包起来。</p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://osxdaily.com/2013/04/30/how-to-exclude-files-from-a-zip-archive/" target="_blank" rel="external">http://osxdaily.com/2013/04/30/how-to-exclude-files-from-a-zip-archive/</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/01/13/使用zip命令压缩文件夹时排除某些文件/" data-id="ckjslnclr00dwlm8tz1uomj6j" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/zip/">zip</a></li></ul>
 
     </footer>
   </div>
@@ -784,7 +790,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/page/3/">&laquo; Prev</a><a class="page-number" href="/blog-hexo/">1</a><a class="page-number" href="/blog-hexo/page/2/">2</a><a class="page-number" href="/blog-hexo/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/blog-hexo/page/5/">5</a><a class="page-number" href="/blog-hexo/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/20/">20</a><a class="extend next" rel="next" href="/blog-hexo/page/5/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/3/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><a class="page-number" href="/blog-hexo/page/2/">2</a><a class="page-number" href="/blog-hexo/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/blog-hexo/page/5/">5</a><a class="page-number" href="/blog-hexo/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/20/">20</a><a class="extend next" rel="next" href="/blog-hexo/page/5/">weiter &raquo;</a>
   </nav>
 
 </section>
@@ -793,7 +799,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
+    <h3 class="widget-title">Kategorien</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -822,7 +828,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archiv</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -832,9 +838,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2021/01/12/Laravel自定义带日期滚动的日志器/">Laravel自定义带日期滚动的日志器</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2021/01/11/使用PyTorch3D自定义渲染图片/">使用PyTorch3D自定义渲染图片</a>
@@ -850,10 +860,6 @@
         
           <li>
             <a href="/blog-hexo/2020/12/31/初识faiss/">初识faiss</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/12/28/配置Laravel-Swagger/">配置Laravel-Swagger</a>
           </li>
         
       </ul>
