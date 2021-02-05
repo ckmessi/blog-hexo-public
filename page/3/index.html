@@ -68,6 +68,62 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Python使用OpenCV将图片帧拼接视频" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/08/26/Python使用OpenCV将图片帧拼接视频/" class="article-date">
+  <time datetime="2020-08-26T15:24:15.000Z" itemprop="datePublished">2020-08-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/08/26/Python使用OpenCV将图片帧拼接视频/">Python使用OpenCV将图片帧拼接视频</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在实际工作中，可能需要读取视频，对其中每一帧画面进行相关的图像处理，然后再拼接成视频。<br>图片的处理过程和方式可以各种可样，最终都免不了需要拼接成视频，使用 opencv-python 可以完成这个功能。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>假定已经获取到处理完成的图片集合，可以使用 <code>cv2.VideoWriter</code> 类将其拼接成视频：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">def concat_video(frame_array, save_file, size=(640, 480), fps=50):</div><div class="line">    file_path = save_file</div><div class="line">    fourcc = cv2.VideoWriter_fourcc(*&apos;mp4v&apos;)</div><div class="line">    video = cv2.VideoWriter(file_path, fourcc, fps, size)</div><div class="line">    for img in frame_array:</div><div class="line">        video.write(img)</div><div class="line">    video.release()</div></pre></td></tr></table></figure></p>
+<p>其中使用的 4 个参数中，</p>
+<ul>
+<li><code>file_path</code> 表示保存的视频文件路径；</li>
+<li><code>fourcc</code> 表示 Four-Character Codes，代表四字符代码（four character code），是一种独立标示视频数据流格式的四字符代码。在输出 <code>.mp4</code> 格式时，使用 <code>*&#39;mp4v&#39;</code> 或者 <code>&#39;m&#39;, &#39;p&#39;, &#39;4&#39;, &#39;v&#39;</code> 表示（两者等价）；</li>
+<li><code>fps</code> 是输出视频的帧率，不同的帧率会导致输出视频的长度不同；</li>
+<li><code>size</code> 表示视频画面大小，注意要与图片的大小保持一致，否则会抛出错误 </li>
+</ul>
+<h2 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h2><ul>
+<li><a href="https://blog.csdn.net/u010420283/article/details/89706794" target="_blank" rel="external">https://blog.csdn.net/u010420283/article/details/89706794</a></li>
+<li><a href="https://blog.csdn.net/Bugest/article/details/81119980" target="_blank" rel="external">https://blog.csdn.net/Bugest/article/details/81119980</a></li>
+<li><a href="https://blog.csdn.net/zj360202/article/details/79026891" target="_blank" rel="external">https://blog.csdn.net/zj360202/article/details/79026891</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/08/26/Python使用OpenCV将图片帧拼接视频/" data-id="ckksh31u7008ih28t6psz4vvn" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/OpenCV/">OpenCV</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Python使用importlib动态导入模块" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2020/08/25/Python使用importlib动态导入模块/" class="article-date">
@@ -112,7 +168,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/08/25/Python使用importlib动态导入模块/" data-id="ckk8gd9c2008i648tpaih4ncm" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/08/25/Python使用importlib动态导入模块/" data-id="ckksh31ub008uh28t0ltpymi5" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -162,7 +218,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/08/24/使用crontab添加特定用户执行的定时任务/" data-id="ckk8gd9du00cw648t9fkczmsg" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/08/24/使用crontab添加特定用户执行的定时任务/" data-id="ckksh31wd00dah28tonumbhwe" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/crontab/">crontab</a></li></ul>
@@ -212,7 +268,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/27/Laravel数据库查询中get-和all-的区别/" data-id="ckk8gd9ar0059648tc9lqrjld" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/27/Laravel数据库查询中get-和all-的区别/" data-id="ckksh31sm004qh28ta98mvl1y" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -273,7 +329,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/" data-id="ckk8gd9dg00bt648t4p8yxjpe" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/23/一次-Swagger-UI-3-30-1-升级引发的故障/" data-id="ckksh31vs00c0h28t2ftqmtnn" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Swagger-UI/">Swagger-UI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/fastapi/">fastapi</a></li></ul>
@@ -335,7 +391,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/21/Windows右键菜单中添加用VSCode打开选项/" data-id="ckk8gd9d300b1648ttmzd2wuw" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/21/Windows右键菜单中添加用VSCode打开选项/" data-id="ckksh31vg00bch28tl0rngdu1" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/VSCode/">VSCode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li></ul>
@@ -385,7 +441,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/" data-id="ckk8gd9f400gf648t7yyay126" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/15/处理Windows编辑的文件在Linux系统中多出-M的办法/" data-id="ckksh31xi00gbh28ttmxl9qxq" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li></ul>
@@ -458,7 +514,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/10/初识Vuetify/" data-id="ckk8gd9eq00ff648tqcdkgh9t" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/10/初识Vuetify/" data-id="ckksh31x400fjh28tjlsb5af9" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vuetify/">Vuetify</a></li></ul>
@@ -527,7 +583,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/08/使用Loguru处理日志/" data-id="ckk8gd9dn00ce648tomqvqgap" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/08/使用Loguru处理日志/" data-id="ckksh31vx00ceh28tbd5h5bkq" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Loguru/">Loguru</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -594,69 +650,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/06/初识Flask/" data-id="ckk8gd9ej00ey648t57epwmp8" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/07/06/初识Flask/" data-id="ckksh31wx00eyh28t82dh54ov" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Flask/">Flask</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-初识FIGlet" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2020/07/04/初识FIGlet/" class="article-date">
-  <time datetime="2020-07-04T04:33:12.000Z" itemprop="datePublished">2020-07-04</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2020/07/04/初识FIGlet/">初识FIGlet</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="什么是FIGlet"><a href="#什么是FIGlet" class="headerlink" title="什么是FIGlet"></a>什么是FIGlet</h2><p><code>FIGlet</code> 是基于 ASCII 字符组成的字符画。</p>
-<img src="/blog-hexo/2020/07/04/初识FIGlet/figlet1.png" alt="FIGlet示意图" title="FIGlet示意图">
-<p>最通俗的 FIGlet 之一是坊间流传广泛的那张图：</p>
-<img src="/blog-hexo/2020/07/04/初识FIGlet/figlet2.png" alt="佛祖保佑" title="佛祖保佑">
-<h2 id="如何使用FIGlet"><a href="#如何使用FIGlet" class="headerlink" title="如何使用FIGlet"></a>如何使用FIGlet</h2><p>在不同平台、不同语言下，可以找到各种 FIGlet 相关的包。<br>比如在 Node.js 下安装包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install figlet</div></pre></td></tr></table></figure></p>
-<p>然后创建一个 <code>main.js</code> 文件，输入以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var figlet = require(&apos;figlet&apos;);</div><div class="line">figlet(&apos;Hello World!!&apos;, function(err, data) &#123;</div><div class="line">    if (err) &#123;</div><div class="line">        console.log(&apos;Something went wrong...&apos;);</div><div class="line">        console.dir(err);</div><div class="line">        return;</div><div class="line">    &#125;</div><div class="line">    console.log(data)</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-<p>执行 <code>node main.js</code> 即可看到结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ node main.js</div><div class="line"></div><div class="line">  _   _      _ _        __        __         _     _ _ _</div><div class="line"></div><div class="line"> | | | | ___| | | ___   \ \      / /__  _ __| | __| | | |</div><div class="line"></div><div class="line"> | |_| |/ _ \ | |/ _ \   \ \ /\ / / _ \| &apos;__| |/ _` | | |</div><div class="line"></div><div class="line"> |  _  |  __/ | | (_) |   \ V  V / (_) | |  | | (_| |_|_|</div><div class="line"></div><div class="line"> |_| |_|\___|_|_|\___/     \_/\_/ \___/|_|  |_|\__,_(_|_)</div></pre></td></tr></table></figure></p>
-<img src="/blog-hexo/2020/07/04/初识FIGlet/figlet3.png" alt="输出效果" title="输出效果">
-<h2 id="Ubuntu-添加到欢迎页面"><a href="#Ubuntu-添加到欢迎页面" class="headerlink" title="Ubuntu 添加到欢迎页面"></a>Ubuntu 添加到欢迎页面</h2><p>首先可以使用 <code>apt-get</code> 安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt; sudo apt-get install figlet</div></pre></td></tr></table></figure></p>
-<p>安装完成后：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt; figlet abc</div></pre></td></tr></table></figure></p>
-<p>在 <code>oh-my-zsh</code> 的 <code>.zshrc</code> 文件中添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">figlet -f slant [xxx]</div></pre></td></tr></table></figure></p>
-<p>前提是系统存在 <code>figlet</code> 命令，否则会提示 <code>command not found: figlet</code>。<br>其中 <code>-f slant</code> 是为了添加倾斜字体的效果。</p>
-<p>之后每次 SSH 连接登录时，就会显示：<br><img src="/blog-hexo/2020/07/04/初识FIGlet/figlet4.png" alt="输出效果" title="输出效果"></p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
-<li><a href="http://www.figlet.org/" target="_blank" rel="external">http://www.figlet.org/</a></li>
-<li><a href="https://www.npmjs.com/package/figlet" target="_blank" rel="external">https://www.npmjs.com/package/figlet</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/07/04/初识FIGlet/" data-id="ckk8gd9eg00er648tkzlx5zdy" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/FIGlet/">FIGlet</a></li></ul>
 
     </footer>
   </div>
@@ -709,7 +706,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archiv</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
   </div>
 
@@ -720,6 +717,10 @@
     <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2021/02/05/Laravel给request参数中添加内容/">Laravel给request参数中添加内容</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2021/01/22/faiss-gpu智障的patch版本升级/">faiss-gpu智障的patch版本升级</a>
@@ -735,10 +736,6 @@
         
           <li>
             <a href="/blog-hexo/2020/12/31/初识faiss/">初识faiss</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/12/28/配置Laravel-Swagger/">配置Laravel-Swagger</a>
           </li>
         
       </ul>

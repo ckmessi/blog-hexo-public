@@ -68,6 +68,61 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Laravel给request参数中添加内容" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2021/02/05/Laravel给request参数中添加内容/" class="article-date">
+  <time datetime="2021-02-05T15:56:40.000Z" itemprop="datePublished">2021-02-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2021/02/05/Laravel给request参数中添加内容/">Laravel给request参数中添加内容</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在使用 Laravel 框架的过程中，可以发现正常情况下每个 Controller 文件的方法中都默认带有一个类型为 <code>Illuminate\Http\Request</code> 的参数 <code>$request</code>，在方法中通常会使用它获取 HTTP 请求的参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public function getFoo(Request $request)&#123;</div><div class="line">    $param_a = $request-&gt;input(&apos;param_a&apos;, &apos;default&apos;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>也可以通过 <code>$request-&gt;input()</code> 获取所有参数。</p>
+<p>基于上述背景，在工作中可能遇到这样一类需求，比如某类账户登录后，默认只能返回特定范围内的数据。后者可以通过 Filter 方式添加查询条件实现，但更关键的逻辑是如何添加这个查询条件。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>按照我个人习惯的架构风格，所有查询类的方法都会将 <code>$request-&gt;input()</code> 的值赋给一个名称为 <code>$search_condition</code> 的参数，在后续的底层数据查询过程中，会使用 <code>xxxFilter</code> 接收这个参数。</p>
+<p>在上述逻辑下，当查询条件添加时，只需要前端传递对应的 key，在底层特定数据模型的 <code>Filter</code> 文件中添加对该键值的查询逻辑即可，上层业务代码都不需要改动。   </p>
+<p>如果现在需要根据登录账户进行筛选，可以考虑使用一个中间件，中间件完成的功能是：<strong>针对某类账户，给 <code>$request</code> 变量中添加相关的搜索条件。</strong></p>
+<p>向 <code>$request</code> 变量中添加值，可以参考 <a href="https://stackoverflow.com/questions/37107903/laravel-is-there-a-way-to-add-values-to-a-request-array" target="_blank" rel="external">这篇回答</a> 完成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$request-&gt;request-&gt;add([&apos;param_key&apos; =&gt; &#123;$param_value&#125;]);</div></pre></td></tr></table></figure></p>
+<p>对于中间件的撰写也很简单，逻辑大概是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public function handle($request, Closure $next)</div><div class="line">&#123;</div><div class="line">    // get login user</div><div class="line">    $user_base = getLoginUser();</div><div class="line">    if($user_base-&gt;xxx1 == xxx2) &#123;</div><div class="line">        $param_value = getRelativeValue();</div><div class="line">        $request-&gt;request-&gt;add([&apos;param_key&apos; =&gt; $param_value]);</div><div class="line">    &#125;</div><div class="line">    return $next($request);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后给需要进行数据范围控制的接口，添加上当前中间件即可。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>针对客户的无理需求不要害怕，利用优秀的代码架构设计，可以用最小的修改代价实现相关的需求。<br>…算了不忍了，客户领导真TMD傻X，大过年的下午提个需求明天就要。。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://stackoverflow.com/questions/37107903/laravel-is-there-a-way-to-add-values-to-a-request-array" target="_blank" rel="external">https://stackoverflow.com/questions/37107903/laravel-is-there-a-way-to-add-values-to-a-request-array</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2021/02/05/Laravel给request参数中添加内容/" data-id="ckksh31st0056h28tuov94uex" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-faiss-gpu智障的patch版本升级" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2021/01/22/faiss-gpu智障的patch版本升级/" class="article-date">
@@ -122,7 +177,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2021/01/22/faiss-gpu智障的patch版本升级/" data-id="ckk8gd9d700bc648tuh6vit8r" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2021/01/22/faiss-gpu智障的patch版本升级/" data-id="ckksh31vo00bqh28t0qeofvqh" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Faiss/">Faiss</a></li></ul>
@@ -174,7 +229,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2021/01/12/Laravel自定义带日期滚动的日志器/" data-id="ckk8gd9at005e648ty13cc30m" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2021/01/12/Laravel自定义带日期滚动的日志器/" data-id="ckksh31t3005yh28t6jldo2sx" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -256,7 +311,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2021/01/01/非root用户安装zsh/" data-id="ckk8gd9fl00he648thpji17me" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2021/01/01/非root用户安装zsh/" data-id="ckksh31y300hlh28ttziz608w" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/zsh/">zsh</a></li></ul>
@@ -312,7 +367,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/12/31/初识faiss/" data-id="ckk8gd9ew00ft648t9duuty9c" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/12/31/初识faiss/" data-id="ckksh31x800fth28tpcbbdgdy" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/faiss/">faiss</a></li></ul>
@@ -387,7 +442,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/12/28/配置Laravel-Swagger/" data-id="ckk8gd9fi00h4648t85fqfw5p" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/12/28/配置Laravel-Swagger/" data-id="ckksh31y200hih28tn165ynl3" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Swagger/">Swagger</a></li></ul>
@@ -447,7 +502,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/12/25/conda创建虚拟环境时抛错的解决方案/" data-id="ckk8gd9de00bm648t37k1ujkm" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/12/25/conda创建虚拟环境时抛错的解决方案/" data-id="ckksh31vh00bfh28ti38vhefn" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/conda/">conda</a></li></ul>
@@ -507,7 +562,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/12/08/Python使用Gooey创建界面/" data-id="ckk8gd9by0088648t90s3gc84" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/12/08/Python使用Gooey创建界面/" data-id="ckksh31u6008fh28t9rwz4grv" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
@@ -565,7 +620,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/12/04/入门三维数据obj格式数据-md/" data-id="ckk8gd9ea00ea648t33vxspxj" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/12/04/入门三维数据obj格式数据-md/" data-id="ckksh31wm00e2h28t6hbytjbu" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/obj/">obj</a></li></ul>
@@ -608,64 +663,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/11/28/Shell检查文件是否存在逻辑/" data-id="ckk8gd9ck009h648t9tkwzj4m" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2020/11/28/Shell检查文件是否存在逻辑/" data-id="ckksh31un009lh28t7x2udght" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Python使用多进程加速数据处理" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2020/11/25/Python使用多进程加速数据处理/" class="article-date">
-  <time datetime="2020-11-25T15:51:22.000Z" itemprop="datePublished">2020-11-25</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2020/11/25/Python使用多进程加速数据处理/">Python使用多进程加速数据处理</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在使用 Python 进行数据处理过程中，如果针对数据的操作是相互独立不依赖的，可以使用 Python 的多进程机制加速数据的处理。</p>
-<p>这里需要使用到 Python 的 <code>multiprocessing</code> 包。</p>
-<h2 id="基础用法"><a href="#基础用法" class="headerlink" title="基础用法"></a>基础用法</h2><p>先定义一个将要被分发给各个进程处理的任务方法 <code>do_job_1</code>，仅接收一个参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">def do_job_1(param1):</div><div class="line">    print(f&apos;do_job_1 with param: &#123;param1&#125;&apos;)</div><div class="line">    return param1 + 1</div></pre></td></tr></table></figure></p>
-<p>在主方法中，使用 <code>multiprocessing.Pool()</code> 生成进程池来处理上述方法，主要通过 <code>pool.imap</code> 方法实现，这个方法的第一个参数是任务函数名，第二个参数是参数数组。注意这是一个长度为 <code>n</code> 的数组，表示共有 <code>n</code> 个任务，而每个任务的处理函数只接收其中一个参数。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">import nultiprocessing </div><div class="line"></div><div class="line">def main_work_1():</div><div class="line">    print(f&quot;start jobs with multiprocessing...&quot;)</div><div class="line">    with multiprocessing.Pool() as pool:</div><div class="line">        param1_array = [1, 2, 3, 4, 5]</div><div class="line">        results = list(tqdm(pool.imap(do_job_1, param1_array), total=len(param1_array)))</div><div class="line">    print(results)</div></pre></td></tr></table></figure>
-<p>输出结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">start jobs with multiprocessing...</div><div class="line">5it [00:00, 9.07it/s]</div><div class="line">do_job_1 with param: 1</div><div class="line">do_job_1 with param: 2</div><div class="line">do_job_1 with param: 3</div><div class="line">do_job_1 with param: 4</div><div class="line">do_job_1 with param: 5</div><div class="line">[2, 3, 4, 5, 6]</div></pre></td></tr></table></figure></p>
-<h2 id="多个参数"><a href="#多个参数" class="headerlink" title="多个参数"></a>多个参数</h2><p>上述方案只能用于传递一个参数，现实情况下大多数方法都需要传递多个参数，这时可以使用 <code>pool.starmap</code>方法。</p>
-<p>定义方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">def do_job_2(param1, param2, param3):</div><div class="line">    print(f&apos;do_job_2 with params: &#123;param1&#125;, &#123;param2&#125;, &#123;param3&#125;&apos;)</div><div class="line">    return param1 + 1, param2 + 2, param3 + &quot;_suffix&quot;</div></pre></td></tr></table></figure></p>
-<p>在主方法中使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">def main_work_2():</div><div class="line">    print(f&quot;start jobs with multiprocessing...&quot;)</div><div class="line">    with multiprocessing.Pool() as pool:</div><div class="line">        param1_array = [1, 2, 3, 4, 5]</div><div class="line">        param2_array = [100, 200, 300, 400, 500]</div><div class="line">        param3_array = [&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;d&apos;, &apos;e&apos;]</div><div class="line">        results = list(tqdm(pool.starmap(do_job_2, list(zip(param1_array, param2_array, param3_array))), total=len(param1_array)))</div><div class="line">    print(results)</div></pre></td></tr></table></figure></p>
-<p>需要将参数分别封装成长度为 <code>n</code> 的数组，然后通过 <code>list(zip(param1_array, param2_array, ...))</code> 的方式传入。<br>输出结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">start jobs with multiprocessing...</div><div class="line">do_job_2 with params: 1, 100, a</div><div class="line">do_job_2 with params: 2, 200, b</div><div class="line">do_job_2 with params: 3, 300, c</div><div class="line">do_job_2 with params: 4, 400, d</div><div class="line">do_job_2 with params: 5, 500, e</div><div class="line">100%|██████████| 5/5 [00:00&lt;?, ?it/s]</div><div class="line">[(2, 102, &apos;a_suffix&apos;), (3, 202, &apos;b_suffix&apos;), (4, 302, &apos;c_suffix&apos;), (5, 402, &apos;d_suffix&apos;), (6, 502, &apos;e_suffix&apos;)]</div></pre></td></tr></table></figure></p>
-<p>需要注意的是，<code>starmap</code> 方法天生是不支持 <code>tqdm</code> 装饰的，意味着无法看到进度条，如果希望能够使用 <code>tqdm</code>，可以添加下面的方法（来源于万能的 stackoverflow）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"># istarmap.py for Python &lt;3.8</div><div class="line">import multiprocessing.pool as mpp</div><div class="line"></div><div class="line">def istarmap(self, func, iterable, chunksize=1):</div><div class="line">    &quot;&quot;&quot;starmap-version of imap</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    if self._state != mpp.RUN:</div><div class="line">        raise ValueError(&quot;Pool not running&quot;)</div><div class="line"></div><div class="line">    if chunksize &lt; 1:</div><div class="line">        raise ValueError(</div><div class="line">            &quot;Chunksize must be 1+, not &#123;0:n&#125;&quot;.format(</div><div class="line">                chunksize))</div><div class="line"></div><div class="line">    task_batches = mpp.Pool._get_tasks(func, iterable, chunksize)</div><div class="line">    result = mpp.IMapIterator(self._cache)</div><div class="line">    self._taskqueue.put(</div><div class="line">        (</div><div class="line">            self._guarded_task_generation(result._job,</div><div class="line">                                          mpp.starmapstar,</div><div class="line">                                          task_batches),</div><div class="line">            result._set_length</div><div class="line">        ))</div><div class="line">    return (item for chunk in result for item in chunk)</div><div class="line">mpp.Pool.istarmap = istarmap</div></pre></td></tr></table></figure></p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://stackoverflow.com/questions/57354700/starmap-combined-with-tqdm" target="_blank" rel="external">https://stackoverflow.com/questions/57354700/starmap-combined-with-tqdm</a><br><a href="https://blog.csdn.net/qq_15969343/article/details/84672527" target="_blank" rel="external">https://blog.csdn.net/qq_15969343/article/details/84672527</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2020/11/25/Python使用多进程加速数据处理/" data-id="ckk8gd9c8008x648tcug7zagl" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
 
     </footer>
   </div>
@@ -718,7 +719,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archiv</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
   </div>
 
@@ -729,6 +730,10 @@
     <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2021/02/05/Laravel给request参数中添加内容/">Laravel给request参数中添加内容</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2021/01/22/faiss-gpu智障的patch版本升级/">faiss-gpu智障的patch版本升级</a>
@@ -744,10 +749,6 @@
         
           <li>
             <a href="/blog-hexo/2020/12/31/初识faiss/">初识faiss</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2020/12/28/配置Laravel-Swagger/">配置Laravel-Swagger</a>
           </li>
         
       </ul>
