@@ -55,9 +55,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSSフィード"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="検索"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
@@ -67,6 +67,69 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Linux用户免密码sudo执行命令" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/09/17/Linux用户免密码sudo执行命令/" class="article-date">
+  <time datetime="2018-09-17T10:55:46.000Z" itemprop="datePublished">2018-09-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/09/17/Linux用户免密码sudo执行命令/">Linux用户免密码sudo执行命令</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>如果希望远程从服务器上下载文件，并删除相关文件，主要步骤可能如下：</p>
+<ul>
+<li>ssh远程到服务器执行zip命令</li>
+<li>将zip文件下载到本地</li>
+<li>比对服务器zip文件和本地zip文件的md5值是否一致，确保下载文件完整性</li>
+<li>删除服务器上的相关文件</li>
+</ul>
+<p>其中最后一步，由于待删除的文件可能不属于当前用户，可能需要使用 <code>sudo</code> 命令才可以删除。</p>
+<p>然而远程执行 <code>sudo</code> 命令时，如果要求输入密码会比较麻烦，因此需要有一种免密码 <code>sudo</code> 执行命令的方式。</p>
+<p>通常我们赋予某位用户 <code>sudo</code> 权限时，是使用root用户在 <code>/etc/sudoers</code> 文件中添加一行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[user_name] ALL=(ALL:ALL) ALL</div></pre></td></tr></table></figure></p>
+<p>如果希望某位用户执行所有 <code>sudo</code> 命令时，都能够免密码，则方法是添加 <code>NOPASSWD:</code> 修饰：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[user_name] ALL=(ALL:ALL) NOPASSWD: ALL</div></pre></td></tr></table></figure></p>
+<p>事实上，上述这一行配置中，每一个元素的含义是：</p>
+<ul>
+<li>第一个 <code>[user_name]</code> 指代适用对象，可以写用户名称，也可以写组名称（组名称用 <code>%</code> 前缀开始）；</li>
+<li>第一个 <code>ALL</code> 表示的是适用主机，可以填写 <code>localhost</code> ，也可以使用 <code>ALL</code> 表示所有；</li>
+<li>等号右边的值放在括号内，表示的是（用户：用户组），即适用对象能够以什么身份执行；</li>
+<li>关于 <code>NOPASSWD:</code> 修饰符的作用是免密输入；</li>
+<li>最后一个 <code>ALL</code> 的含义是执行的命令，如果是 <code>ALL</code> 则是所有命令，如果希望有限制可以写成特定命令。</li>
+</ul>
+<p>所以，如果希望使用户能够执行某些命令时免密，可以修改最后一栏的参数为对应命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">user_name ALL=(ALL:ALL) NOPASSWORD: /path/to/command/cmd.sh</div></pre></td></tr></table></figure></p>
+<p>这样用户在执行 <code>sudo ./path/to/command/cmd.sh</code> 命令时，可以免密码；而执行其它 <code>sudo [command]</code> 时，依然需要输入密码。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/09/17/Linux用户免密码sudo执行命令/" data-id="cku5jrkbj0065368ttuvdjh3e" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Windows-Ubuntu-Mac-OS查看文件md5值的命令" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -106,7 +169,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/09/13/Windows-Ubuntu-Mac-OS查看文件md5值的命令/" data-id="cktv4y3bn00bq9c8t4preu7n4" class="article-share-link">共有</a>
+      <a data-url="http://ckmessi.github.io/2018/09/13/Windows-Ubuntu-Mac-OS查看文件md5值的命令/" data-id="cku5jrkg800e4368t8o5i3a3n" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li></ul>
@@ -186,7 +249,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/14/搭建SSH端口转发反向代理/" data-id="cktv4y3eo00i99c8tlfb9omj0" class="article-share-link">共有</a>
+      <a data-url="http://ckmessi.github.io/2018/08/14/搭建SSH端口转发反向代理/" data-id="cku5jrkiq00i9368txbxfmtln" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li></ul>
@@ -243,7 +306,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/13/解决iPhone上Safari浏览器滑动比较卡的问题/" data-id="cktv4y3ev00ik9c8tm3uk8480" class="article-share-link">共有</a>
+      <a data-url="http://ckmessi.github.io/2018/08/13/解决iPhone上Safari浏览器滑动比较卡的问题/" data-id="cku5jrkiy00iu368tqk7rxggw" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li></ul>
@@ -296,7 +359,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/11/Ubuntu禁用SSH密码登录/" data-id="cktv4y3b800bc9c8tzqp5anv0" class="article-share-link">共有</a>
+      <a data-url="http://ckmessi.github.io/2018/08/11/Ubuntu禁用SSH密码登录/" data-id="cku5jrkeg00az368trbfskc46" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li></ul>
@@ -347,7 +410,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/09/PHP使用ZipArchive完成后台文件压缩/" data-id="cktv4y38g00809c8t5krtjep8" class="article-share-link">共有</a>
+      <a data-url="http://ckmessi.github.io/2018/08/09/PHP使用ZipArchive完成后台文件压缩/" data-id="cku5jrkcp0083368tuh4ucemn" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -399,7 +462,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/03/Element-UI表格标题使用render-header函数/" data-id="cktv4y33700169c8tjasazru5" class="article-share-link">共有</a>
+      <a data-url="http://ckmessi.github.io/2018/08/03/Element-UI表格标题使用render-header函数/" data-id="cku5jrk8s001c368ttc2okq1m" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
@@ -463,7 +526,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/08/02/在Windows上使用PHP-CGI的一个重要参数/" data-id="cktv4y3ei00hv9c8tic9xrhqt" class="article-share-link">共有</a>
+      <a data-url="http://ckmessi.github.io/2018/08/02/在Windows上使用PHP-CGI的一个重要参数/" data-id="cku5jrkim00hy368tlapgp9c6" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li></ul>
@@ -540,7 +603,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/07/27/Laravel-SocketIO即时发送消息/" data-id="cktv4y34k003z9c8tb3vz6hm2" class="article-share-link">共有</a>
+      <a data-url="http://ckmessi.github.io/2018/07/27/Laravel-SocketIO即时发送消息/" data-id="cku5jrkac003y368t34s2l0c2" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -592,88 +655,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/07/17/Linux查看并修改系统时间/" data-id="cktv4y36h005x9c8tqp9u91al" class="article-share-link">共有</a>
+      <a data-url="http://ckmessi.github.io/2018/07/17/Linux查看并修改系统时间/" data-id="cku5jrkbf005y368tbdboele3" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Vue在自定义组件上使用v-model的方法" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2018/07/14/Vue在自定义组件上使用v-model的方法/" class="article-date">
-  <time datetime="2018-07-14T08:25:54.000Z" itemprop="datePublished">2018-07-14</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2018/07/14/Vue在自定义组件上使用v-model的方法/">Vue在自定义组件上使用v-model的方法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在前端项目中经常会使用到这样一种控件：它是一个选择器 <code>select</code> ，它的候选列表是需要从后台服务器获取的，这种时候每次使用它时，都需要调用一次后台接口获取数据，并用于它的候选列表。<br>在这种情况下，通常会将其封装成一个组件，这样将调用后台接口等相同操作封装到统一的地方进行。外部代码只需要进行调用即可。<br>在这种情况下，就需要实现外部代码与子组件的数据通信。在Vue组件中，要实现父组件和子组件的数据双向绑定，有许多种方法。</p>
-<h2 id="之前的方案"><a href="#之前的方案" class="headerlink" title="之前的方案"></a>之前的方案</h2><p>此前对于Vue不熟悉，使用的是事件通信的方案。基本思路是：</p>
-<p>在父组件中</p>
-<ul>
-<li>通过 <code>prop</code> 将初始值传入子组件</li>
-<li>在父组件中设置 <code>v-on</code> 方法监听事件，并完成对父组件数据的修改。</li>
-</ul>
-<p>在子组件中</p>
-<ul>
-<li>根据 <code>prop</code> 的值初始化变量</li>
-<li>使用 <code>watch</code> 监听，确保变量数据保持与父组件同步</li>
-<li>变量值发生改变时，通过通过 <code>$emit</code> 方式发送事件</li>
-</ul>
-<p>此前的基本代码逻辑如下：</p>
-<h4 id="父组件"><a href="#父组件" class="headerlink" title="父组件"></a>父组件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">    ...</div><div class="line">    &lt;sub-component :initVariable=&quot;variable&quot; v-on:selectVariable=&quot;onSelectVariable&quot;&gt;&lt;/sub-component&gt;</div><div class="line">    ...</div><div class="line">&lt;/template&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    export default &#123;</div><div class="line">        data()&#123;</div><div class="line">            return &#123;</div><div class="line">                variable: &apos;&apos;,</div><div class="line">            &#125;</div><div class="line">        &#125;,</div><div class="line">        methods: &#123;</div><div class="line">            onSelectVariable: function (val) &#123;</div><div class="line">                this.variable = val</div><div class="line">            &#125;,</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
-<h4 id="子组件"><a href="#子组件" class="headerlink" title="子组件"></a>子组件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">    &lt;el-select v-model=&quot;variable&quot; v-on:change=&quot;selectVariable&quot;&gt;</div><div class="line">        &lt;el-option</div><div class="line">          v-for=&quot;item in list&quot;</div><div class="line">          :key=&quot;item.value&quot;</div><div class="line">          :label=&quot;item.label&quot;</div><div class="line">          :value=&quot;item.value&quot;&gt;</div><div class="line">        &lt;/el-option&gt;</div><div class="line">    &lt;/el-select&gt;</div><div class="line">&lt;/template&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    export default &#123;</div><div class="line">        props:[</div><div class="line">            &apos;initVariable&apos;,</div><div class="line">        ],</div><div class="line">        data() &#123;</div><div class="line">            return &#123;</div><div class="line">                &apos;list&apos;: [],</div><div class="line">                &apos;variable&apos;: this.initVariable,</div><div class="line">            &#125;</div><div class="line">        &#125;,</div><div class="line">        watch:&#123;</div><div class="line">            initVariable(val) &#123;</div><div class="line">                this.variable= val;</div><div class="line">            &#125;,</div><div class="line">        &#125;,</div><div class="line">        methods:&#123;</div><div class="line">            selectVariable()&#123;</div><div class="line">                this.$emit(&apos;selectVariable&apos;, this.variable)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
-<p>这种情况下，父组件和子组件都需要添加许多监听函数，确保双方的数据能够得到相互同步。</p>
-<h2 id="正确方式：使用v-model"><a href="#正确方式：使用v-model" class="headerlink" title="正确方式：使用v-model"></a>正确方式：使用v-model</h2><p>后来发现，正确的方式应该是使用组件的 <code>v-model</code>方法，官方文档在<a href="https://cn.vuejs.org/v2/guide/components.html#在组件上使用-v-model" target="_blank" rel="external">这里</a>。</p>
-<p>由于下面两种语法等价：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;input v-model=&quot;searchText&quot;&gt;</div></pre></td></tr></table></figure></p>
-<p>等价于<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;input</div><div class="line">  v-bind:value=&quot;searchText&quot;</div><div class="line">  v-on:input=&quot;searchText = $event.target.value&quot;</div><div class="line">&gt;</div></pre></td></tr></table></figure></p>
-<p>当用在组件上时，<code>v-model</code> 实质上等价下以下代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;custom-input</div><div class="line">  v-bind:value=&quot;searchText&quot;</div><div class="line">  v-on:input=&quot;searchText = $event&quot;</div><div class="line">&gt;&lt;/custom-input&gt;</div></pre></td></tr></table></figure></p>
-<p>为了让它正常工作，这个子组件 <code>custom-input</code> 内的 <code>&lt;input&gt;</code> 必须实现：</p>
-<ul>
-<li>将其 <code>value</code> 特性绑定到一个名叫 <code>value</code> 的 prop 上</li>
-<li>在其 input 事件被触发时，将新的值通过自定义的 <code>input</code> 事件抛出</li>
-</ul>
-<p>因此，写成代码之后是这样的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Vue.component(&apos;custom-input&apos;, &#123;</div><div class="line">  props: [&apos;value&apos;],</div><div class="line">  template: `</div><div class="line">    &lt;input</div><div class="line">      v-bind:value=&quot;value&quot;</div><div class="line">      v-on:input=&quot;$emit(&apos;input&apos;, $event.target.value)&quot;</div><div class="line">    &gt;</div><div class="line">  `</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
-<p>在这个基础上，<code>v-model</code> 就应该可以在这个组件上完美地工作起来了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;custom-input v-model=&quot;searchText&quot;&gt;&lt;/custom-input&gt;</div></pre></td></tr></table></figure></p>
-<p>可以看出，基本思路与此前的方法是类似的，但是通过Vue的一些语法糖，使代码更加简洁。</p>
-<p>根据这份教程，我们可以重构之前的父子组件撰写方案，使之更简洁，高效。</p>
-<h2 id="使用样例"><a href="#使用样例" class="headerlink" title="使用样例"></a>使用样例</h2><h4 id="父组件-1"><a href="#父组件-1" class="headerlink" title="父组件"></a>父组件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">    ...</div><div class="line">    &lt;sub-component v-model=&quot;variable&quot;&gt;&lt;/sub-component&gt;</div><div class="line">    ...</div><div class="line">&lt;/template&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    export default &#123;</div><div class="line">        data()&#123;</div><div class="line">            return &#123;</div><div class="line">                variable: &apos;&apos;,</div><div class="line">            &#125;</div><div class="line">        &#125;,</div><div class="line">    &#125;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
-<p>可以看出，父组件只需要定义数据变量，并使用 <code>v-model</code> 绑定到子组件即可，不再需要显式地指定监听函数。</p>
-<h4 id="子组件-1"><a href="#子组件-1" class="headerlink" title="子组件"></a>子组件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">    &lt;el-select v-model=&quot;value&quot; v-on:input=&quot;$emit(&apos;input&apos;, $event)&quot;&gt;</div><div class="line">        &lt;el-option</div><div class="line">          v-for=&quot;item in list&quot;</div><div class="line">          :key=&quot;item.value&quot;</div><div class="line">          :label=&quot;item.label&quot;</div><div class="line">          :value=&quot;item.value&quot;&gt;</div><div class="line">        &lt;/el-option&gt;</div><div class="line">    &lt;/el-select&gt;</div><div class="line">&lt;/template&gt;</div><div class="line"></div><div class="line">&lt;script&gt;</div><div class="line">    export default &#123;</div><div class="line">        props:[</div><div class="line">            &apos;value&apos;,</div><div class="line">        ],</div><div class="line">        data() &#123;</div><div class="line">            return &#123;</div><div class="line">                &apos;list&apos;: [],</div><div class="line">                &apos;variable&apos;: this.initVariable,</div><div class="line">            &#125;</div><div class="line">        &#125;,</div><div class="line">    &#125;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
-<p>可以看出，子组件只需要定义数据变量，并设置 <code>v-on:input</code> 的值即可（取代原来的 <code>$emit</code> 功效），不再需要 <code>watch</code> 初始值。</p>
-<p>这里需要注意的两点，一是<code>v-model=&quot;value&quot;</code>这里的<code>value</code>，一定需要是这个名称，不能修改；二是<code>v-on:input=&quot;$emit(&#39;input&#39;, $event)&quot;</code>与官方文档中不同，后面括号内的参数不再是<code>$event.target.value</code>，但名称一定要是<code>$event</code>。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>写多了发现，许多同类的代码都可以抽象为一个自定义组件，相关属性都使用prop值从父组件传入即可。原始的v-model绑定数据，就通过上述方式与父组件数据进行绑定。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2018/07/14/Vue在自定义组件上使用v-model的方法/" data-id="cktv4y3b400b59c8towi434s7" class="article-share-link">共有</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
 
     </footer>
   </div>
@@ -686,7 +671,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog-hexo/page/14/">&laquo; 戻る</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/13/">13</a><a class="page-number" href="/blog-hexo/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/blog-hexo/page/16/">16</a><a class="page-number" href="/blog-hexo/page/17/">17</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/22/">22</a><a class="extend next" rel="next" href="/blog-hexo/page/16/">次へ &raquo;</a>
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/14/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/13/">13</a><a class="page-number" href="/blog-hexo/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/blog-hexo/page/16/">16</a><a class="page-number" href="/blog-hexo/page/17/">17</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/22/">22</a><a class="extend next" rel="next" href="/blog-hexo/page/16/">weiter &raquo;</a>
   </nav>
 
 </section>
@@ -695,7 +680,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">カテゴリ</h3>
+    <h3 class="widget-title">Kategorien</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li></ul>
     </div>
@@ -705,7 +690,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">タグ</h3>
+    <h3 class="widget-title">Tags</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/3D/">3D</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Alembic/">Alembic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Anime-js/">Anime.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Blender/">Blender</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CMake/">CMake</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Code-Coverage/">Code Coverage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Composer/">Composer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Cookie/">Cookie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/DeepLearning/">DeepLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Django/">Django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FFMpeg/">FFMpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FIGlet/">FIGlet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faiss/">Faiss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FastAPI/">FastAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Flask/">Flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Flyway/">Flyway</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Gem/">Gem</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/GitLab/">GitLab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Go/">Go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JdbcTemplate/">JdbcTemplate</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Loguru/">Loguru</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Markdown/">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Matplotlib/">Matplotlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Maven/">Maven</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mkdocs/">Mkdocs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MyBatis/">MyBatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MyBatisPlus/">MyBatisPlus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mybatis/">Mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Noise/">Noise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Numpy/">Numpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oh-My-Zsh/">Oh-My-Zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenCV/">OpenCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pip/">Pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PosixPath/">PosixPath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PyTorch/">PyTorch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pythonenv/">Pythonenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ruby/">Ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/RuleEngine/">RuleEngine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Rust/">Rust</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SQLAlchemy/">SQLAlchemy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring-Boot/">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SpringCloud/">SpringCloud</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Supervisor/">Supervisor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Swagger/">Swagger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Swagger-UI/">Swagger-UI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/TensorRT/">TensorRT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Torch/">Torch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/TorchServe/">TorchServe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VB/">VB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VS-Code/">VS Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VSCode/">VSCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Visual-Studio/">Visual Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vuetify/">Vuetify</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/YAML/">YAML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/axios/">axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/base64/">base64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/bpy/">bpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/bumpversion/">bumpversion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/conda/">conda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/cookiecutter/">cookiecutter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/crontab/">crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/faiss/">faiss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastapi/">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastjson/">fastjson</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/heatmap-js/">heatmap.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/hexdump/">hexdump</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/interact-js/">interact.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/libfacedetection/">libfacedetection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/nvidia/">nvidia</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/obj/">obj</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/peewee/">peewee</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/pip/">pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/pytest/">pytest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/sed/">sed</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/setuptools/">setuptools</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/vim/">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/virtualenv/">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/xargs/">xargs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/yacs/">yacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/zip/">zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/zsh/">zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
     </div>
@@ -715,7 +700,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">タグクラウド</h3>
+    <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
       <a href="/blog-hexo/tags/3D/" style="font-size: 10px;">3D</a> <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Alembic/" style="font-size: 10px;">Alembic</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 11.43px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/Blender/" style="font-size: 10px;">Blender</a> <a href="/blog-hexo/tags/C/" style="font-size: 11.43px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CMake/" style="font-size: 10px;">CMake</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 10.71px;">CSharp</a> <a href="/blog-hexo/tags/Code-Coverage/" style="font-size: 10px;">Code Coverage</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 10.71px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Cookie/" style="font-size: 10px;">Cookie</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/DeepLearning/" style="font-size: 10px;">DeepLearning</a> <a href="/blog-hexo/tags/Django/" style="font-size: 10px;">Django</a> <a href="/blog-hexo/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.14px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10.71px;">Excel</a> <a href="/blog-hexo/tags/FFMpeg/" style="font-size: 10px;">FFMpeg</a> <a href="/blog-hexo/tags/FIGlet/" style="font-size: 10px;">FIGlet</a> <a href="/blog-hexo/tags/Faiss/" style="font-size: 10px;">Faiss</a> <a href="/blog-hexo/tags/FastAPI/" style="font-size: 10px;">FastAPI</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Flask/" style="font-size: 10px;">Flask</a> <a href="/blog-hexo/tags/Flyway/" style="font-size: 10px;">Flyway</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15px;">Git</a> <a href="/blog-hexo/tags/GitLab/" style="font-size: 10px;">GitLab</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Go/" style="font-size: 10.71px;">Go</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10.71px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 12.14px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 16.43px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 12.14px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.86px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.57px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 17.14px;">Linux</a> <a href="/blog-hexo/tags/Loguru/" style="font-size: 10px;">Loguru</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/blog-hexo/tags/Matplotlib/" style="font-size: 10px;">Matplotlib</a> <a href="/blog-hexo/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/blog-hexo/tags/Mkdocs/" style="font-size: 10px;">Mkdocs</a> <a href="/blog-hexo/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/blog-hexo/tags/MyBatisPlus/" style="font-size: 10px;">MyBatisPlus</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 10.71px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10.71px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.43px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Noise/" style="font-size: 10px;">Noise</a> <a href="/blog-hexo/tags/Numpy/" style="font-size: 10px;">Numpy</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenCV/" style="font-size: 10.71px;">OpenCV</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 11.43px;">Oracle</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Pip/" style="font-size: 10px;">Pip</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PosixPath/" style="font-size: 10px;">PosixPath</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 10.71px;">PowerShell</a> <a href="/blog-hexo/tags/PyTorch/" style="font-size: 10px;">PyTorch</a> <a href="/blog-hexo/tags/Python/" style="font-size: 19.29px;">Python</a> <a href="/blog-hexo/tags/Pythonenv/" style="font-size: 10px;">Pythonenv</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SQLAlchemy/" style="font-size: 10px;">SQLAlchemy</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12.14px;">SSH</a> <a href="/blog-hexo/tags/Shell/" style="font-size: 14.29px;">Shell</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 13.57px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Supervisor/" style="font-size: 10px;">Supervisor</a> <a href="/blog-hexo/tags/Swagger/" style="font-size: 10px;">Swagger</a> <a href="/blog-hexo/tags/Swagger-UI/" style="font-size: 10px;">Swagger-UI</a> <a href="/blog-hexo/tags/TensorRT/" style="font-size: 10px;">TensorRT</a> <a href="/blog-hexo/tags/Torch/" style="font-size: 10px;">Torch</a> <a href="/blog-hexo/tags/TorchServe/" style="font-size: 10.71px;">TorchServe</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 11.43px;">Ubuntu</a> <a href="/blog-hexo/tags/VB/" style="font-size: 10px;">VB</a> <a href="/blog-hexo/tags/VS-Code/" style="font-size: 10.71px;">VS Code</a> <a href="/blog-hexo/tags/VSCode/" style="font-size: 10px;">VSCode</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15.71px;">Vue</a> <a href="/blog-hexo/tags/Vuetify/" style="font-size: 10px;">Vuetify</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12.86px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/YAML/" style="font-size: 10px;">YAML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 10.71px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/bpy/" style="font-size: 10px;">bpy</a> <a href="/blog-hexo/tags/bumpversion/" style="font-size: 10px;">bumpversion</a> <a href="/blog-hexo/tags/conda/" style="font-size: 10px;">conda</a> <a href="/blog-hexo/tags/cookiecutter/" style="font-size: 10px;">cookiecutter</a> <a href="/blog-hexo/tags/crontab/" style="font-size: 10px;">crontab</a> <a href="/blog-hexo/tags/faiss/" style="font-size: 10px;">faiss</a> <a href="/blog-hexo/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/ffmpeg/" style="font-size: 10px;">ffmpeg</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10.71px;">grep</a> <a href="/blog-hexo/tags/heatmap-js/" style="font-size: 10px;">heatmap.js</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/nvidia/" style="font-size: 10px;">nvidia</a> <a href="/blog-hexo/tags/obj/" style="font-size: 10px;">obj</a> <a href="/blog-hexo/tags/peewee/" style="font-size: 10px;">peewee</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/pytest/" style="font-size: 10px;">pytest</a> <a href="/blog-hexo/tags/python/" style="font-size: 10px;">python</a> <a href="/blog-hexo/tags/sed/" style="font-size: 10px;">sed</a> <a href="/blog-hexo/tags/setuptools/" style="font-size: 10px;">setuptools</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/xargs/" style="font-size: 10px;">xargs</a> <a href="/blog-hexo/tags/yacs/" style="font-size: 10px;">yacs</a> <a href="/blog-hexo/tags/zip/" style="font-size: 10px;">zip</a> <a href="/blog-hexo/tags/zsh/" style="font-size: 10px;">zsh</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 11.43px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
     </div>
@@ -724,7 +709,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">アーカイブ</h3>
+    <h3 class="widget-title">Archiv</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
     </div>
@@ -734,9 +719,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">最近の投稿</h3>
+    <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog-hexo/2021/09/29/Docker容器内查看限制内存和占用内存/">(no title)</a>
+          </li>
         
           <li>
             <a href="/blog-hexo/2021/09/22/使用grep排除特定模式的搜索结果/">使用grep排除特定模式的搜索结果</a>
@@ -752,10 +741,6 @@
         
           <li>
             <a href="/blog-hexo/2021/07/28/启动TorchServe时遇到的奇怪的PosixPath问题/">启动TorchServe时遇到的奇怪的PosixPath问题</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2021/07/26/使用opencv给图像添加椒盐噪声和高斯噪声/">使用opencv给图像添加椒盐噪声和高斯噪声</a>
           </li>
         
       </ul>
