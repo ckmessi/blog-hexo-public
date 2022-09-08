@@ -68,6 +68,79 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Yacs配置使用基本流程" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2021/05/16/Yacs配置使用基本流程/" class="article-date">
+  <time datetime="2021-05-16T10:22:40.000Z" itemprop="datePublished">2021-05-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2021/05/16/Yacs配置使用基本流程/">Yacs配置使用基本流程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在 Detectron、MaskRCNN、FastReID 等流行项目中，都使用了 <code>yacs</code> 进行配置文件的管理。<br>这篇文章简单总结将 <code>yacs</code> 集成到项目中需要进行的流程及基本使用方式。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>集成 <code>yacs</code> 工具时，主要流程分为几步：<br>1、CfgNode 定义：继承 <code>yacs.config.CfgNode</code> 并定义一些自己的逻辑；<br>2、Default 信息定义：撰写系统所需要的所有配置项默认信息；<br>3、修改 parse_args 方法，接收配置文件参数，并将剩余的命令行参数也传到程序中；<br>4、在程序的开始时正确地 <code>安装</code> 所需要的配置 <code>cfg</code> 变量。</p>
+<h4 id="基础配置"><a href="#基础配置" class="headerlink" title="基础配置"></a>基础配置</h4><p>假定项目包名称为 <code>project</code>，通常会创建一个目录 <code>project/config</code>，其中放置三个文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- __init__.py</div><div class="line">- cfg_node.py</div><div class="line">- defaults.py</div></pre></td></tr></table></figure></p>
+<p>在 <code>__init__.py</code> 文件中声明一些信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># encoding: utf-8</div><div class="line">from .cfg_node import CfgNode, get_cfg</div><div class="line">from .defaults import _C as cfg</div></pre></td></tr></table></figure></p>
+<p>在 <code>cfg_node.py</code> 中创建继承自 <code>yacs.config.CfgNode</code> 的类，定义自己的相关方法（比如通过 <code>_BASE_</code> 键继承父级配置信息）。</p>
+<p>在 <code>defaults.py</code> 文件中为之前 <code>cfg_node.py</code> 中定义的 <code>CfgNode</code> 类创建一个对象，并给对象赋予一些默认初始值。</p>
+<h4 id="初始化方法"><a href="#初始化方法" class="headerlink" title="初始化方法"></a>初始化方法</h4><p>定义一个 <code>setup</code> 方法，用于创建基本的配置类，实现配置文件的读取及命令行参数的覆写：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">def setup(args):</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    Create configs and perform basic setups.</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    cfg = get_cfg()</div><div class="line">    cfg.merge_from_file(args.config_file)</div><div class="line">    cfg.merge_from_list(args.opts)</div><div class="line">    cfg.freeze()</div><div class="line">    return cfg</div></pre></td></tr></table></figure></p>
+<h4 id="参数解析兼容"><a href="#参数解析兼容" class="headerlink" title="参数解析兼容"></a>参数解析兼容</h4><p>使用 <code>yacs</code> 进行配置文件控制时，往往至少需要两个参数：</p>
+<ul>
+<li><code>--config--file</code>：用于指定配置文件</li>
+<li><code>ops</code>：用于声明命令行剩余的参数 <code>argparse.REMAINDER</code>。</li>
+</ul>
+<p>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">def parse_args():</div><div class="line">    import argparse</div><div class="line">    parser = argparse.ArgumentParser(description=&apos;&apos;)</div><div class="line">    parser.add_argument(&apos;--config-file&apos;, default=&apos;&apos;, help=&apos;&apos;)</div><div class="line">    # other original parameters</div><div class="line">    parser.add_argument(</div><div class="line">        &quot;opts&quot;,</div><div class="line">        help=&quot;Modify config options using the command-line&quot;,</div><div class="line">        default=None,</div><div class="line">        nargs=argparse.REMAINDER,</div><div class="line">    )</div><div class="line">    args = parser.parse_args()</div><div class="line">    return args</div></pre></td></tr></table></figure></p>
+<h2 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h2><p>在使用时，配置项信息可以通过默认值、配置文件或命令行参数的形式传递：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">$ PYTHONPATH=. python demo/main.py --config-file configs/sample.yml LEVEL1.LEVEL2.B 0.22</div><div class="line">Command Line Args: Namespace(argument1=1, config_file=&apos;configs/sample.yml&apos;, opts=[&apos;LEVEL1.LEVEL2.B&apos;, &apos;0.22&apos;])</div><div class="line">[FUNCTION_1] cfg content:</div><div class="line">FIX_SEED: 19</div><div class="line">LEVEL1:</div><div class="line">  LEVEL2:</div><div class="line">    A: 0.11</div><div class="line">    B: 0.22</div><div class="line">    C: 0.3</div><div class="line">  V1: True</div><div class="line">  V2: 3.0</div><div class="line">OUTPUT_DIR: logs/sample/</div></pre></td></tr></table></figure></p>
+<p>这里可以简单分析打印出来的 <code>cfg</code> 变量的内容：</p>
+<ul>
+<li><code>FIX_SEED</code> 在 <code>project/config/defaults.py</code> 中定义，并且没有被覆写过；</li>
+<li><code>LEVEL1.V1</code> 在 <code>project/config/defaults.py</code> 中定义为 <code>False</code>, 但在 <code>base.yml</code> 文件中覆写为 <code>True</code>，并且 <code>sample.yml</code> 继承了它在 <code>base.yml</code> 文件中的值；</li>
+<li><code>LEVEL1.V2</code> 在 <code>base.yml</code> 文件中覆写为 <code>3.0</code>，又在 <code>sample.yml</code> 文件中覆写为 <code>4.0</code>，所以最终的值为 <code>4.0</code>；</li>
+<li><code>LEVEL1.LEVEL2.A</code> 在 <code>sample.yml</code> 文件中覆写为 <code>0.11</code>；</li>
+<li><code>LEVEL1.LEVEL2.B</code> 通过命令行参数设定为 <code>0.22</code>；</li>
+<li><code>LEVEL1.LEVEL2.C</code> 自始自终没有被覆写过，所以它保持了原始的默认值 <code>0.3</code>。</li>
+</ul>
+<p>如上例所示，配置项的内容能够轻松地被默认值、配置文件、配置文件子类及命令行参数控制。<br>希望这种方式能够帮助快速划分不同的实验配置，并记录好它们的实验效果。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>当程序复杂到一定程度时，可以考虑使用 yacs 进行配置参数的管理。<br>相关代码可参考 <a href="https://github.com/ckmessi/yacs-example" target="_blank" rel="external">这里</a>。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://github.com/rbgirshick/yacs" target="_blank" rel="external">https://github.com/rbgirshick/yacs</a></li>
+<li><a href="https://github.com/facebookresearch/Detectron" target="_blank" rel="external">https://github.com/facebookresearch/Detectron</a></li>
+<li><a href="https://github.com/JDAI-CV/fast-reid" target="_blank" rel="external">https://github.com/JDAI-CV/fast-reid</a></li>
+<li><a href="https://github.com/ckmessi/yacs-example" target="_blank" rel="external">https://github.com/ckmessi/yacs-example</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2021/05/16/Yacs配置使用基本流程/" data-id="cl7srbkj200cjaa8ti2c9vboq" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/yacs/">yacs</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-使用Shell批量替换特殊内容的示例" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog-hexo/2021/04/27/使用Shell批量替换特殊内容的示例/" class="article-date">
@@ -109,7 +182,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2021/04/27/使用Shell批量替换特殊内容的示例/" data-id="cl7ld118300ekpy8tjnb1dgmv" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2021/04/27/使用Shell批量替换特殊内容的示例/" data-id="cl7srbkkk00eoaa8t80p1m15r" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li></ul>
@@ -174,7 +247,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2021/04/23/bpy的安装和配置/" data-id="cl7ld117900cmpy8t7jfjmgaf" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2021/04/23/bpy的安装和配置/" data-id="cl7srbkj500cqaa8tdks7ja10" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Blender/">Blender</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/bpy/">bpy</a></li></ul>
@@ -230,7 +303,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2021/04/14/使用TensorRT-7-2-1时遇到的坑/" data-id="cl7ld118700evpy8tdfpyx1fj" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2021/04/14/使用TensorRT-7-2-1时遇到的坑/" data-id="cl7srbkkl00esaa8trprvt61i" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/TensorRT/">TensorRT</a></li></ul>
@@ -280,7 +353,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2021/03/30/使用mtime快速找出几天前的数据/" data-id="cl7ld118n00fxpy8t0zi8xg9f" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2021/03/30/使用mtime快速找出几天前的数据/" data-id="cl7srbkl100fuaa8tlg6yp6rq" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li></ul>
@@ -334,7 +407,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2021/03/29/PHP中strtotime月份加减的坑/" data-id="cl7ld114y0087py8t08pu4i3g" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2021/03/29/PHP中strtotime月份加减的坑/" data-id="cl7srbkdx008caa8to2lsdpdu" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -383,7 +456,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2021/02/17/Laravel使用Sqlite数据库回滚数据库迁移时的错误/" data-id="cl7ld113k004zpy8tc7hdhczn" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2021/02/17/Laravel使用Sqlite数据库回滚数据库迁移时的错误/" data-id="cl7srbka20051aa8tumbwzn41" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -439,7 +512,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2021/02/15/PHP7-4中引发的访问越界问题/" data-id="cl7ld114u007zpy8t9l4s8fc5" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2021/02/15/PHP7-4中引发的访问越界问题/" data-id="cl7srbkdj0084aa8thw9mwqm1" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
@@ -496,7 +569,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2021/02/06/浏览器SetCookie动作失败的原因及解决/" data-id="cl7ld11al00kgpy8t5vqeuzm4" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2021/02/06/浏览器SetCookie动作失败的原因及解决/" data-id="cl7srbkn700kcaa8td3yr9vky" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Cookie/">Cookie</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li></ul>
@@ -551,76 +624,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2021/02/05/Laravel给request参数中添加内容/" data-id="cl7ld113t005mpy8tpyhsc845" class="article-share-link">Teilen</a>
+      <a data-url="http://ckmessi.github.io/2021/02/05/Laravel给request参数中添加内容/" data-id="cl7srbkah005naa8t5e0879gm" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-faiss-gpu智障的patch版本升级" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog-hexo/2021/01/22/faiss-gpu智障的patch版本升级/" class="article-date">
-  <time datetime="2021-01-22T15:38:19.000Z" itemprop="datePublished">2021-01-22</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog-hexo/2021/01/22/faiss-gpu智障的patch版本升级/">faiss-gpu智障的patch版本升级</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>今天遇到一个智障的问题，跑一个示例项目的代码过程中，抛出了 <code>fassi</code> 相关的错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">AttributeError: module &apos;faiss&apos; has no attribute &apos;cast_integer_to_long_ptr&apos;</div></pre></td></tr></table></figure></p>
-<p>拿这个错误信息去搜索，完全找不到相关的内容。</p>
-<img src="/blog-hexo/2021/01/22/faiss-gpu智障的patch版本升级/1.png" alt="google不到真相" title="google不到真相">
-<p>由于 fassi 自身的安装有点混乱，有时候成功安装的版本也可能缺少相关依赖库。在这个 <a href="https://github.com/facebookresearch/faiss/issues/888" target="_blank" rel="external">Issue</a> 下作者甚至直接表示仅支持通过 conda 安装，使用 pip 安装的可能有问题，现在不再支持 pip 安装了：</p>
-<blockquote>
-<p>@sree5472 As @Silent-Zebra mentioned, the supported way of installing Faiss is through conda, and we do not support pip at the moment.</p>
-</blockquote>
-<p>于是在这种背景下，很容易让人以为，并不是包的问题而是自己安装的有问题（开发者是没有错的，错的就是你打开的方式不正确）。<br>然而花了大量时间控制变量地遍历所有安装方式，包括 {pip/conda} 组合 {faiss-cpu/faiss-gpu} 等情况， 依然无法解决上述有问题。</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>忙活了一个多小时，最后灵机一动，降个版本试试，当前 faiss-gpu 是 <code>1.6.5</code>，降到 <code>1.6.4</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install --ignore-installed faiss-gpu==1.6.4</div></pre></td></tr></table></figure></p>
-<p>然后就不抛错了……MDZZ。。。</p>
-<p>下载 <a href="https://github.com/facebookresearch/faiss" target="_blank" rel="external">faiss-gpu源码</a>，切换到 <code>v1.6.4</code> 的标签下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/facebookresearch/faiss.git</div><div class="line">git checkout v1.6.4</div></pre></td></tr></table></figure></p>
-<p>搜索关键词 <code>cast_integer_to_long_ptr</code> 是能够找到内容的，在 <code>swigfaiss.swig</code> 文件中有定义该方法，且 <code>pytorch_tensors.py</code> 的 <code>swig_ptr_from_LongTensor</code> 方法中有调用示例：</p>
-<img src="/blog-hexo/2021/01/22/faiss-gpu智障的patch版本升级/2.png" alt="搜索结果" title="搜索结果">
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">long * cast_integer_to_long_ptr (long x) &#123;</div><div class="line">    return (long*)x;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>如果把版本切到 <code>1.6.5</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git checkout v1.6.5</div></pre></td></tr></table></figure></p>
-<p>搜索关键词 <code>cast_integer_to_long_ptr</code> 就啥也找不着了：</p>
-<img src="/blog-hexo/2021/01/22/faiss-gpu智障的patch版本升级/3.png" alt="搜索结果" title="搜索结果">
-<p>在 <code>v1.6.5</code> 版本中的 <code>contrib/torch_utils.py</code> 文件与之前的 <code>pytorch_tensors.py</code> 内容相似，但其中包含了 <code>swig_ptr_from_UInt8Tensor</code>、<code>swig_ptr_from_FloatTensor</code>、<code>swig_ptr_from_IntTensor</code> 等方法，唯独没有了 <code>swig_ptr_from_LongTensor</code> 方法，不知道是什么原因。</p>
-<p>所以最终的结论就是，<code>fassi</code> 库自己升了一个 <code>patch</code> 版本，却修改了可能引发 breaking change 的内容，导致其它引用该方法的代码崩溃。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>太蠢了，这种智障问题浪费了我一个多小时配环境，更蠢的是我还花了半小时时间复盘和记录这个错误的原因和修复方式。</p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
-<li><a href="https://github.com/facebookresearch/faiss/issues/888" target="_blank" rel="external">https://github.com/facebookresearch/faiss/issues/888</a></li>
-<li><a href="https://github.com/facebookresearch/faiss" target="_blank" rel="external">https://github.com/facebookresearch/faiss</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://ckmessi.github.io/2021/01/22/faiss-gpu智障的patch版本升级/" data-id="cl7ld117d00ctpy8t9o8ifvg2" class="article-share-link">Teilen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Faiss/">Faiss</a></li></ul>
 
     </footer>
   </div>
@@ -664,7 +671,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog-hexo/tags/3D/" style="font-size: 10px;">3D</a> <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Alembic/" style="font-size: 10px;">Alembic</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 11.43px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/Blender/" style="font-size: 10px;">Blender</a> <a href="/blog-hexo/tags/C/" style="font-size: 11.43px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CMake/" style="font-size: 10px;">CMake</a> <a href="/blog-hexo/tags/COCO/" style="font-size: 10px;">COCO</a> <a href="/blog-hexo/tags/COCOAPI/" style="font-size: 10px;">COCOAPI</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 10.71px;">CSharp</a> <a href="/blog-hexo/tags/CentOS/" style="font-size: 10px;">CentOS</a> <a href="/blog-hexo/tags/Code-Coverage/" style="font-size: 10px;">Code Coverage</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 10.71px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Cookie/" style="font-size: 10.71px;">Cookie</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Debug/" style="font-size: 10px;">Debug</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/DeepLearning/" style="font-size: 10px;">DeepLearning</a> <a href="/blog-hexo/tags/Django/" style="font-size: 10px;">Django</a> <a href="/blog-hexo/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.14px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10.71px;">Excel</a> <a href="/blog-hexo/tags/FFMpeg/" style="font-size: 10px;">FFMpeg</a> <a href="/blog-hexo/tags/FIGlet/" style="font-size: 10px;">FIGlet</a> <a href="/blog-hexo/tags/Faiss/" style="font-size: 10px;">Faiss</a> <a href="/blog-hexo/tags/FastAPI/" style="font-size: 10px;">FastAPI</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Flask/" style="font-size: 10px;">Flask</a> <a href="/blog-hexo/tags/Flyway/" style="font-size: 10px;">Flyway</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15px;">Git</a> <a href="/blog-hexo/tags/Git-Bash/" style="font-size: 10px;">Git Bash</a> <a href="/blog-hexo/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/blog-hexo/tags/GitLab/" style="font-size: 10px;">GitLab</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Go/" style="font-size: 10.71px;">Go</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10.71px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 12.14px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 16.43px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 12.14px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.14px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.57px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 17.86px;">Linux</a> <a href="/blog-hexo/tags/Loguru/" style="font-size: 10px;">Loguru</a> <a href="/blog-hexo/tags/MS-COCO/" style="font-size: 10px;">MS COCO</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/blog-hexo/tags/Math/" style="font-size: 10.71px;">Math</a> <a href="/blog-hexo/tags/Matplotlib/" style="font-size: 10px;">Matplotlib</a> <a href="/blog-hexo/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/blog-hexo/tags/Memory/" style="font-size: 10px;">Memory</a> <a href="/blog-hexo/tags/Mkdocs/" style="font-size: 10px;">Mkdocs</a> <a href="/blog-hexo/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/blog-hexo/tags/MyBatisPlus/" style="font-size: 10px;">MyBatisPlus</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 10.71px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10.71px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.43px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Noise/" style="font-size: 10px;">Noise</a> <a href="/blog-hexo/tags/Numpy/" style="font-size: 10px;">Numpy</a> <a href="/blog-hexo/tags/Nvidia-Driver/" style="font-size: 10px;">Nvidia Driver</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenCV/" style="font-size: 10.71px;">OpenCV</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 11.43px;">Oracle</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Paper-js/" style="font-size: 10px;">Paper.js</a> <a href="/blog-hexo/tags/Pip/" style="font-size: 10px;">Pip</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PosixPath/" style="font-size: 10px;">PosixPath</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 10.71px;">PowerShell</a> <a href="/blog-hexo/tags/PyTorch/" style="font-size: 10.71px;">PyTorch</a> <a href="/blog-hexo/tags/PyYAML/" style="font-size: 10px;">PyYAML</a> <a href="/blog-hexo/tags/Python/" style="font-size: 19.29px;">Python</a> <a href="/blog-hexo/tags/Pythonenv/" style="font-size: 10px;">Pythonenv</a> <a href="/blog-hexo/tags/RLE/" style="font-size: 10px;">RLE</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SQLAlchemy/" style="font-size: 10px;">SQLAlchemy</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12.86px;">SSH</a> <a href="/blog-hexo/tags/Shell/" style="font-size: 14.29px;">Shell</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 13.57px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Supervisor/" style="font-size: 10px;">Supervisor</a> <a href="/blog-hexo/tags/Swagger/" style="font-size: 10px;">Swagger</a> <a href="/blog-hexo/tags/Swagger-UI/" style="font-size: 10px;">Swagger-UI</a> <a href="/blog-hexo/tags/TensorRT/" style="font-size: 10px;">TensorRT</a> <a href="/blog-hexo/tags/Terminal/" style="font-size: 10px;">Terminal</a> <a href="/blog-hexo/tags/Torch/" style="font-size: 10px;">Torch</a> <a href="/blog-hexo/tags/TorchServe/" style="font-size: 10.71px;">TorchServe</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 11.43px;">Ubuntu</a> <a href="/blog-hexo/tags/VB/" style="font-size: 10px;">VB</a> <a href="/blog-hexo/tags/VS-Code/" style="font-size: 10.71px;">VS Code</a> <a href="/blog-hexo/tags/VSCode/" style="font-size: 10.71px;">VSCode</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15.71px;">Vue</a> <a href="/blog-hexo/tags/Vuetify/" style="font-size: 10px;">Vuetify</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12.86px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/YAML/" style="font-size: 10px;">YAML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 10.71px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/bpy/" style="font-size: 10px;">bpy</a> <a href="/blog-hexo/tags/bumpversion/" style="font-size: 10px;">bumpversion</a> <a href="/blog-hexo/tags/conda/" style="font-size: 10.71px;">conda</a> <a href="/blog-hexo/tags/cookiecutter/" style="font-size: 10px;">cookiecutter</a> <a href="/blog-hexo/tags/coverage/" style="font-size: 10px;">coverage</a> <a href="/blog-hexo/tags/crontab/" style="font-size: 10px;">crontab</a> <a href="/blog-hexo/tags/faiss/" style="font-size: 10px;">faiss</a> <a href="/blog-hexo/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/ffmpeg/" style="font-size: 10px;">ffmpeg</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10.71px;">grep</a> <a href="/blog-hexo/tags/heatmap-js/" style="font-size: 10px;">heatmap.js</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/iptables/" style="font-size: 10.71px;">iptables</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/nvidia/" style="font-size: 10px;">nvidia</a> <a href="/blog-hexo/tags/obj/" style="font-size: 10px;">obj</a> <a href="/blog-hexo/tags/peewee/" style="font-size: 10px;">peewee</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/pytest/" style="font-size: 10.71px;">pytest</a> <a href="/blog-hexo/tags/python/" style="font-size: 10px;">python</a> <a href="/blog-hexo/tags/scp/" style="font-size: 10px;">scp</a> <a href="/blog-hexo/tags/sed/" style="font-size: 10px;">sed</a> <a href="/blog-hexo/tags/setuptools/" style="font-size: 10px;">setuptools</a> <a href="/blog-hexo/tags/shell/" style="font-size: 10px;">shell</a> <a href="/blog-hexo/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/blog-hexo/tags/torchvision/" style="font-size: 10px;">torchvision</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/xargs/" style="font-size: 10px;">xargs</a> <a href="/blog-hexo/tags/yacs/" style="font-size: 10px;">yacs</a> <a href="/blog-hexo/tags/yaml/" style="font-size: 10px;">yaml</a> <a href="/blog-hexo/tags/zip/" style="font-size: 10px;">zip</a> <a href="/blog-hexo/tags/zsh/" style="font-size: 10px;">zsh</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 11.43px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+      <a href="/blog-hexo/tags/3D/" style="font-size: 10px;">3D</a> <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Alembic/" style="font-size: 10px;">Alembic</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 11.43px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/Blender/" style="font-size: 10px;">Blender</a> <a href="/blog-hexo/tags/C/" style="font-size: 11.43px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CMake/" style="font-size: 10px;">CMake</a> <a href="/blog-hexo/tags/COCO/" style="font-size: 10px;">COCO</a> <a href="/blog-hexo/tags/COCOAPI/" style="font-size: 10px;">COCOAPI</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 10.71px;">CSharp</a> <a href="/blog-hexo/tags/CentOS/" style="font-size: 10px;">CentOS</a> <a href="/blog-hexo/tags/Code-Coverage/" style="font-size: 10px;">Code Coverage</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 10.71px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Cookie/" style="font-size: 10.71px;">Cookie</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Debug/" style="font-size: 10px;">Debug</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/DeepLearning/" style="font-size: 10px;">DeepLearning</a> <a href="/blog-hexo/tags/Django/" style="font-size: 10px;">Django</a> <a href="/blog-hexo/tags/Docker/" style="font-size: 10.71px;">Docker</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.14px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10.71px;">Excel</a> <a href="/blog-hexo/tags/FFMpeg/" style="font-size: 10px;">FFMpeg</a> <a href="/blog-hexo/tags/FIGlet/" style="font-size: 10px;">FIGlet</a> <a href="/blog-hexo/tags/Faiss/" style="font-size: 10px;">Faiss</a> <a href="/blog-hexo/tags/FastAPI/" style="font-size: 10px;">FastAPI</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Flask/" style="font-size: 10px;">Flask</a> <a href="/blog-hexo/tags/Flyway/" style="font-size: 10px;">Flyway</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15px;">Git</a> <a href="/blog-hexo/tags/Git-Bash/" style="font-size: 10px;">Git Bash</a> <a href="/blog-hexo/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/blog-hexo/tags/GitLab/" style="font-size: 10px;">GitLab</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Go/" style="font-size: 10.71px;">Go</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10.71px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 12.14px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 16.43px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 12.14px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.14px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.57px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 17.86px;">Linux</a> <a href="/blog-hexo/tags/Loguru/" style="font-size: 10px;">Loguru</a> <a href="/blog-hexo/tags/MS-COCO/" style="font-size: 10px;">MS COCO</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/blog-hexo/tags/Math/" style="font-size: 10.71px;">Math</a> <a href="/blog-hexo/tags/Matplotlib/" style="font-size: 10px;">Matplotlib</a> <a href="/blog-hexo/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/blog-hexo/tags/Memory/" style="font-size: 10px;">Memory</a> <a href="/blog-hexo/tags/Mkdocs/" style="font-size: 10px;">Mkdocs</a> <a href="/blog-hexo/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/blog-hexo/tags/MyBatisPlus/" style="font-size: 10px;">MyBatisPlus</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 10.71px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10.71px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.43px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Noise/" style="font-size: 10px;">Noise</a> <a href="/blog-hexo/tags/Numpy/" style="font-size: 10px;">Numpy</a> <a href="/blog-hexo/tags/Nvidia-Driver/" style="font-size: 10px;">Nvidia Driver</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenCV/" style="font-size: 10.71px;">OpenCV</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 11.43px;">Oracle</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Paper-js/" style="font-size: 10px;">Paper.js</a> <a href="/blog-hexo/tags/Pip/" style="font-size: 10px;">Pip</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PosixPath/" style="font-size: 10px;">PosixPath</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 10.71px;">PowerShell</a> <a href="/blog-hexo/tags/PyTorch/" style="font-size: 10.71px;">PyTorch</a> <a href="/blog-hexo/tags/PyYAML/" style="font-size: 10px;">PyYAML</a> <a href="/blog-hexo/tags/Python/" style="font-size: 19.29px;">Python</a> <a href="/blog-hexo/tags/Pythonenv/" style="font-size: 10px;">Pythonenv</a> <a href="/blog-hexo/tags/RLE/" style="font-size: 10px;">RLE</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SQLAlchemy/" style="font-size: 10px;">SQLAlchemy</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12.86px;">SSH</a> <a href="/blog-hexo/tags/Shell/" style="font-size: 14.29px;">Shell</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 13.57px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Supervisor/" style="font-size: 10px;">Supervisor</a> <a href="/blog-hexo/tags/Swagger/" style="font-size: 10px;">Swagger</a> <a href="/blog-hexo/tags/Swagger-UI/" style="font-size: 10px;">Swagger-UI</a> <a href="/blog-hexo/tags/TensorRT/" style="font-size: 10px;">TensorRT</a> <a href="/blog-hexo/tags/Terminal/" style="font-size: 10px;">Terminal</a> <a href="/blog-hexo/tags/Torch/" style="font-size: 10px;">Torch</a> <a href="/blog-hexo/tags/TorchServe/" style="font-size: 10.71px;">TorchServe</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 11.43px;">Ubuntu</a> <a href="/blog-hexo/tags/VB/" style="font-size: 10px;">VB</a> <a href="/blog-hexo/tags/VS-Code/" style="font-size: 10.71px;">VS Code</a> <a href="/blog-hexo/tags/VSCode/" style="font-size: 10.71px;">VSCode</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15.71px;">Vue</a> <a href="/blog-hexo/tags/Vuetify/" style="font-size: 10px;">Vuetify</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12.86px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/YAML/" style="font-size: 10px;">YAML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 10.71px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/bpy/" style="font-size: 10px;">bpy</a> <a href="/blog-hexo/tags/bumpversion/" style="font-size: 10px;">bumpversion</a> <a href="/blog-hexo/tags/conda/" style="font-size: 10.71px;">conda</a> <a href="/blog-hexo/tags/cookiecutter/" style="font-size: 10px;">cookiecutter</a> <a href="/blog-hexo/tags/coverage/" style="font-size: 10px;">coverage</a> <a href="/blog-hexo/tags/crontab/" style="font-size: 10px;">crontab</a> <a href="/blog-hexo/tags/faiss/" style="font-size: 10px;">faiss</a> <a href="/blog-hexo/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/ffmpeg/" style="font-size: 10px;">ffmpeg</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10.71px;">grep</a> <a href="/blog-hexo/tags/heatmap-js/" style="font-size: 10px;">heatmap.js</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/iptables/" style="font-size: 10.71px;">iptables</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10px;">npm</a> <a href="/blog-hexo/tags/nvidia/" style="font-size: 10px;">nvidia</a> <a href="/blog-hexo/tags/obj/" style="font-size: 10px;">obj</a> <a href="/blog-hexo/tags/peewee/" style="font-size: 10px;">peewee</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/pytest/" style="font-size: 10.71px;">pytest</a> <a href="/blog-hexo/tags/python/" style="font-size: 10px;">python</a> <a href="/blog-hexo/tags/scp/" style="font-size: 10px;">scp</a> <a href="/blog-hexo/tags/sed/" style="font-size: 10px;">sed</a> <a href="/blog-hexo/tags/setuptools/" style="font-size: 10px;">setuptools</a> <a href="/blog-hexo/tags/shell/" style="font-size: 10px;">shell</a> <a href="/blog-hexo/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/blog-hexo/tags/torchvision/" style="font-size: 10px;">torchvision</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/xargs/" style="font-size: 10px;">xargs</a> <a href="/blog-hexo/tags/yacs/" style="font-size: 10px;">yacs</a> <a href="/blog-hexo/tags/yaml/" style="font-size: 10px;">yaml</a> <a href="/blog-hexo/tags/zip/" style="font-size: 10px;">zip</a> <a href="/blog-hexo/tags/zsh/" style="font-size: 10px;">zsh</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 11.43px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
     </div>
   </div>
 
@@ -686,6 +693,10 @@
       <ul>
         
           <li>
+            <a href="/blog-hexo/2022/09/08/Docker实时查看容器的内存占用/">Docker实时查看容器的内存占用</a>
+          </li>
+        
+          <li>
             <a href="/blog-hexo/2022/09/03/关于将COCO格式多边形绘制成分割图/">关于将COCO格式多边形绘制成分割图</a>
           </li>
         
@@ -699,10 +710,6 @@
         
           <li>
             <a href="/blog-hexo/2022/07/08/torchvision抛出找不到C-ops问题的一种修复方式/">torchvision抛出找不到C++ops问题的一种修复方式</a>
-          </li>
-        
-          <li>
-            <a href="/blog-hexo/2022/06/11/SSH使用ProxyCommand直连内网机器/">SSH使用ProxyCommand直连内网机器</a>
           </li>
         
       </ul>
