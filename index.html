@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>不止是一位程序员</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Lionel的技术笔记总结">
+<meta property="og:type" content="website">
+<meta property="og:title" content="不止是一位程序员">
+<meta property="og:url" content="http://ckmessi.github.io/index.html">
+<meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="Lionel的技术笔记总结">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="不止是一位程序员">
+<meta name="twitter:description" content="Lionel的技术笔记总结">
+  
+    <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/blog-hexo/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog-hexo/" id="logo">不止是一位程序员</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog-hexo/" id="subtitle">Lionel的技术空间</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog-hexo/">Home</a>
+        
+          <a class="main-nav-link" href="/blog-hexo/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-Vue导出HTML页面至PDF" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2023/01/04/Vue导出HTML页面至PDF/" class="article-date">
+  <time datetime="2023-01-04T08:28:36.000Z" itemprop="datePublished">2023-01-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2023/01/04/Vue导出HTML页面至PDF/">Vue导出HTML页面至PDF</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>领导说最近写 PPT 写得有点累，很多实验结论贴图容易弄混，问我有没办法直接写代码把相关素材导出成 PDF。</p>
+<p>领导问，当然没办法也得创造办法啊。</p>
+<p>上网查了一下，把 html 元素导出为 PDF 的方案确实有，主要需要使用到 <code>html2canvas</code> 和 <code>jsPDF</code> 这两个库。</p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>参考 <a href="https://www.jianshu.com/p/0efb0064ce96" target="_blank" rel="external">这篇文章</a> 的方案二，可以逐步实现想要的功能。不过文章里的示例代码不够好，我自己进行了一些封装，更方便实用。</p>
+<h2 id="创建一个全新的-vue-项目"><a href="#创建一个全新的-vue-项目" class="headerlink" title="创建一个全新的 vue 项目"></a>创建一个全新的 vue 项目</h2><p>以 Vue2 为例，如果此前没有安装过 vue-cli 工具，首先先安装一下：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g @vue/cli</div></pre></td></tr></table></figure>
+<p>然后创建一个项目：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vue create &#123;my-project-name&#125;</div></pre></td></tr></table></figure>
+<p>创建完成后，我们将在这个 <code>{my-project-name}</code> 项目中进行相关操作。</p>
+<h2 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h2><p>直接使用 <code>npm</code> 安装两个重要的依赖：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">npm install --save html2canvas</div><div class="line">npm install --save jspdf</div></pre></td></tr></table></figure>
+<h2 id="添加基本代码"><a href="#添加基本代码" class="headerlink" title="添加基本代码"></a>添加基本代码</h2><p>抛开此前查找到的文章，这里对相关代码进行了封装，主要分为几个部分：</p>
+<ul>
+<li>功能方法</li>
+<li>引入绑定 Vue</li>
+<li>导出功能页面</li>
+<li>PDF内容</li>
+</ul>
+<h3 id="功能方法"><a href="#功能方法" class="headerlink" title="功能方法"></a>功能方法</h3><p>其中功能方法部分借鉴了网上文章的内容，但将部分重要参数抽取到了函数声明中：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 导出页面为PDF格式</span></div><div class="line"><span class="keyword">import</span> html2Canvas <span class="keyword">from</span> <span class="string">'html2canvas'</span></div><div class="line"><span class="keyword">import</span> JsPDF <span class="keyword">from</span> <span class="string">'jspdf'</span></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span>&#123;</div><div class="line">  install (Vue) &#123;</div><div class="line">    Vue.prototype.getPdf = <span class="function"><span class="keyword">function</span> (<span class="params">title, domId, pageWidth, pageHeight</span>) </span>&#123;</div><div class="line">      html2Canvas(<span class="built_in">document</span>.querySelector(<span class="string">`#<span class="subst">$&#123;domId&#125;</span>`</span>), &#123;</div><div class="line">        <span class="attr">allowTaint</span>: <span class="literal">true</span></div><div class="line">      &#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">canvas</span>) </span>&#123;</div><div class="line">        <span class="comment">// the contentWidth should be set as the pdf width</span></div><div class="line">        <span class="keyword">let</span> contentWidth = <span class="built_in">parseInt</span>(canvas.style.width)</div><div class="line">        <span class="keyword">let</span> contentHeight = <span class="built_in">parseInt</span>(canvas.style.height)</div><div class="line">        <span class="keyword">let</span> pageData = canvas.toDataURL(<span class="string">'image/jpeg'</span>, <span class="number">1.0</span>)</div><div class="line">        </div><div class="line">        <span class="comment">// console.log(canvas)</span></div><div class="line">        <span class="comment">// console.log("contentHeight", contentHeight)</span></div><div class="line">        <span class="keyword">let</span> PDF = <span class="keyword">new</span> JsPDF(&#123;</div><div class="line">          <span class="attr">orientation</span>: <span class="string">'landscape'</span>,</div><div class="line">          <span class="attr">unit</span>: <span class="string">'px'</span>,</div><div class="line">          <span class="attr">format</span>: [pageWidth, pageHeight]</div><div class="line">        &#125;)</div><div class="line"></div><div class="line">        <span class="comment">// 逐页打印</span></div><div class="line">        <span class="keyword">let</span> remainHeight = contentHeight</div><div class="line">        <span class="keyword">let</span> position = <span class="number">0</span></div><div class="line">        </div><div class="line">        <span class="comment">// 第3个参数和第4个参数 表示在当前 pdf 页进行绘制的偏移</span></div><div class="line">        <span class="keyword">while</span> (remainHeight &gt; <span class="number">0</span>) &#123;</div><div class="line">          PDF.addImage(pageData, <span class="string">'JPEG'</span>, <span class="number">0</span>, position, contentWidth, contentHeight)</div><div class="line">          remainHeight -= pageHeight</div><div class="line">          position -= pageHeight</div><div class="line">          <span class="keyword">if</span> (remainHeight &gt; <span class="number">0</span>) &#123;</div><div class="line">            PDF.addPage()</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">        PDF.save(title + <span class="string">'.pdf'</span>)</div><div class="line">        </div><div class="line">      &#125;</div><div class="line">      )</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>将这些内容保存到一个新文件中，保存为 <code>src/utils/htmlToPdf.js</code>。</p>
+<p>这里的 <code>new JsPDF</code> 方法可以根据 <code>jspdf</code> 库的文档，设置对应的水平或纵向方向，以及页面的宽高信息。</p>
+<p>由于 canvas 获取到的是所有页面信息，因此在打印过程中，通过不断修改 <code>PDF.addImage</code> 方法的第 4 个参数（初始高度偏移）来实现将不同内容打印到对应页面的功能。</p>
+<p>比如一共有 4 页 1920x1080 的页面内容，在打印第二页的时候，应该从 <code>-1080px</code> 位置开始打印，这样显示出来的正好是第 2 页应该有的内容；同理，第三页应该从 <code>-2160px</code> 位置开始打印。</p>
+<h3 id="引入绑定-Vue"><a href="#引入绑定-Vue" class="headerlink" title="引入绑定 Vue"></a>引入绑定 Vue</h3><p>在 <code>main.js</code> 中，可以引入刚刚添加的工具方法，并绑定到 Vue 全局变量中：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> htmlToPdf <span class="keyword">from</span> <span class="string">'@/utils/htmlToPdf'</span></div><div class="line"></div><div class="line">Vue.use(htmlToPdf)</div></pre></td></tr></table></figure>
+<p>这样在任何地方，都可以直接使用 <code>this.getPdf</code> 调用位于 <code>htmlToPdf</code> 文件中的函数。</p>
+<h3 id="导出功能页面"><a href="#导出功能页面" class="headerlink" title="导出功能页面"></a>导出功能页面</h3><p>在导出功能页面中，我们需要添加一个按钮，完成点击后下载 PDF 文件的功能：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">  &lt;div&gt;</div><div class="line">    &lt;div&gt;下方内容为导出的PDF内容&lt;/div&gt;</div><div class="line">    &lt;button</div><div class="line">      type="button"</div><div class="line">      class="btn btn-primary"</div><div class="line">      v-on:click="downloadPdf"</div><div class="line">    &gt;</div><div class="line">      导出PDF</div><div class="line">    &lt;/button&gt;</div><div class="line">    &lt;pdf-page-content :pdfDomName="pdfDomName" :pdfPageWidth="pdfPageWidth" :pdfPageHeight="pdfPageHeight"&gt;&lt;/pdf-page-content&gt;</div><div class="line"></div><div class="line">  &lt;/div&gt;</div><div class="line">&lt;/template&gt;</div><div class="line"></div><div class="line">&lt;script&gt;</div><div class="line"><span class="keyword">import</span> PdfPageContent <span class="keyword">from</span> <span class="string">'./PdfPageContent.vue'</span></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</div><div class="line">  <span class="attr">components</span>: &#123;</div><div class="line">    <span class="string">'PdfPageContent'</span>: PdfPageContent</div><div class="line">  &#125;,</div><div class="line">  data () &#123;</div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">      <span class="attr">pdfDomName</span>: <span class="string">'pdfDom'</span>,</div><div class="line">      <span class="attr">pdfPageWidth</span>: <span class="number">1920</span>,</div><div class="line">      <span class="attr">pdfPageHeight</span>: <span class="number">1080</span>,</div><div class="line">    &#125;</div><div class="line">  &#125;, </div><div class="line">  <span class="attr">methods</span>: &#123;</div><div class="line">    downloadPdf()&#123;</div><div class="line">      <span class="keyword">this</span>.getPdf(<span class="string">'export'</span>, <span class="keyword">this</span>.pdfDomName, <span class="keyword">this</span>.pdfPageWidth, <span class="keyword">this</span>.pdfPageHeight)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line">&lt;/script&gt;</div><div class="line"></div><div class="line">&lt;style&gt;</div><div class="line">&lt;/style&gt;</div></pre></td></tr></table></figure>
+<p>需要注意的是，在这个页面中我们定义了三个重要的变量：</p>
+<ul>
+<li>pdfDomName：标识 PDF 需要打印的 DOM 元素</li>
+<li>pdfPageWidht：标识 PDF 打印的单页宽度，以像素为单位</li>
+<li>pdfPageHeight：标识 PDF 打印的单页高度，以像素为单位</li>
+</ul>
+<p>目前网上查到的相关方案基本是直接打印一个 A4 纸大小的页面。实际上在不同的使用场景，可能更多的是希望打印出类似 PPT 制作的页面，可能是 16:9 或 4:3 比例的页面内容。可以通过修改这里的参数进行设置。</p>
+<p>页面中引入了 <code>PdfPageContent</code> 组件，这个组件是待打印的 PDF 内容，可以供用户指定。</p>
+<h3 id="PDF内容"><a href="#PDF内容" class="headerlink" title="PDF内容"></a>PDF内容</h3><p>在 PDF 实际需要打印的内容中，我们通过 <code>PdfPageContent</code> 组件进行绘制。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">  &lt;div&gt;</div><div class="line">    &lt;div class=&quot;pdf-content&quot; :id=&quot;pdfDomName&quot; :style=&quot;pdfContentStyle&quot;&gt;</div><div class="line">      &lt;div class=&quot;pdf-page&quot; :style=&quot;pdfPageStyle&quot;&gt;A1234567890abcde&lt;/div&gt;</div><div class="line">      &lt;div class=&quot;pdf-page&quot; :style=&quot;pdfPageStyle&quot;&gt;B1234567890abcde&lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  &lt;/div&gt;</div><div class="line">&lt;/template&gt;</div><div class="line"></div><div class="line">&lt;script&gt;</div><div class="line">export default &#123;</div><div class="line">    props: [&apos;pdfDomName&apos;, &apos;pdfPageWidth&apos;, &apos;pdfPageHeight&apos;],</div><div class="line">    computed: &#123;</div><div class="line">        pdfContentStyle()&#123;</div><div class="line">            return `</div><div class="line">                width: $&#123;this.pdfPageWidth&#125;px;</div><div class="line">            `</div><div class="line">        &#125;,</div><div class="line">        pdfPageStyle()&#123;</div><div class="line">            return `</div><div class="line">                width: $&#123;this.pdfPageWidth - 4&#125;px; </div><div class="line">                height: $&#123;this.pdfPageHeight - 4&#125;px;</div><div class="line">            `</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;;</div><div class="line">&lt;/script&gt;</div><div class="line"></div><div class="line">&lt;style&gt;</div><div class="line">.pdf-content&#123;</div><div class="line">    background-color: #fff</div><div class="line">&#125;</div><div class="line">.pdf-page&#123;</div><div class="line">  /**实际使用时去除边框 */</div><div class="line">  border: 2px solid white;</div><div class="line">  /* width: 1916px; */</div><div class="line">  /* height: 1076px; */</div><div class="line">  background-color: aquamarine;</div><div class="line">&#125;</div><div class="line">.pdf-page:hover &#123;</div><div class="line">  border: 2px dashed red;</div><div class="line">&#125;</div><div class="line">&lt;/style&gt;</div></pre></td></tr></table></figure>
+<p>这里简单列举了一些 CSS 样式，根据传入参数设置宽度，并简单设置了边框。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>使用的过程主要分为两部分：</p>
+<ul>
+<li>在对应 PdfPageContent 页面中写代码添加相关元素；</li>
+<li>打开网站，点击【导出】按钮</li>
+</ul>
+<p>导出的内容如图所示：</p>
+<img src="/2023/01/04/Vue导出HTML页面至PDF/blog-hexo/2023/01/04/Vue导出HTML页面至PDF/1.png" alt="导出的PDF文件示意" title="导出的PDF文件示意">
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>通过使用相关库，可以实现从 HTML 页面导出 PDF 文件的功能。</p>
+<p>这在批量制作 PPT 的时候可能很有用。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://www.jianshu.com/p/0efb0064ce96" target="_blank" rel="external">https://www.jianshu.com/p/0efb0064ce96</a></li>
+<li><a href="https://cli.vuejs.org/" target="_blank" rel="external">https://cli.vuejs.org/</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2023/01/04/Vue导出HTML页面至PDF/" data-id="clcivv7s600cbfc8t7dt0y99c" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PDF/">PDF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-python将秒数转为格式化时间字符串" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2022/11/09/python将秒数转为格式化时间字符串/" class="article-date">
+  <time datetime="2022-11-09T13:29:41.000Z" itemprop="datePublished">2022-11-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2022/11/09/python将秒数转为格式化时间字符串/">python将秒数转为格式化时间字符串</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>有些场景，在获取到秒数后，希望将其转换为特定的时间格式。   </p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>使用 python 中的 <code>time</code> 包可以快速实现。<br>使用 <code>time.gmtime()</code> 方法可以将秒数转为时间对象，使用 <code>time.strftime()</code> 可以将时间对象格式化。<br>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a = time.gmtime(321)</div><div class="line">&gt;&gt;&gt; b = time.strftime(&apos;%H:%M:%S&apos;, a)</div><div class="line">&gt;&gt;&gt; b</div><div class="line">&apos;00:05:21&apos;</div></pre></td></tr></table></figure></p>
+<p>这样就可以把 <code>321</code> 秒转换为 <code>00:05:21</code> 这个字符串。    </p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在需要转秒数的情况下，可以使用 python 自带的 <code>time</code> 包进行转换。   </p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li><a href="https://docs.python.org/3/library/time.html" target="_blank" rel="external">https://docs.python.org/3/library/time.html</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2022/11/09/python将秒数转为格式化时间字符串/" data-id="clcivv7sl00dhfc8t0eh9wvop" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-使用Verdaccio搭建私有npm源" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2022/10/19/使用Verdaccio搭建私有npm源/" class="article-date">
+  <time datetime="2022-10-19T01:43:27.000Z" itemprop="datePublished">2022-10-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2022/10/19/使用Verdaccio搭建私有npm源/">使用Verdaccio搭建私有npm源</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在工作中可能遇到一些场景需要搭建私有的npm镜像源，比如：<br>1、遇到断网环境，如果在断网环境中还想进行前端开发安装相关组件；<br>2、自己团队内部发布一些私有的npm包。</p>
+<p>使用 <code>verdaccio</code> 可以搭建一个私有的 npm 源服务。</p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>参考 <a href="[https://verdaccio.org/docs/installation](https://verdaccio.org/docs/installation">verdaccio官方文档</a>) 的介绍，可以快速安装并使用 verdaccio 工具。</p>
+<p>首先全局安装 <code>verdaccio</code>：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g verdaccio</div></pre></td></tr></table></figure></p>
+<p>安装完成后，执行命令即可启动服务：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ verdaccio</div><div class="line"> info --- Creating default config file <span class="keyword">in</span> C:\Users\admin\.config\verdaccio\config.yaml</div><div class="line"> warn --- config file  - C:\Users\admin\.config\verdaccio\config.yaml</div><div class="line"> warn --- <span class="string">"crypt"</span> algorithm <span class="keyword">is</span> deprecated consider switch to <span class="string">"bcrypt"</span>. Read more: https://github.com/verdaccio/monorepo/pull/<span class="number">580</span></div><div class="line"> info --- plugin successfully loaded: verdaccio-htpasswd</div><div class="line"> info --- plugin successfully loaded: verdaccio-audit</div><div class="line"> warn --- http address - http://localhost:<span class="number">4873</span>/ - verdaccio/<span class="number">5.15</span><span class="number">.4</span></div></pre></td></tr></table></figure>
+<p>然后在浏览器打开 <code>[http://localhost:4873](http://localhost:4873)</code> 即可看到：</p>
+<img src="/2022/10/19/使用Verdaccio搭建私有npm源/blog-hexo/2022/10/19/使用Verdaccio搭建私有npm源/1.png" alt="搭建好的npm私源服务" title="搭建好的npm私源服务">
+<h1 id="发布一个自己的包"><a href="#发布一个自己的包" class="headerlink" title="发布一个自己的包"></a>发布一个自己的包</h1><p>参考  <a href="https://fusebit.io/blog/private-npm-verdaccio/?utm_source=verdaccio.org&amp;utm_medium=referral" target="_blank" rel="external">这篇文章</a> 可以发布一个自己的包。<br>（意外发现拼错了，是 verdaccio 不是 verdacio。）</p>
+<p>新建一个文件夹 <code>verdacio-foo</code>，在其中执行 <code>npm init -f</code>，会自动生成一个 <code>package.json</code> 文件：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="string">"name"</span>: <span class="string">"verdacio-foo"</span>,</div><div class="line">  <span class="string">"version"</span>: <span class="string">"1.0.0"</span>,</div><div class="line">  <span class="string">"description"</span>: <span class="string">""</span>,</div><div class="line">  <span class="string">"main"</span>: <span class="string">"index.js"</span>,</div><div class="line">  <span class="string">"scripts"</span>: &#123;</div><div class="line">    <span class="string">"test"</span>: <span class="string">"echo \"Error: no test specified\" &amp;&amp; exit 1"</span></div><div class="line">  &#125;,</div><div class="line">  <span class="string">"keywords"</span>: [],</div><div class="line">  <span class="string">"author"</span>: <span class="string">""</span>,</div><div class="line">  <span class="string">"license"</span>: <span class="string">"ISC"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在目录中创建一个新文件 <code>index.js</code>，添加内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function helloWorld() &#123;</div><div class="line">  console.log (&quot;Hello world from foo!&quot;)</div><div class="line">&#125;</div><div class="line"></div><div class="line">module.exports = helloWorld;</div></pre></td></tr></table></figure>
+<p>然后在目录中执行 <code>npm publish --registry [http://localhost:4873](http://localhost:4873/)</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">$ npm publish --registry http://localhost:<span class="number">4873</span></div><div class="line">npm notice</div><div class="line">npm notice package: verdacio-foo@<span class="number">1.0</span><span class="number">.0</span></div><div class="line">npm notice === Tarball Contents ===</div><div class="line">npm notice <span class="number">107</span>B index.js</div><div class="line">npm notice <span class="number">226</span>B package.json</div><div class="line">npm notice === Tarball Details ===</div><div class="line">npm notice name:          verdacio-foo</div><div class="line">npm notice version:       <span class="number">1.0</span><span class="number">.0</span></div><div class="line">npm notice package size:  <span class="number">359</span> B</div><div class="line">npm notice unpacked size: <span class="number">333</span> B</div><div class="line">npm notice shasum:        <span class="number">8</span>a9f051d19a0a683f13f0610c729416a4176bb1e</div><div class="line">npm notice integrity:     sha512-BjMGWPB0ps/Zp[...]krZ1e/WVxHNhw==</div><div class="line">npm notice total files:   <span class="number">2</span></div><div class="line">npm notice</div><div class="line">+ verdacio-foo@<span class="number">1.0</span><span class="number">.0</span></div><div class="line">(base)</div></pre></td></tr></table></figure>
+<img src="/2022/10/19/使用Verdaccio搭建私有npm源/blog-hexo/2022/10/19/使用Verdaccio搭建私有npm源/2.png" alt="发布了一个服务" title="发布了一个服务">
+<p>然后就可以安装了：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install --registry http://localhost:<span class="number">4873</span> verdacio-fusebit</div></pre></td></tr></table></figure>
+<h1 id="缓存相关包"><a href="#缓存相关包" class="headerlink" title="缓存相关包"></a>缓存相关包</h1><p>如果希望在内网环境安装相关组件，需要提前在公网环境安装相关包，保证其内容被 verdaccio 成功缓存至本地。</p>
+<p>根据启动时候的提示，可知 Windows 环境下的 verdaccio 的配置文件在 <code>C:\Users\username\.config\verdaccio</code> 这里，对应的同级目录下有一个 <code>storage</code> 目录存储着所有缓存。</p>
+<p>可以创建一个示例目录，在目录下执行 <code>npm install --registry http://localhost:4873 element-ui</code>。</p>
+<p>（此时应该已经在 verdaccio 中缓存了）</p>
+<p>断网，新建一个目录。执行 <code>npm install iview</code> 失败。</p>
+<img src="/2022/10/19/使用Verdaccio搭建私有npm源/blog-hexo/2022/10/19/使用Verdaccio搭建私有npm源/3.png" alt="断网时从公网的npm源安装失败" title="断网时从公网的npm源安装失败">
+<p>执行 <code>npm install --registry http://localhost:4873 iview</code> 成功。</p>
+<img src="/2022/10/19/使用Verdaccio搭建私有npm源/blog-hexo/2022/10/19/使用Verdaccio搭建私有npm源/4.png" alt="断网时从verdaccio搭建的npm源安装成功" title="断网时从verdaccio搭建的npm源安装成功">
+<p>这样在搬入内网环境之前，把相关包安装一遍，就可以了。  </p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>使用 verdaccio 可以搭建私有的 npm 镜像源，这样能够在内网中断网安装相关的前端组件。</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><a href="https://verdaccio.org/" target="_blank" rel="external">https://verdaccio.org/</a></li>
+<li><a href="https://fusebit.io/blog/private-npm-verdaccio/?utm_source=verdaccio.org&amp;utm_medium=referral" target="_blank" rel="external">https://fusebit.io/blog/private-npm-verdaccio/?utm_source=verdaccio.org&amp;utm_medium=referral</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2022/10/19/使用Verdaccio搭建私有npm源/" data-id="clcivv7t700ezfc8trbffvp6n" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/verdaccio/">verdaccio</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Docker实时查看容器的内存占用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2022/09/08/Docker实时查看容器的内存占用/" class="article-date">
+  <time datetime="2022-09-08T07:57:00.000Z" itemprop="datePublished">2022-09-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2022/09/08/Docker实时查看容器的内存占用/">Docker实时查看容器的内存占用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>此前提到，可以通过在容器内查看文件 <code>/sys/fs/cgroup/memory/memory.usage_in_bytes</code> 的内容观察容器占用的内存：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat /sys/fs/cgroup/memory/memory.usage_in_bytes  | awk &apos;&#123; byte =$1 /1024/1024/1024; print byte &quot; GB&quot; &#125;&apos;</div></pre></td></tr></table></figure></p>
+<p>然而这个方法不适合同时查看多个容器的内存占用情况。<br>如果希望概览整个机器中各个容器的内存占用，还是使用 <code>docker stat</code> 命令更佳。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker stats --format &quot;table &#123;&#123;.Name&#125;&#125;\t&#123;&#123;.CPUPerc&#125;&#125;\t&#123;&#123;.MemUsage&#125;&#125;&quot;</div></pre></td></tr></table></figure></p>
+<p>可以看到：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">NAME                                                   CPU %     MEM USAGE / LIMIT</div><div class="line"></div><div class="line">protal_backend_1         13.64%    193.4MiB / 503.6GiB</div><div class="line"></div><div class="line">protal_celeryworker_1    0.17%     136.8MiB / 503.6GiB</div><div class="line"></div><div class="line">protal_frontend_1        0.00%     3.539MiB / 503.6GiB</div><div class="line"></div><div class="line">frontend_1                              0.00%     4.242MiB / 503.6GiB</div><div class="line"></div><div class="line">backend_1                 6.13%     325.5MiB / 503.6GiB</div><div class="line"></div><div class="line">xxx_backend_1                  0.28%     1.175GiB / 503.6GiB</div></pre></td></tr></table></figure></p>
+<p>这样看起来就比较直观了。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://www.cnblogs.com/sparkdev/p/7821376.html" target="_blank" rel="external">https://www.cnblogs.com/sparkdev/p/7821376.html</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2022/09/08/Docker实时查看容器的内存占用/" data-id="clcivv7mz0016fc8tos22tdz3" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Docker/">Docker</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-关于将COCO格式多边形绘制成分割图" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2022/09/03/关于将COCO格式多边形绘制成分割图/" class="article-date">
+  <time datetime="2022-09-03T03:31:32.000Z" itemprop="datePublished">2022-09-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工作/">工作</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2022/09/03/关于将COCO格式多边形绘制成分割图/">关于将COCO格式多边形绘制成分割图</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>COCO 数据集格式的目标标注信息中的 <code>segmentations</code> 字段，通常可以表达一个目标的分割信息。其主要存在三种格式：<code>Polygon</code>、<code>Uncompressed RLE</code> 和 <code>Mask</code>，这三种格式可以互相转换。<br>在常见的数据集中，通常会使用 <code>Polygon</code> 格式，实质上是通过其外轮廓的所有点表达了这个目标对象的信息。这种存储方式非常便捷，在一些标注工具中（比如 <code>Paper.js</code> ）可以直接读取并编辑其中的点，修改目标的外轮廓，并重新保存。<br>然而在实际进行分割训练时，有可能需要将其转为掩码信息，即对应每一个像素上的类标签。<br>幸运的是，对 Python 编程者而言，COCO 数据集的官方 SDK 支持包 <a href="https://github.com/cocodataset/cocoapi/tree/master/PythonAPI/pycocotools" target="_blank" rel="external">pycocotools</a> 包含了相关的接口，可以方便地进行调用。</p>
+<h2 id="绘制方式"><a href="#绘制方式" class="headerlink" title="绘制方式"></a>绘制方式</h2><p>对于给定任务将一个多边形转换为掩码图，可以直接使用 <code>pycocotools</code> 的 <code>mask_util</code> 包中的相关方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">import pycocotools.mask as mask_utils</div><div class="line"></div><div class="line">def convert_polygon_to_mask(segmentations, height, width):</div><div class="line">    rles = mask_utils.frPyObjects(segmentations, height, width)</div><div class="line">    rle = mask_utils.merge(rles)</div><div class="line">    mask_arr = mask_utils.decode(rle)</div><div class="line">    return mask_arr</div></pre></td></tr></table></figure></p>
+<p>其中 <code>segmentations</code> 是一个实例对象的分割信息，<code>height</code> 和 <code>width</code> 是当前图像的高宽信息。<br><code>segmentations</code> 的格式是一个二维数组，数组中的多个元素表示当前实例对象的彼此分离的多个部分。每个元素又是一个一维数组，包含着那个部分的外轮廓点信息。<br><code>segmentations</code> 这个数组的长度有可能是 <code>1</code>，也有可能是一个大于 <code>1</code> 的数量。大多数情况都是 <code>1</code>，因为较少目标会以 <code>彼此分离的多个部分</code> 的形式出现。<br>比如 <code>segmentations</code> 的内容可以是：<code>segmentations = [[100, 100, 500, 100, 500, 500, 100, 500, 120, 300]]</code>，表示一个大概在位置 <code>(100, 100) -&gt; (500, 500)</code> 的目标。<br>比如 <code>segmentations</code> 的内容可以是：<code>segmentations = [[100, 100, 200, 100, 200, 200, 100, 200, 120, 150], [300, 300, 400, 300, 400, 400, 300, 400, 320, 350]]</code>，其中包含了两个分离的部分，前者大概在 <code>(100, 100) -&gt; (200, 200)</code> 位置，后者大概在 <code>(300, 300) -&gt; (400, 400)</code> 位置。<br>需要注意的是，如果 <code>segmentations</code> 数组中的元素个数多于一个，则它们彼此之间是分离的（因为如果不分离，就可以直接融合起来重新计算外轮廓点）。<br><strong> 就我目前所能调研到的情况，COCO数据集格式的标注信息，无法表达孔洞类型（甜甜圈）的目标，因为其外轮廓无法一笔画完。</strong></p>
+<p>额外再定义一个可视化方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">def visualize_mask_to_png_nparray(mask_arr):</div><div class="line">    color = [255, 0, 255]</div><div class="line">    transparency = 255</div><div class="line">    m_3d = np.expand_dims(mask_arr, axis=2)</div><div class="line">    m_rgba = np.concatenate((m_3d, m_3d, m_3d, m_3d), axis=2)</div><div class="line">    m_rgba[:, :, 0] *= color[0]</div><div class="line">    m_rgba[:, :, 1] *= color[1]</div><div class="line">    m_rgba[:, :, 2] *= color[2]</div><div class="line">    m_rgba[:, :, 3] *= transparency</div><div class="line">    return m_rgba</div></pre></td></tr></table></figure></p>
+<p>在调用上述方法后，可以画出几种场景下不同实例的分割图。</p>
+<h3 id="场景1：-单独的部分"><a href="#场景1：-单独的部分" class="headerlink" title="场景1： 单独的部分"></a>场景1： 单独的部分</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">segmentations = [[100, 100, 500, 100, 500, 500, 100, 500, 120, 300]]</div><div class="line">height = 600</div><div class="line">width = 600</div><div class="line">mask_arr = convert_polygon_to_mask(segmentations, height, width)</div><div class="line">mask_png = visualize_mask_to_png_nparray(mask_arr)</div></pre></td></tr></table></figure>
+<img src="/2022/09/03/关于将COCO格式多边形绘制成分割图/blog-hexo/2022/09/03/关于将COCO格式多边形绘制成分割图/case1-1.png" alt="场景1-单独的部分" title="场景1-单独的部分">
+<h3 id="场景2：分离的两个部分"><a href="#场景2：分离的两个部分" class="headerlink" title="场景2：分离的两个部分"></a>场景2：分离的两个部分</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">segmentations = [[100, 100, 200, 100, 200, 200, 100, 200, 120, 150], [300, 300, 400, 300, 400, 400, 300, 400, 320, 350]]</div><div class="line">height = 600</div><div class="line">width = 600</div><div class="line">mask_arr = convert_polygon_to_mask(segmentations, height, width)</div><div class="line">mask_png = visualize_mask_to_png_nparray(mask_arr)</div></pre></td></tr></table></figure>
+<img src="/2022/09/03/关于将COCO格式多边形绘制成分割图/blog-hexo/2022/09/03/关于将COCO格式多边形绘制成分割图/case2-1.png" alt="场景2-分离的两个部分" title="场景2-分离的两个部分">
+<h2 id="场景3：包含的两个部分"><a href="#场景3：包含的两个部分" class="headerlink" title="场景3：包含的两个部分"></a>场景3：包含的两个部分</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">segmentations = [[100, 100, 500, 100, 500, 500, 100, 500, 120, 300], [300, 300, 400, 300, 400, 400, 300, 400, 320, 350]]</div><div class="line">height = 600</div><div class="line">width = 600</div><div class="line">mask_arr = convert_polygon_to_mask(segmentations, height, width)</div><div class="line">mask_png = visualize_mask_to_png_nparray(mask_arr)</div></pre></td></tr></table></figure>
+<img src="/2022/09/03/关于将COCO格式多边形绘制成分割图/blog-hexo/2022/09/03/关于将COCO格式多边形绘制成分割图/case3-1.png" alt="场景3-包含的两个部分" title="场景3-包含的两个部分">
+<p>实际上，这种内容不应该出现在 COCO 格式的标注信息中，因为 <code>segmentations</code> 中的两个元素是相互包含的关系。可以看出，虽然 <code>segmentations</code> 中包含了两个独立的元素，但在实际转换过程中，是对它们的位置取并集，最终变成了较大的那一部分的形状。</p>
+<h2 id="场景4：相交的两个部分"><a href="#场景4：相交的两个部分" class="headerlink" title="场景4：相交的两个部分"></a>场景4：相交的两个部分</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">segmentations = [[100, 100, 400, 100, 400, 400, 100, 400, 120, 200], [300, 300, 500, 300, 500, 500, 300, 500, 320, 400]]</div><div class="line">height = 600</div><div class="line">width = 600</div><div class="line">mask_arr = convert_polygon_to_mask(segmentations, height, width)</div><div class="line">mask_png = visualize_mask_to_png_nparray(mask_arr)</div></pre></td></tr></table></figure>
+<img src="/2022/09/03/关于将COCO格式多边形绘制成分割图/blog-hexo/2022/09/03/关于将COCO格式多边形绘制成分割图/case4-1.png" alt="场景4-相交的两个部分" title="场景4-相交的两个部分">
+<p>实际上，这种内容也不应该出现在 COCO 格式的标注信息中，因为 <code>segmentations</code> 中的两个元素是相交的关系。可以看出，虽然 <code>segmentations</code> 中包含了两个独立的元素，实际的结果是对它们的位置取并集，最终合并变成了它们在一起的形状。</p>
+<h2 id="一种等价的转换方式"><a href="#一种等价的转换方式" class="headerlink" title="一种等价的转换方式"></a>一种等价的转换方式</h2><p>由于观察到，<code>pycocotools</code> 在进行转换过程中，实际上是对多个部分取并集操作，我们也可以刻意遍历 <code>segmentations</code> 中的每个元素，然后对其取并集操作，模拟完成这个过程。    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">def convert_polygon_to_mask_with_split_segmentations(segmentations, height, width):</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    Here segmentations is the annotation info for **one instance**</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    mask_list = list()</div><div class="line">    for segmentation in segmentations:</div><div class="line">        if segmentation and len(segmentation) &gt; 0:</div><div class="line">            rles = mask_utils.frPyObjects([segmentation], height, width)</div><div class="line">            rle = mask_utils.merge(rles)</div><div class="line">            mask_arr = mask_utils.decode(rle)</div><div class="line">            mask_list.append(np.expand_dims(mask_arr, axis=0))</div><div class="line"></div><div class="line">    if not mask_list or len(mask_list) &lt;= 0:</div><div class="line">        a_max = np.zeros((height, width))</div><div class="line">    else:</div><div class="line">        a_merge = np.concatenate(mask_list, axis=0)</div><div class="line">        a_max = np.max(a_merge, axis=0)</div><div class="line">    return a_max</div></pre></td></tr></table></figure>
+<p>事实上，确实对于上述4种场景，使用 <code>convert_polygon_to_mask_with_split_segmentations</code> 方法绘制得到的结果，与之前完全相同。</p>
+<h2 id="局限性及修正方式"><a href="#局限性及修正方式" class="headerlink" title="局限性及修正方式"></a>局限性及修正方式</h2><p>由于COCO数据集格式的标注信息，无法表达孔洞类型（甜甜圈）的目标，在实际使用过程中会造成一定的局限性。<br>鉴于孔洞类型目标的特性，在此可以定义一种新的数据表示方式：可以用两个部分表示孔洞，其中A是孔洞对象的外边缘，部分B是孔洞对象的中空部分，在实际转换过程中，将部分B从部分A中“掏空”。<br>为了实现这个“掏空”操作，我们将使用异或运算，对多个部分的内容进行操作。<br>修改上述 <code>convert_polygon_to_mask_with_split_segmentations</code> 方法，对其中取并集的操作过程进行修改，可以得到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">def convert_polygon_to_mask_with_split_segmentations_with_xor(segmentations, height, width):</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    Here segmentations is the annotation info for **one instance**</div><div class="line">    Compare to `convert_polygon_to_mask_with_split_segmentations`, for the `mask_list`, do not use `np.max` to map them.</div><div class="line">    Use xor</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    mask_list = list()</div><div class="line">    for segmentation in segmentations:</div><div class="line">        if segmentation and len(segmentation) &gt; 0:</div><div class="line">            rles = mask_utils.frPyObjects([segmentation], height, width)</div><div class="line">            rle = mask_utils.merge(rles)</div><div class="line">            mask_arr = mask_utils.decode(rle)</div><div class="line">            mask_list.append(mask_arr)</div><div class="line"></div><div class="line">    if not mask_list or len(mask_list) &lt;= 0:</div><div class="line">        a_merge = np.zeros((height, width))</div><div class="line">    else:</div><div class="line">        # for each mask list, use xor operation to combine them</div><div class="line">        a_merge = None</div><div class="line">        for i in range(len(mask_list)):</div><div class="line">            if a_merge is None:</div><div class="line">                a_merge = mask_list[i]</div><div class="line">            else:</div><div class="line">                a_merge = xor_operation_for_np_array(a_merge, mask_list[i])</div><div class="line">        a_merge = a_merge.astype(int)</div><div class="line">    return a_merge</div></pre></td></tr></table></figure>
+<p>其中 <code>xor_operation_for_np_array</code> 是对两个元素执行异或操作，其逻辑和单元测试结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">import numpy </div><div class="line">def xor_operation_for_np_array(a1, a2):</div><div class="line">    return np.logical_xor(a1, a2)</div><div class="line"></div><div class="line">def test_xor_operation_for_np_array():</div><div class="line">    # case 1</div><div class="line">    a1 = np.array([[0, 0, 0], [0, 0, 0]])</div><div class="line">    a2 = np.array([[0, 0, 0], [0, 0, 0]])</div><div class="line">    res = xor_operation_for_np_array(a1, a2)</div><div class="line">    assert res.shape == (2, 3)</div><div class="line">    assert (res == [[0, 0, 0], [0, 0, 0]]).all()</div><div class="line"></div><div class="line">    # case 2</div><div class="line">    a1 = np.array([[0, 0, 0], [1, 0, 0]])</div><div class="line">    a2 = np.array([[0, 0, 0], [0, 0, 0]])</div><div class="line">    res = xor_operation_for_np_array(a1, a2)</div><div class="line">    assert res.shape == (2, 3)</div><div class="line">    assert (res == [[0, 0, 0], [1, 0, 0]]).all()</div><div class="line"></div><div class="line">    # case 3</div><div class="line">    a1 = np.array([[0, 0, 1, 1], [1, 0, 0, 1]])</div><div class="line">    a2 = np.array([[0, 1, 0, 1], [0, 0, 1, 1]])</div><div class="line">    res = xor_operation_for_np_array(a1, a2)</div><div class="line">    assert res.shape == (2, 4)</div><div class="line">    assert (res == [[0, 1, 1, 0], [1, 0, 1, 0]]).all()</div></pre></td></tr></table></figure>
+<p>在完成上述逻辑后，针对4种场景的绘制情况如下，场景1与场景2的结果不变。</p>
+<h4 id="场景3：包含的两个部分-1"><a href="#场景3：包含的两个部分-1" class="headerlink" title="场景3：包含的两个部分"></a>场景3：包含的两个部分</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">segmentations = [[100, 100, 500, 100, 500, 500, 100, 500, 120, 300], [300, 300, 400, 300, 400, 400, 300, 400, 320, 350]]</div><div class="line">height = 600</div><div class="line">width = 600</div><div class="line">mask_arr = convert_polygon_to_mask_with_split_segmentations_with_xor(segmentations, height, width)</div><div class="line">mask_png = visualize_mask_to_png_nparray(mask_arr)</div></pre></td></tr></table></figure>
+<img src="/2022/09/03/关于将COCO格式多边形绘制成分割图/blog-hexo/2022/09/03/关于将COCO格式多边形绘制成分割图/case3-3.png" alt="场景3-包含的两个部分-异或" title="场景3-包含的两个部分-异或">
+<p>可以看出，比较完美地实现了孔洞的效果。</p>
+<h4 id="场景4：相交的两个部分-1"><a href="#场景4：相交的两个部分-1" class="headerlink" title="场景4：相交的两个部分"></a>场景4：相交的两个部分</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&quot;&quot;&quot;</div><div class="line">We should assert that this situation never happes.</div><div class="line">&quot;&quot;&quot;</div><div class="line">segmentations = [[100, 100, 400, 100, 400, 400, 100, 400, 120, 200], [300, 300, 500, 300, 500, 500, 300, 500, 320, 400]]</div><div class="line">height = 600</div><div class="line">width = 600</div><div class="line">mask_arr = convert_polygon_to_mask_with_split_segmentations_with_xor(segmentations, height, width)</div><div class="line">mask_png = visualize_mask_to_png_nparray(mask_arr)</div></pre></td></tr></table></figure>
+<img src="/2022/09/03/关于将COCO格式多边形绘制成分割图/blog-hexo/2022/09/03/关于将COCO格式多边形绘制成分割图/case4-3.png" alt="场景4-相交的的两个部分-异或" title="场景4-相交的的两个部分-异或">
+<p>可以看出，这种场景非常奇怪，因此我们预期是在正常的标注过程中，无论是普通的标注信息，还是孔洞类型的信息，都不应该出现上述相交的情况。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在使用 COCO 数据集格式的标注信息进行多边形绘制至分割图转换时，可能会遇到无法处理孔洞类型数据的情况。<br>这时可以通过自定义格式标准及修改转换逻辑，部分实现想要的逻辑。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://github.com/cocodataset/cocoapi/tree/master/PythonAPI/pycocotools" target="_blank" rel="external">https://github.com/cocodataset/cocoapi/tree/master/PythonAPI/pycocotools</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2022/09/03/关于将COCO格式多边形绘制成分割图/" data-id="clcivv7u900h7fc8thx57hjd1" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/COCO/">COCO</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-前端页面突然被登出的坑" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2022/08/05/前端页面突然被登出的坑/" class="article-date">
+  <time datetime="2022-08-05T08:43:03.000Z" itemprop="datePublished">2022-08-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2022/08/05/前端页面突然被登出的坑/">前端页面突然被登出的坑</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在进行项目产品测试的过程中，产品经理发现一个奇怪的现象：她在一个页面上登录后，不做什么操作，过一会儿账号就被自动登出，跳转到了登录页面。<br>这种现象在其它人使用过程中没有发生过。<br>于是我好奇地展开了探索的过程。</p>
+<h2 id="研究"><a href="#研究" class="headerlink" title="研究"></a>研究</h2><p>首先，这个现象的复现情况不太一致。有时候是一登录之后立刻被登出，有时候是停留页面几秒后被登出，有时候是点击某个菜单栏后出。<br>尝试了一下别的浏览器，没有存在这个问题，大概可以排除后端的问题。<br>通过 Chrome 的网络标签可以发现，在刚刚登录的时候，可以看到大部分API请求是正常返回的，HTTP状态码是200。但是一段时间后，点击页面按钮后发出的请求就返回401 NotAuthorized，即未登录账号请求的状态了。<br>顺着这个线索，首先思考什么情况下会造成 401 响应。正常情况下，请求能够通过服务器的身份鉴定，是因为请求的 header 中 Cookie 信息包含了相关的授权内容。<br>使用 Chrome 查看 Cookie，可以发现其中内容时有时无。也就是说，登录一段时间后，Cookie 就不知道被谁给清了？</p>
+<p>这种情况非常奇怪。突然灵机一动，发现当前打开的标签页列表中，还有几个其它标签页的标题是我们的产品链接。<br>而在那些标签页中，都退回到了登录页面。<br>打开其中一个页面的控制台，可以发现它不断地在往后端发请求，但响应全是401（废话，账号被登出了，当然请求不到内容）。<br>然而为什么一个页面已经登出了，还在不断地发请求呢？仔细研究了一下，大概是某些页面的定时器清除逻辑没有写好，造成了这种现象。    </p>
+<p>终于真相大白！<br>整体的逻辑是，存在一些页面有定时发送请求的逻辑，但相关定时器的清除功能不够完善，导致页面在非登录状态（比如退出到登录页面时）依然不停地发请求。<br>这些请求肯定会获得 401 的响应值，前端根据相关逻辑把当前 Cookie 清空了。<br>由于这些页面共享一个域名，使用的 Cookie 是同一个，因此之前使用的页面就不断地被它清除 Cookie，呈现出来的状态就是不断被登出。<br>而之所以之前“有时候是一登录之后立刻被登出，有时候是停留页面几秒后被登出，有时候是点击某个菜单栏后出。”，是因为前端bug的存在，导致这些定时请求的频率不一样。有时候会多次发送，导致频率特别高。<br>唉，对于那些已经登出的标签页而言，它们的心理大概就是：我不杀伯仁，伯仁却因我而死。幽冥之中，负此良友！</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>解决方案从两个角度出发考虑。<br>从开发角度讲，需要确保每个计时器在页面销毁之前都正确地移除了定时任务，确保账号登出后不会一直定时发送无效的 API 调用，导致返回的 401 响应清空了浏览器存储的 Cookie 信息。<br>在使用者角度，在使用页面的时候，保证浏览器仅打开一个当前域名下的页面，即可避免这种被登出情况的发生。   </p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从一个现实故障的角度出发，探索了奇怪现象的原因，终于找到了根源。<br>很舒服。不然晚上睡不着觉了。     </p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p>无</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2022/08/05/前端页面突然被登出的坑/" data-id="clcivv7v000j9fc8t3dwutlsm" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Cookie/">Cookie</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-使用shell快速查看各台服务器的显存占用情况" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2022/07/23/使用shell快速查看各台服务器的显存占用情况/" class="article-date">
+  <time datetime="2022-07-23T08:33:33.000Z" itemprop="datePublished">2022-07-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2022/07/23/使用shell快速查看各台服务器的显存占用情况/">使用shell快速查看各台服务器的显存占用情况</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>工作中有时候需要趁着没人使用显卡的时候偷偷用一下显卡，这时候如果一台机器一台机器去找，会比较辛苦。可以通过shell脚本的方式快速查看。</p>
+<h2 id="基础知识1：ssh到远程执行命令并返回"><a href="#基础知识1：ssh到远程执行命令并返回" class="headerlink" title="基础知识1：ssh到远程执行命令并返回"></a>基础知识1：ssh到远程执行命令并返回</h2><p>可以通过以下命令实现远程登录后执行命令并返回相关信息，需要注意的是这里需要确保 <code>ssh</code> 远程登录时可以免密码公钥登录。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh username@[remote_ip] &quot;[command]&quot;</div></pre></td></tr></table></figure></p>
+<p>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh username@192.168.1.3 &quot;df -h&quot;</div></pre></td></tr></table></figure></p>
+<p>可以查看对应 <code>192.168.1.3</code> 机器上磁盘空间占用情况。</p>
+<h2 id="基础知识2：在shell脚本中定义数组并循环"><a href="#基础知识2：在shell脚本中定义数组并循环" class="headerlink" title="基础知识2：在shell脚本中定义数组并循环"></a>基础知识2：在shell脚本中定义数组并循环</h2><p>在 shell 脚本中，可以使用 <code>array_name = (v1 v2 v3)</code> 来定义一个数组（注意是使用空格间隔）。<br>然后可以使用 <code>for element in ${array_name[@]}</code> 来遍历这个数组（注意不能写成 <code>for element in ${array_name}</code>。<br>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">array_a = (&quot;1&quot; &quot;2&quot; &quot;3&quot;)</div><div class="line">for element in $&#123;array_a[@]&#125;</div><div class="line">do</div><div class="line">    echo $element &quot;test&quot;</div><div class="line">done</div></pre></td></tr></table></figure></p>
+<p>会输出：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">1 test</div><div class="line">2 test</div><div class="line">3 test</div></pre></td></tr></table></figure></p>
+<h2 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h2><p>结合上述两项背景知识，可以撰写脚本如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line"># ssh and observe nvidia-smi results</div><div class="line">IP_LIST=(&quot;192.168.1.101&quot; &quot;192.168.1.102&quot; &quot;192.168.1.103&quot;)</div><div class="line">for IP in $&#123;IP_LIST[@]&#125;</div><div class="line">do</div><div class="line">        echo $IP</div><div class="line">        ssh username@$&#123;IP&#125; &quot;nvidia-smi&quot;</div><div class="line">        echo &quot;&quot;</div><div class="line">done</div></pre></td></tr></table></figure></p>
+<p>就会输出各台服务器上的显存信息。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>可以通过一个 shell 脚本，快速查看各台服务器的显存占用情况，找到可以用于跑实验的机器。   </p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://blog.csdn.net/Lockey23/article/details/74625744" target="_blank" rel="external">https://blog.csdn.net/Lockey23/article/details/74625744</a></li>
+<li><a href="https://blog.csdn.net/jsugs/article/details/122364493" target="_blank" rel="external">https://blog.csdn.net/jsugs/article/details/122364493</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2022/07/23/使用shell快速查看各台服务器的显存占用情况/" data-id="clcivv7u200gwfc8th9z06kaj" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/shell/">shell</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-torchvision抛出找不到C-ops问题的一种修复方式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2022/07/08/torchvision抛出找不到C-ops问题的一种修复方式/" class="article-date">
+  <time datetime="2022-07-08T08:20:37.000Z" itemprop="datePublished">2022-07-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2022/07/08/torchvision抛出找不到C-ops问题的一种修复方式/">torchvision抛出找不到C++ops问题的一种修复方式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>现在是2022年07月08日，<code>yolov7</code> 再次惊艳了世人。在快速跑通其方案的过程中遇到一个错误 <code>RuntimeError: Couldn&#39;t load custom C++ ops</code>，在此记录一下解决方案。   </p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>在跑相关代码的过程中，抛出的异常信息是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Traceback (most recent call last):</div><div class="line">    out = non_max_suppression(out, conf_thres=conf_thres, iou_thres=iou_thres, labels=lb, multi_label=True)</div><div class="line">  File &quot;/path/to/yolov7/utils/general.py&quot;, line 679, in non_max_suppression</div><div class="line">    i = torchvision.ops.nms(boxes, scores, iou_thres)  # NMS</div><div class="line">  File &quot;/path/to/site-packages/torchvision/ops/boxes.py&quot;, line 41, in nms</div><div class="line">    _assert_has_ops()</div><div class="line">  File &quot;/path/to/site-packages/torchvision/extension.py&quot;, line 62, in _assert_has_ops</div><div class="line">    raise RuntimeError(</div><div class="line">RuntimeError: Couldn&apos;t load custom C++ ops. This can happen if your PyTorch and torchvision versions are incompatible, or if you had errors while compiling torchvision from source. For further information on the compatible versions, check https://github.com/pytorch/vision#installation for the compatibility matrix. Please check your PyTorch version with torch.__version__ and your torchvision version with torchvision.__version__ and verify if they are compatible, and if not please reinstall torchvision so that it matches your PyTorch install.</div></pre></td></tr></table></figure></p>
+<p>大概的含义是说在安装 PyTorch 过程中，<code>torch</code> 和 <code>torchvision</code> 包的版本不匹配的问题。<br>使用 <code>pip</code> 命令查看版本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  pip list | grep torch</div><div class="line">torch                   1.7.1+cu110</div><div class="line">torchvision             0.8.2</div></pre></td></tr></table></figure>
+<p>在官网上查看了，<code>torch</code> 的 <code>1.7.1</code> 对应 <code>torchvision</code> 的 <code>0.8.2</code>，没毛病啊。<br>尝试直接安装 <code>torchvision==0.8.2+cu110</code>，无效：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"> ➜ pip install torchvision==0.8.2+cu110</div><div class="line"></div><div class="line">Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple</div><div class="line">ERROR: Could not find a version that satisfies the requirement torchvision==0.8.2+cu110 (from versions: 0.1.6, 0.1.7, 0.1.8, 0.1.9, 0.2.0, 0.2.1, 0.2.2, 0.2.2.post2, 0.2.2.post3, 0.5.0, 0.6.0, 0.6.1, 0.7.0, 0.8.0, 0.8.1, 0.8.2, 0.9.0, 0.9.1, 0.10.0, 0.10.1, 0.11.0, 0.11.1, 0.11.2, 0.11.3, 0.12.0, 0.13.0)</div><div class="line">ERROR: No matching distribution found for torchvision==0.8.2+cu110</div></pre></td></tr></table></figure></p>
+<p>不过根据 <a href="https://blog.csdn.net/IAMoldpan/article/details/119785899" target="_blank" rel="external">这篇文章</a> 的指导，去 <a href="https://download.pytorch.org/whl/torch_stable.html" target="_blank" rel="external">这里</a> 下载 <a href="https://download.pytorch.org/whl/cu110/torchvision-0.8.2%2Bcu110-cp38-cp38-linux_x86_64.whl" target="_blank" rel="external">torchvision-0.8.2+cu110</a>，然后安装 ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install torchvision-0.8.2+cu110-cp38-cp38-linux_x86_64.whl</div></pre></td></tr></table></figure></p>
+<p>发现已经装上了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  pip list | grep torch</div><div class="line">torch                   1.7.1+cu110</div><div class="line">torchvision             0.8.2+cu110</div></pre></td></tr></table></figure>
+<p>再重新跑上述命令，就不会抛异常了。   </p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在使用 PyTorch 的过程中，可能会遇到抛出找不着 C++ ops 的问题。通过确认 <code>torch</code> 和 <code>torchvision</code> 的版本一致性，可能可以解决。注意除了版本一致，还需要关联的 cuda 版本也保持一致。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://blog.csdn.net/IAMoldpan/article/details/119785899" target="_blank" rel="external">https://blog.csdn.net/IAMoldpan/article/details/119785899</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2022/07/08/torchvision抛出找不到C-ops问题的一种修复方式/" data-id="clcivv7sn00dnfc8ti65qpm38" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PyTorch/">PyTorch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/torchvision/">torchvision</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-SSH使用ProxyCommand直连内网机器" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2022/06/11/SSH使用ProxyCommand直连内网机器/" class="article-date">
+  <time datetime="2022-06-11T10:33:23.000Z" itemprop="datePublished">2022-06-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2022/06/11/SSH使用ProxyCommand直连内网机器/">SSH使用ProxyCommand直连内网机器</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>作为一名程序员，使用 ssh 连接远程服务器已经成为日常工作中必不可少的手段。<br>有些时候需要从工作网络环境之外任何位置（可能是公寓里、大街上、地铁中）访问服务器，但能够被直接连接的只有一台跳板机器。这时候如果总是先 ssh 到服务器 A，再从服务器 A 上 ssh 到服务器 B，效率很低，也不便于使用一些远程访问的程序。<br>可以使用 SSH 中的 ProxyCommand 方式，直接一条命令直连对应服务器。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>假定当前设备为 W，可以直接被远程的跳板机服务器为 G，在跳板机所在的局域网中存在服务器 A, B, C。<br>它们之前存在如下场景：</p>
+<ul>
+<li>1）W 可以直接连接 G；</li>
+<li>2）W 不可以直接连接 A, B, C，…；</li>
+<li>3）G 可以使用内网 IP 地址直接连接 A, B, C，..</li>
+</ul>
+<p>假定场景1）中的连接命令为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh username@ip_G</div></pre></td></tr></table></figure></p>
+<p>假定场景3）中的连接命令为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh username@ip_A</div></pre></td></tr></table></figure></p>
+<p>在这种情况下，从当前设备 W 直接连接到对应的服务器 A 的命令为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh -o ProxyCommand=&quot;ssh -W %h:%p -p 22 ip_G&quot; ip_A</div></pre></td></tr></table></figure></p>
+<p>其中 <code>ProxyCommand</code> 中的  <code>-W %h:%p</code> 是固定句式，需要修改的只有后面 <code>-p 22</code> 的值（有时候跳板机并不会暴露 22 端口）以及 <code>ip_G</code> 的内容（这是跳板机对外暴露的公网IP）。</p>
+<h2 id="使用config文件的示例"><a href="#使用config文件的示例" class="headerlink" title="使用config文件的示例"></a>使用config文件的示例</h2><p>在实际使用过程中，如果每一次都输入 <code>username@ip</code> 的方式比较累，我们可以把相关内容添加到 <code>~/.ssh/config</code> 文件中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Host &#123;server_G&#125;</div><div class="line">  HostName &#123;ip_G&#125;</div><div class="line">  User &#123;username&#125;</div><div class="line">  Port &#123;port&#125;</div><div class="line">  IdentityFile ~/.ssh/id_rsa</div></pre></td></tr></table></figure></p>
+<p>其中 <code>{server_G}</code> 是一个别名，在 <code>conifg</code> 文件中存在这个配置项后，就可以直接使用 <code>ssh {server_G}</code> 快速实现 ssh 连接；<code>{ip_G}</code> 是目标主机的 IP 地址；<code>{username}</code> 是用户名；<code>{port}</code> 是连接端口号（默认为 <code>22</code>）；如果连接使用的私钥不在默认位置下，可以修改 <code>IdentityFile</code> 配置项的值进行修改。<br>比如配置项可能是如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Host server_G1</div><div class="line">  HostName server.mydomain.com</div><div class="line">  User ckmessi</div><div class="line">  Port 12222</div><div class="line">  IdentityFile ~/.ssh/id_rsa</div></pre></td></tr></table></figure></p>
+<p>完成上述配置后，在已经添加公钥的情况下，每次只需要敲入 <code>ssh server_G1</code> 即可快速连接服务器。</p>
+<p>如果要使用上述 <code>ProxyCommand</code> 的内容，可以使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Host &#123;server_A&#125;</div><div class="line">  HostName &#123;ip_A&#125;</div><div class="line">  Port &#123;port&#125;</div><div class="line">  User &#123;username&#125;</div><div class="line">  ProxyCommand ssh -W %h:%p &#123;server_G1&#125;</div><div class="line">  IdentityFile ~/.ssh/id_rsa</div></pre></td></tr></table></figure></p>
+<p>综合起来就是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">Host server_G1</div><div class="line">  HostName server.mydomain.com</div><div class="line">  User ckmessi</div><div class="line">  Port 12222</div><div class="line">  IdentityFile ~/.ssh/id_rsa</div><div class="line"></div><div class="line">Host server_A_by_G1</div><div class="line">  HostName 192.168.100.111</div><div class="line">  Port 22</div><div class="line">  User ckmessi</div><div class="line">  ProxyCommand ssh -W %h:%p server_G1</div><div class="line">  IdentityFile ~/.ssh/id_rsa</div></pre></td></tr></table></figure></p>
+<p>这样使用 <code>ssh server_A_by_G1</code> 的效果，相当于连接到服务器 G 上，再从 G 连接到服务器 A 上。</p>
+<h2 id="关于公钥的注意事项"><a href="#关于公钥的注意事项" class="headerlink" title="关于公钥的注意事项"></a>关于公钥的注意事项</h2><p>在连接目标机器的配置项中，<code>IdentityFile</code> 需要默认走的是当前机器的私钥。因此在目标机器上，需要添加两份公钥，一份是跳板机的公钥，一份是当前机器的公钥。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在使用 SSH 远程连接内网服务器时，可以使用 <code>ProxyCommand</code> 指定跳板机，达到一次中转连接的效果。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2022/06/11/SSH使用ProxyCommand直连内网机器/" data-id="clcivv7rc00affc8tozivz8dc" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-使用iptables工具限制端口的访问白名单" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2022/06/05/使用iptables工具限制端口的访问白名单/" class="article-date">
+  <time datetime="2022-06-05T15:26:54.000Z" itemprop="datePublished">2022-06-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2022/06/05/使用iptables工具限制端口的访问白名单/">使用iptables工具限制端口的访问白名单</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在实际业务中，将某个端口直接暴露在公网是非常危险的。    </p>
+<p>然而有时候又需要能够被特定的业务方访问到，这时候就需要能够实现仅允许特定IP访问当前机器特定端口的需求。</p>
+<p>在自建 Linux 服务器中，可以使用 <code>iptables</code> 工具完成相关防火墙端口规则的限制。</p>
+<h2 id="iptables相关操作"><a href="#iptables相关操作" class="headerlink" title="iptables相关操作"></a>iptables相关操作</h2><h4 id="添加一个链路"><a href="#添加一个链路" class="headerlink" title="添加一个链路"></a>添加一个链路</h4><p>使用 <code>iptables -N [chain_name]</code> 可以添加一个链路。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">iptables -N test10301</div><div class="line"></div><div class="line">iptables --list</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line">Chain test10301 (0 references)</div><div class="line"></div><div class="line">target     prot opt source               destination</div></pre></td></tr></table></figure>
+<h4 id="删除一个链路"><a href="#删除一个链路" class="headerlink" title="删除一个链路"></a>删除一个链路</h4><p>使用 <code>iptables -X [chain_name]</code> 可以删除一个链路。</p>
+<p>但其中有两个限制：</p>
+<ul>
+<li><p>链路不能有其它规则引用</p>
+</li>
+<li><p>链路本身没有规则</p>
+</li>
+</ul>
+<p>如果链路有其它规则引用了（references 不为 0），会返回：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&gt; iptables --list | tail -4 </div><div class="line"></div><div class="line">Chain test10301 (1 references)</div><div class="line"></div><div class="line">target     prot opt source               destination         </div><div class="line"></div><div class="line">ACCEPT     tcp  --  192.168.10.12        anywhere             tcp dpt:10301</div><div class="line"></div><div class="line">DROP       tcp  --  anywhere             anywhere             tcp dpt:10301</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">&gt; iptables -X test10301</div><div class="line"></div><div class="line">iptables: Too many links.</div></pre></td></tr></table></figure>
+<p>需要移除对应的规则后再执行删除操作。</p>
+<p>如果链路中包含规则，会返回：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&gt; iptables -X test10301</div><div class="line"></div><div class="line">iptables: Directory not empty.</div></pre></td></tr></table></figure>
+<p>需要使用 <code>iptables -D</code> 将其所包含的规则都移除。</p>
+<p>上述两个条件满足后，再使用 <code>iptables -X [chain_name]</code> 即可正确删除。</p>
+<h4 id="在链路中添加规则"><a href="#在链路中添加规则" class="headerlink" title="在链路中添加规则"></a>在链路中添加规则</h4><p>比如指定 <code>192.168.10.6</code> 服务器可以访问 <code>10301</code> 端口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">iptables -A test10301 -p tcp --dport 10301 --src 192.168.10.6 -j ACCEPT</div></pre></td></tr></table></figure>
+<p>也可以指定 <code>127.0.0.1</code> 即本机可以访问 <code>10301</code> 端口（但实际上这条规则没有意义，本机访问的时候并不会走这个访火墙）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">iptables -A test10301 -p tcp --dport 10301 --src 127.0.0.1 -j ACCEPT</div></pre></td></tr></table></figure>
+<p>比如指定其它所有都不能访问 <code>10301</code> 端口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">iptables -A test10301 -j DROP  # drop everyone else</div></pre></td></tr></table></figure>
+<p>比如指定 <code>192.168.10.12</code> 服务器可以访问 <code>10301</code> 端口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">iptables -A test10301 -p tcp --dport 10301 --src 192.168.10.12 -j ACCEPT</div></pre></td></tr></table></figure>
+<p>但由于这条规则在前一条 <code>DROP</code> 之后，因此可能无法生效。</p>
+<p>完成后使用 <code>iptables --list</code> 看到的链路内容是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">Chain test10301 (1 references)</div><div class="line"></div><div class="line">target     prot opt source               destination         </div><div class="line"></div><div class="line">ACCEPT     tcp  --  localhost            anywhere             tcp dpt:10301</div><div class="line"></div><div class="line">ACCEPT     tcp  --  192.168.10.6        anywhere             tcp dpt:10301</div><div class="line"></div><div class="line">DROP       tcp  --  anywhere             anywhere             tcp dpt:10301</div><div class="line"></div><div class="line">ACCEPT     tcp  --  192.168.10.12         anywhere             tcp dpt:10301</div></pre></td></tr></table></figure>
+<p>这里的效果是，只有 <code>192.168.10.6</code> 可以通过 <code>test10301</code> 这个规则。其它来源的访问都会被丢弃。</p>
+<h4 id="将链路添加到全局访问规则中"><a href="#将链路添加到全局访问规则中" class="headerlink" title="将链路添加到全局访问规则中"></a>将链路添加到全局访问规则中</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">iptables -I INPUT -p tcp --dport 10301 -j test10301</div></pre></td></tr></table></figure>
+<p>综合上述链路自身规则及这条访问规则 ，综合果是，只有 <code>192.168.10.6</code> 可以访问 <code>10301</code> 端口，其它来源的访问都会被丢弃。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>基于上述操作基础，假定待限制的端口号为 <code>{port}</code>，可以访问的IP地址为 <code>{ip1}</code> 和 <code>{ip2}</code>，可以使用以下方式添加相关规则。</p>
+<h4 id="添加一个链路规则"><a href="#添加一个链路规则" class="headerlink" title="添加一个链路规则"></a>添加一个链路规则</h4><p>假定将该规则命名为 <code>{chain_name1}</code>，则</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">iptables -N &#123;chain_name1&#125; # create a new chain</div><div class="line"></div><div class="line">iptables -A &#123;chain_name1&#125; --src &#123;ip1&#125; -j ACCEPT  # allow &#123;ip1&#125;</div><div class="line"></div><div class="line">iptables -A &#123;chain_name1&#125; --src &#123;ip2&#125; -j ACCEPT  # allow &#123;ip2&#125;</div><div class="line"></div><div class="line">iptables -A &#123;chain_name1&#125; -j DROP  # drop everyone else</div></pre></td></tr></table></figure>
+<h4 id="添加到全局规则中"><a href="#添加到全局规则中" class="headerlink" title="添加到全局规则中"></a>添加到全局规则中</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">iptables -I INPUT -p tcp --dport &#123;port&#125; -j &#123;chain_name1&#125;</div><div class="line"></div><div class="line"># use chain &#123;chain_name1&#125; for packets coming to TCP port &#123;port&#125;</div></pre></td></tr></table></figure>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><p>假定 <code>{port}</code> 为 <code>10301</code>，IP白名单为 <code>192.168.100.10</code> 和 <code>192.168.100.11</code>，链路名称为 <code>RULE_10301</code>，则：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">iptables -N RULE_10301</div><div class="line"></div><div class="line">iptables -A RULE_10301 --src 192.168.100.10 -j ACCEPT</div><div class="line"></div><div class="line">iptables -A RULE_10301 --src 192.168.100.11 -j ACCEPT</div><div class="line"></div><div class="line">iptables -A RULE_10301 -j DROP</div><div class="line"></div><div class="line">iptables -I INPUT -p tcp --dport 10301 -j RULE_10301</div></pre></td></tr></table></figure>
+<p>对应的反向操作是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">iptables -D INPUT -p tcp --dport10301 -j RULE_10301</div><div class="line"></div><div class="line">iptables -D RULE_10301 -j DROP</div><div class="line"></div><div class="line">iptables -D RULE_10301 --src 192.168.100.10 -j ACCEPT</div><div class="line"></div><div class="line">iptables -D RULE_10301 --src 192.168.100.11 -j ACCEPT</div><div class="line"></div><div class="line">iptables -X RULE_10301</div></pre></td></tr></table></figure>
+<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><p>注意上述操作都没有持久化，重启之后相关改动会失效。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在 Linux 服务器上，预期达到限制某个端口只能被特定白名单IP访问到，可以使用 <code>iptables</code> 工具添加对应的链路规则。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://serverfault.com/questions/146569/iptables-how-to-allow-only-one-ip-through-specific-port" target="_blank" rel="external">https://serverfault.com/questions/146569/iptables-how-to-allow-only-one-ip-through-specific-port</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2022/06/05/使用iptables工具限制端口的访问白名单/" data-id="clcivv7tl00g4fc8ta5u43lfd" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/iptables/">iptables</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/blog-hexo/page/2/">2</a><a class="page-number" href="/blog-hexo/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/24/">24</a><a class="extend next" rel="next" href="/blog-hexo/page/2/">weiter &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Kategorien</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工作/">工作</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/科研/">科研</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/3D/">3D</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Alembic/">Alembic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Anime-js/">Anime.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Blender/">Blender</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CMake/">CMake</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/COCO/">COCO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/COCOAPI/">COCOAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CentOS/">CentOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Code-Coverage/">Code Coverage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Composer/">Composer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Cookie/">Cookie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Debug/">Debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/DeepLearning/">DeepLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Django/">Django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FFMpeg/">FFMpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FIGlet/">FIGlet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faiss/">Faiss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FastAPI/">FastAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Flask/">Flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Flyway/">Flyway</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Gem/">Gem</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git-Bash/">Git Bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/GitHub/">GitHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/GitLab/">GitLab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Go/">Go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JdbcTemplate/">JdbcTemplate</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Loguru/">Loguru</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MS-COCO/">MS COCO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Markdown/">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Math/">Math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Matplotlib/">Matplotlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Maven/">Maven</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Memory/">Memory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mkdocs/">Mkdocs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MyBatis/">MyBatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MyBatisPlus/">MyBatisPlus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mybatis/">Mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Noise/">Noise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Numpy/">Numpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nvidia-Driver/">Nvidia Driver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oh-My-Zsh/">Oh-My-Zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenCV/">OpenCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PDF/">PDF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Paper-js/">Paper.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pip/">Pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PosixPath/">PosixPath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PyTorch/">PyTorch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PyYAML/">PyYAML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pythonenv/">Pythonenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/RLE/">RLE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ruby/">Ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/RuleEngine/">RuleEngine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Rust/">Rust</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SQLAlchemy/">SQLAlchemy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring-Boot/">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SpringCloud/">SpringCloud</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Supervisor/">Supervisor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Swagger/">Swagger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Swagger-UI/">Swagger-UI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/TensorRT/">TensorRT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Torch/">Torch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/TorchServe/">TorchServe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VB/">VB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VS-Code/">VS Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VSCode/">VSCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Visual-Studio/">Visual Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vuetify/">Vuetify</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/YAML/">YAML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/axios/">axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/base64/">base64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/bpy/">bpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/bumpversion/">bumpversion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/conda/">conda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/cookiecutter/">cookiecutter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/coverage/">coverage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/crontab/">crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/faiss/">faiss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastapi/">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastjson/">fastjson</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/heatmap-js/">heatmap.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/hexdump/">hexdump</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/interact-js/">interact.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/iptables/">iptables</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/libfacedetection/">libfacedetection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/nvidia/">nvidia</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/obj/">obj</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/peewee/">peewee</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/pip/">pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/pytest/">pytest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/scp/">scp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/sed/">sed</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/setuptools/">setuptools</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ssh/">ssh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/torchvision/">torchvision</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/verdaccio/">verdaccio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/vim/">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/virtualenv/">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/xargs/">xargs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/yacs/">yacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/yaml/">yaml</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/zip/">zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/zsh/">zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/blog-hexo/tags/3D/" style="font-size: 10px;">3D</a> <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Alembic/" style="font-size: 10px;">Alembic</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 11.43px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/Blender/" style="font-size: 10px;">Blender</a> <a href="/blog-hexo/tags/C/" style="font-size: 11.43px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CMake/" style="font-size: 10px;">CMake</a> <a href="/blog-hexo/tags/COCO/" style="font-size: 10px;">COCO</a> <a href="/blog-hexo/tags/COCOAPI/" style="font-size: 10px;">COCOAPI</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 10.71px;">CSharp</a> <a href="/blog-hexo/tags/CentOS/" style="font-size: 10px;">CentOS</a> <a href="/blog-hexo/tags/Code-Coverage/" style="font-size: 10px;">Code Coverage</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 10.71px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Cookie/" style="font-size: 10.71px;">Cookie</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Debug/" style="font-size: 10px;">Debug</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/DeepLearning/" style="font-size: 10px;">DeepLearning</a> <a href="/blog-hexo/tags/Django/" style="font-size: 10px;">Django</a> <a href="/blog-hexo/tags/Docker/" style="font-size: 10.71px;">Docker</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.14px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10.71px;">Excel</a> <a href="/blog-hexo/tags/FFMpeg/" style="font-size: 10px;">FFMpeg</a> <a href="/blog-hexo/tags/FIGlet/" style="font-size: 10px;">FIGlet</a> <a href="/blog-hexo/tags/Faiss/" style="font-size: 10px;">Faiss</a> <a href="/blog-hexo/tags/FastAPI/" style="font-size: 10px;">FastAPI</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Flask/" style="font-size: 10px;">Flask</a> <a href="/blog-hexo/tags/Flyway/" style="font-size: 10px;">Flyway</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15px;">Git</a> <a href="/blog-hexo/tags/Git-Bash/" style="font-size: 10px;">Git Bash</a> <a href="/blog-hexo/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/blog-hexo/tags/GitLab/" style="font-size: 10px;">GitLab</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Go/" style="font-size: 10.71px;">Go</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10.71px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 12.14px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 16.43px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 12.14px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.14px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.57px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 17.86px;">Linux</a> <a href="/blog-hexo/tags/Loguru/" style="font-size: 10px;">Loguru</a> <a href="/blog-hexo/tags/MS-COCO/" style="font-size: 10px;">MS COCO</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/blog-hexo/tags/Math/" style="font-size: 10.71px;">Math</a> <a href="/blog-hexo/tags/Matplotlib/" style="font-size: 10px;">Matplotlib</a> <a href="/blog-hexo/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/blog-hexo/tags/Memory/" style="font-size: 10px;">Memory</a> <a href="/blog-hexo/tags/Mkdocs/" style="font-size: 10px;">Mkdocs</a> <a href="/blog-hexo/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/blog-hexo/tags/MyBatisPlus/" style="font-size: 10px;">MyBatisPlus</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 10.71px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10.71px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.43px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Noise/" style="font-size: 10px;">Noise</a> <a href="/blog-hexo/tags/Numpy/" style="font-size: 10px;">Numpy</a> <a href="/blog-hexo/tags/Nvidia-Driver/" style="font-size: 10px;">Nvidia Driver</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenCV/" style="font-size: 10.71px;">OpenCV</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 11.43px;">Oracle</a> <a href="/blog-hexo/tags/PDF/" style="font-size: 10px;">PDF</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Paper-js/" style="font-size: 10px;">Paper.js</a> <a href="/blog-hexo/tags/Pip/" style="font-size: 10px;">Pip</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PosixPath/" style="font-size: 10px;">PosixPath</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 10.71px;">PowerShell</a> <a href="/blog-hexo/tags/PyTorch/" style="font-size: 10.71px;">PyTorch</a> <a href="/blog-hexo/tags/PyYAML/" style="font-size: 10px;">PyYAML</a> <a href="/blog-hexo/tags/Python/" style="font-size: 19.29px;">Python</a> <a href="/blog-hexo/tags/Pythonenv/" style="font-size: 10px;">Pythonenv</a> <a href="/blog-hexo/tags/RLE/" style="font-size: 10px;">RLE</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SQLAlchemy/" style="font-size: 10px;">SQLAlchemy</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12.86px;">SSH</a> <a href="/blog-hexo/tags/Shell/" style="font-size: 14.29px;">Shell</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 13.57px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Supervisor/" style="font-size: 10px;">Supervisor</a> <a href="/blog-hexo/tags/Swagger/" style="font-size: 10px;">Swagger</a> <a href="/blog-hexo/tags/Swagger-UI/" style="font-size: 10px;">Swagger-UI</a> <a href="/blog-hexo/tags/TensorRT/" style="font-size: 10px;">TensorRT</a> <a href="/blog-hexo/tags/Terminal/" style="font-size: 10px;">Terminal</a> <a href="/blog-hexo/tags/Torch/" style="font-size: 10px;">Torch</a> <a href="/blog-hexo/tags/TorchServe/" style="font-size: 10.71px;">TorchServe</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 11.43px;">Ubuntu</a> <a href="/blog-hexo/tags/VB/" style="font-size: 10px;">VB</a> <a href="/blog-hexo/tags/VS-Code/" style="font-size: 10.71px;">VS Code</a> <a href="/blog-hexo/tags/VSCode/" style="font-size: 10.71px;">VSCode</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15.71px;">Vue</a> <a href="/blog-hexo/tags/Vuetify/" style="font-size: 10px;">Vuetify</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12.86px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/YAML/" style="font-size: 10px;">YAML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 10.71px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/bpy/" style="font-size: 10px;">bpy</a> <a href="/blog-hexo/tags/bumpversion/" style="font-size: 10px;">bumpversion</a> <a href="/blog-hexo/tags/conda/" style="font-size: 10.71px;">conda</a> <a href="/blog-hexo/tags/cookiecutter/" style="font-size: 10px;">cookiecutter</a> <a href="/blog-hexo/tags/coverage/" style="font-size: 10px;">coverage</a> <a href="/blog-hexo/tags/crontab/" style="font-size: 10px;">crontab</a> <a href="/blog-hexo/tags/faiss/" style="font-size: 10px;">faiss</a> <a href="/blog-hexo/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/ffmpeg/" style="font-size: 10px;">ffmpeg</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10.71px;">grep</a> <a href="/blog-hexo/tags/heatmap-js/" style="font-size: 10px;">heatmap.js</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/iptables/" style="font-size: 10.71px;">iptables</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10.71px;">npm</a> <a href="/blog-hexo/tags/nvidia/" style="font-size: 10px;">nvidia</a> <a href="/blog-hexo/tags/obj/" style="font-size: 10px;">obj</a> <a href="/blog-hexo/tags/peewee/" style="font-size: 10px;">peewee</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/pytest/" style="font-size: 10.71px;">pytest</a> <a href="/blog-hexo/tags/python/" style="font-size: 10px;">python</a> <a href="/blog-hexo/tags/scp/" style="font-size: 10px;">scp</a> <a href="/blog-hexo/tags/sed/" style="font-size: 10px;">sed</a> <a href="/blog-hexo/tags/setuptools/" style="font-size: 10px;">setuptools</a> <a href="/blog-hexo/tags/shell/" style="font-size: 10px;">shell</a> <a href="/blog-hexo/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/blog-hexo/tags/torchvision/" style="font-size: 10px;">torchvision</a> <a href="/blog-hexo/tags/verdaccio/" style="font-size: 10px;">verdaccio</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/xargs/" style="font-size: 10px;">xargs</a> <a href="/blog-hexo/tags/yacs/" style="font-size: 10px;">yacs</a> <a href="/blog-hexo/tags/yaml/" style="font-size: 10px;">yaml</a> <a href="/blog-hexo/tags/zip/" style="font-size: 10px;">zip</a> <a href="/blog-hexo/tags/zsh/" style="font-size: 10px;">zsh</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 11.43px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2023/01/">January 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/11/">November 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/10/">October 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog-hexo/2023/01/04/Vue导出HTML页面至PDF/">Vue导出HTML页面至PDF</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/11/09/python将秒数转为格式化时间字符串/">python将秒数转为格式化时间字符串</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/10/19/使用Verdaccio搭建私有npm源/">使用Verdaccio搭建私有npm源</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/09/08/Docker实时查看容器的内存占用/">Docker实时查看容器的内存占用</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/09/03/关于将COCO格式多边形绘制成分割图/">关于将COCO格式多边形绘制成分割图</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 ckmessi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog-hexo/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog-hexo/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/blog-hexo/fancybox/jquery.fancybox.css">
+  <script src="/blog-hexo/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/blog-hexo/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
