@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>不止是一位程序员</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Lionel的技术笔记总结">
+<meta property="og:type" content="website">
+<meta property="og:title" content="不止是一位程序员">
+<meta property="og:url" content="http://ckmessi.github.io/page/13/index.html">
+<meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="Lionel的技术笔记总结">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="不止是一位程序员">
+<meta name="twitter:description" content="Lionel的技术笔记总结">
+  
+    <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/blog-hexo/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog-hexo/" id="logo">不止是一位程序员</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog-hexo/" id="subtitle">Lionel的技术空间</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog-hexo/">Home</a>
+        
+          <a class="main-nav-link" href="/blog-hexo/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-Java中BigDecimal的scale和precision" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/08/01/Java中BigDecimal的scale和precision/" class="article-date">
+  <time datetime="2019-08-01T09:48:49.000Z" itemprop="datePublished">2019-08-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/08/01/Java中BigDecimal的scale和precision/">Java中BigDecimal的scale和precision</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在Java中，经常使用 <code>BigDecimal</code> 类进行高精度的计算。   </p>
+<p><code>BigDecimal</code> 类有两项关键的属性：<code>scale</code> 和 <code>precision</code> ，其数值与 <code>BigDecimal</code> 的定义有关。</p>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>一个 <code>BigDecimal</code> 对象由以下两个值确定：一个 <code>任意精度整型数</code> 和一个 <code>32位整数表示的尺度</code> ，它的值按照如下公式定义：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">value = unscaledValue * 10^&#123;-scale&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="Precision"><a href="#Precision" class="headerlink" title="Precision"></a>Precision</h2><p>其中 <code>precision</code> 表示  <code>unscaledValue</code> 中数字位数，比如对于数值 <code>123.45</code> ，其 <code>precision</code> 就是 <code>5</code>。<br>因此，<code>precision</code> 指示了任意精度整型数的长度，以下是一些相同 <code>scale</code> 情况下不同 <code>precision</code> 的例子：</p>
+<ul>
+<li>0.12345 = 12345 * 10^{-5}    // scale = 5, precision = 5</li>
+<li>0.12340 = 1234 * 10^{-5}    // scale = 5, precision = 4</li>
+<li>0.00001 = 1 * 10^{-5}    // scale = 5, precision = 1</li>
+</ul>
+<p>可以看出，在 <code>scale</code> 相同的情况下，<code>precision</code> 越大能够表示的数值越精确，这也符合 <code>precision</code> 英文含义。<br>一个特殊的场景是与 <code>0</code> 相等的数值（比如 <code>0.000</code>），它们的 <code>precision</code> 总是等于 <code>1</code> 。</p>
+<h2 id="Scale"><a href="#Scale" class="headerlink" title="Scale"></a>Scale</h2><p>对于 <code>scale</code>，如果它是零或正数，表示小数点右边数字的数量；如果是负数，则 <code>unscaledValue</code> 将乘以 10^{-scale} 。比如如果 <code>scale</code> 的值为 <code>-3</code> ，那么 <code>unscaledValue</code> 的值将乘以 <code>1000</code>。<br>即 <code>BigDecimal</code> 的值就是将对象中的 <code>unscaledValue</code> 乘以 <code>10^{-scale}</code> 。<br>以下是一些相同 <code>precision</code> 情况下（<code>unscaledValue</code> 也相同）不同 <code>scale</code> 的例子：</p>
+<ul>
+<li>对于 unscaledValue = 12345， 在 scale = 5 的情况下是 0.12345；</li>
+<li>对于 unscaledValue = 12345， 在 scale = 4 的情况下是 1.2345；</li>
+<li>对于 unscaledValue = 12345， 在 scale = 0 的情况下是 12345；</li>
+<li>对于 unscaledValue = 12345， 在 scale = -1 的情况下是 123450；</li>
+</ul>
+<p>但对于值相同的情况下，在设置不同 <code>scale</code> 的时候，其 <code>precision</code> 会自动变化：</p>
+<ul>
+<li>对于 12345， 在 scale = 5 的情况下是 12345.00000，其 <code>precision</code> 是 <code>10</code> ；</li>
+<li>对于 12345， 在 scale = 4 的情况下是 12345.0000，其 <code>precision</code> 是 <code>9</code>；</li>
+<li>对于 12345， 在 scale = 0 的情况下是 12345，其 <code>precision</code> 是 <code>5</code>；</li>
+<li>对于 12345， 在 scale = -1 的情况下是 1234 * 10^{1}，其 <code>precision</code> 是 <code>4</code> ；</li>
+</ul>
+<h2 id="设置-scale"><a href="#设置-scale" class="headerlink" title="设置 scale"></a>设置 scale</h2><p>使用 <code>BigDecimal</code> 的 <code>.setScale</code> 方法，可以给一个既定 <code>BigDecimal</code> 值设置尺度，同时会影响它的 <code>precision</code> 。<br>比如对于一个值为 <code>12345.6789</code> 的 <code>BigDecimal</code> 对象 <code>x</code> ，设置不同的 <code>scale</code> 可能导致不同的结果：</p>
+<ul>
+<li>x = x.setScale(1, BigDecimal.ROUND_CEILING);    // value = 12345.7, scale = 1, precision = 6；</li>
+<li>x = x.setScale(5);    // value = 12345.67890, scale = 5, precision = 10；</li>
+<li>x = x.setScale(-1, BigDecimal.ROUND_CEILING);    // value = 1.235E+4, scale = -1, precision = 4；<br>其中设置的 <code>scale</code> 比当前小时，需要添加第二个参数，表示舍弃时的方式；</li>
+</ul>
+<h2 id="设置-precision"><a href="#设置-precision" class="headerlink" title="设置 precision"></a>设置 precision</h2><p>使用 <code>BigDecimal</code> 的构造方法，在第二个参数中使用 <code>MathContext</code> 类，可以指定创建对象最大允许的 <code>precision</code> ，同时可能会影响它的 <code>scale</code> 。<br>比如用字符串值 <code>12345.6789</code> 创建 <code>BigDecimal</code> 对象 <code>x</code> ，设置不同的 MathContext 可能导致不同的结果：</p>
+<ul>
+<li>x = new BigDecimal(“12345.6789”, new MathContext(9));    // value = 12345.6789, scale = 4, precision = 9</li>
+<li>x = new BigDecimal(“12345.6789”, new MathContext(8));    // value = 12345.679, scale = 3, precision = 8</li>
+<li>x = new BigDecimal(“12345.6789”, new MathContext(5));    // value = 12345.6789, scale = 0, precision = 5</li>
+<li>x = new BigDecimal(“12345.6789”, new MathContext(2));    // value = 1.2E+4, scale = -3, precision = 2</li>
+<li>x = new BigDecimal(“12345.6789”, new MathContext(19));    // value = 12345.6789, scale = 4, precision = 9<br>可以看出，对于设置的 <code>MathContext</code> 如果大于当前的 <code>precision</code> ，则不会造成影响。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>针对一个 <code>BigDecimal</code> 方法，我们可以使用 <code>scale</code> 和 <code>precision</code> 属性理解它的尺度和精度。<br>同时可以使用 <code>.setScale</code> 和 构造方法控制其 <code>scale</code> 和 <code>precision</code> 。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://stackoverflow.com/questions/35435691/bigdecimal-precision-and-scale" target="_blank" rel="external">https://stackoverflow.com/questions/35435691/bigdecimal-precision-and-scale</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/08/01/Java中BigDecimal的scale和precision/" data-id="clcpwy3az003f5e8tv1s86ap1" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Git设置本地分支关联的远程分支" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/07/11/Git设置本地分支关联的远程分支/" class="article-date">
+  <time datetime="2019-07-11T09:20:25.000Z" itemprop="datePublished">2019-07-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/07/11/Git设置本地分支关联的远程分支/">Git设置本地分支关联的远程分支</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在使用 Git 的过程中，经常会遇到本地分支与远程分支相关联的问题。<br>这篇笔记总结一下相关的现象和使用的命令。</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>通常在执行 <code>git push</code> 或 <code>git pull</code> 时遇到如下错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">There is no tracking information for the current branch.</div><div class="line">Please specify which branch you want to merge with.</div><div class="line">See git-pull(1) for details.</div><div class="line">git pull &lt;remote&gt; &lt;branch&gt;</div><div class="line">If you wish to set tracking information for this branch you can do so with:</div><div class="line">git branch --set-upstream-to=origin/&lt;branch&gt; release</div></pre></td></tr></table></figure></p>
+<p>这是由于当前分支没有与远程分支相关联引起的。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>解决方案是，将本地分支与远程分支关联起来。</p>
+<h4 id="查看关联情况"><a href="#查看关联情况" class="headerlink" title="查看关联情况"></a>查看关联情况</h4><p>可以使用命令 <code>git branch -vv</code> 查看分支与远程的关联关系：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git branch -vv</div><div class="line">* dev 1149894 [origin/dev: 领先 11] xxx</div><div class="line">  master 2c9a70b Initial Commit</div></pre></td></tr></table></figure></p>
+<p>可以看出，当前 <code>dev</code> 分支关联的是 <code>origin/dev</code> 分支，而 <code>master</code> 分支没有关联的相关分支。<br>如果在 <code>master</code> 分支下执行 <code>git pull</code> 操作，一定会返回错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">当前分支没有跟踪信息。</div><div class="line">请指定您要合并哪一个分支。</div><div class="line">详见 git-pull(1)。</div><div class="line">    git pull &lt;远程&gt; &lt;分支&gt;</div><div class="line">如果您想要为此分支创建跟踪信息，您可以执行：</div><div class="line">    git branch --set-upstream-to=origin/&lt;分支&gt; master</div></pre></td></tr></table></figure></p>
+<h4 id="方式一：直接push执行关联"><a href="#方式一：直接push执行关联" class="headerlink" title="方式一：直接push执行关联"></a>方式一：直接push执行关联</h4><p>一种直接的关联方式，是使用 `git push –set-upstream [remote] [remote_branch] 为上游创建分支，并将本地分支自动关联到上游分支。<br>比如以下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">git checkout -b test</div><div class="line">git push --set-upstream origin test</div><div class="line">...</div><div class="line"> * [new branch] test -&gt; test</div><div class="line">分支 &apos;test&apos; 设置为跟踪来自 &apos;origin&apos; 的远程分支 &apos;test&apos;。</div></pre></td></tr></table></figure></p>
+<p>其中 <code>--set-upstream</code> 与参数 <code>-u</code> 含义是相同的。</p>
+<h4 id="方式二：显式设置关联"><a href="#方式二：显式设置关联" class="headerlink" title="方式二：显式设置关联"></a>方式二：显式设置关联</h4><p>参考上述错误信息提示，还有一种方式是使用命令 <code>git branch --set-upstream-to=[remote]/[remote_branch] [local_branch]</code> 关联分支。<br>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git checkout test</div><div class="line">git branch --set-upstream-to=origin/dev</div></pre></td></tr></table></figure></p>
+<p>这时将本地的 <code>test</code> 分支与远程的 <code>dev</code> 分支关联，更加灵活。</p>
+<p>从功能上讲，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push -u origin branchName</div></pre></td></tr></table></figure></p>
+<p>等价于以下两个语句的合成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git push origin branchName</div><div class="line">git branch --set-upstream-to=origin/branchName branchName</div></pre></td></tr></table></figure></p>
+<h4 id="关于push的参数"><a href="#关于push的参数" class="headerlink" title="关于push的参数"></a>关于push的参数</h4><p>通常在使用 <code>git push</code> 命令时，根据默认缺省参数的不同，可以有许多种形式，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git push </div><div class="line">git push origin</div><div class="line">git push origin branchName</div></pre></td></tr></table></figure></p>
+<p>使用 <code>git push --help</code> 查看文档可知，这是有两个不带 <code>-</code> 符号的可选参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push [&lt;repository&gt; [&lt;refspec&gt;...]]</div></pre></td></tr></table></figure></p>
+<p>当命令没有使用 <code>&lt;repository&gt;</code> 参数指定往哪 push 的时候，会根据当前分支的 <code>branch.*.remote</code> 配置确定往哪推代码；如果没有配置的话，默认值为 <code>origin</code> 。</p>
+<blockquote>
+<p>When the command line does not specify where to push with the <repository> argument, branch.*.remote configuration for the current branch is consulted to determine where to push. If the configuration is missing, it defaults to origin.</repository></p>
+</blockquote>
+<p>当命令没有使用 <code>&lt;refspec&gt;</code> 参数或者 <code>--all</code>，<code>--mirror</code>，<code>--tags</code> 选项时，会根据 <code>remote.*.push</code> 配置查找默认的推送项，如果没找着的话，<code>push.default</code> 配置项会被用于决定推送什么。</p>
+<blockquote>
+<p>When the command line does not specify what to push with <refspec>… arguments or –all, –mirror, –tags options, the command finds the default <refspec> by consulting remote.*.push configuration, and if it is not found, honors push.default configuration to decide what to push (See git-config(1) for the meaning of push.default).</refspec></refspec></p>
+</blockquote>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://www.jianshu.com/p/403d6ad11e30" target="_blank" rel="external">https://www.jianshu.com/p/403d6ad11e30</a><br><a href="https://blog.csdn.net/haoaiqian/article/details/76586895" target="_blank" rel="external">https://blog.csdn.net/haoaiqian/article/details/76586895</a><br><a href="https://www.zhihu.com/question/20019419" target="_blank" rel="external">https://www.zhihu.com/question/20019419</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/07/11/Git设置本地分支关联的远程分支/" data-id="clcpwy3am002g5e8ty6rxhrtq" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Java中String类的split方法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/07/08/Java中String类的split方法/" class="article-date">
+  <time datetime="2019-07-08T08:18:58.000Z" itemprop="datePublished">2019-07-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/07/08/Java中String类的split方法/">Java中String类的split方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在 <code>Java</code> 语言中，字符串类 <code>String</code> 提供了方法 <code>split</code> 用于分割字符串。</p>
+<p><code>split</code> 方法的原型为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">public String[] split(String regex)</div><div class="line">public String[] split(String regex, int limit)</div></pre></td></tr></table></figure></p>
+<p>其中，只有一个参数的方法的实际逻辑，就是调用两个参数的方法，并将参数 <code>limit</code> 赋值为 <code>0</code> 传入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public String[] split(String regex) &#123;</div><div class="line">    return split(regex, 0);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>对于 <code>split</code> 方法的第一个参数，含义比较明确，表示的是 <code>分割符正则表达式</code>，即按照什么特殊字符对字符串进行分割：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">* @param regex</div><div class="line">* the delimiting regular expression</div></pre></td></tr></table></figure></p>
+<p>对于 <code>split</code> 方法的第二个参数，含义就比较丰富了，概括地讲是 <code>结果阀值</code> ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">* @param limit</div><div class="line">* the result threshold, as described above</div></pre></td></tr></table></figure></p>
+<p>这个参数在实际用途是控制分割模式被使用的次数，最终效果会影响结果数组的长度。<br>如果 <code>limit</code> 比 <code>0</code> 大，则表示分割模式最多被使用 <code>n</code> 次，因此结果数组的长度不会大于 <code>n</code>，且数组的最后一项将包含最后一个匹配到的分割符后的所有内容。比如对于 <code>&quot;1,2,3,4,5,&quot;</code> ，如果使用 <code>split(&quot;,&quot;, 3)</code> ，得到的结果会是 <code>[&quot;1&quot;,&quot;2&quot;,&quot;3,4,5,&quot;]</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">String str = &quot;1,2,3,4,5,&quot;;</div><div class="line">String[] array = str.split(&quot;,&quot;, 3);    // [&quot;1&quot;,&quot;2&quot;,&quot;3,4,5,&quot;]</div></pre></td></tr></table></figure></p>
+<p>如果 <code>limit</code> 是一个负数，则模式将被尽可能多次地被匹配，因此数组可能有任意长度。比如对于 <code>&quot;1,2,3,4,5,&quot;</code> ，如果使用 <code>split(&quot;,&quot;, -1)</code> ，得到的结果会是 <code>[&quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,&quot;5&quot;,&quot;&quot;]</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">String str = &quot;1,2,3,4,5,&quot;;</div><div class="line">String[] array = str.split(&quot;,&quot;, -1);    // [&quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,&quot;5&quot;,&quot;&quot;]</div></pre></td></tr></table></figure></p>
+<p>如果 <code>limit</code> 是 <code>0</code> ，模式也会尽可能多次地被匹配，但最后结尾的空字符串会被丢弃。比如对于 <code>&quot;1,2,3,4,5,&quot;</code> ，如果使用 <code>split(&quot;,&quot;, 0)</code> 或 <code>split(&quot;,&quot;)</code>，得到的结果会是 <code>[&quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,&quot;5&quot;]</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">String str = &quot;1,2,3,4,5,&quot;;</div><div class="line">String[] array = str.split(&quot;,&quot;, 0);    // [&quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,&quot;5&quot;]</div></pre></td></tr></table></figure></p>
+<p>具体可参考 Java 源码中的相关文档：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">* &lt;p&gt; The &#123;@code limit&#125; parameter controls the number of times the</div><div class="line">* pattern is applied and therefore affects the length of the resulting</div><div class="line">* array. If the limit &lt;i&gt;n&lt;/i&gt; is greater than zero then the pattern</div><div class="line">* will be applied at most &lt;i&gt;n&lt;/i&gt;&amp;nbsp;-&amp;nbsp;1 times, the array&apos;s</div><div class="line">* length will be no greater than &lt;i&gt;n&lt;/i&gt;, and the array&apos;s last entry</div><div class="line">* will contain all input beyond the last matched delimiter. If &lt;i&gt;n&lt;/i&gt;</div><div class="line">* is non-positive then the pattern will be applied as many times as</div><div class="line">* possible and the array can have any length. If &lt;i&gt;n&lt;/i&gt; is zero then</div><div class="line">* the pattern will be applied as many times as possible, the array can</div><div class="line">* have any length, and trailing empty strings will be discarded.</div></pre></td></tr></table></figure></p>
+<p>话说文档中使用 <code>non-positive</code> 感觉让文档的结构复杂化了，如果使用 <code>less than zero</code> 层次上会更清晰。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/07/08/Java中String类的split方法/" data-id="clcpwy3b1003j5e8ts2p2qanw" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Axios发送Ajax请求至SpringBoot后台时参数匹配的一个问题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/07/04/Axios发送Ajax请求至SpringBoot后台时参数匹配的一个问题/" class="article-date">
+  <time datetime="2019-07-04T08:48:12.000Z" itemprop="datePublished">2019-07-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/07/04/Axios发送Ajax请求至SpringBoot后台时参数匹配的一个问题/">Axios发送Ajax请求至SpringBoot后台时参数匹配的一个问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>在 Vue.js 框架中使用 axios 给后台接口发送请求时，发现后台 Spring Boot 无法接收到参数。<br>在前端，发送请求的代码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">PutMethod: (params) =&gt; &#123;</div><div class="line">    return axios.put(&apos;/api/request/path&apos;, params);</div><div class="line">&#125;</div><div class="line">// params 的值为  &#123; paramSample: &apos;abcd&apos; &#125;</div></pre></td></tr></table></figure></p>
+<p>使用 <code>PUT</code> 方法，将参数放在了请求体 <code>Request Payload</code> 中。</p>
+<p>在 Spring Boot 后台，接口的定义方法为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public void putMethod(String paramSample) &#123;</div><div class="line"> log.info(paramSample);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这种情况下，Spring Boot 默认会从访问请求的 URL 中提取名称为 <code>paramSample</code> 的参数，但 <code>PUT</code> 方法没有将参数拼接到 URL 里，因此后台获取不到 axios 请求时的参数。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>在这种场景下，问题本质在于前后端对于参数传递的位置不一致造成的。<br>前端认为应该通过请求体传递参数，而后台认为应该从请求的 URL 中接收参数。<br>因此，修改方式可以从两个角度来考虑。</p>
+<h4 id="1-考虑修改后端"><a href="#1-考虑修改后端" class="headerlink" title="1.考虑修改后端"></a>1.考虑修改后端</h4><p>通常来说 <code>POST</code> 和 <code>PUT</code> 方法不会将参数暴露在 URL 中，因此可以考虑将后台接口修改为从请求体中获取参数。<br>具体的流程大概有以下几步：<br>添加一个实体类 <code>ParamEntity</code> ，其中成员变量定义为需要接收的参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">class ParamEntity &#123;</div><div class="line">    private String paramSample;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在 Controller 接口中，使用 <code>@RequestBody</code> 注解使参数能够获取到请求体的内容。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public Void putMethod(@RequestBody ParamEntity paramEntity)&#123;</div><div class="line"> // …</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后在参数变量 <code>paramEntity</code> 中获取对应的成员变量 <code>paramSample</code> ，即可获取对应参数的值。</p>
+<h4 id="2-考虑修改前端"><a href="#2-考虑修改前端" class="headerlink" title="2.考虑修改前端"></a>2.考虑修改前端</h4><p>有时候参数比较简单而接口较为繁多，为每一个接口声明一个实体类可能会有点麻烦。<br>这时可以直接采用在前端中将参数拼接到 URL 中的方案。</p>
+<p>平时使用 axios 进行 ajax 请求时，对于 <code>PUT</code> 方法主要是使用了前两个参数 <code>url</code> 和 <code>data</code> ，参考 axios 的官方文档，可以使用第三个参数 <code>config</code> 中的 <code>params</code> 参数项，类似于 <code>GET</code> 方法的第二个参数。<br>将<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">PutMethod: (params) =&gt; &#123;</div><div class="line"> return axis.put(`/api/request/path`, params);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>修改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">PutMethod: (params) =&gt; &#123;</div><div class="line"> return axis.put(`/api/request/path`, params, &#123;</div><div class="line">  params: params</div><div class="line"> &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>就会在 <code>PUT</code> 请求的 URL 中拼接上对应的参数，这时后台就可以使用原来的方案获取到参数了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/07/04/Axios发送Ajax请求至SpringBoot后台时参数匹配的一个问题/" data-id="clcpwy39200095e8trceej4ne" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/axios/">axios</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-使用JSONServer快速搭建API服务器" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/07/01/使用JSONServer快速搭建API服务器/" class="article-date">
+  <time datetime="2019-07-01T07:24:29.000Z" itemprop="datePublished">2019-07-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/07/01/使用JSONServer快速搭建API服务器/">使用JSONServer快速搭建API服务器</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>有时候前端页面需要一个简单的服务器API快速进行逻辑检验，这时可以使用 <code>json-server</code> 快速搭建。</p>
+<h2 id="安装："><a href="#安装：" class="headerlink" title="安装："></a>安装：</h2><p>使用 <code>npm</code> 全局安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g json-server</div></pre></td></tr></table></figure></p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>创建一个 <code>.json</code> 格式的文件 <code>data.json</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;hello&quot;: &#123;</div><div class="line">        &quot;data&quot;: &quot;hello world&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;users&quot;: [</div><div class="line">        &#123;</div><div class="line">            &quot;id&quot;: 1,</div><div class="line">            &quot;name&quot;: &quot;user1&quot;</div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">            &quot;id&quot;: 2,</div><div class="line">            &quot;name&quot;: &quot;user2&quot;</div><div class="line">        &#125;</div><div class="line">    ]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">json-server --watch data.json</div></pre></td></tr></table></figure></p>
+<p>会显示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">\&#123;^_^&#125;/ hi!</div><div class="line"></div><div class="line">Loading data.json</div><div class="line">Done</div><div class="line"></div><div class="line">Resources</div><div class="line">http://localhost:3000/hello</div><div class="line">http://localhost:3000/users</div><div class="line"></div><div class="line">Home</div><div class="line">http://localhost:3000</div><div class="line"></div><div class="line">Type s + enter at any time to create a snapshot of the database</div><div class="line">Watching...</div></pre></td></tr></table></figure></p>
+<p>这时候通过 <code>http://localhost:3000/hello</code> 就能够访问到相关的信息。</p>
+<p>如果希望修改端口号，可以通过参数 <code>--port</code> 指定，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">json-server --watch data.json --port 8722</div></pre></td></tr></table></figure></p>
+<p>如果希望从当前机器之外访问，可以通过参数 <code>--port</code> 指定，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">json-server --watch data.json --prot 8722 --host 0.0.0.0</div></pre></td></tr></table></figure></p>
+<p>这样就使前端有一个简单的提供访问 api 用于调试使用。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://github.com/typicode/json-server" target="_blank" rel="external">https://github.com/typicode/json-server</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/07/01/使用JSONServer快速搭建API服务器/" data-id="clcpwy3fx00e75e8tpmqh1qb8" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JSON/">JSON</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-SpringBoot简单读取注解内容的方式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/06/26/SpringBoot简单读取注解内容的方式/" class="article-date">
+  <time datetime="2019-06-26T07:20:51.000Z" itemprop="datePublished">2019-06-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/06/26/SpringBoot简单读取注解内容的方式/">SpringBoot简单读取注解内容的方式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在 Spring Boot 项目开发中，我们通常会使用许多注解来完成相关的配置。<br>最常见的注解是 Controller 文件中，对外提供 API 接口的访问地址：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(&quot;/root/url/v1/&quot;)</div><div class="line">public class TestController &#123;</div><div class="line">    @GetMapping(&quot;health/check&quot;)</div><div class="line">    String healthCheck()&#123;</div><div class="line">        return &quot;ok&quot;;</div><div class="line">    &#125;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这里的 <code>RequestMapping</code> 和 <code>@GetMapping</code> 声明了该 Controller 下的接口 URL  相关信息。<br>有时我们可能需要动态读取这些信息，这时候就需要使用到 Spring Boot 读取注解的方式。</p>
+<h2 id="解决方式"><a href="#解决方式" class="headerlink" title="解决方式"></a>解决方式</h2><h4 id="类注解的读取"><a href="#类注解的读取" class="headerlink" title="类注解的读取"></a>类注解的读取</h4><p>对于类上的注解，通常使用 <code>class</code> 的 <code>getAnnotation</code> 方法获取：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">RequestMapping requestMapping = TestController.class.getAnnotation(RequestMapping.class);</div><div class="line">String[] requestMappingValues = requestMapping.value();</div><div class="line">// ...</div></pre></td></tr></table></figure></p>
+<p>如果在类上没有 <code>RequestMapping</code> 类型的注解，则 <code>getAnnotation</code> 方法得到的返回值是个 <code>null</code> 。</p>
+<h4 id="方法注解的读取"><a href="#方法注解的读取" class="headerlink" title="方法注解的读取"></a>方法注解的读取</h4><p>对于方法上的注解，读取方式相对麻烦一些，因为需要先获取到方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Method m =TestController.class.getMethod(&quot;healthCheck&quot;, String.class);</div><div class="line">GetMapping getMapping = m.getAnnotation(GetMapping.class);</div><div class="line">String[] getMappingValues = getMapping.value();</div><div class="line">// ...</div></pre></td></tr></table></figure></p>
+<p>在上述过程中，获取方法的操作 <code>getMethod</code> 通常需要使用 <code>try...catch...</code> 包起来，因为可能抛出 <code>NoSuchMethodException</code> 异常。  </p>
+<h2 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h2><p><a href="https://stackoverflow.com/questions/20192552/get-value-of-a-parameter-of-an-annotation-in-java" target="_blank" rel="external">https://stackoverflow.com/questions/20192552/get-value-of-a-parameter-of-an-annotation-in-java</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/06/26/SpringBoot简单读取注解内容的方式/" data-id="clcpwy3eh00aw5e8tzq3geoqu" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-SpringBoot使用-Async实现异步调用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/06/24/SpringBoot使用-Async实现异步调用/" class="article-date">
+  <time datetime="2019-06-24T08:45:09.000Z" itemprop="datePublished">2019-06-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/06/24/SpringBoot使用-Async实现异步调用/">SpringBoot使用@Async实现异步调用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在使用 Spring Boot 搭建服务器时，大多数情况下都是同步返回的，但对于一些功能比较繁重的任务，执行时间较长，很有可能导致 HTTP 请求调用超时。   </p>
+<p>在这种情况下，我们通常会让接口调用先返回，让后台异步执行相关的任务。最后通过其它方式让用户获取到任务执行结果。   </p>
+<p>使用 Spring Boot 的 <code>@Async</code> 和 <code>@EnableAsync</code> 注解，可以很方便地完成从 [同步] -&gt; [异步] 的转换。</p>
+<p>假设原来的 Controller 类和 Service 类的代码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@RestController</div><div class="line">public class TestController &#123;</div><div class="line">    ...</div><div class="line">    public String executeAsyn()&#123;</div><div class="line">        log.info(&quot;准备开启异步线程...&quot;);</div><div class="line">        testService.executeAsync();</div><div class="line">        log.info(&quot;executeAsync 接口返回&quot;);</div><div class="line">        return &quot;success&quot;;</div><div class="line">    &#125;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@Service</div><div class="line">public class TestService &#123;</div><div class="line">    public void executeAsync()&#123;</div><div class="line">        log.info(&quot;开始异步线程&quot;);</div><div class="line">        for(int i = 0; i &lt; 10; i++)&#123;</div><div class="line">            try &#123;</div><div class="line">                Thread.sleep(1000);</div><div class="line">                log.info(&quot;sleep...&#123;&#125;&quot;, i);</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        log.info(&quot;完成异步线程&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在这种情况下，接口调用将等待10秒左右才会返回，查看日志输出为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">准备开启异步线程...</div><div class="line">开始异步线程</div><div class="line">sleep...0</div><div class="line">sleep...1</div><div class="line">...</div><div class="line">sleep...9</div><div class="line">完成异步线程</div><div class="line">executeAsync 接口返回</div></pre></td></tr></table></figure></p>
+<p>可以看到，在同步调用的情况下，只有当线程内sleep操作全部执行完了，外部接口调用才返回。</p>
+<p>为了将其修改为异步调用，只需要添加两个注解：</p>
+<ul>
+<li>在方法上添加注解 <code>@Async</code></li>
+<li>在调用方 Controller 类上添加注解 <code>@EnableAsync</code></li>
+</ul>
+<p>修改为异步后，得到的输出为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">准备开启异步线程...</div><div class="line">executeAsync 接口返回</div><div class="line">开始异步线程</div><div class="line">sleep...0</div><div class="line">sleep...1</div><div class="line">...</div><div class="line">sleep...9</div><div class="line">完成异步线程</div></pre></td></tr></table></figure></p>
+<p>这样方法就是异步执行了。</p>
+<p>事实上，同步改异步的难点，不在于这两个注解的添加。最关键的点在于，异步线程执行完毕后，通过何种方式通知操作者任务已经完成。这就需要结合实际场景和需求进行相关的改造了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/06/24/SpringBoot使用-Async实现异步调用/" data-id="clcpwy3ef00as5e8tzay9kae1" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Oracle数据库幂等性创建数据库表语句" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/06/15/Oracle数据库幂等性创建数据库表语句/" class="article-date">
+  <time datetime="2019-06-15T07:20:54.000Z" itemprop="datePublished">2019-06-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/06/15/Oracle数据库幂等性创建数据库表语句/">Oracle数据库幂等性创建数据库表语句</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在 Oracle 数据库中，一条最基础的创建数据库表的语句通常是如下形式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">CREATE TABLE &quot;[table_name]&quot; (</div><div class="line">    &quot;[primary_id]&quot; VARCHAR2(18 BYTE) NOT NULL,</div><div class="line">    &quot;[field_name]&quot; VARCHAR2(128 BYTE) NOT NULL</div><div class="line">);</div></pre></td></tr></table></figure></p>
+<p>这条语句没有问题，但只能执行一次，如果多执行一次的话，会抛出 <code>数据库表已存在</code> 的错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[Err] ORA-00955: 名称已由现有对象使用</div></pre></td></tr></table></figure></p>
+<p>这样的话，在作为部署脚本使用的话可能比较麻烦，最好能够使创建数据库表的语句 <code>幂等化</code> ，即执行一次和执行多次达到的效果相同。   </p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>在 Mysql 数据库中，通常会在创建数据库表之前使用 <code>DROP TABLE IF EXISTS [table_name]</code> 的语句，先删除这张可能存在的数据库表，为之后的创建工作作好铺垫。而其中的 <code>IF EXISTS</code> 语句则避免了数据库表不存在时误报错误。</p>
+<p>然而在 Oracle 数据库中，没有 <code>DROP TABLE IF EXISTS</code> 语句，直接使用 <code>DROP TABLE [table_name]</code> 在数据库表不存在时，将抛出 <code>表或视图不存在</code> 的错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[Err] ORA-00942: 表或视图不存在</div></pre></td></tr></table></figure></p>
+<p>查询一些资料发现，可以使用 <code>BEGIN...EXCEPTION...END</code> 语句来避免这个错误的抛出。类似于在代码中使用 <code>try...catch</code> 语句。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">BEGIN</div><div class="line">    EXECUTE IMMEDIATE &apos;DROP TABLE [table_name]&apos;;</div><div class="line">EXCEPTION</div><div class="line">    WHEN OTHERS THEN</div><div class="line">         IF SQLCODE != -942 THEN</div><div class="line">            RAISE;</div><div class="line">        END IF;</div><div class="line">END;</div></pre></td></tr></table></figure></p>
+<p>可以看出语句很好理解，尝试执行 <code>DROP TABLE [table_name]</code> 语句，如果有抛出异常，判断错误码是否等于 <code>-942</code> ，在错误码为 <code>-942</code> 的情况下不抛出异常，不影响后续语句的使用，否则抛出异常。</p>
+<p>这样，结合上述删除数据库表和创建数据库表的语句，可以得到综合的幂等性创建数据库表语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">BEGIN</div><div class="line">    EXECUTE IMMEDIATE &apos;DROP TABLE [table_name]&apos;;</div><div class="line">EXCEPTION</div><div class="line">    WHEN OTHERS THEN</div><div class="line">         IF SQLCODE != -942 THEN</div><div class="line">            RAISE;</div><div class="line">        END IF;</div><div class="line">END;</div><div class="line">/</div><div class="line">CREATE TABLE &quot;[table_name]&quot; (</div><div class="line">    &quot;[primary_id]&quot; VARCHAR2(18 BYTE) NOT NULL,</div><div class="line">    &quot;[field_name]&quot; VARCHAR2(128 BYTE) NOT NULL</div><div class="line">);</div></pre></td></tr></table></figure></p>
+<h2 id="一个深坑"><a href="#一个深坑" class="headerlink" title="一个深坑"></a>一个深坑</h2><p>注意上一节解决方案中的 SQL 代码，在前一段 <code>BEGIN...EXCEPTION...END</code> 后的那个斜线 <code>/</code> 不可缺少，否则会抛出错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[Err] ORA-06550: 第11行，第1列：</div><div class="line">PLS-00103: 出现符号 &quot;CREATE&quot;</div></pre></td></tr></table></figure></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://stackoverflow.com/questions/1008248/how-do-i-use-create-or-replace" target="_blank" rel="external">https://stackoverflow.com/questions/1008248/how-do-i-use-create-or-replace</a><br><a href="https://stackoverflow.com/questions/1799128/oracle-if-table-exists" target="_blank" rel="external">https://stackoverflow.com/questions/1799128/oracle-if-table-exists</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/06/15/Oracle数据库幂等性创建数据库表语句/" data-id="clcpwy3cy007x5e8tgkk37rij" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Git历史版本列表列表最新项与当前版本不一致的可能原因" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/" class="article-date">
+  <time datetime="2019-06-10T09:40:46.000Z" itemprop="datePublished">2019-06-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/">Git历史版本列表列表最新项与当前版本不一致的可能原因</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在使用 <code>Git</code> 的过程中，通常来讲分支中一个文件的历史版本中最新的那个版本，将是当前分支的文件当前内容。<br>然而在实际工作中，出现了意外现象：从 GitLab 页面上看，当前 <code>dev</code> 分支中文件A的历史版本按照时间倒序有 <code>v5</code>-<code>v4</code>-<code>v3</code>-<code>v2</code>-<code>v1</code>，然而文件A显示的当前版本却是 <code>v3</code>，实际内容也是版本 <code>v3</code> 提交后的内容。  （GitHub页面上的历史版本只会显示到 <code>v3</code>）<br>这种现象非常令人困惑，经过和好朋友的一番推理和测试，推测出可能存在的一种造成该现象的原因。</p>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><h4 id="步骤0：主分支操作"><a href="#步骤0：主分支操作" class="headerlink" title="步骤0：主分支操作"></a>步骤0：主分支操作</h4><p>创建一个空项目并初始化Git仓库：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir git-file-version-not-latest-demo</div><div class="line">cd git-file-version-not-latest-demo</div><div class="line">git init</div></pre></td></tr></table></figure></p>
+<p>创建一些基础文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">echo &quot;content in file a.txt&quot; &gt; a.txt</div><div class="line">echo &quot;content in file b.txt&quot; &gt; b.txt</div><div class="line">echo &quot;content in file common.txt&quot; &gt; common.txt</div></pre></td></tr></table></figure></p>
+<p>执行第一次提交：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git add .</div><div class="line">git commit -m &quot;initial commit&quot;</div></pre></td></tr></table></figure></p>
+<h4 id="步骤1：分支a操作"><a href="#步骤1：分支a操作" class="headerlink" title="步骤1：分支a操作"></a>步骤1：分支a操作</h4><p>从主分支切换到分支a，修改一些文件，本地提交一次 commit ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">git checkout master</div><div class="line">git checkout -b branch-a</div><div class="line">echo &quot;content added by branch-a&quot; &gt;&gt; a.txt</div><div class="line">echo &quot;common content added by branch-a&quot; &gt;&gt; common.txt</div><div class="line">git add .</div><div class="line">git commit -m &quot;modification by branch-a&quot;</div></pre></td></tr></table></figure></p>
+<h4 id="步骤2：分支b操作"><a href="#步骤2：分支b操作" class="headerlink" title="步骤2：分支b操作"></a>步骤2：分支b操作</h4><p>从主分支切换到分支b，修改一些文件，本地提交一次 commit ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">git checkout master</div><div class="line">git checkout -b branch-b</div><div class="line">echo &quot;content added by branch-b&quot; &gt;&gt; b.txt</div><div class="line">echo &quot;common content added by branch-b&quot; &gt;&gt; common.txt</div><div class="line">git add .</div><div class="line">git commit -m &quot;modification by branch-b&quot;</div></pre></td></tr></table></figure></p>
+<h4 id="步骤3：分支b（提交Pull-Request）合并到主分支"><a href="#步骤3：分支b（提交Pull-Request）合并到主分支" class="headerlink" title="步骤3：分支b（提交Pull Request）合并到主分支"></a>步骤3：分支b（提交Pull Request）合并到主分支</h4><p>如果直接合并，可以使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git checkout master</div><div class="line">git merge branch-b</div></pre></td></tr></table></figure></p>
+<p>如果是项目流程，可以使用标准的提交PR-&gt;合并PR的流程，将分支b中的内容合并到主分支。</p>
+<h4 id="步骤4：分支a合并主分支的改动"><a href="#步骤4：分支a合并主分支的改动" class="headerlink" title="步骤4：分支a合并主分支的改动"></a>步骤4：分支a合并主分支的改动</h4><p>由于主分支添加了分支b的内容，分支a无法直接将当前内容合并到主分支上。</p>
+<img src="/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/blog-hexo/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/conflict.png" alt="Conflict" title="Conflict">
+<p>此时需要同步主分支的修改：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git checkout branch-a</div><div class="line">git merge master</div></pre></td></tr></table></figure></p>
+<p>此时由于分支b的提交也修改了文件 <code>common.txt</code>，因此一定会产生冲突：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">➜ git-file-version-not-latest-demo git:(branch-a) git merge master</div><div class="line">自动合并 common.txt</div><div class="line">冲突（内容）：合并冲突于 common.txt</div><div class="line">自动合并失败，修正冲突然后提交修正的结果。</div><div class="line">➜ git-file-version-not-latest-demo git:(branch-a) ✗ git status</div><div class="line">位于分支 branch-a</div><div class="line">您的分支与上游分支 &apos;origin/branch-a&apos; 一致。</div><div class="line">您有尚未合并的路径。</div><div class="line">  （解决冲突并运行 &quot;git commit&quot;）</div><div class="line">  （使用 &quot;git merge --abort&quot; 终止合并）</div><div class="line">要提交的变更：</div><div class="line"> 修改： b.txt</div><div class="line">未合并的路径：</div><div class="line">  （使用 &quot;git add &lt;文件&gt;...&quot; 标记解决方案）</div><div class="line"> 双方修改： common.txt</div><div class="line">➜ git-file-version-not-latest-demo git:(branch-a) ✗</div></pre></td></tr></table></figure></p>
+<p>根据正常的处理流程，我们应该编辑 <code>common.txt</code> 文件，解决冲突，然后提交。<br>将以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">content in file common.txt</div><div class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</div><div class="line">common content added by branch-a</div><div class="line">=======</div><div class="line">common content added by branch-b</div><div class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; master</div></pre></td></tr></table></figure></p>
+<p>修改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">content in file common.txt</div><div class="line">common content added by branch-a</div><div class="line">common content added by branch-b</div></pre></td></tr></table></figure></p>
+<p>在提交前 Git 仓库的状态是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜ git-file-version-not-latest-demo git:(branch-a) ✗ git status</div><div class="line">位于分支 branch-a</div><div class="line">您的分支与上游分支 &apos;origin/branch-a&apos; 一致。</div><div class="line">您有尚未合并的路径。</div><div class="line">  （解决冲突并运行 &quot;git commit&quot;）</div><div class="line">  （使用 &quot;git merge --abort&quot; 终止合并）</div><div class="line">要提交的变更：</div><div class="line"> 修改： b.txt</div><div class="line">未合并的路径：</div><div class="line">  （使用 &quot;git add &lt;文件&gt;...&quot; 标记解决方案）</div><div class="line"> 双方修改： common.txt</div><div class="line">➜ git-file-version-not-latest-demo git:(branch-a) ✗</div></pre></td></tr></table></figure></p>
+<p>我们应该将解决冲突的文件 <code>common.txt</code> 添加到暂存区 <code>git add common.txt</code> ，然后执行 <code>git commit</code> 或 <code>git merge --continue</code> 完成这次合并。<br>然而，如果意外地将改动 <code>b.txt</code> 移出了暂存区：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git add common.txt</div><div class="line">git reset HEAD b.txt</div><div class="line">git status</div></pre></td></tr></table></figure></p>
+<p>此时 Git 目录的状态将是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜ git-file-version-not-latest-demo git:(branch-a) ✗ git status</div><div class="line">位于分支 branch-a</div><div class="line">您的分支与上游分支 &apos;origin/branch-a&apos; 一致。</div><div class="line">所有冲突已解决但您仍处于合并中。</div><div class="line">  （使用 &quot;git commit&quot; 结束合并）</div><div class="line">要提交的变更：</div><div class="line"> 修改： common.txt</div><div class="line">尚未暂存以备提交的变更：</div><div class="line">  （使用 &quot;git add &lt;文件&gt;...&quot; 更新要提交的内容）</div><div class="line">  （使用 &quot;git checkout -- &lt;文件&gt;...&quot; 丢弃工作区的改动）</div><div class="line"> 修改： b.txt</div><div class="line">➜ git-file-version-not-latest-demo git:(branch-a) ✗</div></pre></td></tr></table></figure></p>
+<p>在这种情况下完成这次合并，执行 <code>git commit --continue</code> ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜ git-file-version-not-latest-demo git:(branch-a) ✗ git merge --continue</div><div class="line">[branch-a 43d5d69] Merge branch &apos;master&apos; into branch-a</div></pre></td></tr></table></figure></p>
+<h4 id="步骤5：分支a（提交Pull-Request）合并到主分支"><a href="#步骤5：分支a（提交Pull-Request）合并到主分支" class="headerlink" title="步骤5：分支a（提交Pull Request）合并到主分支"></a>步骤5：分支a（提交Pull Request）合并到主分支</h4><p>由分支 a 向主分支提交 Pull Request。</p>
+<img src="/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/blog-hexo/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/mr.png" alt="Pull Request" title="Pull Request">
+<p>此时，可以从 PR 的改动中看到相关的变动情况：分支 a 的改动除了在 <code>a.txt</code> 和 <code>common.txt</code> 文件中添加内容，还使 <code>b.txt</code> 的文件内容减少了。</p>
+<h4 id="步骤6：合并分支a的PR"><a href="#步骤6：合并分支a的PR" class="headerlink" title="步骤6：合并分支a的PR"></a>步骤6：合并分支a的PR</h4><p>如果此时将这个 PR 合并到了主分支内，就可以看到一个神奇的现象。<br>文件 <code>b.txt</code> 显示的版本是 <code>initial commit</code> 那次提交的版本。<br>这对于分支 b 的开发人员来说是很一脸蒙蔽的，因为分支 b 的提交不知道在什么时候被吞了。<br>单纯从文件 <code>b.txt</code> 的角度出发，是无法知道哪个改动将自己的提交删除了，很难找到相关责任人。</p>
+<p>另外一个值得注意的现象是 <code>git log</code> 命令添加 <code>--follow</code> 选项的功能。<br>使用 <code>git log b.txt</code> 查看也只有一个版本信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">commit aa61d9a12a8b8d9f3f382bdd7913bafa40745702</div><div class="line">Author: ckmessi &lt;ckmessi@163.com&gt;</div><div class="line">Date: Fri May 17 09:53:33 2019 +0800</div><div class="line">    initial commit</div></pre></td></tr></table></figure></p>
+<p>使用 <code>git log --follow b.txt</code> 可以看到分支b提交的信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">commit 8fca98d7e28de1b25eb390ac70bebf2a18bc70e0 (origin/branch-b, branch-b)</div><div class="line">Author: ckmessi &lt;ckmessi@163.com&gt;</div><div class="line">Date: Fri May 17 10:08:05 2019 +0800</div><div class="line">    modification by branch-b</div><div class="line"></div><div class="line">commit aa61d9a12a8b8d9f3f382bdd7913bafa40745702</div><div class="line">Author: ckmessi &lt;ckmessi@163.com&gt;</div><div class="line">Date: Fri May 17 09:53:33 2019 +0800</div><div class="line">    initial commit</div></pre></td></tr></table></figure></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://github.com/ckmessi/git-file-version-not-latest-demo/" target="_blank" rel="external">https://github.com/ckmessi/git-file-version-not-latest-demo/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/06/10/Git历史版本列表列表最新项与当前版本不一致的可能原因/" data-id="clcpwy3ak002b5e8tqmkmurjy" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-SpringBoot运行jar包提示没有主清单属性的问题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/06/05/SpringBoot运行jar包提示没有主清单属性的问题/" class="article-date">
+  <time datetime="2019-06-05T07:36:12.000Z" itemprop="datePublished">2019-06-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/06/05/SpringBoot运行jar包提示没有主清单属性的问题/">SpringBoot运行jar包提示没有主清单属性的问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>使用命令 <code>java -jar xxx-0.1.0-SNAPSHOT.jar</code> 启动 Spring Boot 项目时，可能遇到错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">xxx-0.1.0-SNAPSHOT.jar中没有主清单属性</div></pre></td></tr></table></figure></p>
+<p>这个问题是在 maven 构建过程中没有正确配置插件导致的。<br><code>spring-boot-maven-plugin</code> 能够将 Spring Boot 应用打包为可执行的 <code>jar</code> 或 <code>war</code> 文件，然后以正常方式运行 Spring Boot 应用。</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>如果添加了 <code>spring-boot-maven-plugin</code> 构建插件，得到的 <code>jar</code> 包解压缩后的目录如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">.</div><div class="line">├── BOOT-INF</div><div class="line">├── META-INF</div><div class="line">├── org</div></pre></td></tr></table></figure></p>
+<p>而没有添加 <code>spring-boot-maven-plugin</code> 构建插件，得到的 <code>jar</code> 包解压缩后的目录如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">.</div><div class="line">├── com</div><div class="line">├── mapper</div><div class="line">├── META-INF</div><div class="line">├── application.yml</div><div class="line">├── bootstrap.yml</div></pre></td></tr></table></figure></p>
+<p>注：其中 <code>mapper</code>，<code>application.yml</code> 和 <code>bootstrap.yml</code> 等是源码中 <code>resource</code> 目录下的相关文件。</p>
+<p>其中 <code>META-INF</code> 文件夹下有一个 <code>MANIFEST.MF</code> 文件，该文件指明了程序的入口以及版本信息等内容。  </p>
+<img src="/2019/06/05/SpringBoot运行jar包提示没有主清单属性的问题/blog-hexo/2019/06/05/SpringBoot运行jar包提示没有主清单属性的问题/META-INF.png" alt="不同方式构建项目Jar包中的MANIFEST.MF文件内容对比" title="不同方式构建项目Jar包中的MANIFEST.MF文件内容对比">
+<p>从截图中可以看出，如果没有添加 <code>spring-boot-maven-plugin</code> 构建插件，将缺少 <code>Main-Class</code>，<code>Start-Class</code> 等启动类配置信息。因此会抛错。</p>
+<p>￼</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>因此，可行的解决方案是在启动项目的 <code>pom.xml</code> 文件中添加一个构建插件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;build&gt;</div><div class="line">  &lt;plugins&gt;</div><div class="line">   &lt;plugin&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">   &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</div><div class="line">   &lt;/plugin&gt;</div><div class="line">  &lt;/plugins&gt;</div><div class="line"> &lt;/build&gt;</div></pre></td></tr></table></figure></p>
+<p>这样在执行 <code>mvn install</code> 时，将会自动生成主清单属性。<br>执行 <code>java -jar xxx-0.1.0-SNAPSHOT.jar</code> 启动 Spring Boot 项目时，就不会报错了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/06/05/SpringBoot运行jar包提示没有主清单属性的问题/" data-id="clcpwy3ei00az5e8tvpxk6tlf" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/12/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/11/">11</a><a class="page-number" href="/blog-hexo/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/blog-hexo/page/14/">14</a><a class="page-number" href="/blog-hexo/page/15/">15</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/24/">24</a><a class="extend next" rel="next" href="/blog-hexo/page/14/">weiter &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Kategorien</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工作/">工作</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/科研/">科研</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/3D/">3D</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Alembic/">Alembic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Anime-js/">Anime.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Blender/">Blender</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CMake/">CMake</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/COCO/">COCO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/COCOAPI/">COCOAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CentOS/">CentOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Code-Coverage/">Code Coverage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Composer/">Composer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Cookie/">Cookie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Debug/">Debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/DeepLearning/">DeepLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Django/">Django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FFMpeg/">FFMpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FIGlet/">FIGlet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faiss/">Faiss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FastAPI/">FastAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Flask/">Flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Flyway/">Flyway</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Gem/">Gem</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git-Bash/">Git Bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/GitHub/">GitHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/GitLab/">GitLab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Go/">Go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JdbcTemplate/">JdbcTemplate</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Loguru/">Loguru</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MS-COCO/">MS COCO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Markdown/">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Math/">Math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Matplotlib/">Matplotlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Maven/">Maven</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Memory/">Memory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mkdocs/">Mkdocs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MyBatis/">MyBatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MyBatisPlus/">MyBatisPlus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mybatis/">Mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Noise/">Noise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Numpy/">Numpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nvidia-Driver/">Nvidia Driver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oh-My-Zsh/">Oh-My-Zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenCV/">OpenCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PDF/">PDF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Paper-js/">Paper.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pip/">Pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PosixPath/">PosixPath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PyTorch/">PyTorch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PyYAML/">PyYAML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pythonenv/">Pythonenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/RLE/">RLE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ruby/">Ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/RuleEngine/">RuleEngine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Rust/">Rust</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SQLAlchemy/">SQLAlchemy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring-Boot/">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SpringCloud/">SpringCloud</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Supervisor/">Supervisor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Swagger/">Swagger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Swagger-UI/">Swagger-UI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/TensorRT/">TensorRT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Torch/">Torch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/TorchServe/">TorchServe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VB/">VB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VS-Code/">VS Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VSCode/">VSCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Visual-Studio/">Visual Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue-js/">Vue.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vuetify/">Vuetify</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/YAML/">YAML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/axios/">axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/base64/">base64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/bpy/">bpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/bumpversion/">bumpversion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/conda/">conda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/cookiecutter/">cookiecutter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/coverage/">coverage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/crontab/">crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/faiss/">faiss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastapi/">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastjson/">fastjson</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/heatmap-js/">heatmap.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/hexdump/">hexdump</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/interact-js/">interact.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/iptables/">iptables</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/libfacedetection/">libfacedetection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/nvidia/">nvidia</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/obj/">obj</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/peewee/">peewee</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/pip/">pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/pytest/">pytest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/scp/">scp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/sed/">sed</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/setuptools/">setuptools</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ssh/">ssh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/torchvision/">torchvision</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/verdaccio/">verdaccio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/vim/">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/virtualenv/">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/xargs/">xargs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/yacs/">yacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/yaml/">yaml</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/zip/">zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/zsh/">zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/blog-hexo/tags/3D/" style="font-size: 10px;">3D</a> <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Alembic/" style="font-size: 10px;">Alembic</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 11.43px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/Blender/" style="font-size: 10px;">Blender</a> <a href="/blog-hexo/tags/C/" style="font-size: 11.43px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CMake/" style="font-size: 10px;">CMake</a> <a href="/blog-hexo/tags/COCO/" style="font-size: 10px;">COCO</a> <a href="/blog-hexo/tags/COCOAPI/" style="font-size: 10px;">COCOAPI</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 10.71px;">CSharp</a> <a href="/blog-hexo/tags/CentOS/" style="font-size: 10px;">CentOS</a> <a href="/blog-hexo/tags/Code-Coverage/" style="font-size: 10px;">Code Coverage</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 10.71px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Cookie/" style="font-size: 10.71px;">Cookie</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Debug/" style="font-size: 10px;">Debug</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/DeepLearning/" style="font-size: 10px;">DeepLearning</a> <a href="/blog-hexo/tags/Django/" style="font-size: 10px;">Django</a> <a href="/blog-hexo/tags/Docker/" style="font-size: 10.71px;">Docker</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.14px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10.71px;">Excel</a> <a href="/blog-hexo/tags/FFMpeg/" style="font-size: 10px;">FFMpeg</a> <a href="/blog-hexo/tags/FIGlet/" style="font-size: 10px;">FIGlet</a> <a href="/blog-hexo/tags/Faiss/" style="font-size: 10px;">Faiss</a> <a href="/blog-hexo/tags/FastAPI/" style="font-size: 10px;">FastAPI</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Flask/" style="font-size: 10px;">Flask</a> <a href="/blog-hexo/tags/Flyway/" style="font-size: 10px;">Flyway</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15px;">Git</a> <a href="/blog-hexo/tags/Git-Bash/" style="font-size: 10px;">Git Bash</a> <a href="/blog-hexo/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/blog-hexo/tags/GitLab/" style="font-size: 10px;">GitLab</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Go/" style="font-size: 10.71px;">Go</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10.71px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 12.14px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 16.43px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 12.14px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.14px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.57px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 17.86px;">Linux</a> <a href="/blog-hexo/tags/Loguru/" style="font-size: 10px;">Loguru</a> <a href="/blog-hexo/tags/MS-COCO/" style="font-size: 10px;">MS COCO</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/blog-hexo/tags/Math/" style="font-size: 10.71px;">Math</a> <a href="/blog-hexo/tags/Matplotlib/" style="font-size: 10px;">Matplotlib</a> <a href="/blog-hexo/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/blog-hexo/tags/Memory/" style="font-size: 10px;">Memory</a> <a href="/blog-hexo/tags/Mkdocs/" style="font-size: 10px;">Mkdocs</a> <a href="/blog-hexo/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/blog-hexo/tags/MyBatisPlus/" style="font-size: 10px;">MyBatisPlus</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 10.71px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10.71px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.43px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Noise/" style="font-size: 10px;">Noise</a> <a href="/blog-hexo/tags/Numpy/" style="font-size: 10px;">Numpy</a> <a href="/blog-hexo/tags/Nvidia-Driver/" style="font-size: 10px;">Nvidia Driver</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenCV/" style="font-size: 10.71px;">OpenCV</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 11.43px;">Oracle</a> <a href="/blog-hexo/tags/PDF/" style="font-size: 10px;">PDF</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Paper-js/" style="font-size: 10px;">Paper.js</a> <a href="/blog-hexo/tags/Pip/" style="font-size: 10px;">Pip</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PosixPath/" style="font-size: 10px;">PosixPath</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 10.71px;">PowerShell</a> <a href="/blog-hexo/tags/PyTorch/" style="font-size: 10.71px;">PyTorch</a> <a href="/blog-hexo/tags/PyYAML/" style="font-size: 10px;">PyYAML</a> <a href="/blog-hexo/tags/Python/" style="font-size: 19.29px;">Python</a> <a href="/blog-hexo/tags/Pythonenv/" style="font-size: 10px;">Pythonenv</a> <a href="/blog-hexo/tags/RLE/" style="font-size: 10px;">RLE</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SQLAlchemy/" style="font-size: 10px;">SQLAlchemy</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12.86px;">SSH</a> <a href="/blog-hexo/tags/Shell/" style="font-size: 14.29px;">Shell</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 13.57px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Supervisor/" style="font-size: 10px;">Supervisor</a> <a href="/blog-hexo/tags/Swagger/" style="font-size: 10px;">Swagger</a> <a href="/blog-hexo/tags/Swagger-UI/" style="font-size: 10px;">Swagger-UI</a> <a href="/blog-hexo/tags/TensorRT/" style="font-size: 10px;">TensorRT</a> <a href="/blog-hexo/tags/Terminal/" style="font-size: 10px;">Terminal</a> <a href="/blog-hexo/tags/Torch/" style="font-size: 10px;">Torch</a> <a href="/blog-hexo/tags/TorchServe/" style="font-size: 10.71px;">TorchServe</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 11.43px;">Ubuntu</a> <a href="/blog-hexo/tags/VB/" style="font-size: 10px;">VB</a> <a href="/blog-hexo/tags/VS-Code/" style="font-size: 10.71px;">VS Code</a> <a href="/blog-hexo/tags/VSCode/" style="font-size: 10.71px;">VSCode</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15.71px;">Vue</a> <a href="/blog-hexo/tags/Vue-js/" style="font-size: 10px;">Vue.js</a> <a href="/blog-hexo/tags/Vuetify/" style="font-size: 10px;">Vuetify</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12.86px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/YAML/" style="font-size: 10.71px;">YAML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 10.71px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/bpy/" style="font-size: 10px;">bpy</a> <a href="/blog-hexo/tags/bumpversion/" style="font-size: 10px;">bumpversion</a> <a href="/blog-hexo/tags/conda/" style="font-size: 10.71px;">conda</a> <a href="/blog-hexo/tags/cookiecutter/" style="font-size: 10px;">cookiecutter</a> <a href="/blog-hexo/tags/coverage/" style="font-size: 10px;">coverage</a> <a href="/blog-hexo/tags/crontab/" style="font-size: 10px;">crontab</a> <a href="/blog-hexo/tags/faiss/" style="font-size: 10px;">faiss</a> <a href="/blog-hexo/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/ffmpeg/" style="font-size: 10px;">ffmpeg</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10.71px;">grep</a> <a href="/blog-hexo/tags/heatmap-js/" style="font-size: 10px;">heatmap.js</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/iptables/" style="font-size: 10.71px;">iptables</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10.71px;">npm</a> <a href="/blog-hexo/tags/nvidia/" style="font-size: 10px;">nvidia</a> <a href="/blog-hexo/tags/obj/" style="font-size: 10px;">obj</a> <a href="/blog-hexo/tags/peewee/" style="font-size: 10px;">peewee</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/pytest/" style="font-size: 10.71px;">pytest</a> <a href="/blog-hexo/tags/python/" style="font-size: 10px;">python</a> <a href="/blog-hexo/tags/scp/" style="font-size: 10px;">scp</a> <a href="/blog-hexo/tags/sed/" style="font-size: 10px;">sed</a> <a href="/blog-hexo/tags/setuptools/" style="font-size: 10px;">setuptools</a> <a href="/blog-hexo/tags/shell/" style="font-size: 10px;">shell</a> <a href="/blog-hexo/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/blog-hexo/tags/torchvision/" style="font-size: 10px;">torchvision</a> <a href="/blog-hexo/tags/verdaccio/" style="font-size: 10px;">verdaccio</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/xargs/" style="font-size: 10px;">xargs</a> <a href="/blog-hexo/tags/yacs/" style="font-size: 10px;">yacs</a> <a href="/blog-hexo/tags/yaml/" style="font-size: 10px;">yaml</a> <a href="/blog-hexo/tags/zip/" style="font-size: 10px;">zip</a> <a href="/blog-hexo/tags/zsh/" style="font-size: 10px;">zsh</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 11.43px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2023/01/">January 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/11/">November 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/10/">October 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog-hexo/2023/01/10/Vue使用js-yaml解析yaml文件/">Vue使用js-yaml解析yaml文件</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2023/01/04/Vue导出HTML页面至PDF/">Vue导出HTML页面至PDF</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/11/09/python将秒数转为格式化时间字符串/">python将秒数转为格式化时间字符串</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/10/19/使用Verdaccio搭建私有npm源/">使用Verdaccio搭建私有npm源</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/09/08/Docker实时查看容器的内存占用/">Docker实时查看容器的内存占用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 ckmessi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog-hexo/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog-hexo/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/blog-hexo/fancybox/jquery.fancybox.css">
+  <script src="/blog-hexo/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/blog-hexo/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

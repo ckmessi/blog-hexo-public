@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>不止是一位程序员</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Lionel的技术笔记总结">
+<meta property="og:type" content="website">
+<meta property="og:title" content="不止是一位程序员">
+<meta property="og:url" content="http://ckmessi.github.io/page/6/index.html">
+<meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="Lionel的技术笔记总结">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="不止是一位程序员">
+<meta name="twitter:description" content="Lionel的技术笔记总结">
+  
+    <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/blog-hexo/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog-hexo/" id="logo">不止是一位程序员</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog-hexo/" id="subtitle">Lionel的技术空间</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog-hexo/">Home</a>
+        
+          <a class="main-nav-link" href="/blog-hexo/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-Python使用Gooey创建界面" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/12/08/Python使用Gooey创建界面/" class="article-date">
+  <time datetime="2020-12-08T05:21:06.000Z" itemprop="datePublished">2020-12-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/12/08/Python使用Gooey创建界面/">Python使用Gooey创建界面</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p><code>Gooey</code> 是一个库，能够将几乎所有 Python 代码转换成带 GUI （图形操作界面）的程序。<br>使用 <code>Gooey</code> 的方式很简单，在方法中使用 <code>@gooey</code> 注解即可。</p>
+<h2 id="环境基础"><a href="#环境基础" class="headerlink" title="环境基础"></a>环境基础</h2><p>由于使用的界面相关的库，在启动时可能会抛错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">This program needs access to the screen. Please run with a</div><div class="line">Framework build of python, and only when you are logged in</div><div class="line">on the main display of your Mac.</div></pre></td></tr></table></figure></p>
+<p>因为 MacOS 如果要启动 Python 的 GUI 程序，需要使用 <code>pythonw</code> 命令启动。<br>注意 MacOS 的 <code>pythonw</code> 可能是在默认路径 <code>/usr/bin</code> 中，版本与当前使用的 Python 虚拟环境可能不符合。可以在 conda 环境中使用 <code>conda install python.app</code> 来修复这个问题，参考 <a href="https://stackoverflow.com/questions/43480073/anaconda-python-3-6-pythonw-and-python-supposed-to-be-equivalent" target="_blank" rel="external">这篇文章</a> 解决。<br>然后就可以使用 <code>pythonw [python_script_file]</code> 语句执行了。</p>
+<h2 id="示例0：基础"><a href="#示例0：基础" class="headerlink" title="示例0：基础"></a>示例0：基础</h2><p>如果仅仅引入 <code>gooey</code> 相关库而没有具体的语句，是不会影响到程序正常执行的，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">from gooey import Gooey, GooeyParser</div><div class="line"></div><div class="line">@Gooey()</div><div class="line">def main():</div><div class="line">    print(&apos;Hello, world&apos;)</div><div class="line"></div><div class="line">if __name__ == &apos;__main__&apos;:</div><div class="line">    main()</div></pre></td></tr></table></figure></p>
+<p>执行 <code>pythonw main.py</code> 后，只在控制台打印了一行基础的 <code>Hello, world</code> 。</p>
+<h2 id="示例1：显示界面"><a href="#示例1：显示界面" class="headerlink" title="示例1：显示界面"></a>示例1：显示界面</h2><p>可以通过 <code>GooeyParser</code> 给代码添加参数输入框，可以等价理解为 <code>ArgParser</code>，在显示的形式上又可以理解为页面中的 <code>form</code> 组件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">@Gooey()</div><div class="line">def main1():</div><div class="line">    parser = GooeyParser(description=&apos;Process some arguments.&apos;)</div><div class="line">    parser.add_argument(</div><div class="line">        &apos;required_field&apos;,</div><div class="line">        metavar=&apos;Some Field&apos;,</div><div class="line">        help=&apos;Enter some string...&apos;)</div><div class="line">    parser.add_argument(</div><div class="line">        &apos;-k&apos;,</div><div class="line">        metavar=&apos;Some Field&apos;,</div><div class="line">        type=int,</div><div class="line">        help=&apos;Enter some integer...&apos;)</div><div class="line">    parser.add_argument(</div><div class="line">        &apos;-d&apos;, &apos;--debug&apos;,</div><div class="line">        metavar=&apos;Some Flag&apos;,</div><div class="line">        action=&apos;store_true&apos;,</div><div class="line">        help=&apos;Turn debug on and off&apos;)</div><div class="line"></div><div class="line">    args = parser.parse_args()</div><div class="line">    print(f&apos;required_field=&#123;args.required_field&#125;&apos;)</div><div class="line">    print(f&apos;k=&#123;args.k&#125;&apos;)</div><div class="line">    print(f&apos;d=&#123;args.debug&#125;&apos;)</div><div class="line"></div><div class="line">if __name__ == &apos;__main__&apos;:</div><div class="line">    main1()</div></pre></td></tr></table></figure></p>
+<p>执行后显示出界面：<br><img src="/2020/12/08/Python使用Gooey创建界面/blog-hexo/2020/12/08/Python使用Gooey创建界面/1.png" alt="示例图" title="示例图"></p>
+<p>输入一些参数后点击 <code>start</code> 按钮：<br><img src="/2020/12/08/Python使用Gooey创建界面/blog-hexo/2020/12/08/Python使用Gooey创建界面/2.png" alt="示例图" title="示例图"></p>
+<h2 id="示例2：显示进度条"><a href="#示例2：显示进度条" class="headerlink" title="示例2：显示进度条"></a>示例2：显示进度条</h2><p>上一步显示仅仅实现了参数的读入和显示，实际过程中更多的可能需要进行一些处理操作。<br>比如在处理文件的过程中添加一些进度条：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">for i in range(args.k):</div><div class="line">    print(&quot;progress: &#123;&#125;/&#123;&#125;&quot;.format(i + 1, args.k))</div><div class="line">    sys.stdout.flush()</div><div class="line">    time.sleep(0.1)</div></pre></td></tr></table></figure></p>
+<img src="/2020/12/08/Python使用Gooey创建界面/blog-hexo/2020/12/08/Python使用Gooey创建界面/3.png" alt="示例图" title="示例图">
+<h2 id="示例三：文件选择框"><a href="#示例三：文件选择框" class="headerlink" title="示例三：文件选择框"></a>示例三：文件选择框</h2><p>界面操作最方便的点就在于可交互式的鼠标操作，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@Gooey</div><div class="line">def main1():</div><div class="line">    parser = GooeyParser(description=&apos;Process some arguments.&apos;)</div><div class="line">    parser.add_argument(&apos;dirname&apos;, help=&quot;name of the dir to process&quot;, widget=&apos;DirChooser&apos;)</div><div class="line">    args = parser.parse_args()</div><div class="line">    file_name_list = os.listdir(args.dirname)</div><div class="line">    </div><div class="line">    for i in range(len(file_name_list)):</div><div class="line">        print(&quot;progress: &#123;&#125;/&#123;&#125;, file:&#123;&#125;&quot;.format(i + 1, len(file_name_list), file_name_list[i]))</div><div class="line">        sys.stdout.flush()</div><div class="line">        time.sleep(0.1)</div></pre></td></tr></table></figure></p>
+<p>执行后会逐个列出所选目录的文件名：<br><img src="/2020/12/08/Python使用Gooey创建界面/blog-hexo/2020/12/08/Python使用Gooey创建界面/4.png" alt="示例图" title="示例图"></p>
+<p>这在数据批量处理的过程中会比较友好。<br><img src="/2020/12/08/Python使用Gooey创建界面/blog-hexo/2020/12/08/Python使用Gooey创建界面/5.png" alt="示例图" title="示例图"></p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>更多控制方式可以参考官方给出的 <a href="https://github.com/chriskiehl/GooeyExamples/blob/master/examples" target="_blank" rel="external">示例代码</a>。</p>
+<h2 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h2><ul>
+<li><a href="https://github.com/chriskiehl/Gooey" target="_blank" rel="external">https://github.com/chriskiehl/Gooey</a></li>
+<li><a href="https://github.com/chriskiehl/GooeyExamples/blob/master/examples/example_progress_bar_2.py" target="_blank" rel="external">https://github.com/chriskiehl/GooeyExamples/blob/master/examples/example_progress_bar_2.py</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/12/08/Python使用Gooey创建界面/" data-id="clcpwy3dq009b5e8t2ikfvkz5" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-入门三维数据obj格式数据-md" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/12/04/入门三维数据obj格式数据-md/" class="article-date">
+  <time datetime="2020-12-04T15:35:27.000Z" itemprop="datePublished">2020-12-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/12/04/入门三维数据obj格式数据-md/">入门三维数据obj格式数据.md</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>对于二维的静态图片数据，现在主流的存储格式为 <code>.jpg</code> 或 <code>.png</code>。对于三维数据，目前并没有非常统一的通用存储格式。<code>.obj</code> 格式的数据是三维数据格式中的其中一种，本篇文章主要介绍 <code>.obj</code> 格式的含义。</p>
+<h2 id="三维数据"><a href="#三维数据" class="headerlink" title="三维数据"></a>三维数据</h2><p>三维数据通常由两种数据组成：点和面。理论上点和面之间还有“线”的概念，但由于在三维世界中不可能有“线”脱离于“面”独立存在，因此不需要单独声明“线”的数据。   </p>
+<p>在 <code>.obj</code> 格式数据中，通常由两部分组成，前 <code>n</code> 行是点数据，后 <code>m</code> 行是面数据。</p>
+<p>点数据的基本格式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">v -0.1475 -0.1475 -0.876884 0.81 0.59 0.45</div><div class="line">v -0.1475 -0.161837 -0.845 0.28 0.23 0.18</div><div class="line">v -0.176174 -0.1475 -0.845 0.28 0.23 0.18</div><div class="line">v -0.1475 -0.164438 -0.7675 0.0 0.0 0.5</div><div class="line">v -0.181376 -0.1475 -0.7675 0.0 0.0 0.5</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<p>每行的开头是一个字母 <code>v</code>，表示这是一个顶点 <code>vertex</code> 数据，后面有 <code>3</code> 列或 <code>6</code> 列，用空格分隔，前三列表示的是该顶点在三维主坐标系中的 <code>xyz</code> 坐标，后三列表示的是该顶点的颜色数据。</p>
+<p>有些三维数据只有三列，这种情况下就只有顶点信息而没有颜色信息。   </p>
+<p>在顶点数据后，有面数据，格式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">f 1 2 3</div><div class="line">f 2 4 5</div><div class="line">f 3 2 5</div><div class="line">f 4 6 5</div><div class="line">f 7 8 9</div><div class="line">f 1 9 8</div><div class="line">f 1 8 2</div><div class="line">f 2 8 10</div><div class="line">f 10 11 2</div></pre></td></tr></table></figure></p>
+<p>其中开头字母 <code>f</code> 表示面 <code>face</code> 数据，后面有三列，用逗号分隔。三列的数值分别是顶点的序号，三个顶点组成一个面。   </p>
+<h2 id="可视化"><a href="#可视化" class="headerlink" title="可视化"></a>可视化</h2><p>将一个最基础的模型可视化：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">v 0 0 0</div><div class="line">v 0 1 0</div><div class="line">v 1 1 0</div><div class="line">v 1 0 0 </div><div class="line">v 0 0 1</div><div class="line">v 0 1 1</div><div class="line">v 1 1 1</div><div class="line">v 1 0 1</div><div class="line">f 1 2 3</div><div class="line">f 1 3 4</div><div class="line">f 1 2 6</div><div class="line">f 1 5 6</div><div class="line">f 1 4 8</div><div class="line">f 1 5 8</div></pre></td></tr></table></figure></p>
+<p>绘制了一个立方体的八个顶点，和其中三个面。注意三个顶点的顺序决定了面的顺序，对于上述数据，可以发现同一个立方体表面的两个三角形可能正反面不同。<br>使用 Windows 10 操作系统时，右键点击 <code>.obj</code> 格式文件，选择 <code>3D Print</code> 选项可以查看三维数据：</p>
+<img src="/2020/12/04/入门三维数据obj格式数据-md/blog-hexo/2020/12/04/入门三维数据obj格式数据-md/1.png" alt="立方体的三个面" title="立方体的三个面">
+<p>如果希望绘制一个完整的立方体，可以继续按照规则添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">v 0 0 0</div><div class="line">v 0 1 0</div><div class="line">v 1 1 0</div><div class="line">v 1 0 0 </div><div class="line">v 0 0 1</div><div class="line">v 0 1 1</div><div class="line">v 1 1 1</div><div class="line">v 1 0 1</div><div class="line">f 1 2 3</div><div class="line">f 1 3 4</div><div class="line">f 1 2 6</div><div class="line">f 1 6 5</div><div class="line">f 1 4 8</div><div class="line">f 1 8 5</div><div class="line">f 5 6 7</div><div class="line">f 5 7 8</div><div class="line">f 2 6 7</div><div class="line">f 2 7 3</div><div class="line">f 3 4 8</div><div class="line">f 3 8 7</div></pre></td></tr></table></figure></p>
+<p>我们得到了一个完整的有6个面的立方体。<br><img src="/2020/12/04/入门三维数据obj格式数据-md/blog-hexo/2020/12/04/入门三维数据obj格式数据-md/2.png" alt="完整的立方体" title="完整的立方体"></p>
+<h2 id="添加颜色"><a href="#添加颜色" class="headerlink" title="添加颜色"></a>添加颜色</h2><p>上述三维数据已经能够显示出一个简单的立方体，如果我们希望给其中一个面染色，可以通过改奕顶点的颜色完成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">v 0 0 0 0.0 0.0 0.0</div><div class="line">v 0 1 0 0.0 0.0 0.0</div><div class="line">v 1 1 0 0.0 0.0 0.0</div><div class="line">v 1 0 0 0.0 0.0 0.0</div><div class="line">v 0 0 1 1.0 0.0 0.0</div><div class="line">v 0 1 1 1.0 0.0 0.0</div><div class="line">v 1 1 1 1.0 0.0 0.0</div><div class="line">v 1 0 1 1.0 0.0 0.0</div><div class="line">f 1 2 3</div><div class="line">f 1 3 4</div><div class="line">f 1 2 6</div><div class="line">f 1 6 5</div><div class="line">f 1 4 8</div><div class="line">f 1 8 5</div><div class="line">f 5 6 7</div><div class="line">f 5 7 8</div><div class="line">f 2 6 7</div><div class="line">f 2 7 3</div><div class="line">f 3 4 8</div><div class="line">f 3 8 7</div></pre></td></tr></table></figure></p>
+<p>可以发现，一个面的颜色会根据其三个顶点的颜色自动计算得到，这使得我们不经意间获得了一个治愈的渐变立方体。<br><img src="/2020/12/04/入门三维数据obj格式数据-md/blog-hexo/2020/12/04/入门三维数据obj格式数据-md/3.png" alt="颜色很棒的立方体" title="颜色很棒的立方体"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>三维数据可以通过一个 <code>.obj</code> 格式的数据表示，其中包含了顶点信息和面的信息，也就是通俗意义上的物体网格（Mesh）。<code>.obj</code> 格式文件的内容简洁易懂，可以通过操作其中的顶点或面的数据，修改其三维数据的内容。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/12/04/入门三维数据obj格式数据-md/" data-id="clcpwy3hb00ha5e8twinszenf" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/obj/">obj</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Shell检查文件是否存在逻辑" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/11/28/Shell检查文件是否存在逻辑/" class="article-date">
+  <time datetime="2020-11-28T15:35:45.000Z" itemprop="datePublished">2020-11-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/11/28/Shell检查文件是否存在逻辑/">Shell检查文件是否存在逻辑</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在执行 <code>.sh</code> Shell 脚本时，有可能需要根据情况判断文件是否存在，如果存在才执行后续逻辑。<br>可以使用 <code>if [ ! -f &quot;file_path&quot;]</code> 语句进行判断。<br>下面这段代码描述了一个简单的示例，判断一组文件是否存在，如果不存在则 Sleep 一段时间后继续检查，直到文件存在时才执行后续流程：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">echo &quot;example code...&quot;</div><div class="line"></div><div class="line">NPY_FILE_PATH_1=&apos;1.npy&apos;</div><div class="line">NPY_FILE_PATH_2=&apos;2.npy&apos;</div><div class="line">KEY_FILES=(</div><div class="line">    $NPY_FILE_PATH_1</div><div class="line">    $NPY_FILE_PATH_2</div><div class="line">)</div><div class="line"></div><div class="line">while true</div><div class="line">    do</div><div class="line">        FILE_MISSING=false</div><div class="line">        for file_path in $&#123;KEY_FILES[@]&#125;; do</div><div class="line">            if [ ! -f &quot;$file_path&quot; ]; then</div><div class="line">                echo &quot;File \`$file_path\` does not exist, sleep to wait...&quot;</div><div class="line">                FILE_MISSING=true</div><div class="line">            fi</div><div class="line">            done</div><div class="line">        if $FILE_MISSING == true; then</div><div class="line">            echo &quot;sleep to wait files.&quot;</div><div class="line">            sleep 5</div><div class="line">        else</div><div class="line">            echo &quot;All Files exist, start execute&quot;</div><div class="line">            break</div><div class="line">        fi</div><div class="line">    done</div><div class="line"></div><div class="line">echo &quot;execute subsequent logic.&quot;</div><div class="line">echo &quot;finish&quot;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/11/28/Shell检查文件是否存在逻辑/" data-id="clcpwy3ea00ah5e8tzqis0h60" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Python使用多进程加速数据处理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/11/25/Python使用多进程加速数据处理/" class="article-date">
+  <time datetime="2020-11-25T15:51:22.000Z" itemprop="datePublished">2020-11-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/11/25/Python使用多进程加速数据处理/">Python使用多进程加速数据处理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在使用 Python 进行数据处理过程中，如果针对数据的操作是相互独立不依赖的，可以使用 Python 的多进程机制加速数据的处理。</p>
+<p>这里需要使用到 Python 的 <code>multiprocessing</code> 包。</p>
+<h2 id="基础用法"><a href="#基础用法" class="headerlink" title="基础用法"></a>基础用法</h2><p>先定义一个将要被分发给各个进程处理的任务方法 <code>do_job_1</code>，仅接收一个参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">def do_job_1(param1):</div><div class="line">    print(f&apos;do_job_1 with param: &#123;param1&#125;&apos;)</div><div class="line">    return param1 + 1</div></pre></td></tr></table></figure></p>
+<p>在主方法中，使用 <code>multiprocessing.Pool()</code> 生成进程池来处理上述方法，主要通过 <code>pool.imap</code> 方法实现，这个方法的第一个参数是任务函数名，第二个参数是参数数组。注意这是一个长度为 <code>n</code> 的数组，表示共有 <code>n</code> 个任务，而每个任务的处理函数只接收其中一个参数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">import nultiprocessing </div><div class="line"></div><div class="line">def main_work_1():</div><div class="line">    print(f&quot;start jobs with multiprocessing...&quot;)</div><div class="line">    with multiprocessing.Pool() as pool:</div><div class="line">        param1_array = [1, 2, 3, 4, 5]</div><div class="line">        results = list(tqdm(pool.imap(do_job_1, param1_array), total=len(param1_array)))</div><div class="line">    print(results)</div></pre></td></tr></table></figure>
+<p>输出结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">start jobs with multiprocessing...</div><div class="line">5it [00:00, 9.07it/s]</div><div class="line">do_job_1 with param: 1</div><div class="line">do_job_1 with param: 2</div><div class="line">do_job_1 with param: 3</div><div class="line">do_job_1 with param: 4</div><div class="line">do_job_1 with param: 5</div><div class="line">[2, 3, 4, 5, 6]</div></pre></td></tr></table></figure></p>
+<h2 id="多个参数"><a href="#多个参数" class="headerlink" title="多个参数"></a>多个参数</h2><p>上述方案只能用于传递一个参数，现实情况下大多数方法都需要传递多个参数，这时可以使用 <code>pool.starmap</code>方法。</p>
+<p>定义方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">def do_job_2(param1, param2, param3):</div><div class="line">    print(f&apos;do_job_2 with params: &#123;param1&#125;, &#123;param2&#125;, &#123;param3&#125;&apos;)</div><div class="line">    return param1 + 1, param2 + 2, param3 + &quot;_suffix&quot;</div></pre></td></tr></table></figure></p>
+<p>在主方法中使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">def main_work_2():</div><div class="line">    print(f&quot;start jobs with multiprocessing...&quot;)</div><div class="line">    with multiprocessing.Pool() as pool:</div><div class="line">        param1_array = [1, 2, 3, 4, 5]</div><div class="line">        param2_array = [100, 200, 300, 400, 500]</div><div class="line">        param3_array = [&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;d&apos;, &apos;e&apos;]</div><div class="line">        results = list(tqdm(pool.starmap(do_job_2, list(zip(param1_array, param2_array, param3_array))), total=len(param1_array)))</div><div class="line">    print(results)</div></pre></td></tr></table></figure></p>
+<p>需要将参数分别封装成长度为 <code>n</code> 的数组，然后通过 <code>list(zip(param1_array, param2_array, ...))</code> 的方式传入。<br>输出结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">start jobs with multiprocessing...</div><div class="line">do_job_2 with params: 1, 100, a</div><div class="line">do_job_2 with params: 2, 200, b</div><div class="line">do_job_2 with params: 3, 300, c</div><div class="line">do_job_2 with params: 4, 400, d</div><div class="line">do_job_2 with params: 5, 500, e</div><div class="line">100%|██████████| 5/5 [00:00&lt;?, ?it/s]</div><div class="line">[(2, 102, &apos;a_suffix&apos;), (3, 202, &apos;b_suffix&apos;), (4, 302, &apos;c_suffix&apos;), (5, 402, &apos;d_suffix&apos;), (6, 502, &apos;e_suffix&apos;)]</div></pre></td></tr></table></figure></p>
+<p>需要注意的是，<code>starmap</code> 方法天生是不支持 <code>tqdm</code> 装饰的，意味着无法看到进度条，如果希望能够使用 <code>tqdm</code>，可以添加下面的方法（来源于万能的 stackoverflow）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"># istarmap.py for Python &lt;3.8</div><div class="line">import multiprocessing.pool as mpp</div><div class="line"></div><div class="line">def istarmap(self, func, iterable, chunksize=1):</div><div class="line">    &quot;&quot;&quot;starmap-version of imap</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    if self._state != mpp.RUN:</div><div class="line">        raise ValueError(&quot;Pool not running&quot;)</div><div class="line"></div><div class="line">    if chunksize &lt; 1:</div><div class="line">        raise ValueError(</div><div class="line">            &quot;Chunksize must be 1+, not &#123;0:n&#125;&quot;.format(</div><div class="line">                chunksize))</div><div class="line"></div><div class="line">    task_batches = mpp.Pool._get_tasks(func, iterable, chunksize)</div><div class="line">    result = mpp.IMapIterator(self._cache)</div><div class="line">    self._taskqueue.put(</div><div class="line">        (</div><div class="line">            self._guarded_task_generation(result._job,</div><div class="line">                                          mpp.starmapstar,</div><div class="line">                                          task_batches),</div><div class="line">            result._set_length</div><div class="line">        ))</div><div class="line">    return (item for chunk in result for item in chunk)</div><div class="line">mpp.Pool.istarmap = istarmap</div></pre></td></tr></table></figure></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://stackoverflow.com/questions/57354700/starmap-combined-with-tqdm" target="_blank" rel="external">https://stackoverflow.com/questions/57354700/starmap-combined-with-tqdm</a><br><a href="https://blog.csdn.net/qq_15969343/article/details/84672527" target="_blank" rel="external">https://blog.csdn.net/qq_15969343/article/details/84672527</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/11/25/Python使用多进程加速数据处理/" data-id="clcpwy3e3009w5e8tbwoutele" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Numpy使用花式索引操作数组" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/11/24/Numpy使用花式索引操作数组/" class="article-date">
+  <time datetime="2020-11-24T10:15:13.000Z" itemprop="datePublished">2020-11-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/11/24/Numpy使用花式索引操作数组/">Numpy使用花式索引操作数组</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在使用 numpy 进行数组操作时，有时候可能需要操作其中的一个区块。比如一个 <code>4x5</code> 的矩阵，共有20个元素，我们其实只关注第 <code>1,3</code> 行和第 <code>2,4</code> 列有元素（共4个），这种情况下可以通过花式索引（Fancy Index）操作完成。  </p>
+<h2 id="读取数组"><a href="#读取数组" class="headerlink" title="读取数组"></a>读取数组</h2><p>首先声明一个全量数组：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">array_a = np.zeros((4, 5))</div><div class="line">for i in range(0, 4):</div><div class="line">    for j in range(0, 5):</div><div class="line">        array_a[i, j] = int(str(i+1) + str(j+1))</div><div class="line">print(array_a)</div></pre></td></tr></table></figure></p>
+<p>可以获得 <code>array_a</code> 的内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[[11. 12. 13. 14. 15.]</div><div class="line"> [21. 22. 23. 24. 25.]</div><div class="line"> [31. 32. 33. 34. 35.]</div><div class="line"> [41. 42. 43. 44. 45.]]</div></pre></td></tr></table></figure></p>
+<p>如果我们只希望获取其中第 <code>1,3</code> 行和第 <code>2,4</code> 列的内容，肯定需要利用 <code>[1,3]</code> 和 <code>[2,4]</code> 索引数组信息。</p>
+<p>如果直接使用下面的语句，获得的内容可能和预期有差别，得到的是一个一维数组，保存的是两个索引数组一一对应得到的元素，即第1行第2列、第3行第4列：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">array_b = array_a[[1,3],[2,4]]</div><div class="line">print(array_b)</div><div class="line"># [23. 45.]</div></pre></td></tr></table></figure></p>
+<p>要想获得一个区块，一种方式是两步法，先取出所有要的行，再取出这些行里所有需要的列：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">array_b = array_a[[1,3]][:,[2,4]]</div><div class="line">print(array_b)</div></pre></td></tr></table></figure></p>
+<p>可以获得子区块的数组：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[[23. 25.]</div><div class="line"> [43. 45.]]</div></pre></td></tr></table></figure></p>
+<p>另一种方式是直接使用 <code>np.ix_</code> 方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">array_b = array_a[np.ix_([1,3], [2,4])]</div><div class="line">print(array_b)</div></pre></td></tr></table></figure></p>
+<p>获得：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[[23. 25.]</div><div class="line"> [43. 45.]]</div></pre></td></tr></table></figure></p>
+<h2 id="修改数组"><a href="#修改数组" class="headerlink" title="修改数组"></a>修改数组</h2><p>之前提到了两种方式访问数组，但如果需要对上述感兴趣的区域进行修改，只能使用 <code>np.ix_</code> 方法的那一种。</p>
+<p>如果执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">array_a[[1,3]][:,[2,4]] = np.array([[923, 925], [943, 945]])</div><div class="line">print(array_a)</div></pre></td></tr></table></figure></p>
+<p>发现 <code>array_a</code> 的内容并没有被修改：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[[11. 12. 13. 14. 15.]</div><div class="line"> [21. 22. 23. 24. 25.]</div><div class="line"> [31. 32. 33. 34. 35.]</div><div class="line"> [41. 42. 43. 44. 45.]]</div></pre></td></tr></table></figure></p>
+<p>这是因为花式索引总是拷贝数据到一个新的数组，当我们使用 <code>array_a[[1,3]][:,[2,4]]</code> 操作时，已经不是操作原 <code>array_a</code> 数组了。</p>
+<p>不过使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">array_a[np.ix_([1, 3], [2, 4])] = np.array([[923, 925], [943, 945]])</div><div class="line">print(array_a)</div></pre></td></tr></table></figure></p>
+<p>可以发现 <code>array_a</code> 的元素被修改了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[[ 11. 12. 13. 14. 15.]</div><div class="line"> [ 21. 22. 923. 24. 925.]</div><div class="line"> [ 31. 32. 33. 34. 35.]</div><div class="line"> [ 41. 42. 943. 44. 945.]]</div></pre></td></tr></table></figure></p>
+<p>这是因为通过 <code>np.ix_([1, 3], [2, 4])</code> 获取的结果对 <code>array_a</code> 进行操作，实际上进行的是切片操作，因此可以对原数组完成修改。</p>
+<p>借助 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ix_.html" target="_blank" rel="external">文档</a> 可以知道，<code>np.ix_</code> 方法根据输入的序列构建了一个网格（类似于 <code>meshgrid</code> 方法），输出一个 <code>Tuple</code>，而 numpy 数组根据这个网格能够快速切片出想要的区域。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如果希望对数组的某些区块进行操作，可以使用花式索引。但如果要修改原数组的内容，需要借助 <code>np.ix_</code> 方法</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://pda.readthedocs.io/en/latest/chp4.html" target="_blank" rel="external">https://pda.readthedocs.io/en/latest/chp4.html</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/11/24/Numpy使用花式索引操作数组/" data-id="clcpwy3ct007l5e8tr72xlr6l" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Numpy/">Numpy</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-合并多个Excel文件到一个Excel工作簿" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/11/11/合并多个Excel文件到一个Excel工作簿/" class="article-date">
+  <time datetime="2020-11-11T07:59:52.000Z" itemprop="datePublished">2020-11-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/11/11/合并多个Excel文件到一个Excel工作簿/">合并多个Excel文件到一个Excel工作簿</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在批量处理 Excel 文件的过程中，可能会遇到这样的需求：将多个 Excel 文件内容合并到一个 Excel 文件中，方便后续处理。<br>由于 Microsoft 相对封闭的生态环境，使用外部代码直接读取 Excel 文件不太容易。可以使用兼容性较好的 VB 脚本语言，在 Excel 的宏命令运行环境中执行相关逻辑。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>首先明确一个 Excel 中的概念，<code>工作薄</code> 指的是一个 Excel 文件，是一系列 <code>工作表</code> 的集合；而 <code>工作表</code> 是一个 Excel 文件中一个 Sheet。一个 Excel 文件是一个 <code>工作薄</code>，可能包含多个 <code>工作表</code>。</p>
+<p>为了合并多个 Excel 文件（多个 Excel 工作薄），其中每个 Excel 文件可能包含多个工作表，需要都合并到同一个 Excel 文件中。</p>
+<p>可以使用下面的代码完成这个功能：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">&apos;Created by ...</div><div class="line">Sub Books2Sheets()</div><div class="line">Dim fd As FileDialog</div><div class="line">Set fd = Application.FileDialog(msoFileDialogFilePicker)</div><div class="line">Dim newwb As Workbook</div><div class="line">Set newwb = Workbooks.Add</div><div class="line">With fd</div><div class="line">If .Show = -1 Then</div><div class="line">Dim vrtSelectedItem As Variant</div><div class="line">Dim i As Integer</div><div class="line">i = 1</div><div class="line">For Each vrtSelectedItem In .SelectedItems</div><div class="line">Dim tempwb As Workbook</div><div class="line">Set tempwb = Workbooks.Open(vrtSelectedItem)</div><div class="line">    zd = tempwb.Worksheets.Count</div><div class="line">    For Each ws In tempwb.Sheets</div><div class="line">        ws.Copy Before:=newwb.Worksheets(i)</div><div class="line">        newwb.Worksheets(i).Name = VBA.Replace(tempwb.Name, &quot;.xlsx&quot;, &quot;&quot;) + ws.Name</div><div class="line">        i = i + 1</div><div class="line">        Next</div><div class="line">tempwb.Close SaveChanges:=False</div><div class="line">Next vrtSelectedItem</div><div class="line">End If</div><div class="line">End With</div><div class="line">Set fd = Nothing</div><div class="line">End Sub</div></pre></td></tr></table></figure></p>
+<ul>
+<li>操作步骤1：打开一个全新的 Excel 文件；</li>
+<li>操作步骤2：在下方工作表标签位置右键点击 <code>Shee1</code>，在弹出菜单中选择 <code>查看代码</code>；</li>
+<li>操作步骤3：把上述代码拷贝到弹出的文本编辑框中，点击运行按钮；</li>
+<li>操作步骤4：运行程序后，会弹出对话框让选择文件，此时选择要合并的文件即可（注意这些文件不能是打开状态）</li>
+<li>操作步骤5：点击确认。</li>
+</ul>
+<p>经过上述步骤，所有选择的 Excel 文件中的工作表都被拷贝到了一个新的文件中。<br>后续在这个新的合并文件中操作即可。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/27783391" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/27783391</a></li>
+<li><a href="https://www.zhihu.com/question/20366713" target="_blank" rel="external">https://www.zhihu.com/question/20366713</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/11/11/合并多个Excel文件到一个Excel工作簿/" data-id="clcpwy3i500jg5e8t0w0fpphr" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/VB/">VB</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Linux环境su到不能登录的用户" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/11/02/Linux环境su到不能登录的用户/" class="article-date">
+  <time datetime="2020-11-02T12:39:02.000Z" itemprop="datePublished">2020-11-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/11/02/Linux环境su到不能登录的用户/">Linux环境su到不能登录的用户</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在现实开发过程中有可能需要测试某个账户对于执行某条命令是否有足够的权限，最直接的方式自然是直接作为这个用户登录尝试执行。   </p>
+<p>但有的时候会遇到，该用户是系统创建的且不具备登录权限的情况，比如 Nginx 的 <code>www-data</code> 等。</p>
+<p>普通情况下，使用 <code>su</code> 命令登录到某个账号可以用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">su [username]</div></pre></td></tr></table></figure>
+<p>或者：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">sudo su [username]</div></pre></td></tr></table></figure>
+<p>前者需要输入目标账号的密码，后者需要当前账户拥有 ROOT 权限且输入当前账户的密码。  </p>
+<p>但如果直接执行 <code>sudo su www-data</code> 是无法切换的，会提示 <code>This account is currently not available</code>。</p>
+<p>这时候可以使用 <code>-s</code> 参数，表示用特定的 SHELL 方式登录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">sudo su www-data -s /bin/bash</div></pre></td></tr></table></figure>
+<p>即可切换过去。   </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/11/02/Linux环境su到不能登录的用户/" data-id="clcpwy3cb00695e8tf27u7zao" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Python使用argparse传递参数" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/10/21/Python使用argparse传递参数/" class="article-date">
+  <time datetime="2020-10-21T08:25:56.000Z" itemprop="datePublished">2020-10-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/10/21/Python使用argparse传递参数/">Python使用argparse传递参数</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p><code>argparse</code> 是在撰写 Python 代码时最常用的一个库，它能够方便地解析命令行参数。使用 <code>argparse</code> 而不是直接将一些输入参数定义在代码中，能够避免在版本库中引入一些路径相关的敏感信息。</p>
+<h2 id="主要使用方式"><a href="#主要使用方式" class="headerlink" title="主要使用方式"></a>主要使用方式</h2><p>通常会根据以下方式获取命令行参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">def parse_args():</div><div class="line">    import argparse</div><div class="line">    parser = argparse.ArgumentParser()</div><div class="line">    parser.add_argument(&apos;--load_path&apos;, type=str)</div><div class="line">    # ...</div><div class="line">    args = parser.parse_args()</div><div class="line">    return args</div><div class="line"></div><div class="line">if __name__ == &apos;__main__&apos;:</div><div class="line">    args = parse_args()</div><div class="line">    # visit command line parameters by `args` variable</div><div class="line">    print(args.load_path)</div><div class="line">    # ...</div></pre></td></tr></table></figure></p>
+<p>可以根据实际需求，不断通过 <code>parser.add_argument()</code> 方法添加预定义的命令行参数，通过 <code>args.xxx</code> 访问对应参数。</p>
+<h2 id="参数主要选项"><a href="#参数主要选项" class="headerlink" title="参数主要选项"></a>参数主要选项</h2><h4 id="参数名称"><a href="#参数名称" class="headerlink" title="参数名称"></a>参数名称</h4><p>不带 <code>-</code> 前缀符号的是位置参数，在使用时不需要声明参数名称，输入的值会自动被解析到对应位置的参数变量中。<br>带  <code>-</code> 和 <code>--</code> 前缀符号的是可选参数，在使用时需要使用 <code>[变量名称] [变量值]</code> 或 <code>[变量名称]=[变量值]</code> 的方式。<br>比如下面这段代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">parser.add_argument(&apos;a1&apos;, type=str)</div><div class="line">parser.add_argument(&apos;-a2&apos;, type=str)</div><div class="line">parser.add_argument(&apos;--a3&apos;, type=str)</div></pre></td></tr></table></figure></p>
+<p>在输入 <code>python xxx.py a1_v -a2=a2_v --a3 a3_v</code> 的情况下，对应三个变量的值为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">a1_v</div><div class="line">a2_v</div><div class="line">a3_v</div></pre></td></tr></table></figure></p>
+<p>而 <code>python xxx.py -a2=a2_v --a3 a3_v</code>，<code>python xxx.py a1_v a2_v --a3 a3_v</code> 都不符合规则，将抛出 <code>unrecognized arguments</code> 异常。</p>
+<h4 id="参数类型"><a href="#参数类型" class="headerlink" title="参数类型"></a>参数类型</h4><p>对于 <code>add_argument()</code> 方法，有关键字参数 <code>type</code>，由于在命令行输入时默认都是字符串类型，可以通过该方法指定输入参数的类型。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"># ...</div><div class="line">parser.add_argument(&apos;--a1&apos;, type=str)</div><div class="line">parser.add_argument(&apos;--a2&apos;, type=int)</div><div class="line">parser.add_argument(&apos;--a3&apos;, type=float)</div><div class="line"># ...</div><div class="line"></div><div class="line"># ...</div><div class="line">print(f&apos;type of a1 is &#123;type(args.a1)&#125;&apos;)</div><div class="line">print(f&apos;type of a2 is &#123;type(args.a2)&#125;&apos;)</div><div class="line">print(f&apos;type of a3 is &#123;type(args.a3)&#125;&apos;)</div></pre></td></tr></table></figure></p>
+<p>获得的结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ python argparse_demo.py --a1 1 --a2 1 --a3 1</div><div class="line">type of a1 is &lt;class &apos;str&apos;&gt;</div><div class="line">type of a2 is &lt;class &apos;int&apos;&gt;</div><div class="line">type of a3 is &lt;class &apos;float&apos;&gt;</div></pre></td></tr></table></figure></p>
+<h4 id="默认值"><a href="#默认值" class="headerlink" title="默认值"></a>默认值</h4><p>通过 <code>default</code> 关键字参数，可以设定未输入该变量时的默认值。</p>
+<h4 id="参数解释"><a href="#参数解释" class="headerlink" title="参数解释"></a>参数解释</h4><p>通过 <code>help</code> 关键字参数，可以设定该参数的含义解释。</p>
+<h4 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h4><ul>
+<li>使用 <code>choices</code> 可以给出参数的候选值列表；</li>
+<li>使用 <code>required</code> 声明这是否为必须给定的参数；</li>
+<li>使用 <code>dest</code> 相关于把该位置参数关联到一个特定的名字，可以灵活控制；</li>
+<li>使用 <code>action</code> 指定操作，默认是 <code>store</code> 表示存储，常用的还有用 <code>store_true</code> 表示布尔型参数的操作；</li>
+<li>使用 <code>nargs</code> 灵活控制这个参数消耗的命令行参数个数。</li>
+</ul>
+<h2 id="使用场景示例"><a href="#使用场景示例" class="headerlink" title="使用场景示例"></a>使用场景示例</h2><h4 id="字符串参数"><a href="#字符串参数" class="headerlink" title="字符串参数"></a>字符串参数</h4><p>最简单的字符串参数，不需要太多修饰：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">parser.add_argument(&apos;--a1&apos;, type=str, default=&apos;&apos;, help=&apos;a string variable&apos;)</div></pre></td></tr></table></figure></p>
+<h4 id="数值参数"><a href="#数值参数" class="headerlink" title="数值参数"></a>数值参数</h4><p>数值参数需要指定 <code>type</code> 变量，让程序正确解析：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">parser.add_argument(&apos;--a2&apos;, type=int, default=0, help=&apos;a int variable&apos;)</div><div class="line">parser.add_argument(&apos;--a3&apos;, type=float, default=1.0, help=&apos;a float variable&apos;)</div></pre></td></tr></table></figure></p>
+<h4 id="枚举值参数"><a href="#枚举值参数" class="headerlink" title="枚举值参数"></a>枚举值参数</h4><p>通过指定 <code>choices</code> 来限定输入参数范围：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">parser.add_argument(&apos;--a4&apos;, type=int, choices=[1, 2, 4], help=&apos;a int value from candidate set &#123;1, 2, 4&#125;&apos;)</div></pre></td></tr></table></figure></p>
+<p>如果输入其它数值比如 <code>3</code>，则会抛出 <code>invalid choice</code> 异常，提示用户正确输入参数。</p>
+<h4 id="布尔值参数"><a href="#布尔值参数" class="headerlink" title="布尔值参数"></a>布尔值参数</h4><p>可以通过 <code>type=bool</code> 声明一个参数为布尔类型：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">parser.add_argument(&apos;--a5&apos;, type=bool, default=False, help=&apos;a bool type variable.&apos;)</div></pre></td></tr></table></figure></p>
+<p>但在这种情况下，不管输入啥都会被解析成 <code>True</code>（因为任何字符串都是 <code>True</code>），但不跟着一个参数值又会抛错。</p>
+<p>在这种场景下可以简化成下面这种方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">parser.add_argument(&apos;--a6&apos;, action=&apos;store_true&apos;, help=&apos;a bool type variable with store_true&apos;)</div></pre></td></tr></table></figure></p>
+<p>这样在使用 <code>--a6</code> 参数时，可以直接：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python xxx.py --a6</div></pre></td></tr></table></figure></p>
+<p>此时 <code>args.a6</code> 的值为 <code>True</code>，否则为 <code>False</code>。</p>
+<h4 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h4><p>相对比较复杂的是如何在命令行中输入一个列表，此时需要使用 <code>nargs</code> 声明该参数的值的数量：</p>
+<ul>
+<li>nargs=’*’ 表示任意个参数</li>
+<li>nargs=’+’ 表示1个或多个参数</li>
+<li>nargs=n 表示n个参数</li>
+</ul>
+<p>具体使用方式为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">parser.add_argument(&apos;--a7&apos;, nargs=&apos;+&apos;, default=[], help=&apos;an argument of list type&apos;)</div><div class="line">parser.add_argument(&apos;--a8&apos;, type=int, nargs=&apos;+&apos;, default=[], help=&apos;an argument of list int type&apos;)</div></pre></td></tr></table></figure></p>
+<p>使用命令行输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python xxx.py --a7 1 2 3 --a8 1 2 3</div></pre></td></tr></table></figure></p>
+<p>获得的情况是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">a7=[&apos;1&apos;, &apos;2&apos;, &apos;3&apos;]</div><div class="line">a8=[1, 2, 3]</div></pre></td></tr></table></figure></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>文章简单总结了 <code>argparse</code> 库在 Python 代码中的主要应用，根据不同的使用场景列举了相关的代码示例。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://blog.csdn.net/xxzhangx/article/details/85321422" target="_blank" rel="external">https://blog.csdn.net/xxzhangx/article/details/85321422</a></li>
+<li><a href="https://www.itranslater.com/qa/details/2111392594507858944" target="_blank" rel="external">https://www.itranslater.com/qa/details/2111392594507858944</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/10/21/Python使用argparse传递参数/" data-id="clcpwy3dt009h5e8t37vgl6kt" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Python使用concurrent并发编程" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/10/17/Python使用concurrent并发编程/" class="article-date">
+  <time datetime="2020-10-17T14:52:47.000Z" itemprop="datePublished">2020-10-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/10/17/Python使用concurrent并发编程/">Python使用concurrent并发编程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在 Python 编程中如果需要使用到多线程并发操作，一种简单的操作是使用 <code>concurrent</code> 库。</p>
+<h2 id="基本示例"><a href="#基本示例" class="headerlink" title="基本示例"></a>基本示例</h2><p>多线程的关键在于任务的分发与结果收集，因此最关键的部分是定义每个线程需要执行的方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">from concurrent.futures import ThreadPoolExecutor</div><div class="line">import time</div><div class="line"></div><div class="line">def task(n, a, b):</div><div class="line">    print(f&apos;task #&#123;n&#125; is running&apos;)</div><div class="line">    time.sleep(2)</div><div class="line">    return a + b</div><div class="line"></div><div class="line">if __name__ == &quot;__main__&quot;:</div><div class="line">    t0 = time.time()</div><div class="line">    with ThreadPoolExecutor(max_workers = 5) as executor:</div><div class="line">        future_list = []</div><div class="line">        for i in range(0, 5):</div><div class="line">            future = executor.submit(task, i, 2*i, 3*i)</div><div class="line">            future_list.append(future)</div><div class="line">    result_list = [f.result() for f in future_list]</div><div class="line">    print(result_list)</div><div class="line">    print(f&apos;cost time: &#123;time.time() - t0&#125;&apos;)</div></pre></td></tr></table></figure></p>
+<p>执行结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">task #0 is running</div><div class="line">task #1 is running</div><div class="line">task #2 is running</div><div class="line">task #3 is running</div><div class="line">task #4 is running</div><div class="line">[0, 5, 10, 15, 20]</div><div class="line">cost time: 2.006157159805298</div></pre></td></tr></table></figure></p>
+<h2 id="使用map"><a href="#使用map" class="headerlink" title="使用map"></a>使用map</h2><p>也可以使用 <code>map</code> 方法，和 <code>submit</code> 的区别主要有几点：<br>1、<code>map</code> 保证结果是有序的，而 <code>submit</code> 输出的顺序可能是乱的；<br>2、如果每个线程执行的任务函数是相同的，可以简化成 <code>map</code>；如果各个线程不一样，或者执行过程中可能有异常，使用 <code>submit</code> 会比较清晰。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">def method_in_thread(uid, param_a, param_b):</div><div class="line">    print(f&apos;method in thread #&#123;uid&#125;&apos;)</div><div class="line">    sum = param_a + param_b</div><div class="line">    time.sleep(2)</div><div class="line">    return sum</div></pre></td></tr></table></figure>
+<p>在主进程中，可以使用 <code>ThreadPoolExecutor</code> 编排各个线程的任务：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">from concurrent.futures import ThreadPoolExecutor</div><div class="line">import time</div><div class="line"></div><div class="line">def main():</div><div class="line">    list_a = [1, 2, 3, 4, 5]</div><div class="line">    list_b = [100, 200, 300, 400, 500]</div><div class="line"></div><div class="line">    # serially</div><div class="line">    t0 = time.time()</div><div class="line">    result = [method_in_thread(i, list_a[i], list_b[i]) for i in range(0, len(list_a))]</div><div class="line">    print(result)</div><div class="line">    print(f&apos;serially executing methods cost &#123;time.time() - t0&#125;s.&apos;)</div><div class="line"></div><div class="line">    # concurrently</div><div class="line">    t0 = time.time()</div><div class="line">    thread_pool_size = len(list_a)</div><div class="line">    with ThreadPoolExecutor(thread_pool_size) as executor:</div><div class="line">        args = [[i, list_a[i], list_b[i]] for i in range(0, thread_pool_size)]</div><div class="line">        result = executor.map(lambda p: method_in_thread(*p), args)</div><div class="line">        result = list(result)</div><div class="line">    print(result)</div><div class="line">    print(f&apos;concurrently executing methods cost &#123;time.time() - t0&#125;s.&apos;)</div><div class="line"></div><div class="line">if __name__ == &quot;__main__&quot;:</div><div class="line">    main()</div></pre></td></tr></table></figure></p>
+<p>输出结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">method in thread #0</div><div class="line">method in thread #1</div><div class="line">method in thread #2</div><div class="line">method in thread #3</div><div class="line">method in thread #4</div><div class="line">[101, 202, 303, 404, 505]</div><div class="line">serially executing methods cost 10.013130903244019s.</div><div class="line">method in thread #0</div><div class="line">method in thread #1</div><div class="line">method in thread #2</div><div class="line">method in thread #3</div><div class="line">method in thread #4</div><div class="line">[101, 202, 303, 404, 505]</div><div class="line">concurrently executing methods cost 2.0045928955078125s.</div></pre></td></tr></table></figure></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://docs.python.org/3/library/concurrent.futures.html" target="_blank" rel="external">https://docs.python.org/3/library/concurrent.futures.html</a></li>
+<li><a href="https://www.cnblogs.com/zhang293/p/7954353.html" target="_blank" rel="external">https://www.cnblogs.com/zhang293/p/7954353.html</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/10/17/Python使用concurrent并发编程/" data-id="clcpwy3du009k5e8t9vu8bbnv" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-使用Matplotlib绘制三维点图" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/10/12/使用Matplotlib绘制三维点图/" class="article-date">
+  <time datetime="2020-10-12T07:30:56.000Z" itemprop="datePublished">2020-10-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/10/12/使用Matplotlib绘制三维点图/">使用Matplotlib绘制三维点图</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>使用 <code>matplotlib</code> 可以绘制三维空间的点图。</p>
+<p>可以使用下述代码绘制基础的三维点图：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">fig = plt.figure()</div><div class="line">ax = fig.gca(projection=&apos;3d&apos;)</div><div class="line">x = np.linspace(1,100, 10)</div><div class="line">y = np.linspace(1,100, 10)</div><div class="line">z = np.linspace(1, 100, 10)</div><div class="line">xv, yv, zv = np.meshgrid(x, y, z)</div><div class="line">surf = ax.scatter3D(xv, yv, zv, c=color_map)</div><div class="line">plot.show()</div></pre></td></tr></table></figure></p>
+<img src="/2020/10/12/使用Matplotlib绘制三维点图/blog-hexo/2020/10/12/使用Matplotlib绘制三维点图/1.png" alt="生成效果" title="生成效果">
+<p>如果为三维空间中每个坐标点，根据其坐标信息生成颜色值：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">from mpl_toolkits.mplot3d import Axes3D</div><div class="line">import matplotlib.pyplot as plt</div><div class="line">import numpy as np</div><div class="line"></div><div class="line">def build_hex_color_str(r, g, b):</div><div class="line">    def remove_0x_prefix_padding_0(hex_value):</div><div class="line">        assert isinstance(hex_value, str)</div><div class="line">        res = hex_value.replace(&quot;0x&quot;, &quot;&quot;)</div><div class="line">        if len(res) &lt; 2:</div><div class="line">            res = &quot;0&quot; + res</div><div class="line">        return res</div><div class="line"></div><div class="line">    r, g, b = int(r), int(g), int(b)</div><div class="line">    r_v = remove_0x_prefix_padding_0(hex(r))</div><div class="line">    g_v = remove_0x_prefix_padding_0(hex(g))</div><div class="line">    b_v = remove_0x_prefix_padding_0(hex(b))</div><div class="line">    return f&apos;#&#123;r_v&#125;&#123;g_v&#125;&#123;b_v&#125;&apos;</div><div class="line"></div><div class="line">def draw():</div><div class="line">    fig = plt.figure()</div><div class="line">    ax = fig.gca(projection=&apos;3d&apos;)</div><div class="line">    x = np.linspace(0, 255, 30)</div><div class="line">    y = np.linspace(0, 255, 30)</div><div class="line">    z = np.linspace(0, 255, 30)</div><div class="line">    xv, yv, zv = np.meshgrid(x, y, z)</div><div class="line">    color_map = [build_hex_color_str(xv.reshape(-1)[index], yv.reshape(-1)[index], zv.reshape(-1)[index]) for index in range(0, 30*30*30)]</div><div class="line">    surf = ax.scatter3D(xv, yv, zv, c=color_map)</div><div class="line">    plt.show()</div><div class="line"></div><div class="line">if __name__ == &apos;__main__&apos;:</div><div class="line">    draw()</div></pre></td></tr></table></figure></p>
+<p>可以得到结果：<br><img src="/2020/10/12/使用Matplotlib绘制三维点图/blog-hexo/2020/10/12/使用Matplotlib绘制三维点图/2.png" alt="生成效果" title="生成效果"></p>
+<p>使用图表弹出框自带的工具，还可以拖拽查看。</p>
+<img src="/2020/10/12/使用Matplotlib绘制三维点图/blog-hexo/2020/10/12/使用Matplotlib绘制三维点图/3.png" alt="生成效果" title="生成效果">
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/10/12/使用Matplotlib绘制三维点图/" data-id="clcpwy3fz00ee5e8tjipdmhny" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Matplotlib/">Matplotlib</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/5/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/4/">4</a><a class="page-number" href="/blog-hexo/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/blog-hexo/page/7/">7</a><a class="page-number" href="/blog-hexo/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/24/">24</a><a class="extend next" rel="next" href="/blog-hexo/page/7/">weiter &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Kategorien</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工作/">工作</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/科研/">科研</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/3D/">3D</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Alembic/">Alembic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Anime-js/">Anime.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Blender/">Blender</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CMake/">CMake</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/COCO/">COCO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/COCOAPI/">COCOAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CentOS/">CentOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Code-Coverage/">Code Coverage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Composer/">Composer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Cookie/">Cookie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Debug/">Debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/DeepLearning/">DeepLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Django/">Django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FFMpeg/">FFMpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FIGlet/">FIGlet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faiss/">Faiss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FastAPI/">FastAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Flask/">Flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Flyway/">Flyway</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Gem/">Gem</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git-Bash/">Git Bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/GitHub/">GitHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/GitLab/">GitLab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Go/">Go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JdbcTemplate/">JdbcTemplate</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Loguru/">Loguru</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MS-COCO/">MS COCO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Markdown/">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Math/">Math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Matplotlib/">Matplotlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Maven/">Maven</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Memory/">Memory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mkdocs/">Mkdocs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MyBatis/">MyBatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MyBatisPlus/">MyBatisPlus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mybatis/">Mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Noise/">Noise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Numpy/">Numpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nvidia-Driver/">Nvidia Driver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oh-My-Zsh/">Oh-My-Zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenCV/">OpenCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PDF/">PDF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Paper-js/">Paper.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pip/">Pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PosixPath/">PosixPath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PyTorch/">PyTorch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PyYAML/">PyYAML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pythonenv/">Pythonenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/RLE/">RLE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ruby/">Ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/RuleEngine/">RuleEngine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Rust/">Rust</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SQLAlchemy/">SQLAlchemy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring-Boot/">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SpringCloud/">SpringCloud</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Supervisor/">Supervisor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Swagger/">Swagger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Swagger-UI/">Swagger-UI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/TensorRT/">TensorRT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Torch/">Torch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/TorchServe/">TorchServe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VB/">VB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VS-Code/">VS Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VSCode/">VSCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Visual-Studio/">Visual Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue-js/">Vue.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vuetify/">Vuetify</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/YAML/">YAML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/axios/">axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/base64/">base64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/bpy/">bpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/bumpversion/">bumpversion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/conda/">conda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/cookiecutter/">cookiecutter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/coverage/">coverage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/crontab/">crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/faiss/">faiss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastapi/">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastjson/">fastjson</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/heatmap-js/">heatmap.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/hexdump/">hexdump</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/interact-js/">interact.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/iptables/">iptables</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/libfacedetection/">libfacedetection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/nvidia/">nvidia</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/obj/">obj</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/peewee/">peewee</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/pip/">pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/pytest/">pytest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/scp/">scp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/sed/">sed</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/setuptools/">setuptools</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ssh/">ssh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/torchvision/">torchvision</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/verdaccio/">verdaccio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/vim/">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/virtualenv/">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/xargs/">xargs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/yacs/">yacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/yaml/">yaml</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/zip/">zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/zsh/">zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/blog-hexo/tags/3D/" style="font-size: 10px;">3D</a> <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Alembic/" style="font-size: 10px;">Alembic</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 11.43px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/Blender/" style="font-size: 10px;">Blender</a> <a href="/blog-hexo/tags/C/" style="font-size: 11.43px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CMake/" style="font-size: 10px;">CMake</a> <a href="/blog-hexo/tags/COCO/" style="font-size: 10px;">COCO</a> <a href="/blog-hexo/tags/COCOAPI/" style="font-size: 10px;">COCOAPI</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 10.71px;">CSharp</a> <a href="/blog-hexo/tags/CentOS/" style="font-size: 10px;">CentOS</a> <a href="/blog-hexo/tags/Code-Coverage/" style="font-size: 10px;">Code Coverage</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 10.71px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Cookie/" style="font-size: 10.71px;">Cookie</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Debug/" style="font-size: 10px;">Debug</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/DeepLearning/" style="font-size: 10px;">DeepLearning</a> <a href="/blog-hexo/tags/Django/" style="font-size: 10px;">Django</a> <a href="/blog-hexo/tags/Docker/" style="font-size: 10.71px;">Docker</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.14px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10.71px;">Excel</a> <a href="/blog-hexo/tags/FFMpeg/" style="font-size: 10px;">FFMpeg</a> <a href="/blog-hexo/tags/FIGlet/" style="font-size: 10px;">FIGlet</a> <a href="/blog-hexo/tags/Faiss/" style="font-size: 10px;">Faiss</a> <a href="/blog-hexo/tags/FastAPI/" style="font-size: 10px;">FastAPI</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Flask/" style="font-size: 10px;">Flask</a> <a href="/blog-hexo/tags/Flyway/" style="font-size: 10px;">Flyway</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15px;">Git</a> <a href="/blog-hexo/tags/Git-Bash/" style="font-size: 10px;">Git Bash</a> <a href="/blog-hexo/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/blog-hexo/tags/GitLab/" style="font-size: 10px;">GitLab</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Go/" style="font-size: 10.71px;">Go</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10.71px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 12.14px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 16.43px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 12.14px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.14px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.57px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 17.86px;">Linux</a> <a href="/blog-hexo/tags/Loguru/" style="font-size: 10px;">Loguru</a> <a href="/blog-hexo/tags/MS-COCO/" style="font-size: 10px;">MS COCO</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/blog-hexo/tags/Math/" style="font-size: 10.71px;">Math</a> <a href="/blog-hexo/tags/Matplotlib/" style="font-size: 10px;">Matplotlib</a> <a href="/blog-hexo/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/blog-hexo/tags/Memory/" style="font-size: 10px;">Memory</a> <a href="/blog-hexo/tags/Mkdocs/" style="font-size: 10px;">Mkdocs</a> <a href="/blog-hexo/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/blog-hexo/tags/MyBatisPlus/" style="font-size: 10px;">MyBatisPlus</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 10.71px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10.71px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.43px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Noise/" style="font-size: 10px;">Noise</a> <a href="/blog-hexo/tags/Numpy/" style="font-size: 10px;">Numpy</a> <a href="/blog-hexo/tags/Nvidia-Driver/" style="font-size: 10px;">Nvidia Driver</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenCV/" style="font-size: 10.71px;">OpenCV</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 11.43px;">Oracle</a> <a href="/blog-hexo/tags/PDF/" style="font-size: 10px;">PDF</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Paper-js/" style="font-size: 10px;">Paper.js</a> <a href="/blog-hexo/tags/Pip/" style="font-size: 10px;">Pip</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PosixPath/" style="font-size: 10px;">PosixPath</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 10.71px;">PowerShell</a> <a href="/blog-hexo/tags/PyTorch/" style="font-size: 10.71px;">PyTorch</a> <a href="/blog-hexo/tags/PyYAML/" style="font-size: 10px;">PyYAML</a> <a href="/blog-hexo/tags/Python/" style="font-size: 19.29px;">Python</a> <a href="/blog-hexo/tags/Pythonenv/" style="font-size: 10px;">Pythonenv</a> <a href="/blog-hexo/tags/RLE/" style="font-size: 10px;">RLE</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SQLAlchemy/" style="font-size: 10px;">SQLAlchemy</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12.86px;">SSH</a> <a href="/blog-hexo/tags/Shell/" style="font-size: 14.29px;">Shell</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 13.57px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Supervisor/" style="font-size: 10px;">Supervisor</a> <a href="/blog-hexo/tags/Swagger/" style="font-size: 10px;">Swagger</a> <a href="/blog-hexo/tags/Swagger-UI/" style="font-size: 10px;">Swagger-UI</a> <a href="/blog-hexo/tags/TensorRT/" style="font-size: 10px;">TensorRT</a> <a href="/blog-hexo/tags/Terminal/" style="font-size: 10px;">Terminal</a> <a href="/blog-hexo/tags/Torch/" style="font-size: 10px;">Torch</a> <a href="/blog-hexo/tags/TorchServe/" style="font-size: 10.71px;">TorchServe</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 11.43px;">Ubuntu</a> <a href="/blog-hexo/tags/VB/" style="font-size: 10px;">VB</a> <a href="/blog-hexo/tags/VS-Code/" style="font-size: 10.71px;">VS Code</a> <a href="/blog-hexo/tags/VSCode/" style="font-size: 10.71px;">VSCode</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15.71px;">Vue</a> <a href="/blog-hexo/tags/Vue-js/" style="font-size: 10px;">Vue.js</a> <a href="/blog-hexo/tags/Vuetify/" style="font-size: 10px;">Vuetify</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12.86px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/YAML/" style="font-size: 10.71px;">YAML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 10.71px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/bpy/" style="font-size: 10px;">bpy</a> <a href="/blog-hexo/tags/bumpversion/" style="font-size: 10px;">bumpversion</a> <a href="/blog-hexo/tags/conda/" style="font-size: 10.71px;">conda</a> <a href="/blog-hexo/tags/cookiecutter/" style="font-size: 10px;">cookiecutter</a> <a href="/blog-hexo/tags/coverage/" style="font-size: 10px;">coverage</a> <a href="/blog-hexo/tags/crontab/" style="font-size: 10px;">crontab</a> <a href="/blog-hexo/tags/faiss/" style="font-size: 10px;">faiss</a> <a href="/blog-hexo/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/ffmpeg/" style="font-size: 10px;">ffmpeg</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10.71px;">grep</a> <a href="/blog-hexo/tags/heatmap-js/" style="font-size: 10px;">heatmap.js</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/iptables/" style="font-size: 10.71px;">iptables</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10.71px;">npm</a> <a href="/blog-hexo/tags/nvidia/" style="font-size: 10px;">nvidia</a> <a href="/blog-hexo/tags/obj/" style="font-size: 10px;">obj</a> <a href="/blog-hexo/tags/peewee/" style="font-size: 10px;">peewee</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/pytest/" style="font-size: 10.71px;">pytest</a> <a href="/blog-hexo/tags/python/" style="font-size: 10px;">python</a> <a href="/blog-hexo/tags/scp/" style="font-size: 10px;">scp</a> <a href="/blog-hexo/tags/sed/" style="font-size: 10px;">sed</a> <a href="/blog-hexo/tags/setuptools/" style="font-size: 10px;">setuptools</a> <a href="/blog-hexo/tags/shell/" style="font-size: 10px;">shell</a> <a href="/blog-hexo/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/blog-hexo/tags/torchvision/" style="font-size: 10px;">torchvision</a> <a href="/blog-hexo/tags/verdaccio/" style="font-size: 10px;">verdaccio</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/xargs/" style="font-size: 10px;">xargs</a> <a href="/blog-hexo/tags/yacs/" style="font-size: 10px;">yacs</a> <a href="/blog-hexo/tags/yaml/" style="font-size: 10px;">yaml</a> <a href="/blog-hexo/tags/zip/" style="font-size: 10px;">zip</a> <a href="/blog-hexo/tags/zsh/" style="font-size: 10px;">zsh</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 11.43px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2023/01/">January 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/11/">November 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/10/">October 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog-hexo/2023/01/10/Vue使用js-yaml解析yaml文件/">Vue使用js-yaml解析yaml文件</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2023/01/04/Vue导出HTML页面至PDF/">Vue导出HTML页面至PDF</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/11/09/python将秒数转为格式化时间字符串/">python将秒数转为格式化时间字符串</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/10/19/使用Verdaccio搭建私有npm源/">使用Verdaccio搭建私有npm源</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/09/08/Docker实时查看容器的内存占用/">Docker实时查看容器的内存占用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 ckmessi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog-hexo/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog-hexo/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/blog-hexo/fancybox/jquery.fancybox.css">
+  <script src="/blog-hexo/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/blog-hexo/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

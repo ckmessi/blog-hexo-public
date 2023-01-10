@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>不止是一位程序员</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Lionel的技术笔记总结">
+<meta property="og:type" content="website">
+<meta property="og:title" content="不止是一位程序员">
+<meta property="og:url" content="http://ckmessi.github.io/page/11/index.html">
+<meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="Lionel的技术笔记总结">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="不止是一位程序员">
+<meta name="twitter:description" content="Lionel的技术笔记总结">
+  
+    <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/blog-hexo/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog-hexo/" id="logo">不止是一位程序员</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog-hexo/" id="subtitle">Lionel的技术空间</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog-hexo/">Home</a>
+        
+          <a class="main-nav-link" href="/blog-hexo/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-使用heatmap-js生成热力图" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/10/29/使用heatmap-js生成热力图/" class="article-date">
+  <time datetime="2019-10-29T11:53:19.000Z" itemprop="datePublished">2019-10-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/10/29/使用heatmap-js生成热力图/">使用heatmap.js生成热力图</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在某些数据可视化需求下，我们需要根据给定的数据生成热力图。<br>使用 <a href="https://www.patrick-wied.at/static/heatmapjs/" target="_blank" rel="external">heatmap.js</a> 可以方便地完成这个功能。</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><code>heatmap.js</code> 不是追踪用户行为的脚本，它仅仅是基于用户喂给它的数据创建一个动态的热力图。<br> <a href="https://www.patrick-wied.at/static/heatmapjs/" target="_blank" rel="external">heatmap.js</a> 的官方网站最令人惊喜之处在于，它在网站背景上记录了用户鼠标的滑动区域，并生成热力图。在阅读其说明文档的不经意间，生成了一张反映了用户行为了热力图。<br><img src="/2019/10/29/使用heatmap-js生成热力图/blog-hexo/2019/10/29/使用heatmap-js生成热力图/site.png" alt="示例图" title="示例图"></p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>参考 <a href="https://github.com/pa7/heatmap.js" target="_blank" rel="external">官方GitHub仓库相关说明</a> 可以使用 <code>npm</code> 快速安装。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install heatmap.js</div></pre></td></tr></table></figure></p>
+<p>其实 <code>heatmap.js</code> 包所包含的代码很简洁，主要就是两个类 <code>h337</code> 和 <code>heatmapInstance</code>。<br>其中 <code>h337</code> 是 <code>heatmap.js</code> 全局注册的主类对象，主要功能就是用于创建 <code>heatmapInstance</code> 实例，在创建的过程中通过一系列配置参数控制热力图的行为。<br>而 <code>heatmapInstance</code> 则主要用于加载数据，完成数据可视化的相关工作。<br>话说这个对象名 <code>h337</code> 起得也太随意了，一开始还以为是哪个水平较差的博主随手贴了自己的代码，代码中的变量名称还这么奔放，后来发现居然就是插件自己定义的。</p>
+<h2 id="使用样例"><a href="#使用样例" class="headerlink" title="使用样例"></a>使用样例</h2><p>首先在页面上需要有一个 <code>id</code> 为 <code>heatmapContainer</code> 的组件区域，然后使用 <code>h337</code> 创建一个 <code>heatmapInstance</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">// create configuration object</div><div class="line">var config = &#123;</div><div class="line">  container: document.getElementById(&apos;heatmapContainer&apos;),</div><div class="line">  radius: 10,</div><div class="line">  maxOpacity: .5,</div><div class="line">  minOpacity: 0,</div><div class="line">  blur: .75</div><div class="line">&#125;;</div><div class="line">// create heatmap with configuration</div><div class="line">var heatmapInstance = h337.create(config);</div></pre></td></tr></table></figure></p>
+<p>然后将数据绑定到 <code>heatmapInstance</code> 中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">// a single datapoint</div><div class="line">var dataPoint = &#123;</div><div class="line">  x: 5, // x coordinate of the datapoint, a number</div><div class="line">  y: 5, // y coordinate of the datapoint, a number</div><div class="line">  value: 100 // the value at datapoint(x, y)</div><div class="line">&#125;;</div><div class="line">heatmapInstance.addData(dataPoint);</div><div class="line">// multiple datapoints (for data initialization use setData!!)</div><div class="line">var dataPoints = [dataPoint, dataPoint, dataPoint, dataPoint];</div><div class="line">heatmapInstance.addData(dataPoints);</div></pre></td></tr></table></figure></p>
+<p>就这么简单，图形定义加上数据绑定，真正好的工具应该像它这样简洁易懂。</p>
+<h2 id="参数详解"><a href="#参数详解" class="headerlink" title="参数详解"></a>参数详解</h2><p>首先在创建 <code>heatmapInstance</code> 过程中，主要使用的参数有以下几个：</p>
+<ul>
+<li><code>container</code>：用于放置热力图画布的 DOM 节点；</li>
+<li><code>radius</code>：每个数据点具有的半径；</li>
+<li><code>opacity</code>：整个热力图的透明度；</li>
+<li><code>gradient</code>：表示梯度的对象，可以控制热力图的颜色；</li>
+<li><code>blur</code>：模糊因子，值越高梯度越平滑；</li>
+</ul>
+<p>在设置数据的过程中，数据的格式就比较简单。参数是一个表示数据点的数组，而每个数据点只包含三个属性：</p>
+<ul>
+<li><code>x</code>：横轴坐标值</li>
+<li><code>y</code>：纵轴坐标值</li>
+<li><code>value</code>：热度值</li>
+</ul>
+<h2 id="简单示例"><a href="#简单示例" class="headerlink" title="简单示例"></a>简单示例</h2><p>创建一个 <code>index.html</code> 空文件，将如下代码拷贝到文件中，使用浏览器打开即可查看一个最简单的示例：<br>（代码中引用了 <code>heatmap.js</code> 的CDN链接，需要联网环境。）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&apos;utf-8&apos;&gt;</div><div class="line">    &lt;meta http-equiv=&apos;X-UA-Compatible&apos; content=&apos;IE=edge&apos;&gt;</div><div class="line">    &lt;title&gt;heatmap.js example&lt;/title&gt;</div><div class="line">    &lt;meta name=&apos;viewport&apos; content=&apos;width=device-width, initial-scale=1&apos;&gt;</div><div class="line"></div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">    &lt;div&gt;</div><div class="line">        &lt;div&gt;Below is the heatmap diagram.&lt;/div&gt;</div><div class="line">        &lt;div id=&quot;heatmapContainer&quot; style=&quot;width: 500px; height: 300px; background-color: aqua;&quot;&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/body&gt;</div><div class="line"></div><div class="line">&lt;script src=&quot;https://cdn.bootcss.com/heatmap.js/2.0.0/heatmap.js&quot;&gt;&lt;/script&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    var config = &#123;</div><div class="line">        container: document.getElementById(&apos;heatmapContainer&apos;),</div><div class="line">        radius: 80,</div><div class="line">        maxOpacity: .8,</div><div class="line">        minOpacity: 0,</div><div class="line">        blur: .75</div><div class="line">    &#125;;</div><div class="line">    // create heatmap with configuration</div><div class="line">    var heatmapInstance = h337.create(config);</div><div class="line">    </div><div class="line">    var data = [</div><div class="line">        &#123; x: 100, y: 150, value: 50 &#125;,</div><div class="line">        &#123; x: 400, y: 15, value: 80 &#125;,</div><div class="line">        &#123; x: 10, y: 120, value: 20 &#125;,</div><div class="line">        &#123; x: 200, y: 95, value: 100 &#125;,</div><div class="line">    ]</div><div class="line">    heatmapInstance.setData(&#123;</div><div class="line">        max: 100,</div><div class="line">        data: data,</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://www.patrick-wied.at/static/heatmapjs/" target="_blank" rel="external">https://www.patrick-wied.at/static/heatmapjs/</a><br><a href="https://www.patrick-wied.at/static/heatmapjs/docs.html" target="_blank" rel="external">https://www.patrick-wied.at/static/heatmapjs/docs.html</a><br><a href="https://github.com/ckmessi/frontend-effect-assemble" target="_blank" rel="external">https://github.com/ckmessi/frontend-effect-assemble</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/10/29/使用heatmap-js生成热力图/" data-id="clcpwy3go00fx5e8tacvs6v5b" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/heatmap-js/">heatmap.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Python使用enumerate处理流数据" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/10/22/Python使用enumerate处理流数据/" class="article-date">
+  <time datetime="2019-10-22T11:30:37.000Z" itemprop="datePublished">2019-10-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/10/22/Python使用enumerate处理流数据/">Python使用enumerate处理流数据</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在 Java 中，通常会使用 <code>stream</code> 将数组转换为流，进行筛选或映射操作。<br>比如取出对象列表中的某个属性重新组成一个列表，可以使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">List&lt;ClassA&gt; aList = new ArrayList&lt;ClassA&gt;();</div><div class="line">List&lt;String&gt; propertyXList = aList.stream().map(ClassA::getPropertyX).collect(Collectors.toList());</div></pre></td></tr></table></figure></p>
+<p>在 Python 中，类似的可以使用 <code>enumerate</code> 进行数据处理操作。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">array = [&#123;&apos;a&apos;: 11, &apos;b&apos;: 12&#125;, &#123;&apos;a&apos;: 21, &apos;b&apos;: 22&#125;]</div><div class="line">a_list = [item[&apos;a&apos;] for index, item in enumerate(array)]</div></pre></td></tr></table></figure></p>
+<p>最终可以得到一个列表 <code>a_list</code> 的值为 <code>[11, 21]</code> 。<br>需要注意的是，语句中左右方括号是不能省略的，其中的 <code>index, item</code> 表示索引和项也不能省略。</p>
+<p>这样，对于一个类 <code>A</code>，取出其中属性 <code>X</code> 的语句可以用以下语句实现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">a_list = [ClassA(), ClassA()]</div><div class="line">property_x_list = [a.x for index, a in enumerate(a_list)]</div></pre></td></tr></table></figure></p>
+<p>普通的 <code>for</code> 循环语句，也可以转换成 <code>enumerate</code> 语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">i = 0</div><div class="line">sequence = [&apos;element1&apos;, &apos;element2&apos;, &apos;element3&apos;]</div><div class="line">for element in sequence:</div><div class="line">    print(i, element)</div><div class="line">    i += 1</div></pre></td></tr></table></figure></p>
+<p>等价于：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sequence = [&apos;element1&apos;, &apos;element2&apos;, &apos;element3&apos;]</div><div class="line">for i, element in enumerate(sequence):</div><div class="line">    print(i, element)</div></pre></td></tr></table></figure></p>
+<p>此外，类似于 Java 中使用 <code>stream</code> 的 <code>filter</code> 方法，在 Python 中如果要对属性 <code>X</code> 的值进行筛选，获得特定的对象列表，则可以使用 <code>filter</code> 语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">target_object_list = list(filter(lambda obj: obj.x == &apos;target&apos;, a_list))</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/10/22/Python使用enumerate处理流数据/" data-id="clcpwy3dx009n5e8tyybkq52f" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Python中检查日期时间格式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/10/21/Python中检查日期时间格式/" class="article-date">
+  <time datetime="2019-10-21T07:55:18.000Z" itemprop="datePublished">2019-10-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/10/21/Python中检查日期时间格式/">Python中检查日期时间格式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在 Python 中，可以使用 <code>datetime</code> 包检查日期格式。</p>
+<p>具体的方式是使用 <code>datetime.datetime.strptime(date_str, format_str)</code> 语句尝试将字符串按照特定格式转换为时间。<br>如果在转换过程中出现错误，则会抛出 <code>ValueError</code> 异常；因此可以通过 <code>try...except...</code> 语句，根据转换过程中是否抛出异常，来判断日期时间格式的字符串是否正确。</p>
+<p>格式模板应该是形如 <code>%Y-%m-%d %H:%M:%S</code> 这样的形式，其中 <code>%Y</code> 是年份占位符，表示匹配四位年份；对应 <code>%m</code> 和 <code>%d</code> 是月和日的占位符。</p>
+<p>常用的格式占位符有：</p>
+<ul>
+<li>年份：<code>%Y</code>（4位，1909、1910…），<code>%y</code>（2位，09、10…），<code>%-y</code>（2位不补零，9、10…）</li>
+<li>月份：<code>%m</code>（2位，09、10…），<code>%B</code>（名称，January，February，…），<code>%b</code>（名称缩写，Jan，Feb，…）</li>
+<li>日期：<code>%d</code>（2位，09、10…）</li>
+<li>星期：<code>%w</code>（数值，0，1，…，6），<code>%a</code>（名称缩写，Sun，Mon，…）</li>
+<li>小时：<code>%H</code>（24小时制，00，01，…，23），<code>%I</code>（12小时制，01，02，…，12）</li>
+<li>分钟：<code>%M</code>（补零的分钟，00，01，…，59）</li>
+<li>秒数：<code>%S</code>（补零的秒数，00，01，…，59）</li>
+</ul>
+<h2 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">import datetime</div><div class="line"></div><div class="line">def validate_format(date_str, format_str):</div><div class="line">    try:</div><div class="line">        datetime.datetime.strptime(date_str, format_str)</div><div class="line">    except ValueError:</div><div class="line">        raise ValueError(&quot;Incorrect data format, should be %s&quot; % format_str)</div><div class="line"></div><div class="line">def check_date_format_correct(date_str, format_str):</div><div class="line">    try:</div><div class="line">        validate_format(date_str, format_str)</div><div class="line">        return True</div><div class="line">    except ValueError:</div><div class="line">        return False</div><div class="line"></div><div class="line">assert True == check_date_format_correct(&apos;2019-10-17&apos;, &apos;%Y-%m-%d&apos;)</div><div class="line">assert False == check_date_format_correct(&apos;2019-10-37&apos;, &apos;%Y-%m-%d&apos;)</div><div class="line">assert True == check_date_format_correct(&apos;2019-10-17 00:00:01&apos;, &apos;%Y-%m-%d %H:%M:%S&apos;)</div><div class="line">assert False == check_date_format_correct(&apos;2019-10-17 00:00:61&apos;, &apos;%Y-%m-%d %H:%M:%S&apos;)</div></pre></td></tr></table></figure>
+<p>其它字符串格式可参考 <a href="https://www.programiz.com/python-programming/datetime/strftime" target="_blank" rel="external">官方文档</a> 。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/10/21/Python中检查日期时间格式/" data-id="clcpwy3dp00985e8tgtkfo35l" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-使用sed命令快速替换文件内容" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/10/18/使用sed命令快速替换文件内容/" class="article-date">
+  <time datetime="2019-10-18T08:51:15.000Z" itemprop="datePublished">2019-10-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/10/18/使用sed命令快速替换文件内容/">使用sed命令快速替换文件内容</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在工作中通常会遇到一类场景，需要批量地将许多文件中的特定字符串进行统一替换。<br>比如最近在使用工具进行图像标注时，发现不小心使标注信息附上了比较隐私的个人机器信息，而这些路径信息在数据集中并没有实际作用。<br>因此，为了避免不必要的麻烦，我的目标是将所有 <code>.xml</code> 文件中 <code>C:\Users\username\path\to\xxx</code> 统一替换为不带敏感信息的相对路径 <code>path/to/xxx</code>。<br>这时就可以使用 Linux 的 <code>sed</code> 命令。</p>
+<h2 id="sed简介"><a href="#sed简介" class="headerlink" title="sed简介"></a>sed简介</h2><p><code>sed</code> 本身是一种流编辑器，能够把当前处理的行存储在临时缓冲区中，根据命令进行处理，处理完成后把缓冲区的内容输往屏幕。</p>
+<p>比如我们有一个文件 <code>a.txt</code>，其中的内容是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">1234</div><div class="line">abcd</div><div class="line">error:</div><div class="line">line4</div><div class="line">line5</div></pre></td></tr></table></figure></p>
+<p>使用 <code>sed</code> 可以只取出第2至第3行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜ ~ sed -n &apos;2,3p&apos; a.txt</div><div class="line">abcd</div><div class="line">error:</div></pre></td></tr></table></figure></p>
+<p>其中的 <code>-n</code> 参数表示忽略执行过程的输出，而 <code>p</code> 命令的含义是打印，即打印到屏幕上。</p>
+<h2 id="使用sed替换文件内容"><a href="#使用sed替换文件内容" class="headerlink" title="使用sed替换文件内容"></a>使用sed替换文件内容</h2><p>类似的，还有一个参数 <code>-i</code> 表示对原文件进行改动，这样配合在 <code>vim</code> 中常用的替换命令，我们可以直接替换文件 <code>a.txt</code> 中的一些元素：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed -i &quot;s/[old_content]/[replace_content]/g&quot; a.txt</div></pre></td></tr></table></figure></p>
+<p>比如执行 <code>sed -i &quot;s/line/welcome/g&quot; a.txt</code>命令，再次查看文件 <code>a.txt</code> ，会发现第4行和第5行被修改了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">1234</div><div class="line">abcd</div><div class="line">error:</div><div class="line">welcome4</div><div class="line">welcome5</div></pre></td></tr></table></figure></p>
+<p>需要注意的是，上述命令在 Linux 操作系统中是正常运行的，但比较危险，因为 <code>a.txt</code> 文件被覆盖了。可能正是由于安全因素考虑，相同的命令在 MacOS 系统上会抛错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜ ~ sed -i &quot;s/line/welcome/g&quot; a.txt</div><div class="line">sed: 1: &quot;a.txt&quot;: command a expects \ followed by text</div></pre></td></tr></table></figure></p>
+<p>此时需要显示地为其声明一个备份文件，比如使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜ ~ sed -i .bak &quot;s/line/welcome/g&quot; a.txt</div></pre></td></tr></table></figure></p>
+<p>这时会生成一个  <code>a.txt.bak</code> 文件，内容与替换前的文件内容相同；而 <code>a.txt</code> 则保留了替换后的文件内容。</p>
+<h2 id="实际操作示例"><a href="#实际操作示例" class="headerlink" title="实际操作示例"></a>实际操作示例</h2><p>实际场景是同一个文件夹下有若干 <code>.xml</code> 文件，其中都有某一行带有路径信息 <code>C:\Users\username\path\to\xxx</code>，可以使用以下命令进行替换：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed -i &quot;s#C:\\\Users\\\username\\\path\\\to\\\xxx#../JPEGImages/#g&quot; *.xml</div></pre></td></tr></table></figure></p>
+<p>关于替换的命令，通常使用 <code>/</code> 作为 <code>s/&lt;old&gt;/&lt;new&gt;/g</code> 的分隔符，如果要替换的内容中带有 <code>/</code>，则需要使用 <code>\</code> 进行转义。为了方便，可以直接把分隔符替换为 <code>#</code>，这样替换内容中的 <code>/</code> 就不用进行转义了。<br>需要注意的是，对于待替换元素中的反斜杠 <code>\</code>，需要使用三个反斜杠替代。<br>另外，待替换的文本需要有一定的辨识度，避免被误伤的情况。要替换的文件，最好在替换前进行备份。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://stackoverflow.com/questions/4247068/sed-command-with-i-option-failing-on-mac-but-works-on-linux" target="_blank" rel="external">https://stackoverflow.com/questions/4247068/sed-command-with-i-option-failing-on-mac-but-works-on-linux</a><br><a href="https://blog.csdn.net/lycyingO/article/details/95306600" target="_blank" rel="external">https://blog.csdn.net/lycyingO/article/details/95306600</a><br><a href="https://www.cnblogs.com/ftl1012/p/sed.html" target="_blank" rel="external">https://www.cnblogs.com/ftl1012/p/sed.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/10/18/使用sed命令快速替换文件内容/" data-id="clcpwy3h400gt5e8trzhhym6w" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/sed/">sed</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Git-submodule的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/10/16/Git-submodule的使用/" class="article-date">
+  <time datetime="2019-10-16T09:59:00.000Z" itemprop="datePublished">2019-10-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/10/16/Git-submodule的使用/">Git submodule的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>面对比较复杂的项目，我们有可能会将代码根据功能拆解成不同的子模块。主项目对子模块有依赖关系，却又并不关心子模块的内部开发流程细节。<br>这种情况下，通常不会把所有源码都放在同一个 Git 仓库中。<br>有一种比较简单的方式，是在当前工作目录下，将子模块文件夹加入到 <code>.gitignore</code> 文件内容中，这样主项目就能够无视子项目的存在。这样做有一个弊端就是，使用主项目的人需要有一个先验知识：需要在当前目录下放置一份某版本的子模块代码。<br>还有另外一种方式可供借鉴，可以使用 Git 的 <code>submodule</code> 功能，也是这篇文章的主题<br>实际上 Git 工具的 <code>submodule</code> 功能就是建立了当前项目与子模块之间的依赖关系：<code>子模块路径</code>、<code>子模块的远程仓库</code>、<code>子模块的版本号</code>。</p>
+<h2 id="使用流程"><a href="#使用流程" class="headerlink" title="使用流程"></a>使用流程</h2><p>假定我们有两个项目：<code>project-main</code> 和 <code>project-sub-1</code>，其中 <code>project-main</code> 表示主项目，而 <code>project-sub-1</code> 表示子模块项目。<br>其中 <code>project-main</code> 的远程仓库地址为 <code>https://github.com/username/project-main.git</code>，而  <code>project-sub-1</code> 的远程仓库地址为 <code>https://github.com/username/project-sub-1.git</code>。<br>接下来，我们希望在 <code>project-main</code> 中添加 <code>project-sub-1</code> ，而又保持 <code>project-sub-1</code> 自身独立的版本控制。</p>
+<h4 id="创建-submodule"><a href="#创建-submodule" class="headerlink" title="创建 submodule"></a>创建 submodule</h4><p>使用 <code>git submodule add &lt;submodule_url&gt;</code> 命令可以在项目中创建一个 <code>submodule</code> 子模块。<br>进入项目 <code>project-main</code> ，输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">➜ project-main git:(master) git submodule add https://github.com/username/project-sub-1.git</div><div class="line">正克隆到 &apos;/path/to/project-main/project-sub-1&apos;...</div><div class="line">remote: Enumerating objects: 3, done.</div><div class="line">remote: Counting objects: 100% (3/3), done.</div><div class="line">remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0</div><div class="line">展开对象中: 100% (3/3), 完成.</div></pre></td></tr></table></figure></p>
+<p>此时项目仓库中会多出两个文件：<code>.gitmodules</code> 和 <code>project-sub-1</code> 。<br>前者的内容是这样的，事实上就是子模块的相关信息；而后者那个文件，实际上保存的是子模块当前版本的版本号信息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[submodule &quot;project-sub-1&quot;]</div><div class="line">    path = project-sub-1</div><div class="line">    url = https://github.com/username/project-sub-1.git</div></pre></td></tr></table></figure></p>
+<p>如果此前项目中已经存在 <code>.gitmodules</code> 文件，则会在文件内容中多出上述三行记录。<br>事实上，此时在 <code>.git/config</code> 文件中也会多出一些信息，在 <code>.git/modules</code> 文件夹下也会多出一份内容。</p>
+<p>通常此时可以使用 <code>git commit -m &quot;add submodule xxx&quot;</code> 提交一次，表示引入了某个子模块。<br>提交后，在主项目仓库中，会显示出子模块文件夹，并带上其所在仓库的版本号。</p>
+<img src="/2019/10/16/Git-submodule的使用/blog-hexo/2019/10/16/Git-submodule的使用/1.png" alt="主项目仓库" title="主项目仓库">
+<h4 id="获取-submodule"><a href="#获取-submodule" class="headerlink" title="获取 submodule"></a>获取 submodule</h4><p>上述步骤在创建子模块的过程中，会自动将相关代码克隆到对应路径，但对于后续使用者而言，对于主项目使用普通的 <code>clone</code> 操作并不会拉取到子模块中的实际代码。<br>使用以下命令进行克隆，完成后 <code>project-main/project-sub-1</code> 文件夹是空的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /path/to/temp</div><div class="line">git clone https://github.com/username/project-main.git</div></pre></td></tr></table></figure></p>
+<p>一种方式是在克隆主项目的时候带上参数 <code>--recurse-submodules</code>，这样会递归地将项目中所有子模块的代码拉取。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /path/to/temp2</div><div class="line">git clone https://github.com/username/project-main.git --recurse-submodules</div></pre></td></tr></table></figure></p>
+<p>此时 <code>project-main/project-sub-1</code> 文件夹是有内容的，并且固定在某个 Git 提交的版本上。</p>
+<p>另外一种可行的方式是，在当前主项目中执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git submodule init</div><div class="line">git submodule update</div></pre></td></tr></table></figure></p>
+<p>则会根据主项目的配置信息，拉取更新子模块中的代码。</p>
+<h4 id="子模块内容的更新"><a href="#子模块内容的更新" class="headerlink" title="子模块内容的更新"></a>子模块内容的更新</h4><p>对于子模块而言，并不需要知道引用自己的主项目的存在。对于自身来讲，子模块就是一个完整的 Git 仓库，按照正常的 Git 代码管理规范操作即可。<br>对于主项目而言，子模块的内容发生变动时，通常有三种情况：<br>1）当前项目下子模块文件夹内的内容发生了未跟踪的内容变动；<br>2）当前项目下子模块文件夹内的内容发生了版本变化；<br>3）当前项目下子模块文件夹内的内容没变，远程有更新；</p>
+<h6 id="情况1：子模块有未跟踪的内容变动"><a href="#情况1：子模块有未跟踪的内容变动" class="headerlink" title="情况1：子模块有未跟踪的内容变动"></a>情况1：子模块有未跟踪的内容变动</h6><p>对于第1种情况，通常是在开发环境中，直接修改子模块文件夹中的代码导致的。<br>此时在主项目中使用 <code>git status</code> 能够看到关于子模块尚未暂存以备提交的变更，但是于主项目而言是无能为力的，使用 <code>git add/commit</code> 对其也不会产生影响。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">➜ project-main git:(master) git status</div><div class="line">位于分支 master</div><div class="line">您的分支与上游分支 &apos;origin/master&apos; 一致。</div><div class="line">尚未暂存以备提交的变更：</div><div class="line">  （使用 &quot;git add &lt;文件&gt;...&quot; 更新要提交的内容）</div><div class="line">  （使用 &quot;git checkout -- &lt;文件&gt;...&quot; 丢弃工作区的改动）</div><div class="line">  （提交或丢弃子模组中未跟踪或修改的内容）</div><div class="line"> 修改： project-sub-1 (未跟踪的内容)</div><div class="line">修改尚未加入提交（使用 &quot;git add&quot; 和/或 &quot;git commit -a&quot;）</div></pre></td></tr></table></figure></p>
+<p>在此情景下，通常需要进入子模块文件夹，按照子模块内部的版本控制体系提交代码。<br>当提交完成后，主项目的状态则进入了情况2，即当前项目下子模块文件夹内的内容发生了版本变化。</p>
+<h6 id="情况2：子模块有版本变化"><a href="#情况2：子模块有版本变化" class="headerlink" title="情况2：子模块有版本变化"></a>情况2：子模块有版本变化</h6><p>当子模块版本变化时，在主项目中使用 <code>git status</code> 查看仓库状态时，会显示子模块有新的提交：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">➜ project-main git:(master) ✗ git status</div><div class="line">位于分支 master</div><div class="line">您的分支与上游分支 &apos;origin/master&apos; 一致。</div><div class="line">尚未暂存以备提交的变更：</div><div class="line">  （使用 &quot;git add &lt;文件&gt;...&quot; 更新要提交的内容）</div><div class="line">  （使用 &quot;git checkout -- &lt;文件&gt;...&quot; 丢弃工作区的改动）</div><div class="line"> 修改： project-sub-1 (新提交)</div><div class="line">修改尚未加入提交（使用 &quot;git add&quot; 和/或 &quot;git commit -a&quot;）</div></pre></td></tr></table></figure></p>
+<p>在这种情况下，可以使用 <code>git add/commit</code> 将其添加到主项目的代码提交中，实际的改动就是那个子模块 <code>文件</code> 所表示的版本信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">git diff HEAD HEAD^</div><div class="line">diff --git a/project-sub-1 b/project-sub-1</div><div class="line">index ace9770..7097c48 160000</div><div class="line">--- a/project-sub-1</div><div class="line">+++ b/project-sub-1</div><div class="line">@@ -1 +1 @@</div><div class="line">-Subproject commit ace977071f94f4f88935f9bb9a33ac0f8b4ba935</div><div class="line">+Subproject commit 7097c4887798b71cee360e99815f7dbd1aa17eb4</div></pre></td></tr></table></figure></p>
+<p>通常当子项目更新后，主项目修改其所依赖的版本时，会产生类似这种情景的 commit 提交信息。</p>
+<h6 id="情况3：子模块远程有更新"><a href="#情况3：子模块远程有更新" class="headerlink" title="情况3：子模块远程有更新"></a>情况3：子模块远程有更新</h6><p>通常来讲，主项目与子模块的开发不会恰好是同时进行的。通常是子模块负责维护自己的版本升级后，推送到远程仓库，并告知主项目可以更新对子模块的版本依赖。<br>在这种情况下，主项目是比较茫然的。<br>之前曾经提到，主项目可以使用 <code>git submodule update</code> 更新子模块的代码，但那是指 <code>当前主项目文件夹下的子模块目录内容</code> 与 <code>当前主项目记录的子模块版本</code> 不一致时，会参考后者进行更新。<br>但如今这种情况下，后者 <code>当前主项目记录的子模块版本</code> 还没有变化，在主项目看来当前情况一切正常。<br>此时，需要让主项目主动进入子模块拉取新版代码，进行升级操作。<br>通常流程是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd project-sub-1</div><div class="line">git pull origin master</div></pre></td></tr></table></figure></p>
+<p>子模块目录下的代码版本会发生变化，转到情况2的流程进行主项目的提交。<br>当主项目的子项目特别多时，可能会不太方便，此时可以使用 <code>git submodule</code> 的一个命令 <code>foreach</code> 执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git submodule foreach &apos;git pull origin master&apos;</div></pre></td></tr></table></figure></p>
+<h6 id="情况汇总"><a href="#情况汇总" class="headerlink" title="情况汇总"></a>情况汇总</h6><p>终上所述，可知在不同场景下子模块的更新方式如下：</p>
+<ul>
+<li>对于子模块，只需要管理好自己的版本，并推送到远程分支即可；</li>
+<li>对于父模块，若子模块版本信息未提交，需要更新子模块目录下的代码，并执行 <code>commit</code> 操作提交子模块版本信息；</li>
+<li>对于父模块，若子模块版本信息已提交，需要使用 <code>git submodule update</code> ，Git 会自动根据子模块版本信息更新所有子模块目录的相关代码。</li>
+</ul>
+<h4 id="删除子模块"><a href="#删除子模块" class="headerlink" title="删除子模块"></a>删除子模块</h4><p>网上流传了一些偏法，主要步骤是直接移除模块，并手动修改 <code>.gitmodules</code>、<code>.git/config</code> 和 <code>.git/modules</code> 内容。<br>包含了一大堆类似<code>git rm --cached &lt;sub-module&gt;</code>、<code>rm -rf &lt;sub-moduel&gt;</code>、<code>rm .gitmodules</code> 和 <code>git rm --cached</code> 之类的代码。<br>实际上这是一种比较野的做法，不建议使用。</p>
+<p>根据官方文档的说明，应该使用 <code>git submodule deinit</code> 命令卸载一个子模块。这个命令如果添加上参数 <code>--force</code>，则子模块工作区内即使有本地的修改，也会被移除。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git submodule deinit project-sub-1</div><div class="line">git rm project-sub-1</div></pre></td></tr></table></figure></p>
+<p>执行 <code>git submodule deinit project-sub-1</code> 命令的实际效果，是自动在 <code>.git/config</code> 中删除了以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[submodule &quot;project-sub-1&quot;]</div><div class="line">    url = https://github.com/username/project-sub-1.git</div></pre></td></tr></table></figure></p>
+<p>执行 <code>git rm project-sub-1</code> 的效果，是移除了 <code>project-sub-1</code> 文件夹，并自动在 <code>.gitmodules</code> 中删除了以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[submodule &quot;project-sub-1&quot;]</div><div class="line">         path = project-sub-1</div><div class="line">         url = https://github.com/username/project-sub-1.git</div></pre></td></tr></table></figure></p>
+<p>此时，主项目中关于子模块的信息基本已经删除（虽然貌似 <code>.git/modules</code> 目录下还有残余）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">➜ project-main git:(master) ✗ gs</div><div class="line">位于分支 master</div><div class="line">您的分支与上游分支 &apos;origin/master&apos; 一致。</div><div class="line">要提交的变更：</div><div class="line">  （使用 &quot;git reset HEAD &lt;文件&gt;...&quot; 以取消暂存）</div><div class="line"> 修改： .gitmodules</div><div class="line"> 删除： project-sub-1</div></pre></td></tr></table></figure></p>
+<p>可以提交代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git commit -m &quot;delete submodule project-sub-1&quot;</div></pre></td></tr></table></figure></p>
+<p>至此完成对子模块的删除。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>当项目比较复杂，部分代码希望独立为子模块进行版本控制时，可以使用 <code>git submodule</code> 功能。<br>使用 <code>git submodule</code> 功能时，主项目仓库并不会包含子模块的文件，只会保留一份子模块的配置信息及版本信息，作为主项目版本管理的一部分。<br>本篇文章简单介绍了 <code>git submodule</code> 的添加和删除，以及项目开发过程中主项目与子模块不同状态时刻的操作方式。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://git-scm.com/docs/git-submodule" target="_blank" rel="external">https://git-scm.com/docs/git-submodule</a><br><a href="https://www.jianshu.com/p/0107698498af" target="_blank" rel="external">https://www.jianshu.com/p/0107698498af</a><br><a href="https://www.git-tower.com/learn/git/ebook/cn/command-line/advanced-topics/submodules" target="_blank" rel="external">https://www.git-tower.com/learn/git/ebook/cn/command-line/advanced-topics/submodules</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/10/16/Git-submodule的使用/" data-id="clcpwy3ac001s5e8tmzghxw6n" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-在Shell中执行Pythonenv的激活" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/09/29/在Shell中执行Pythonenv的激活/" class="article-date">
+  <time datetime="2019-09-29T03:10:14.000Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/09/29/在Shell中执行Pythonenv的激活/">在Shell中执行Pythonenv的激活</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>通常在 Linux 系统中，初始化 Pythonenv 后，会使用 <code>source /path/to/pythonenv/bin/activate</code> 命令激活这个环境。</p>
+<p>但是在 Shell 脚本中，如果直接写：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">source /path/to/pythonenv/bin/activate</div><div class="line">python --version</div></pre></td></tr></table></figure></p>
+<p>执行 <code>sh shell.sh</code>，会抛错误：<code>source: not found</code>。</p>
+<p>需要替换成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">. /path/to/pythonenv/bin/activate</div><div class="line">python --version</div></pre></td></tr></table></figure></p>
+<p>才能够正确执行并有效，会输出 pythonenv 中执行 <code>python</code> 版本。</p>
+<p>这是因为 <code>/bin/dash</code> 并不支持 <code>source</code> 命令，大多数 shell 使用 <code>.</code> 替代 <code>source</code>。</p>
+<p>需要注意的是，这个 <code>.</code> 与后面的部分中间有一个空格，与使用 <code>./xxx</code> 执行某个文件有区别。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://stackoverflow.com/questions/13702425/source-command-not-found-in-sh-shell/13702876" target="_blank" rel="external">https://stackoverflow.com/questions/13702425/source-command-not-found-in-sh-shell/13702876</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/09/29/在Shell中执行Pythonenv的激活/" data-id="clcpwy3i800jq5e8tliefvqb5" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Pythonenv/">Pythonenv</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Python使用pynvml查看显卡信息" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/09/18/Python使用pynvml查看显卡信息/" class="article-date">
+  <time datetime="2019-09-18T12:02:01.000Z" itemprop="datePublished">2019-09-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/09/18/Python使用pynvml查看显卡信息/">Python使用pynvml查看显卡信息</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在使用 Python 语言撰写的项目中，使用 <code>pynvml</code> 包能够实现显卡信息的读取和管理。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>可以使用 <code>pip</code> 便捷安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install pynvml</div></pre></td></tr></table></figure></p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>首先引入包并初始化：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">import pynvml</div><div class="line">pynvml.nvmlInit()</div></pre></td></tr></table></figure></p>
+<p>查看设备数量以及设备：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">device_count = pynvml.nvmlDeviceGetCount()</div><div class="line">print(device_count)</div><div class="line">for i in range(deviceCount):</div><div class="line">    handle = nvmlDeviceGetHandleByIndex(i)</div><div class="line">    print(&quot;GPU&quot;, i, &quot;:&quot;, nvmlDeviceGetName(handle))</div></pre></td></tr></table></figure></p>
+<p>获取设备句柄：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">handle = pynvml.nvmlDeviceGetHandleByIndex(0)</div></pre></td></tr></table></figure></p>
+<p>查看显存信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">memory_info = pynvml.nvmlDeviceGetMemoryInfo(handle)</div><div class="line">print(&quot;memory total:&quot; + str(memory_info.total))</div><div class="line">print(&quot;memory used:&quot; + str(memory_info.used))</div><div class="line">print(&quot;memory free:&quot; + str(memory_info.free))</div></pre></td></tr></table></figure></p>
+<p>查看设备名称、温度、风扇速度、电源状态等：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">print(&quot;Device 0:&quot; + str(pynvml.nvmlDeviceGetName(handle)))</div><div class="line">print(&quot;Temperature is %d C&quot; % pynvml.nvmlDeviceGetTemperature(handle, 0))</div><div class="line">print(&quot;Fan speed is &quot; + str(pynvml.nvmlDeviceGetFanSpeed(handle)))</div><div class="line">print(&quot;Power status is &quot; + str(pynvml.nvmlDeviceGetPowerState(handle)))</div></pre></td></tr></table></figure></p>
+<p>参考 <a href="https://pypi.org/project/pynvml/" target="_blank" rel="external">官方文档</a> 可以有更多方法。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://pypi.org/project/pynvml/" target="_blank" rel="external">https://pypi.org/project/pynvml/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/09/18/Python使用pynvml查看显卡信息/" data-id="clcpwy3e4009z5e8t8y2b1tmc" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Laravel读写YAML格式文件" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/09/11/Laravel读写YAML格式文件/" class="article-date">
+  <time datetime="2019-09-11T11:35:40.000Z" itemprop="datePublished">2019-09-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/09/11/Laravel读写YAML格式文件/">Laravel读写YAML格式文件</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p><code>.yaml</code> 格式是配置文件一种常用的格式，很经常会遇到针对 <code>.yaml</code> 格式信息的解析和封装。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>在 Laravel 框架中，可以使用 <code>symfony/yaml</code> 对 <code>.yaml</code> 格式的信息或文件进行操作。<br>首先通过命令安装这个插件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer require symfony/yaml</div></pre></td></tr></table></figure></p>
+<h4 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h4><p>可以使用 <code>Yaml::parse()</code> 方法解析 <code>.yaml</code> 格式的字符串：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$value = Yaml::parse(&quot;foo: bar&quot;);</div><div class="line">// $value = [&apos;foo&apos; =&gt; &apos;bar&apos;]</div></pre></td></tr></table></figure></p>
+<p>如果在解析过程中发生错误，将会抛出一个 <code>Symfony\Component\Yaml\Exception\ParseException</code> 异常。</p>
+<h4 id="解析文件"><a href="#解析文件" class="headerlink" title="解析文件"></a>解析文件</h4><p>可以直接使用 <code>Yaml::parseFile()</code> 方法解析文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$value = Yaml::parseFile(&apos;/path/to/file.yaml&apos;);</div></pre></td></tr></table></figure></p>
+<h4 id="生成yaml文件"><a href="#生成yaml文件" class="headerlink" title="生成yaml文件"></a>生成yaml文件</h4><p>使用 <code>Yaml::dump()</code> 可以将数据转换为 <code>.yaml</code> 格式的内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$array = [</div><div class="line">    &apos;foo&apos; =&gt; &apos;bar&apos;,</div><div class="line">    &apos;bar&apos; =&gt; [</div><div class="line">        &apos;foo&apos; =&gt; &apos;bar&apos;,</div><div class="line">        &apos;bar&apos; =&gt; &apos;baz&apos;</div><div class="line">    ],</div><div class="line">];</div><div class="line">$yaml = Yaml::dump($array);</div><div class="line">file_put_contents(&apos;/path/to/file.yaml&apos;, $yaml);</div></pre></td></tr></table></figure></p>
+<p>如果解析过程中发生异常，会抛出一个 <code>Symfony\Component\Yaml\Exception\DumpException</code> 异常。<br>解析完成后，文件中的内容应该是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">foo: bar</div><div class="line">bar:</div><div class="line">    foo: bar</div><div class="line">    bar: baz</div></pre></td></tr></table></figure></p>
+<h2 id="其它参数"><a href="#其它参数" class="headerlink" title="其它参数"></a>其它参数</h2><p>在使用 <code>Yaml::dump()</code> 方法过程中，可能需要注意一些参数。<br>比如第二个参数 <code>inline</code>，由于 YAML 格式支持两种表示数组的方式（展开/行内），如果将 <code>inline</code> 的值设置为 <code>1</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo Yaml::dump($array, 1);</div></pre></td></tr></table></figure></p>
+<p>得到的结果将会是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">foo: bar</div><div class="line">bar: &#123; foo: bar, bar: baz &#125;</div></pre></td></tr></table></figure></p>
+<p>第三个参数 <code>indent</code> 声明了缩进的空格数，默认使用 <code>4</code> 个空格进行缩进。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://symfony.com/doc/current/components/yaml.html" target="_blank" rel="external">https://symfony.com/doc/current/components/yaml.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/09/11/Laravel读写YAML格式文件/" data-id="clcpwy3c4005w5e8t3s2sqx07" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Vue使用proxyTable解决跨域问题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/09/06/Vue使用proxyTable解决跨域问题/" class="article-date">
+  <time datetime="2019-09-06T10:10:14.000Z" itemprop="datePublished">2019-09-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/09/06/Vue使用proxyTable解决跨域问题/">Vue使用proxyTable解决跨域问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>之前在使用 <code>Vue.js</code> 作为前端框架时，通常是在主方法中引入 <code>axios</code> ，并设置其 <code>baseURL</code> 属性指向后端：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">import axios from &apos;axios&apos;</div><div class="line">axios.defaults.baseURL = &apos;http://localhost:8080&apos;</div><div class="line">axios.defaults.withCredentials = true;</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<p>在这种情况下，如果前端页面所在的域名和端口号与后台服务器不同，需要后台服务器提供支持，因为涉及到了跨域请求。</p>
+<p>还有一种方式，可以在 Vue.js 开发过程中直接避免跨域问题，就是使用配置中的 <code>proxyTable</code> 项。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>在 <code>Vue.js</code> 框架目录中 <code>config/index.js</code> 文件，修改配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">module.exports = &#123;</div><div class="line">  dev: &#123;</div><div class="line">    proxyTable: &#123;</div><div class="line">        &apos;/backend-api&apos;: &#123;</div><div class="line">            // 测试环境</div><div class="line">            target: &apos;http://localhost:8710/&apos;, // 接口域名</div><div class="line">            changeOrigin: true, //是否跨域</div><div class="line">            pathRewrite: &#123;</div><div class="line">                &apos;^/backend-api&apos;: &apos;xxx&apos; // 其实如果原样的话，是可以不要重写的</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<p>其中 <code>proxyTable</code> 对象的键值 <code>/backend-api</code> 标识了一个匹配规则，即所有匹配上 <code>/backend-api</code> 的请求都会根据这个对象中的配置进行一些修改。<br><code>target</code> 属性标识了真实的后台域名，<code>changeOrigin</code> 设置为 <code>true</code> 可以允许跨域，而 <code>pathRewrite</code> 则标识了一个重写逻辑，这部分是可选的。</p>
+<p>然后在具体的 API 调用文件中，使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">import axios from &apos;axios&apos;</div><div class="line">export default &#123;</div><div class="line">    ExecuteSingle: (params) =&gt; &#123;</div><div class="line">        return axios.get(&apos;/backend-api/web/academy/list&apos;, &#123;</div><div class="line">            params: params</div><div class="line">        &#125;);</div><div class="line">    &#125;,</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>这样，如果前端页面所在的域名端口是 <code>http://127.0.0.1:8888</code> ，那么 <code>ExecuteSingle</code> 方法执行时发出的请求就是 <code>http://127.0.0.1:8888/backend-api/web/academy/list</code> 。<br>此时这个请求将被转发到 <code>proxyTable</code> 中 <code>target</code> 属性 <code>http://localhost:8710/</code> 处，即实际执行的请求会转变成 <code>http://localhost:8710/backend-api/web/academy/list</code> ；同时，由于 <code>pathRewrite</code> 属性的声明，其中路径中的 <code>^/backend-api</code> 部分还会被重写为 <code>xxx</code>，因此最终实际的请求是 <code>http://localhost:8710/xxx/web/academy/list</code>。</p>
+<p>注意，上述使用场景都是针对 <code>npm run dev</code> 启动时才有效。<br><strong>注意</strong>：修改 <code>config/index.js</code> 后，一定要重新运行 <code>npm run dev</code> 才会生效！！！</p>
+<h2 id="配置到-nginx"><a href="#配置到-nginx" class="headerlink" title="配置到 nginx"></a>配置到 nginx</h2><p>上述解决方法都是针对使用 <code>npm run dev</code> 场景下才有效，真正部署至线上时，我们通常会使用 <code>npm run build</code> 打出一个 <code>dist</code> 包，并使用 Nginx 服务器进行部署。<br>此时 <code>dist</code> 目录中的前端代码是不受上述代理配置约束的，它会按照正常的逻辑访问 <code>http://127.0.0.1:8888/backend-api/web/academy/list</code> 。<br>这当然是我们不希望看到的，为了解决这个问题，通常是修改 Nginx 服务器配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">location ^~/backend-api/ &#123;</div><div class="line">    proxy_pass http://localhost:8710/;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这样使所有带 <code>/backend-api/</code> 的请求都被转发到后台端口，实际上也是完成了 <code>proxyTable</code> 的工作。<br>但在实际使用中发现，经过一次 <code>proxy_pass</code> 的请求，偶尔会出现一直 pending 的情况，直到超时了才重试，重试后又正常返回。</p>
+<p>具体现象和 <a href="https://segmentfault.com/q/1010000014023324" target="_blank" rel="external">这篇文章</a>  描述的很像，排查了好长时间，最终根据 <a href="https://www.lwhweb.com/2018/09/06/nginx-upstream-timed-out-10060/" target="_blank" rel="external">这篇博客</a> 知道了原因。<br>标准解决方法是将 <code>localhost</code> 修改为 <code>127.0.0.1</code> 即可，妥协的解决方法可以是设置一个较少的 <code>proxy_connect_timeout</code> 值让其超时自动重试。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://segmentfault.com/a/1190000014396546" target="_blank" rel="external">https://segmentfault.com/a/1190000014396546</a><br><a href="https://vuejs-templates.github.io/webpack/proxy.html" target="_blank" rel="external">https://vuejs-templates.github.io/webpack/proxy.html</a><br><a href="https://www.cnblogs.com/goloving/p/9170508.html" target="_blank" rel="external">https://www.cnblogs.com/goloving/p/9170508.html</a><br><a href="https://segmentfault.com/q/1010000014023324" target="_blank" rel="external">https://segmentfault.com/q/1010000014023324</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/09/06/Vue使用proxyTable解决跨域问题/" data-id="clcpwy3f300c35e8tzjp2qf29" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-FFMPeg剪切音频和拼接音频" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2019/09/04/FFMPeg剪切音频和拼接音频/" class="article-date">
+  <time datetime="2019-09-04T13:06:58.000Z" itemprop="datePublished">2019-09-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2019/09/04/FFMPeg剪切音频和拼接音频/">FFMPeg剪切音频和拼接音频</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="截取音频"><a href="#截取音频" class="headerlink" title="截取音频"></a>截取音频</h2><p>使用如下命令可以指定音频从某时间点开始，持续多长时间：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ffmpeg -i source_mp3.mp3 -ss [start_time] -t [duration_time] -acodec copy output_mp3.mp3</div></pre></td></tr></table></figure></p>
+<p>比如下面将从 <code>00:01:12</code> 开始，持续时长 <code>1</code> 分钟 <code>42</code> 秒：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ffmpeg -i source_mp3.mp3 -ss 00:01:12 -t 00:01:42 -acodec copy output_mp3.mp3</div></pre></td></tr></table></figure></p>
+<h2 id="拼接音频"><a href="#拼接音频" class="headerlink" title="拼接音频"></a>拼接音频</h2><p>在截取音频的需求之上，还可能需要拼接音频。<br>通常使用方式是在当前工作目录 <code>work_dir</code> 下放置所有要拼接的音频：</p>
+<ul>
+<li>1.mp3</li>
+<li>2.mp3</li>
+<li>3.mp3</li>
+<li>…<br>然后用一个文本文件 <code>list.txt</code> 组织它们，每行一个音频文件：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">file &apos;1.mp3&apos;</div><div class="line">file &apos;2.mp3&apos;</div><div class="line">file &apos;3.mp3&apos;</div><div class="line">...</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>然后在当前工作目录下输入命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ffmpeg -f concat -safe 0 -i list.txt -c copy output3.mp3</div></pre></td></tr></table></figure></p>
+<p>就能将上述多个音频文件按照文件中的顺序拼接成一个大音频文件了。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://blog.zinewow.com/post/192.html" target="_blank" rel="external">http://blog.zinewow.com/post/192.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2019/09/04/FFMPeg剪切音频和拼接音频/" data-id="clcpwy3aa001m5e8twzpytr9d" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/FFMpeg/">FFMpeg</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/10/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/9/">9</a><a class="page-number" href="/blog-hexo/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/blog-hexo/page/12/">12</a><a class="page-number" href="/blog-hexo/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/24/">24</a><a class="extend next" rel="next" href="/blog-hexo/page/12/">weiter &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Kategorien</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工作/">工作</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/科研/">科研</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/3D/">3D</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Alembic/">Alembic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Anime-js/">Anime.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Blender/">Blender</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CMake/">CMake</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/COCO/">COCO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/COCOAPI/">COCOAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CentOS/">CentOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Code-Coverage/">Code Coverage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Composer/">Composer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Cookie/">Cookie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Debug/">Debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/DeepLearning/">DeepLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Django/">Django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FFMpeg/">FFMpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FIGlet/">FIGlet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faiss/">Faiss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FastAPI/">FastAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Flask/">Flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Flyway/">Flyway</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Gem/">Gem</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git-Bash/">Git Bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/GitHub/">GitHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/GitLab/">GitLab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Go/">Go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JdbcTemplate/">JdbcTemplate</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Loguru/">Loguru</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MS-COCO/">MS COCO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Markdown/">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Math/">Math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Matplotlib/">Matplotlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Maven/">Maven</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Memory/">Memory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mkdocs/">Mkdocs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MyBatis/">MyBatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MyBatisPlus/">MyBatisPlus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mybatis/">Mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Noise/">Noise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Numpy/">Numpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nvidia-Driver/">Nvidia Driver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oh-My-Zsh/">Oh-My-Zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenCV/">OpenCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PDF/">PDF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Paper-js/">Paper.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pip/">Pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PosixPath/">PosixPath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PyTorch/">PyTorch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PyYAML/">PyYAML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pythonenv/">Pythonenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/RLE/">RLE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ruby/">Ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/RuleEngine/">RuleEngine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Rust/">Rust</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SQLAlchemy/">SQLAlchemy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring-Boot/">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SpringCloud/">SpringCloud</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Supervisor/">Supervisor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Swagger/">Swagger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Swagger-UI/">Swagger-UI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/TensorRT/">TensorRT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Torch/">Torch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/TorchServe/">TorchServe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VB/">VB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VS-Code/">VS Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VSCode/">VSCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Visual-Studio/">Visual Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue-js/">Vue.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vuetify/">Vuetify</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/YAML/">YAML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/axios/">axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/base64/">base64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/bpy/">bpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/bumpversion/">bumpversion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/conda/">conda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/cookiecutter/">cookiecutter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/coverage/">coverage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/crontab/">crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/faiss/">faiss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastapi/">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastjson/">fastjson</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/heatmap-js/">heatmap.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/hexdump/">hexdump</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/interact-js/">interact.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/iptables/">iptables</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/libfacedetection/">libfacedetection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/nvidia/">nvidia</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/obj/">obj</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/peewee/">peewee</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/pip/">pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/pytest/">pytest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/scp/">scp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/sed/">sed</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/setuptools/">setuptools</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ssh/">ssh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/torchvision/">torchvision</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/verdaccio/">verdaccio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/vim/">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/virtualenv/">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/xargs/">xargs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/yacs/">yacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/yaml/">yaml</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/zip/">zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/zsh/">zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/blog-hexo/tags/3D/" style="font-size: 10px;">3D</a> <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Alembic/" style="font-size: 10px;">Alembic</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 11.43px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/Blender/" style="font-size: 10px;">Blender</a> <a href="/blog-hexo/tags/C/" style="font-size: 11.43px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CMake/" style="font-size: 10px;">CMake</a> <a href="/blog-hexo/tags/COCO/" style="font-size: 10px;">COCO</a> <a href="/blog-hexo/tags/COCOAPI/" style="font-size: 10px;">COCOAPI</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 10.71px;">CSharp</a> <a href="/blog-hexo/tags/CentOS/" style="font-size: 10px;">CentOS</a> <a href="/blog-hexo/tags/Code-Coverage/" style="font-size: 10px;">Code Coverage</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 10.71px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Cookie/" style="font-size: 10.71px;">Cookie</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Debug/" style="font-size: 10px;">Debug</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/DeepLearning/" style="font-size: 10px;">DeepLearning</a> <a href="/blog-hexo/tags/Django/" style="font-size: 10px;">Django</a> <a href="/blog-hexo/tags/Docker/" style="font-size: 10.71px;">Docker</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.14px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10.71px;">Excel</a> <a href="/blog-hexo/tags/FFMpeg/" style="font-size: 10px;">FFMpeg</a> <a href="/blog-hexo/tags/FIGlet/" style="font-size: 10px;">FIGlet</a> <a href="/blog-hexo/tags/Faiss/" style="font-size: 10px;">Faiss</a> <a href="/blog-hexo/tags/FastAPI/" style="font-size: 10px;">FastAPI</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Flask/" style="font-size: 10px;">Flask</a> <a href="/blog-hexo/tags/Flyway/" style="font-size: 10px;">Flyway</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15px;">Git</a> <a href="/blog-hexo/tags/Git-Bash/" style="font-size: 10px;">Git Bash</a> <a href="/blog-hexo/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/blog-hexo/tags/GitLab/" style="font-size: 10px;">GitLab</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Go/" style="font-size: 10.71px;">Go</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10.71px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 12.14px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 16.43px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 12.14px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.14px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.57px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 17.86px;">Linux</a> <a href="/blog-hexo/tags/Loguru/" style="font-size: 10px;">Loguru</a> <a href="/blog-hexo/tags/MS-COCO/" style="font-size: 10px;">MS COCO</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/blog-hexo/tags/Math/" style="font-size: 10.71px;">Math</a> <a href="/blog-hexo/tags/Matplotlib/" style="font-size: 10px;">Matplotlib</a> <a href="/blog-hexo/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/blog-hexo/tags/Memory/" style="font-size: 10px;">Memory</a> <a href="/blog-hexo/tags/Mkdocs/" style="font-size: 10px;">Mkdocs</a> <a href="/blog-hexo/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/blog-hexo/tags/MyBatisPlus/" style="font-size: 10px;">MyBatisPlus</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 10.71px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10.71px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.43px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Noise/" style="font-size: 10px;">Noise</a> <a href="/blog-hexo/tags/Numpy/" style="font-size: 10px;">Numpy</a> <a href="/blog-hexo/tags/Nvidia-Driver/" style="font-size: 10px;">Nvidia Driver</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenCV/" style="font-size: 10.71px;">OpenCV</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 11.43px;">Oracle</a> <a href="/blog-hexo/tags/PDF/" style="font-size: 10px;">PDF</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Paper-js/" style="font-size: 10px;">Paper.js</a> <a href="/blog-hexo/tags/Pip/" style="font-size: 10px;">Pip</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PosixPath/" style="font-size: 10px;">PosixPath</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 10.71px;">PowerShell</a> <a href="/blog-hexo/tags/PyTorch/" style="font-size: 10.71px;">PyTorch</a> <a href="/blog-hexo/tags/PyYAML/" style="font-size: 10px;">PyYAML</a> <a href="/blog-hexo/tags/Python/" style="font-size: 19.29px;">Python</a> <a href="/blog-hexo/tags/Pythonenv/" style="font-size: 10px;">Pythonenv</a> <a href="/blog-hexo/tags/RLE/" style="font-size: 10px;">RLE</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SQLAlchemy/" style="font-size: 10px;">SQLAlchemy</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12.86px;">SSH</a> <a href="/blog-hexo/tags/Shell/" style="font-size: 14.29px;">Shell</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 13.57px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Supervisor/" style="font-size: 10px;">Supervisor</a> <a href="/blog-hexo/tags/Swagger/" style="font-size: 10px;">Swagger</a> <a href="/blog-hexo/tags/Swagger-UI/" style="font-size: 10px;">Swagger-UI</a> <a href="/blog-hexo/tags/TensorRT/" style="font-size: 10px;">TensorRT</a> <a href="/blog-hexo/tags/Terminal/" style="font-size: 10px;">Terminal</a> <a href="/blog-hexo/tags/Torch/" style="font-size: 10px;">Torch</a> <a href="/blog-hexo/tags/TorchServe/" style="font-size: 10.71px;">TorchServe</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 11.43px;">Ubuntu</a> <a href="/blog-hexo/tags/VB/" style="font-size: 10px;">VB</a> <a href="/blog-hexo/tags/VS-Code/" style="font-size: 10.71px;">VS Code</a> <a href="/blog-hexo/tags/VSCode/" style="font-size: 10.71px;">VSCode</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15.71px;">Vue</a> <a href="/blog-hexo/tags/Vue-js/" style="font-size: 10px;">Vue.js</a> <a href="/blog-hexo/tags/Vuetify/" style="font-size: 10px;">Vuetify</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12.86px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/YAML/" style="font-size: 10.71px;">YAML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 10.71px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/bpy/" style="font-size: 10px;">bpy</a> <a href="/blog-hexo/tags/bumpversion/" style="font-size: 10px;">bumpversion</a> <a href="/blog-hexo/tags/conda/" style="font-size: 10.71px;">conda</a> <a href="/blog-hexo/tags/cookiecutter/" style="font-size: 10px;">cookiecutter</a> <a href="/blog-hexo/tags/coverage/" style="font-size: 10px;">coverage</a> <a href="/blog-hexo/tags/crontab/" style="font-size: 10px;">crontab</a> <a href="/blog-hexo/tags/faiss/" style="font-size: 10px;">faiss</a> <a href="/blog-hexo/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/ffmpeg/" style="font-size: 10px;">ffmpeg</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10.71px;">grep</a> <a href="/blog-hexo/tags/heatmap-js/" style="font-size: 10px;">heatmap.js</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/iptables/" style="font-size: 10.71px;">iptables</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10.71px;">npm</a> <a href="/blog-hexo/tags/nvidia/" style="font-size: 10px;">nvidia</a> <a href="/blog-hexo/tags/obj/" style="font-size: 10px;">obj</a> <a href="/blog-hexo/tags/peewee/" style="font-size: 10px;">peewee</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/pytest/" style="font-size: 10.71px;">pytest</a> <a href="/blog-hexo/tags/python/" style="font-size: 10px;">python</a> <a href="/blog-hexo/tags/scp/" style="font-size: 10px;">scp</a> <a href="/blog-hexo/tags/sed/" style="font-size: 10px;">sed</a> <a href="/blog-hexo/tags/setuptools/" style="font-size: 10px;">setuptools</a> <a href="/blog-hexo/tags/shell/" style="font-size: 10px;">shell</a> <a href="/blog-hexo/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/blog-hexo/tags/torchvision/" style="font-size: 10px;">torchvision</a> <a href="/blog-hexo/tags/verdaccio/" style="font-size: 10px;">verdaccio</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/xargs/" style="font-size: 10px;">xargs</a> <a href="/blog-hexo/tags/yacs/" style="font-size: 10px;">yacs</a> <a href="/blog-hexo/tags/yaml/" style="font-size: 10px;">yaml</a> <a href="/blog-hexo/tags/zip/" style="font-size: 10px;">zip</a> <a href="/blog-hexo/tags/zsh/" style="font-size: 10px;">zsh</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 11.43px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2023/01/">January 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/11/">November 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/10/">October 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog-hexo/2023/01/10/Vue使用js-yaml解析yaml文件/">Vue使用js-yaml解析yaml文件</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2023/01/04/Vue导出HTML页面至PDF/">Vue导出HTML页面至PDF</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/11/09/python将秒数转为格式化时间字符串/">python将秒数转为格式化时间字符串</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/10/19/使用Verdaccio搭建私有npm源/">使用Verdaccio搭建私有npm源</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/09/08/Docker实时查看容器的内存占用/">Docker实时查看容器的内存占用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 ckmessi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog-hexo/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog-hexo/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/blog-hexo/fancybox/jquery.fancybox.css">
+  <script src="/blog-hexo/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/blog-hexo/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

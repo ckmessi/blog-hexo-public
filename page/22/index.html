@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>不止是一位程序员</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Lionel的技术笔记总结">
+<meta property="og:type" content="website">
+<meta property="og:title" content="不止是一位程序员">
+<meta property="og:url" content="http://ckmessi.github.io/page/22/index.html">
+<meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="Lionel的技术笔记总结">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="不止是一位程序员">
+<meta name="twitter:description" content="Lionel的技术笔记总结">
+  
+    <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/blog-hexo/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog-hexo/" id="logo">不止是一位程序员</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog-hexo/" id="subtitle">Lionel的技术空间</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog-hexo/">Home</a>
+        
+          <a class="main-nav-link" href="/blog-hexo/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-React-Router-v4的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/09/23/React-Router-v4的使用/" class="article-date">
+  <time datetime="2017-09-23T11:12:33.000Z" itemprop="datePublished">2017-09-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/09/23/React-Router-v4的使用/">React Router v4的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在入门React，学习的过程中发现一些样例的Router不好使用。经过摸索后发现，react-router版本不是向下兼容的，react-router v2和v4有着截然不同的使用方法。网上许多样例都使用的是react-router@2.<em>，因此在依赖包为react-router@4.</em>时无法正确运行。</p>
+<p>根据<code>react-router@4.*</code>的一些参考教程，简单描述撰写一个能够使用的React Router的步骤。</p>
+<p>首先要说明的是，React路由相关的组件有许多，包括<code>react-router</code>，<code>react-router-dom</code>和<code>react-dom</code>。在这种情况下，应该使用npm安装<code>react-router-dom</code>。</p>
+<pre><code>You should almost never have to install react-router directly. That package provides the core routing components and functions for React Router applications. The other two provide environment specific (browser and react-native) components, but they both also re-export all of react-router&apos;s exports.
+</code></pre><h4 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h4><p>创建一个全新的React项目<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">create-react-app react-router-v4-sample</div></pre></td></tr></table></figure></p>
+<p>进入项目，使用<code>npm start</code>命令，检查项目是否能正常运行。</p>
+<p>安装<code>react-router-dom</code>插件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install react-router-dom -S</div></pre></td></tr></table></figure></p>
+<p>打开<code>package.json</code>，会发现<code>react-router-dom</code>和<code>react-dom</code>都已经安装了。</p>
+<p>修改<code>index.js</code>文件，将<code>&lt;App /&gt;</code>元素放置到<code>&lt;BrowserRouter&gt;</code>元素中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">import React from &apos;react&apos;;</div><div class="line">import ReactDOM from &apos;react-dom&apos;;</div><div class="line">import Main from &apos;./Main&apos;;</div><div class="line">import &apos;./index.css&apos;;</div><div class="line">import registerServiceWorker from &apos;./registerServiceWorker&apos;;</div><div class="line">import &#123; BrowserRouter &#125; from &apos;react-router-dom&apos;;</div><div class="line"></div><div class="line">ReactDOM.render((</div><div class="line">  &lt;BrowserRouter&gt;</div><div class="line">    &lt;Main /&gt;</div><div class="line">  &lt;/BrowserRouter&gt;</div><div class="line"> ), document.getElementById(&apos;root&apos;));</div><div class="line">registerServiceWorker();</div></pre></td></tr></table></figure></p>
+<p>此时项目应该不受影响，正常运行。</p>
+<h4 id="添加根据路由显示的内容"><a href="#添加根据路由显示的内容" class="headerlink" title="添加根据路由显示的内容"></a>添加根据路由显示的内容</h4><p>接下来要进行较多的改动，首先在<code>App.js</code>文件中添加一个<code>Switch</code>区域，表示根据路由选择不同的组件，并引入相关组件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">import React, &#123; Component &#125; from &apos;react&apos;;</div><div class="line">import &#123; Route, Switch &#125; from &apos;react-router-dom&apos;;</div><div class="line">import Home from &apos;./Home&apos;;</div><div class="line">import About from &apos;./About&apos;;</div><div class="line">import Blog from &apos;./Blog&apos;;</div><div class="line"></div><div class="line">class App extends Component &#123;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;div className=&quot;App&quot;&gt;</div><div class="line">        &lt;div&gt;</div><div class="line">            Here is common area</div><div class="line">        &lt;/div&gt;</div><div class="line">        &lt;Switch&gt;</div><div class="line">          &lt;Route exact path=&apos;/&apos; component=&#123;Home&#125;/&gt;</div><div class="line">          &lt;Route path=&apos;/about&apos; component=&#123;About&#125;/&gt;</div><div class="line">          &lt;Route path=&apos;/blog&apos; component=&#123;Blog&#125;/&gt;</div><div class="line">        &lt;/Switch&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">export default App;</div></pre></td></tr></table></figure></p>
+<p>在<code>src</code>目录添加三个新文件<code>Home.js</code>，<code>About.js</code>和<code>Blog.js</code>，并按照如下模板添加内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">import React, &#123; Component &#125; from &apos;react&apos;;</div><div class="line">class Home extends Component &#123;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;div&gt;</div><div class="line">        Here is Home page.</div><div class="line">      &lt;/div&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">export default Home;</div></pre></td></tr></table></figure></p>
+<p>运行，此时网页应该有两行文字，上面一行永远是<code>Here is common area</code>，下面一行则根据不同的路由显示对应的文字，如<code>Here is Home page</code></p>
+<h4 id="添加导航链接"><a href="#添加导航链接" class="headerlink" title="添加导航链接"></a>添加导航链接</h4><p>在<code>App.js</code>文件中，添加<code>Here is common area</code>所在的代码段，添加导航链接：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;header&gt;</div><div class="line">  &lt;nav&gt;</div><div class="line">	&lt;ul&gt;</div><div class="line">	  &lt;li&gt;&lt;Link to=&apos;/&apos;&gt;Home&lt;/Link&gt;&lt;/li&gt;</div><div class="line">	  &lt;li&gt;&lt;Link to=&apos;/about&apos;&gt;About&lt;/Link&gt;&lt;/li&gt;</div><div class="line">	  &lt;li&gt;&lt;Link to=&apos;blog&apos;&gt;Blog&lt;/Link&gt;&lt;/li&gt;</div><div class="line">	&lt;/ul&gt;</div><div class="line">  &lt;/nav&gt;</div><div class="line">&lt;/header&gt;</div></pre></td></tr></table></figure></p>
+<p>注意添加<code>Link</code>的引用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import &#123; Route, Switch, Link &#125; from &apos;react-router-dom&apos;;</div></pre></td></tr></table></figure></p>
+<p>打开网页，此时应该能够出现三个选择，点击不同的链接，下面<code>Switch</code>区域的文字内容将根据路由规则进行切换。</p>
+<p>基本的React Router v4使用方法就是这些。</p>
+<hr>
+<p>参考资料：<br><a href="https://medium.com/@pshrmn/a-simple-react-router-v4-tutorial-7f23ff27adf" target="_blank" rel="external">https://medium.com/@pshrmn/a-simple-react-router-v4-tutorial-7f23ff27adf</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/09/23/React-Router-v4的使用/" data-id="clcpwy3e800ab5e8td0sqco5h" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/React/">React</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-php7新特性中的一些语法糖" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/09/22/php7新特性中的一些语法糖/" class="article-date">
+  <time datetime="2017-09-22T12:54:22.000Z" itemprop="datePublished">2017-09-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/09/22/php7新特性中的一些语法糖/">php7新特性中的一些语法糖</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>php7相比于php5有许多新特性，通过常用的语法糖，能够使撰写的代码更加优雅、简洁。</p>
+<h4 id="运算符"><a href="#运算符" class="headerlink" title="??运算符"></a>??运算符</h4><p><code>??</code>运算符称作null合并运算符。若运算符的左操作数不为<code>null</code>，则返回左操作数；否则返回右操作数。<br>举例而言：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$a = $b ?? &quot;default&quot;;</div></pre></td></tr></table></figure></p>
+<p>若<code>$b</code>不为<code>null</code>则<code>$a</code>的值为<code>$b</code>，否则<code>$a</code>被赋值字符串”default”。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$name = $_GET[&apos;name&apos;] ?? &apos;Leo&apos;;</div><div class="line">//相当于：</div><div class="line">$name = isset($_GET[&apos;name&apos;]) ? $_GET[&apos;name&apos;] : &apos;Leo&apos;;</div></pre></td></tr></table></figure>
+<p>使用<code>??</code>运算符能够使代码更加简洁。</p>
+<h4 id="太空船操作符-lt-gt"><a href="#太空船操作符-lt-gt" class="headerlink" title="太空船操作符&lt;=&gt;"></a>太空船操作符&lt;=&gt;</h4><p>太空船操作符用于比较两个表达式，当运算符的左操作数小于、等于或大于右操作数时，分别返回-1、0或1<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">// 整数</div><div class="line">echo 1 &lt;=&gt; 1; // 0</div><div class="line">echo 1 &lt;=&gt; 2; // -1</div><div class="line">echo 2 &lt;=&gt; 1; // 1</div><div class="line"></div><div class="line">// 浮点数</div><div class="line">echo 1.5 &lt;=&gt; 1.5; // 0</div><div class="line">echo 1.5 &lt;=&gt; 2.5; // -1</div><div class="line">echo 2.5 &lt;=&gt; 1.5; // 1</div><div class="line"> </div><div class="line">// 字符串</div><div class="line">echo &quot;a&quot; &lt;=&gt; &quot;a&quot;; // 0</div><div class="line">echo &quot;a&quot; &lt;=&gt; &quot;b&quot;; // -1</div><div class="line">echo &quot;b&quot; &lt;=&gt; &quot;a&quot;; // 1</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<p>此前一些自定义排序函数<code>sort</code>中的代码可以更加简洁了。</p>
+<h4 id="通过define-定义常量数组"><a href="#通过define-定义常量数组" class="headerlink" title="通过define()定义常量数组"></a>通过<code>define()</code>定义常量数组</h4><p><code>Array</code>类型的常量可以通过<code>define()</code>来定义了，这对于一些全局通用固定信息来说更加便捷。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">define(&apos;ANIMALS&apos;, [</div><div class="line">    &apos;dog&apos;,</div><div class="line">    &apos;cat&apos;,</div><div class="line">    &apos;bird&apos;</div><div class="line">]);</div><div class="line">echo ANIMALS[1]; // 输出 &quot;cat&quot;</div><div class="line">?&gt;</div></pre></td></tr></table></figure>
+<h4 id="匿名类"><a href="#匿名类" class="headerlink" title="匿名类"></a>匿名类</h4><p>可以使用<code>new class</code>来声明一个匿名类，这在一些一次性使用的地方可能会比较方便。</p>
+<h4 id="Unicode-codepoint-转译语法"><a href="#Unicode-codepoint-转译语法" class="headerlink" title="Unicode codepoint 转译语法"></a>Unicode codepoint 转译语法</h4><p>可以接受一个以十六进制形式的Unicode Codepoint，打印出一个双引号或heredoc包围的<code>UTF-8</code>编码格式的字符串。 可以接受任何有效的 codepoint，并且开头的<code>0</code>是可以省略的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">echo &quot;\u&#123;aa&#125;&quot;;</div><div class="line">echo &quot;\u&#123;0000aa&#125;&quot;;</div><div class="line">echo &quot;\u&#123;9999&#125;&quot;;</div></pre></td></tr></table></figure></p>
+<h4 id="Closure-call"><a href="#Closure-call" class="headerlink" title="Closure::call()"></a>Closure::call()</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">class A &#123;private $x = 1;&#125;</div><div class="line">// PHP 7 之前</div><div class="line">$getXCB = function() &#123;return $this-&gt;x;&#125;;</div><div class="line">$getX = $getXCB-&gt;bindTo(new A, &apos;A&apos;); // intermediate closure</div><div class="line">echo $getX();</div><div class="line">// PHP 7 之后</div><div class="line">$getX = function() &#123;return $this-&gt;x;&#125;;</div><div class="line">echo $getX-&gt;call(new A);</div></pre></td></tr></table></figure>
+<h4 id="为unserialize-提供过滤"><a href="#为unserialize-提供过滤" class="headerlink" title="为unserialize()提供过滤"></a>为<code>unserialize()</code>提供过滤</h4><p>这个特性旨在提供更安全的方式解包不可靠的数据。它通过白名单的方式来防止潜在的代码注入。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">// 将所有的对象都转换为 __PHP_Incomplete_Class 对象</div><div class="line">$data = unserialize($foo, [&quot;allowed_classes&quot; =&gt; false]);</div><div class="line"></div><div class="line">// 将除 MyClass 和 MyClass2 之外的所有对象都转换为 __PHP_Incomplete_Class 对象</div><div class="line">$data = unserialize($foo, [&quot;allowed_classes&quot; =&gt; [&quot;MyClass&quot;, &quot;MyClass2&quot;]);</div><div class="line"></div><div class="line">// 默认情况下所有的类都是可接受的，等同于省略第二个参数</div><div class="line">$data = unserialize($foo, [&quot;allowed_classes&quot; =&gt; true]);</div></pre></td></tr></table></figure></p>
+<h4 id="Group-use-declarations"><a href="#Group-use-declarations" class="headerlink" title="Group use declarations"></a>Group use declarations</h4><p>从同一 namespace 导入的类、函数和常量现在可以通过单个 use 语句 一次性导入了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">// PHP 7 之前的代码</div><div class="line">use some\namespace\ClassA;</div><div class="line">use some\namespace\ClassB;</div><div class="line">use some\namespace\ClassC as C;</div><div class="line"></div><div class="line">use function some\namespace\fn_a;</div><div class="line">use function some\namespace\fn_b;</div><div class="line">use function some\namespace\fn_c;</div><div class="line"></div><div class="line">use const some\namespace\ConstA;</div><div class="line">use const some\namespace\ConstB;</div><div class="line">use const some\namespace\ConstC;</div><div class="line"></div><div class="line">// PHP 7+ 及更高版本的代码</div><div class="line">use some\namespace\&#123;ClassA, ClassB, ClassC as C&#125;;</div><div class="line">use function some\namespace\&#123;fn_a, fn_b, fn_c&#125;;</div><div class="line">use const some\namespace\&#123;ConstA, ConstB, ConstC&#125;;</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<h4 id="标量类型声明"><a href="#标量类型声明" class="headerlink" title="标量类型声明"></a>标量类型声明</h4><p>此前PHP语言重要的特点就是弱类型，使代码编写者不用关心变量的具体类型，但也可能留下很多隐患。<br>PHP7开始支持变量类型的定义，引入一个开关指令<code>declare(strict_type=1);</code><br>如果进行了参数和返回值的类型声明，在不开启strict_type时，PHP将尝试帮你转换成要求的类型；在开启strict_type时，如果类型不匹配就抛出错误。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">declare(strict_types=1);</div><div class="line">function add(int $a, int $b): int &#123;</div><div class="line">    return $a + $b;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>注意只是在传参和返回值上不允许隐式类型转换，在使用内置函数时还是会转换，并且在变量声明的时候也不是强类型严格要求。</p>
+<p>Referrence: </p>
+<ul>
+<li><a href="http://php.net/manual/zh/migration70.new-features.php" target="_blank" rel="external">http://php.net/manual/zh/migration70.new-features.php</a></li>
+<li><a href="http://blog.csdn.net/black_ox/article/details/50354619" target="_blank" rel="external">http://blog.csdn.net/black_ox/article/details/50354619</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/09/22/php7新特性中的一些语法糖/" data-id="clcpwy3fj00dc5e8t5cjau7ml" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-开源许可协议简介" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/09/18/开源许可协议简介/" class="article-date">
+  <time datetime="2017-09-18T14:22:23.000Z" itemprop="datePublished">2017-09-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/09/18/开源许可协议简介/">开源许可协议简介</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>开源许可协议简介</p>
+<p>此前经常在别人的Github仓库中看到采用某某开源许可协议，这里进行总结概括，使对开源许可协议的理解更加清晰。</p>
+<p>通常来讲，开源界5大许可协议包括：</p>
+<ul>
+<li>GPL</li>
+<li>LGPL</li>
+<li>BSD</li>
+<li>MIT</li>
+<li>Apache</li>
+</ul>
+<p>此外还有Mozilla License等协议。</p>
+<h4 id="GPL"><a href="#GPL" class="headerlink" title="GPL"></a>GPL</h4><p>GPL(GNU General Public License)，称为GNU通用公共授权许可证。<br>GPL是鼓励开源自由的，因此它唯一的限制是，如果软件产品中包含或修改了使用GPL的代码，那么项目必须是GPL协议。<br>这一点主要约束了将免费代码进行修改后闭源的谋利。<br>GPL协议的约束可以概括为：自由，并且使用了该产品的软件也必须是GPL协议。</p>
+<p>由于GPL严格要求使用了GPL类库的软件产品必须使用GPL协议，对于使用GPL协议的开源代码，商业软件或者对代码有保密要求的部门就不适合集成/采用作为类库和二次开发的基础。</p>
+<h4 id="LGPL"><a href="#LGPL" class="headerlink" title="LGPL"></a>LGPL</h4><p>LGPL(GNU Lesser General Public License)，称为GNU宽通用公共许可证。<br>LGPL通常用于一些(但不是全部)GNU程序库，之前曾被称为GNU库通用公共许可证，LGPL是GPL的一个为主要为类库使用设计的开源协议。和GPL要求任何使用/修改/衍生之GPL类库的的软件必须采用GPL协议不同。LGPL 允许商业软件通过类库引用(link)方式使用LGPL类库而不需要开源商业软件的代码。这使得采用LGPL协议的开源代码可以被商业软件作为类库引用并发布和销售。<br>LGPL协议的约束可以概括为：如果是引用包但没有使用代码，就不受GPL的限制。</p>
+<p>公司在使用自由软件之前应该保证在LGPL或其它GPL变种的授权下，而不能是GPL。</p>
+<h4 id="BSD"><a href="#BSD" class="headerlink" title="BSD"></a>BSD</h4><p>BSD(Berkeley Software Distribution)，也称为伯克利软件发行版许可证。<br>BSD开源协议给于使用者很大的自由。可以自由的使用，修改源代码，也可以将修改后的代码作为开源或者专有软件再发布。当发布使用了BSD协议的代码，或则以BSD协议代码为基础做二次开发自己的产品时，需要满足三个条件：<br>1.如果再发布的产品中包含源代码，则在源代码中必须带有原来代码中的BSD协议。<br>2.如果再发布的只是二进制类库/软件，则需要在类库/软件的文档和版权声明中包含原来代码中的BSD协议。<br>3.不可以用开源代码的作者/机构名字和原来产品的名字做市场推广。<br>BSD协议的约束可以概括为：你可以自由地使用代码，只需要保留代码原有的协议。</p>
+<p>BSD代码鼓励代码共享，但需要尊重代码作者的著作权。BSD由于允许使用者修改和重新发布代码，也允许使用或在BSD代码上开发商业软件发布和销售，因此是对商业集成很友好的协议。<br>很多的公司企业在选用开源产品的时候都首选BSD协议，因为可以完全控制这些第三方的代码，在必要的时候可以修改或者二次开发。</p>
+<h4 id="MIT"><a href="#MIT" class="headerlink" title="MIT"></a>MIT</h4><p>MIT是和BSD一样宽范的许可协议，作者只想保留版权，而无任何其他的限制。<br>只需要在发行版里包含原许可协议的声明，无论你是以二进制发布的还是以源代码发布的。<br>另外，相比于BSD协议更加宽松的一点是，可以使用开源代码的作者/机构名字和原来产品的名字做市场推广。</p>
+<h4 id="Apache"><a href="#Apache" class="headerlink" title="Apache"></a>Apache</h4><p>Apache Licence是著名的非盈利开源组织Apache采用的协议。该协议和BSD类似，同样鼓励代码共享和尊重原作者的著作权，同样允许代码修改，再发布（作为开源或商业软件）。需要条件和BSD类似：<br>1.需要给代码的用户一份Apache Licence<br>2.如果你修改了代码，需要再被修改的文件中说明。<br>3.在延伸的代码中（修改和有源代码衍生的代码中）需要带有原来代码中的协议，商标，专利声明和其他原来作者规定需要包含的说明。<br>4.如果再发布的产品中包含一个Notice文件，则在Notice文件中需要带有Apache Licence。你可以在Notice中增加自己的许可，但不可以表现为对Apache Licence构成更改。</p>
+<p>Apache Licence也是对商业应用友好的许可。使用者也可以在需要的时候修改代码来满足需要并作为开源或商业产品发布/销售。</p>
+<hr>
+<img src="/2017/09/18/开源许可协议简介/blog-hexo/2017/09/18/开源许可协议简介/license.PNG" alt="开源许可协议示意图" title="开源许可协议示意图">
+<p>总结：通常来讲，商业使用通常闭源，因此只能选择BSD、MIT和Apache；如果只是引用，可以使用LGPL和Mozilla。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/09/18/开源许可协议简介/" data-id="clcpwy3id00k55e8tvcc4nkug" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/License/">License</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Access-Control-Allow-Origin实现跨域访问" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/09/12/Access-Control-Allow-Origin实现跨域访问/" class="article-date">
+  <time datetime="2017-09-12T13:26:43.000Z" itemprop="datePublished">2017-09-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/09/12/Access-Control-Allow-Origin实现跨域访问/">Access-Control-Allow-Origin实现跨域访问</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在前端使用Ajax请求后台时，如果前端和后台项目是分离的，很容易出现跨域请求访问的错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">XMLHttpRequest cannot load http://localhost/.... The &apos;Access-Control-Allow-Origin&apos; header has a value  that is not equal to the supplied origin. Origin &apos;null&apos; is therefore not allowed access.</div></pre></td></tr></table></figure></p>
+<p>跨域指的是浏览器执行了其他网站的脚本。这是由浏览器的同源策略造成的，是浏览器对javascript施加的安全限制。<br>之前一直为其困扰，最近找到一种便捷的方法实现跨域访问，其基本原理是在服务器端设置Access-Control-Allow-Origin，表示允许浏览器跨域访问，相当于被请求资源给浏览器开了一道绿色通行证。</p>
+<p>客户端正常使用ajax请求资源：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">axios.get(&apos;http://localhost/your/path&apos;).then(function (response) &#123;</div><div class="line">    var data = response.data;</div><div class="line">    if (data.code === 200) &#123;</div><div class="line">        alert(data.data.message)</div><div class="line">    &#125; else &#123;</div><div class="line">        alert(data.data);</div><div class="line">    &#125;</div><div class="line">&#125;).catch(function (error) &#123;</div><div class="line">    alert(error);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>服务器端需要添加以下内容设置<code>header</code>信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// 指定允许其他域名访问  </div><div class="line">header(&apos;Access-Control-Allow-Origin:*&apos;);  </div><div class="line">// 响应类型  </div><div class="line">header(&apos;Access-Control-Allow-Methods:GET&apos;);  </div><div class="line">// 响应头设置  </div><div class="line">header(&apos;Access-Control-Allow-Headers:x-requested-with,content-type&apos;);</div></pre></td></tr></table></figure></p>
+<p>这样前端就不会报浏览器跨域访问的错误了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/09/12/Access-Control-Allow-Origin实现跨域访问/" data-id="clcpwy38k00005e8tw53frlau" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Azure-Application-Insights入门" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/09/11/Azure-Application-Insights入门/" class="article-date">
+  <time datetime="2017-09-11T14:32:06.000Z" itemprop="datePublished">2017-09-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/09/11/Azure-Application-Insights入门/">Azure Application Insights入门</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Application Insights是微软Azure平台的一项服务，声称能够全面监控和了解服务的行为、可靠性和性能。<br>可以这样理解，当一项应用添加了Application Insights插件后，相当于给自己的应用添加了许多监控机制，可以通过Azure平台页面直接监测服务的运行状况。类似于阿里云平台查看云主机吞吐量，或自行使用<code>tail -f x.log</code>命令监控日志信息。</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>首先需要理解以下几个概念：</p>
+<ul>
+<li>Azure Application Insights：微软推出的服务监控插件，可自行配置安装到应用中。</li>
+<li>Microsoft Azure：微软推出的云平台，用于监控配置了Application Insights的服务资源。</li>
+<li>InstrumentationKey：检测密钥，一项Azure上的Application Insights资源对应唯一的密钥，当项目配置密钥后，将直接将该项目应用绑定到密钥所标识的Azure资源上。</li>
+</ul>
+<h2 id="Application-Insights在ASP-NET中的使用"><a href="#Application-Insights在ASP-NET中的使用" class="headerlink" title="Application Insights在ASP.NET中的使用"></a>Application Insights在ASP.NET中的使用</h2><h4 id="设置InstrumentationKey"><a href="#设置InstrumentationKey" class="headerlink" title="设置InstrumentationKey"></a>设置<code>InstrumentationKey</code></h4><p>Application Insights的基本使用方法可以参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-asp-net" target="_blank" rel="external">微软官方文档</a>。<br>主要包括安装相关SDK，初始化Application Insights配置等流程。<br>最重要的步骤是添加<code>InstrumentationKey</code>，事实证明所有流程的最终结果本质上是在<code>ApplicationInsights.config</code>文件中添加该配置项，这样应用就能够连上Azure监控平台。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;InstrumentationKey&gt;Your Key&lt;/InstrumentationKey&gt;</div></pre></td></tr></table></figure></p>
+<p>由于不同部署平台可能需要使用不同的<code>InstrumentationKey</code>，比较好的方案是在程序启动后执行的代码中读取配置文件动态添加。<br>参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-configuration-with-applicationinsights-config#instrumentationkey" target="_blank" rel="external">文档</a>，可以在项目的启动添加中动态添加<code>InstrumentationKey</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">protected void Application_Start()</div><div class="line">&#123;</div><div class="line">	Microsoft.ApplicationInsights.Extensibility.</div><div class="line">		TelemetryConfiguration.Active.InstrumentationKey =</div><div class="line">          // - for example -</div><div class="line">        WebConfigurationManager.Settings[&quot;ikey&quot;];</div><div class="line">    //...</div></pre></td></tr></table></figure>
+<h4 id="设置cloud-RoleName"><a href="#设置cloud-RoleName" class="headerlink" title="设置cloud_RoleName"></a>设置<code>cloud_RoleName</code></h4><p><code>cloud_RoleName</code>的作用是区分使用同一个<code>InstrumentationKey</code>的不同组件（Components）。例如，在同一个应用下，可能有多个组件组成，此时如果希望对一些性能指标、日志记录进行筛选，则需要给每个组件添加唯一的<code>cloud_RoleName</code>，在Azure监控平台上的”搜索”中可以添加<code>cloud_RoleName</code>的筛选条件。</p>
+<p>参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-monitor-multi-role-apps" target="_blank" rel="external">官方文档1</a>和<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-api-filtering-sampling#add-properties-itelemetryinitializer" target="_blank" rel="external">cloud_RoleName的覆写方法</a>，可以在程序启动时为应用配置特殊的<code>cloud_RoleName</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">private class MyTelemetryInitializer : ITelemetryInitializer</div><div class="line">&#123;</div><div class="line">	public void Initialize(ITelemetry telemetry)</div><div class="line">	&#123;</div><div class="line">		telemetry.Context.Cloud.RoleName = &quot;TEST_ROLE_NAME&quot;;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">TelemetryConfiguration.Active.TelemetryInitializers.Add(new MyTelemetryInitializer());</div></pre></td></tr></table></figure></p>
+<h4 id="添加遥测追踪"><a href="#添加遥测追踪" class="headerlink" title="添加遥测追踪"></a>添加遥测追踪</h4><p>参考<a href="https://docs.microsoft.com/en-us/azure/application-insights/app-insights-asp-net-trace-logs" target="_blank" rel="external">文档</a>可以添加日志记录，最基础的方案是手动添加一项遥测数据。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var telemetry = new Microsoft.ApplicationInsights.TelemetryClient();</div><div class="line">telemetry.TrackTrace(&quot;Slow database response&quot;,</div><div class="line">               SeverityLevel.Warning,</div><div class="line">               new Dictionary&lt;string,string&gt; &#123; &#123;&quot;database&quot;, db.ID&#125; &#125;);</div></pre></td></tr></table></figure></p>
+<p>当包含上述代码的代码段运行后，在监控平台上可以找到相关追踪的日志记录。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/09/11/Azure-Application-Insights入门/" data-id="clcpwy39b000f5e8thbe7n47y" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C#</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Laravel中Collection排序函数的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/08/19/Laravel中Collection排序函数的使用/" class="article-date">
+  <time datetime="2017-08-19T05:14:24.000Z" itemprop="datePublished">2017-08-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/08/19/Laravel中Collection排序函数的使用/">Laravel中Collection排序函数的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在Laravel中，使用Collection类的排序函数能够方便地对一个数组进行排序。这在无法使用默认数据库排序时非常有用。   </p>
+<h2 id="基本排序"><a href="#基本排序" class="headerlink" title="基本排序"></a>基本排序</h2><p>使用<code>collect</code>帮助函数的<code>sortBy</code>函数能够方便地实现对一个数组按照某个<code>key</code>进行排序：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">$sample_array = array(</div><div class="line">    array(</div><div class="line">        &apos;name&apos; =&gt; &apos;a1&apos;,</div><div class="line">        &apos;age&apos; =&gt; 12</div><div class="line">    ),</div><div class="line">    array(</div><div class="line">        &apos;name&apos; =&gt; &apos;a2&apos;,</div><div class="line">        &apos;age&apos; =&gt; 6</div><div class="line">    ),</div><div class="line">    array(</div><div class="line">    &apos;name&apos; =&gt; &apos;a3&apos;,</div><div class="line">    &apos;age&apos; =&gt; 8</div><div class="line">    )</div><div class="line">);</div><div class="line">$sample_array_sort = collect($sample_array)-&gt;sortBy(&apos;age&apos;)-&gt;values()-&gt;all();</div></pre></td></tr></table></figure></p>
+<p>得到的<code>sample_array_sort</code>数组将按照<code>age</code>的大小进行排序。<br>如果需要修改排序方向，可以使用<code>sortByDesc</code>替换<code>sortBy</code>函数。   </p>
+<h2 id="自定义排序"><a href="#自定义排序" class="headerlink" title="自定义排序"></a>自定义排序</h2><p>除了按照某个<code>key</code>的数值进行排序外，还可以自定义排序函数函数，使用方法为传入一个回调函数，并返回一个<code>int</code>类型的值作为排序依据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">$collection = collect([</div><div class="line">    [&apos;name&apos; =&gt; &apos;Desk&apos;, &apos;colors&apos; =&gt; [&apos;Black&apos;, &apos;Mahogany&apos;]],</div><div class="line">    [&apos;name&apos; =&gt; &apos;Chair&apos;, &apos;colors&apos; =&gt; [&apos;Black&apos;]],</div><div class="line">    [&apos;name&apos; =&gt; &apos;Bookcase&apos;, &apos;colors&apos; =&gt; [&apos;Red&apos;, &apos;Beige&apos;, &apos;Brown&apos;]],</div><div class="line">]);</div><div class="line"></div><div class="line">$sorted = $collection-&gt;sortBy(function ($product, $key) &#123;</div><div class="line">    return count($product[&apos;colors&apos;]);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">$sorted-&gt;values()-&gt;all();</div><div class="line"></div><div class="line">/*</div><div class="line">    [</div><div class="line">        [&apos;name&apos; =&gt; &apos;Chair&apos;, &apos;colors&apos; =&gt; [&apos;Black&apos;]],</div><div class="line">        [&apos;name&apos; =&gt; &apos;Desk&apos;, &apos;colors&apos; =&gt; [&apos;Black&apos;, &apos;Mahogany&apos;]],</div><div class="line">        [&apos;name&apos; =&gt; &apos;Bookcase&apos;, &apos;colors&apos; =&gt; [&apos;Red&apos;, &apos;Beige&apos;, &apos;Brown&apos;]],</div><div class="line">    ]</div><div class="line">*/</div></pre></td></tr></table></figure></p>
+<p>如上所示的代码中，排序函数将根据数组中每一项中<code>colors</code>数组的长度进行排序。</p>
+<h2 id="排序是否重组key的问题"><a href="#排序是否重组key的问题" class="headerlink" title="排序是否重组key的问题"></a>排序是否重组key的问题</h2><p>需要注意的是，单独使用<code>sortBy</code>方法不会重新修改数组中索引，这在使用JSON格式输出是会造成一些困扰。<br>Laraval官方文档中写到：</p>
+<pre><code>The sorted collection keeps the original array keys, so in this example we&apos;ll use the values method to reset the keys to consecutively numbered indexes:
+</code></pre><p>因此，在使用时，为了使排序结果满足预期，最好使用<code>&gt;values()-&gt;all()</code>方法。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/08/19/Laravel中Collection排序函数的使用/" data-id="clcpwy3bg004g5e8t8zhm1tp6" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Solution-sln-File-in-Visual-Studio" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/08/18/Solution-sln-File-in-Visual-Studio/" class="article-date">
+  <time datetime="2017-08-18T13:34:32.000Z" itemprop="datePublished">2017-08-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/08/18/Solution-sln-File-in-Visual-Studio/">Solution(.sln) File in Visual Studio</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>使用Visual Studio创建的项目都包含一个<code>.sln</code>文件，本文简要说明文件的内容及相关作用。</p>
+<h2 id="文件说明"><a href="#文件说明" class="headerlink" title="文件说明"></a>文件说明</h2><p>在Visual Studio中，解决方案是用于组织管理项目的结构。解决方案将所有项目的状态信息保存在<code>.sln</code>文件和<code>.suo</code>文件中。<code>.sln</code>文件以文本信息的方式，保存着环境需要用于查找和载入项目及其引用VSPackage的持久化数据name-value参数。当一个用户打开解决方案时，开发环境将遍历<code>.sln</code>文件中的<code>preSolution</code>、<code>Project</code>和<code>postSolution</code>信息，载入解决方案、解决方案中的项目、以及解决方案相关联的持久化信息。</p>
+<h2 id="内容概览"><a href="#内容概览" class="headerlink" title="内容概览"></a>内容概览</h2><p>我们可以显示地将<code>.sln</code>文件中的内容划分为以下几个部分：</p>
+<h4 id="第一部分，版本信息"><a href="#第一部分，版本信息" class="headerlink" title="第一部分，版本信息"></a>第一部分，版本信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Microsoft Visual Studio Solution File, Format Version 12.00</div><div class="line"># Visual Studio 14</div><div class="line">VisualStudioVersion = 14.0.25420.1</div><div class="line">MinimumVisualStudioVersion = 10.0.40219.1</div></pre></td></tr></table></figure>
+<h4 id="第二部分，项目信息"><a href="#第二部分，项目信息" class="headerlink" title="第二部分，项目信息"></a>第二部分，项目信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Project(&quot;&#123;FAE04EC0-301F-11D3-BF4B-00C04F79EFBC&#125;&quot;) = &quot;WebApplicationSample&quot;, &quot;WebApplicationSample\WebApplicationSample.csproj&quot;, &quot;&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;&quot;</div><div class="line">EndProject</div></pre></td></tr></table></figure>
+<h4 id="第三部分，全局信息"><a href="#第三部分，全局信息" class="headerlink" title="第三部分，全局信息"></a>第三部分，全局信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">Global</div><div class="line">	GlobalSection(SolutionConfigurationPlatforms) = preSolution</div><div class="line">		Debug|Any CPU = Debug|Any CPU</div><div class="line">		Release|Any CPU = Release|Any CPU</div><div class="line">	EndGlobalSection</div><div class="line">	GlobalSection(ProjectConfigurationPlatforms) = postSolution</div><div class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Debug|Any CPU.ActiveCfg = Debug|Any CPU</div><div class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Debug|Any CPU.Build.0 = Debug|Any CPU</div><div class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Release|Any CPU.ActiveCfg = Release|Any CPU</div><div class="line">		&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;.Release|Any CPU.Build.0 = Release|Any CPU</div><div class="line">	EndGlobalSection</div><div class="line">	GlobalSection(SolutionProperties) = preSolution</div><div class="line">		HideSolutionNode = FALSE</div><div class="line">	EndGlobalSection</div><div class="line">EndGlobal</div></pre></td></tr></table></figure>
+<h2 id="开发环境载入流程"><a href="#开发环境载入流程" class="headerlink" title="开发环境载入流程"></a>开发环境载入流程</h2><p>参考(MSDN官方文档)[<a href="https://msdn.microsoft.com/en-us/library/bb165951.aspx]，为了载入`解决方案`，环境平台将执行以下任务：" target="_blank" rel="external">https://msdn.microsoft.com/en-us/library/bb165951.aspx]，为了载入`解决方案`，环境平台将执行以下任务：</a></p>
+<ol>
+<li><p>开发环境将阅读Global区域，处理所有标记为<code>preSolution</code>的区域，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">GlobalSection(SolutionConfigurationPlatforms) = preSolution</div><div class="line">	Debug|Any CPU = Debug|Any CPU</div><div class="line">	Release|Any CPU = Release|Any CPU</div></pre></td></tr></table></figure>
+</li>
+<li><p>开发环境载入VSPackage，调用其中的接口<code>QueryInterface</code>，并使用区域中的数据调用<code>ReadSolutionProps</code>方法，这样数据就能存储在VSPackage中。开发环境将对每个<code>preSolution</code>区域重复这个流程。</p>
+</li>
+<li><p>开发环境迭代存留区域（persistence blocks）的项目。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Project(&quot;&#123;FAE04EC0-301F-11D3-BF4B-00C04F79EFBC&#125;&quot;) = &quot;WebApplicationSample&quot;, &quot;WebApplicationSample\WebApplicationSample.csproj&quot;, &quot;&#123;C76D4A5B-EFAA-415A-8B92-984B0A225415&#125;&quot;</div><div class="line">EndProject</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这份声明包含了唯一的项目GUID，以及项目类型GUID。这些信息是被开发环境用于找到属于解决方案的项目文件，以及每个项目所需要的VSPackage。项目GUID将被传递给IVsProjectFactory以载入相关的VSPackage，然后载入项目。</p>
+<ol>
+<li><p>基于.sln文件项目区域所包含的信息，环境变量载入每个项目文件。项目自身需要负责构建项目层级并载入内嵌的项目</p>
+</li>
+<li><p>在.sln文件所有区域后，解决方案将被显示在Solution Explorer中，并准备好呈现给用户。</p>
+</li>
+</ol>
+<p>如果解决方案中任何实现项目的VSPackage载入失败，将调用<code>OnProjectLoadFailure</code>方法，其它项目将让用户选择是否忽略。如果发生解析错误，开发环境将显示对话框警告用户解决方案损坏了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>.sln</code>文件包含了解决方案所需要的相关信息，包括开发环境的版本要求、属于解决方案的项目信息、载入解决方案所需要执行的相关操作等。在启动时，开发环境将根据<code>.sln</code>文件执行相关准备，完成后将解决方案呈现给用户，否则提供相关的提示信息。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/08/18/Solution-sln-File-in-Visual-Studio/" data-id="clcpwy3ec00am5e8tx2eqhdve" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-NodeJS读写文件" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/08/11/NodeJS读写文件/" class="article-date">
+  <time datetime="2017-08-11T13:48:57.000Z" itemprop="datePublished">2017-08-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/08/11/NodeJS读写文件/">NodeJS读写文件</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>许多项目可能在生成时需要执行一些脚本处理文件，由于npm环境下NodeJS是最合适的选择，因此使用NodeJS进行文件读写成为必要操作。   </p>
+<p>简单查找了一下，参考<a href="http://www.2cto.com/kf/201411/351586.html" target="_blank" rel="external">这篇文章</a>学会了基本的NodeJS文件读写。</p>
+<p>首先需要require两个包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var fs = require(&apos;fs&apos;);</div><div class="line">var path = require(&apos;path&apos;);</div></pre></td></tr></table></figure></p>
+<p>然后定义咱们的操作数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var data = &#123;</div><div class="line">	&quot;user_id&quot;: 1,</div><div class="line">	&quot;user_name&quot;: &quot;Lionel&quot;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>使用<code>fs.writeFile</code>函数能够实现文件的写入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">fs.writeFile(path.join(__dirname, &apos;data.json&apos;), JSON.stringify(data), function (err) &#123;</div><div class="line">    if (err) &#123;</div><div class="line">        throw err;</div><div class="line">    &#125;</div><div class="line">    console.log(&quot;Export Account Success!&quot;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>使用<code>fs.readFile</code>函数能够实现文件的读取：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">fs.readFile(path.join(__dirname, &apos;data.json&apos;),&#123;encoding:&apos;utf-8&apos;&#125;, function (err,bytesRead) &#123;</div><div class="line">	if (err) &#123;</div><div class="line">	    throw err;</div><div class="line">	&#125;</div><div class="line">	console.log(&quot;readFile success&quot;);</div><div class="line">	console.log(&quot;content below:&quot;);</div><div class="line">	console.log(bytesRead);</div><div class="line">	var data = JSON.parse(bytesRead);</div><div class="line">	console.log(data);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>以上。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/08/11/NodeJS读写文件/" data-id="clcpwy3cs007i5e8tjn4hsnwb" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-PowerShell-Alias设置" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/08/02/PowerShell-Alias设置/" class="article-date">
+  <time datetime="2017-08-02T11:35:29.000Z" itemprop="datePublished">2017-08-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/08/02/PowerShell-Alias设置/">PowerShell Alias设置</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在PowerShell中，可以定义一些别名，实现许多复杂命令的简化。</p>
+<p>使用<code>Get-Alias</code>可以查看当前别名列表。<br>使用<code>Get-Alias -name [cmd_name]</code>可以查看对应<code>cmd_name</code>命令的别名信息。</p>
+<p><code>$profile</code>文件保存着PowerShell中的一些配置，有点类似于Linux下的<code>.bashrc</code>或者<code>.zshrc</code>文件。<br>这个文件路径可以用<code>echo $PROFILE</code>命令看到：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">C:\Users\[username]\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1</div></pre></td></tr></table></figure></p>
+<p>编辑$PROFILE文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim $PROFILE</div></pre></td></tr></table></figure></p>
+<p>设置<code>vim</code>和<code>sublime</code>的快捷打开方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">set-alias vim &quot;C:/Program Files (x86)/Vim/vim80./vim.exe&quot;</div><div class="line">set-alias subl &quot;C:/Program Files\Sublime Text 3/sublime_text.exe&quot;</div></pre></td></tr></table></figure></p>
+<p>如果希望添加一串带有参数的命令，就不能使用<code>Set-Alias</code>方法。<br>如果添加<code>set-alias sdk &quot;cd C:/SDK/&quot;</code>，在使用<code>sdk</code>命令时会报错。<br>正确方法是添加一个函数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">function sdk &#123;</div><div class="line">    cd C:/SDK/</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/08/02/PowerShell-Alias设置/" data-id="clcpwy3de008t5e8ttzntg78b" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-C-读取XML格式内容" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/07/28/C-读取XML格式内容/" class="article-date">
+  <time datetime="2017-07-28T12:30:05.000Z" itemprop="datePublished">2017-07-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/07/28/C-读取XML格式内容/">C#读取XML格式内容</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>XML(Extensible Markup Language)可扩展标记语言是一种标准通用语言的子集，通常我们将其称为XML格式，对应的还有JSON(JavaScript Object Notation)JS对象标记数据格式等。<br>在C#中要读取XML格式的数据，常用方法是按照XML语法对数据进行解析，然后提取感兴趣的信息。</p>
+<h2 id="使用XmlDocument的方式"><a href="#使用XmlDocument的方式" class="headerlink" title="使用XmlDocument的方式"></a>使用XmlDocument的方式</h2><p><code>XmlDocument</code>类能够存储一份XML格式数据，可以将其看成一棵树，通过访问树的节点和属性来访问XML数据。<br>以下代码实现了用递归的方式遍历XML树：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">private string TravelXmlTree(string xmlStr)</div><div class="line">&#123;</div><div class="line">	XmlDocument xml = new XmlDocument();</div><div class="line">	try</div><div class="line">	&#123;</div><div class="line">		xml.LoadXml(xmlStr);</div><div class="line">		XmlNode node = (XmlNode)xml.DocumentElement;</div><div class="line">		travelNode(node);</div><div class="line">		return xml.OuterXml;</div><div class="line">	&#125;</div><div class="line">	catch</div><div class="line">	&#123;</div><div class="line">		return xmlStr;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">private void travelNode(XmlNode node)</div><div class="line">&#123;</div><div class="line">	// do some operation to attributes</div><div class="line">	if (node.Attributes != null)</div><div class="line">	&#123;</div><div class="line">		foreach (XmlAttribute attr in node.Attributes)</div><div class="line">		&#123;</div><div class="line">			string str = attr.Value;</div><div class="line">			node.Attributes[attr.Name].Value = guid;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	// travel the child nodes</div><div class="line">	if (node.HasChildNodes)</div><div class="line">	&#123;</div><div class="line">		foreach (XmlNode child in node.ChildNodes)</div><div class="line">		&#123;</div><div class="line">			travelNode(child);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	// if the node is leaf, visit InnerText</div><div class="line">	else</div><div class="line">	&#123;</div><div class="line">		string str = node.InnerText;</div><div class="line">		node.InnerText = &quot;111&quot;;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="使用XmlReader进行流式读取的方式"><a href="#使用XmlReader进行流式读取的方式" class="headerlink" title="使用XmlReader进行流式读取的方式"></a>使用XmlReader进行流式读取的方式</h2><p>有些时候，当整个XML数据太大时，使用<code>XmlDocument</code>进行数据的载入<code>.load</code>会抛出out of memory的异常。<br>这时候可选方案是使用<code>XmlReader</code>类，以流式读取XML格式字符串内容，一边读取一边处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">private string ConvertGuidToUuidInXmlContentByTravel(string xmlStr)</div><div class="line">&#123;</div><div class="line">	using (XmlReader reader = XmlReader.Create(new StringReader(xmlStr)))</div><div class="line">	&#123;</div><div class="line">		try</div><div class="line">		&#123;</div><div class="line">			while (reader.Read())</div><div class="line">			&#123;</div><div class="line">				switch (reader.NodeType)</div><div class="line">				&#123;</div><div class="line">					case XmlNodeType.Element:</div><div class="line">						for (int attInd = 0; attInd &lt; reader.AttributeCount; attInd++)</div><div class="line">						&#123;</div><div class="line">							reader.MoveToAttribute(attInd);</div><div class="line">							string attr = reader.Name;</div><div class="line">							string str = reader.Value;</div><div class="line">						&#125;</div><div class="line">						reader.MoveToElement();</div><div class="line">						break;</div><div class="line">					case XmlNodeType.Text:</div><div class="line">						string str2 = reader.Value;</div><div class="line">						break;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		catch</div><div class="line">		&#123;</div><div class="line">			return xmlStr;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当然，使用流式读取的一个缺点在于，无法即时地对<code>xmlStr</code>数据本身进行编辑操作。通常只能在读取的过程中将相关信息记录下来，在读取结束后执行对应的编辑。   </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/07/28/C-读取XML格式内容/" data-id="clcpwy39p000p5e8ttkjc56tz" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/21/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/20/">20</a><a class="page-number" href="/blog-hexo/page/21/">21</a><span class="page-number current">22</span><a class="page-number" href="/blog-hexo/page/23/">23</a><a class="page-number" href="/blog-hexo/page/24/">24</a><a class="extend next" rel="next" href="/blog-hexo/page/23/">weiter &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Kategorien</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工作/">工作</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/科研/">科研</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/3D/">3D</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Alembic/">Alembic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Anime-js/">Anime.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Blender/">Blender</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CMake/">CMake</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/COCO/">COCO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/COCOAPI/">COCOAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CentOS/">CentOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Code-Coverage/">Code Coverage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Composer/">Composer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Cookie/">Cookie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Debug/">Debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/DeepLearning/">DeepLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Django/">Django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FFMpeg/">FFMpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FIGlet/">FIGlet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faiss/">Faiss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FastAPI/">FastAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Flask/">Flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Flyway/">Flyway</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Gem/">Gem</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git-Bash/">Git Bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/GitHub/">GitHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/GitLab/">GitLab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Go/">Go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JdbcTemplate/">JdbcTemplate</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Loguru/">Loguru</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MS-COCO/">MS COCO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Markdown/">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Math/">Math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Matplotlib/">Matplotlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Maven/">Maven</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Memory/">Memory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mkdocs/">Mkdocs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MyBatis/">MyBatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MyBatisPlus/">MyBatisPlus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mybatis/">Mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Noise/">Noise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Numpy/">Numpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nvidia-Driver/">Nvidia Driver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oh-My-Zsh/">Oh-My-Zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenCV/">OpenCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PDF/">PDF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Paper-js/">Paper.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pip/">Pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PosixPath/">PosixPath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PyTorch/">PyTorch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PyYAML/">PyYAML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pythonenv/">Pythonenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/RLE/">RLE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ruby/">Ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/RuleEngine/">RuleEngine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Rust/">Rust</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SQLAlchemy/">SQLAlchemy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring-Boot/">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SpringCloud/">SpringCloud</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Supervisor/">Supervisor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Swagger/">Swagger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Swagger-UI/">Swagger-UI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/TensorRT/">TensorRT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Torch/">Torch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/TorchServe/">TorchServe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VB/">VB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VS-Code/">VS Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VSCode/">VSCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Visual-Studio/">Visual Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue-js/">Vue.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vuetify/">Vuetify</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/YAML/">YAML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/axios/">axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/base64/">base64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/bpy/">bpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/bumpversion/">bumpversion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/conda/">conda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/cookiecutter/">cookiecutter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/coverage/">coverage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/crontab/">crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/faiss/">faiss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastapi/">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastjson/">fastjson</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/heatmap-js/">heatmap.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/hexdump/">hexdump</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/interact-js/">interact.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/iptables/">iptables</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/libfacedetection/">libfacedetection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/nvidia/">nvidia</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/obj/">obj</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/peewee/">peewee</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/pip/">pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/pytest/">pytest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/scp/">scp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/sed/">sed</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/setuptools/">setuptools</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ssh/">ssh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/torchvision/">torchvision</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/verdaccio/">verdaccio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/vim/">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/virtualenv/">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/xargs/">xargs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/yacs/">yacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/yaml/">yaml</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/zip/">zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/zsh/">zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/blog-hexo/tags/3D/" style="font-size: 10px;">3D</a> <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Alembic/" style="font-size: 10px;">Alembic</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 11.43px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/Blender/" style="font-size: 10px;">Blender</a> <a href="/blog-hexo/tags/C/" style="font-size: 11.43px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CMake/" style="font-size: 10px;">CMake</a> <a href="/blog-hexo/tags/COCO/" style="font-size: 10px;">COCO</a> <a href="/blog-hexo/tags/COCOAPI/" style="font-size: 10px;">COCOAPI</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 10.71px;">CSharp</a> <a href="/blog-hexo/tags/CentOS/" style="font-size: 10px;">CentOS</a> <a href="/blog-hexo/tags/Code-Coverage/" style="font-size: 10px;">Code Coverage</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 10.71px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Cookie/" style="font-size: 10.71px;">Cookie</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Debug/" style="font-size: 10px;">Debug</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/DeepLearning/" style="font-size: 10px;">DeepLearning</a> <a href="/blog-hexo/tags/Django/" style="font-size: 10px;">Django</a> <a href="/blog-hexo/tags/Docker/" style="font-size: 10.71px;">Docker</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.14px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10.71px;">Excel</a> <a href="/blog-hexo/tags/FFMpeg/" style="font-size: 10px;">FFMpeg</a> <a href="/blog-hexo/tags/FIGlet/" style="font-size: 10px;">FIGlet</a> <a href="/blog-hexo/tags/Faiss/" style="font-size: 10px;">Faiss</a> <a href="/blog-hexo/tags/FastAPI/" style="font-size: 10px;">FastAPI</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Flask/" style="font-size: 10px;">Flask</a> <a href="/blog-hexo/tags/Flyway/" style="font-size: 10px;">Flyway</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15px;">Git</a> <a href="/blog-hexo/tags/Git-Bash/" style="font-size: 10px;">Git Bash</a> <a href="/blog-hexo/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/blog-hexo/tags/GitLab/" style="font-size: 10px;">GitLab</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Go/" style="font-size: 10.71px;">Go</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10.71px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 12.14px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 16.43px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 12.14px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.14px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.57px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 17.86px;">Linux</a> <a href="/blog-hexo/tags/Loguru/" style="font-size: 10px;">Loguru</a> <a href="/blog-hexo/tags/MS-COCO/" style="font-size: 10px;">MS COCO</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/blog-hexo/tags/Math/" style="font-size: 10.71px;">Math</a> <a href="/blog-hexo/tags/Matplotlib/" style="font-size: 10px;">Matplotlib</a> <a href="/blog-hexo/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/blog-hexo/tags/Memory/" style="font-size: 10px;">Memory</a> <a href="/blog-hexo/tags/Mkdocs/" style="font-size: 10px;">Mkdocs</a> <a href="/blog-hexo/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/blog-hexo/tags/MyBatisPlus/" style="font-size: 10px;">MyBatisPlus</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 10.71px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10.71px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.43px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Noise/" style="font-size: 10px;">Noise</a> <a href="/blog-hexo/tags/Numpy/" style="font-size: 10px;">Numpy</a> <a href="/blog-hexo/tags/Nvidia-Driver/" style="font-size: 10px;">Nvidia Driver</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenCV/" style="font-size: 10.71px;">OpenCV</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 11.43px;">Oracle</a> <a href="/blog-hexo/tags/PDF/" style="font-size: 10px;">PDF</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Paper-js/" style="font-size: 10px;">Paper.js</a> <a href="/blog-hexo/tags/Pip/" style="font-size: 10px;">Pip</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PosixPath/" style="font-size: 10px;">PosixPath</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 10.71px;">PowerShell</a> <a href="/blog-hexo/tags/PyTorch/" style="font-size: 10.71px;">PyTorch</a> <a href="/blog-hexo/tags/PyYAML/" style="font-size: 10px;">PyYAML</a> <a href="/blog-hexo/tags/Python/" style="font-size: 19.29px;">Python</a> <a href="/blog-hexo/tags/Pythonenv/" style="font-size: 10px;">Pythonenv</a> <a href="/blog-hexo/tags/RLE/" style="font-size: 10px;">RLE</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SQLAlchemy/" style="font-size: 10px;">SQLAlchemy</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12.86px;">SSH</a> <a href="/blog-hexo/tags/Shell/" style="font-size: 14.29px;">Shell</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 13.57px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Supervisor/" style="font-size: 10px;">Supervisor</a> <a href="/blog-hexo/tags/Swagger/" style="font-size: 10px;">Swagger</a> <a href="/blog-hexo/tags/Swagger-UI/" style="font-size: 10px;">Swagger-UI</a> <a href="/blog-hexo/tags/TensorRT/" style="font-size: 10px;">TensorRT</a> <a href="/blog-hexo/tags/Terminal/" style="font-size: 10px;">Terminal</a> <a href="/blog-hexo/tags/Torch/" style="font-size: 10px;">Torch</a> <a href="/blog-hexo/tags/TorchServe/" style="font-size: 10.71px;">TorchServe</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 11.43px;">Ubuntu</a> <a href="/blog-hexo/tags/VB/" style="font-size: 10px;">VB</a> <a href="/blog-hexo/tags/VS-Code/" style="font-size: 10.71px;">VS Code</a> <a href="/blog-hexo/tags/VSCode/" style="font-size: 10.71px;">VSCode</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15.71px;">Vue</a> <a href="/blog-hexo/tags/Vue-js/" style="font-size: 10px;">Vue.js</a> <a href="/blog-hexo/tags/Vuetify/" style="font-size: 10px;">Vuetify</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12.86px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/YAML/" style="font-size: 10.71px;">YAML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 10.71px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/bpy/" style="font-size: 10px;">bpy</a> <a href="/blog-hexo/tags/bumpversion/" style="font-size: 10px;">bumpversion</a> <a href="/blog-hexo/tags/conda/" style="font-size: 10.71px;">conda</a> <a href="/blog-hexo/tags/cookiecutter/" style="font-size: 10px;">cookiecutter</a> <a href="/blog-hexo/tags/coverage/" style="font-size: 10px;">coverage</a> <a href="/blog-hexo/tags/crontab/" style="font-size: 10px;">crontab</a> <a href="/blog-hexo/tags/faiss/" style="font-size: 10px;">faiss</a> <a href="/blog-hexo/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/ffmpeg/" style="font-size: 10px;">ffmpeg</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10.71px;">grep</a> <a href="/blog-hexo/tags/heatmap-js/" style="font-size: 10px;">heatmap.js</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/iptables/" style="font-size: 10.71px;">iptables</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10.71px;">npm</a> <a href="/blog-hexo/tags/nvidia/" style="font-size: 10px;">nvidia</a> <a href="/blog-hexo/tags/obj/" style="font-size: 10px;">obj</a> <a href="/blog-hexo/tags/peewee/" style="font-size: 10px;">peewee</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/pytest/" style="font-size: 10.71px;">pytest</a> <a href="/blog-hexo/tags/python/" style="font-size: 10px;">python</a> <a href="/blog-hexo/tags/scp/" style="font-size: 10px;">scp</a> <a href="/blog-hexo/tags/sed/" style="font-size: 10px;">sed</a> <a href="/blog-hexo/tags/setuptools/" style="font-size: 10px;">setuptools</a> <a href="/blog-hexo/tags/shell/" style="font-size: 10px;">shell</a> <a href="/blog-hexo/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/blog-hexo/tags/torchvision/" style="font-size: 10px;">torchvision</a> <a href="/blog-hexo/tags/verdaccio/" style="font-size: 10px;">verdaccio</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/xargs/" style="font-size: 10px;">xargs</a> <a href="/blog-hexo/tags/yacs/" style="font-size: 10px;">yacs</a> <a href="/blog-hexo/tags/yaml/" style="font-size: 10px;">yaml</a> <a href="/blog-hexo/tags/zip/" style="font-size: 10px;">zip</a> <a href="/blog-hexo/tags/zsh/" style="font-size: 10px;">zsh</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 11.43px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2023/01/">January 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/11/">November 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/10/">October 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog-hexo/2023/01/10/Vue使用js-yaml解析yaml文件/">Vue使用js-yaml解析yaml文件</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2023/01/04/Vue导出HTML页面至PDF/">Vue导出HTML页面至PDF</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/11/09/python将秒数转为格式化时间字符串/">python将秒数转为格式化时间字符串</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/10/19/使用Verdaccio搭建私有npm源/">使用Verdaccio搭建私有npm源</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/09/08/Docker实时查看容器的内存占用/">Docker实时查看容器的内存占用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 ckmessi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog-hexo/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog-hexo/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/blog-hexo/fancybox/jquery.fancybox.css">
+  <script src="/blog-hexo/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/blog-hexo/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

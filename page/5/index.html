@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>不止是一位程序员</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Lionel的技术笔记总结">
+<meta property="og:type" content="website">
+<meta property="og:title" content="不止是一位程序员">
+<meta property="og:url" content="http://ckmessi.github.io/page/5/index.html">
+<meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="Lionel的技术笔记总结">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="不止是一位程序员">
+<meta name="twitter:description" content="Lionel的技术笔记总结">
+  
+    <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/blog-hexo/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog-hexo/" id="logo">不止是一位程序员</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog-hexo/" id="subtitle">Lionel的技术空间</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog-hexo/">Home</a>
+        
+          <a class="main-nav-link" href="/blog-hexo/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-Laravel使用Sqlite数据库回滚数据库迁移时的错误" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2021/02/17/Laravel使用Sqlite数据库回滚数据库迁移时的错误/" class="article-date">
+  <time datetime="2021-02-17T14:21:33.000Z" itemprop="datePublished">2021-02-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2021/02/17/Laravel使用Sqlite数据库回滚数据库迁移时的错误/">Laravel使用Sqlite数据库回滚数据库迁移时的错误</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>如果在使用 Laravel 框架时使用 <code>sqlite</code> 作为数据库，并且在使用 <code>migrate:rollback</code> 命令时抛错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Class &apos;Doctrine\DBAL\Driver\PDOSqlite\Driver&apos; not found</div></pre></td></tr></table></figure></p>
+<p>那可能是由于缺少 <code>doctrine/dbal</code> 这个外部依赖包造成的。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>应该要选择添加 <code>2.5</code> 版本的 <code>doctrine/dbal</code>，：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer require --dev doctrine/dbal=^2.5</div></pre></td></tr></table></figure></p>
+<p>实测必须要使用 <code>^2.5</code> 指定版本，否则会安装到 <code>doctrine/dbal=^3.0</code>，无法解决问题。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://github.com/rappasoft/laravel-boilerplate/issues/785" target="_blank" rel="external">https://github.com/rappasoft/laravel-boilerplate/issues/785</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2021/02/17/Laravel使用Sqlite数据库回滚数据库迁移时的错误/" data-id="clcpwy3bs00515e8tzvu262si" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-PHP7-4中引发的访问越界问题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2021/02/15/PHP7-4中引发的访问越界问题/" class="article-date">
+  <time datetime="2021-02-15T15:59:24.000Z" itemprop="datePublished">2021-02-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2021/02/15/PHP7-4中引发的访问越界问题/">PHP7.4中引发的访问越界问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在不同环境下使用 Laravel 框架，有可能遇到 PHP 版本升级引发的问题，报错信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Trying to access array offset on value of type int</div></pre></td></tr></table></figure></p>
+<p>这是由于 PHP7.4 语言本身对于语法的规范性要求得 <a href="https://www.php.net/manual/en/migration74.incompatible.php" target="_blank" rel="external">更为严谨了</a>：</p>
+<blockquote>
+<p>Trying to use values of type null, bool, int, float or resource as an array (such as $null[“key”]) will now generate a notice.</p>
+</blockquote>
+<p>比如在代码文件 <code>vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Cell/DefaultValueBinder.php</code> 中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#125; elseif ($pValue[0] === &apos;=&apos; &amp;&amp; strlen($pValue) &gt; 1) &#123;</div><div class="line">    return DataType::TYPE_FORMULA;</div><div class="line">&#125; elseif (is_bool($pValue)) &#123;</div><div class="line">    return DataType::TYPE_BOOL;</div><div class="line">&#125; elseif (is_float($pValue) || is_int($pValue)) &#123;</div><div class="line">    return DataType::TYPE_NUMERIC;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这段逻辑在 PHP7.2 以下是没问题的，但 PHP7.4 会抛错。需要把上述改成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#125; elseif (is_bool($pValue)) &#123;</div><div class="line">    return DataType::TYPE_BOOL;</div><div class="line">&#125; elseif (is_float($pValue) || is_int($pValue)) &#123;</div><div class="line">    return DataType::TYPE_NUMERIC;</div><div class="line">&#125; elseif ($pValue[0] === &apos;=&apos; &amp;&amp; strlen($pValue) &gt; 1) &#123;</div><div class="line">    return DataType::TYPE_FORMULA;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>即把对于 <code>$pValue[0] === &#39;=&#39;</code> 的判断放到后面就可以了，因为如果 <code>$pValue</code> 是一个 <code>int</code> 类型，对它执行 <code>$pValue[0]</code> 访问在 PHP7.2 版本下是没问题的，但在 PHP7.4 中就会报错了。</p>
+<p>类似的，在 <code>vendor/symfony/console/Input/ArrayInput.php</code> 的 <code>141</code> 行也有问题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#125; elseif (&apos;-&apos; === $key[0]) &#123;</div></pre></td></tr></table></figure></p>
+<p>修改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#125; elseif (is_string($key) &amp;&amp; &apos;-&apos; === $key[0]) &#123;</div></pre></td></tr></table></figure></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://www.php.net/manual/en/migration74.incompatible.php" target="_blank" rel="external">https://www.php.net/manual/en/migration74.incompatible.php</a></li>
+<li><a href="https://www.shuijingwanwq.com/2020/06/05/4228/" target="_blank" rel="external">https://www.shuijingwanwq.com/2020/06/05/4228/</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2021/02/15/PHP7-4中引发的访问越界问题/" data-id="clcpwy3d000805e8tgxe8voki" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-浏览器SetCookie动作失败的原因及解决" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2021/02/06/浏览器SetCookie动作失败的原因及解决/" class="article-date">
+  <time datetime="2021-02-06T15:19:34.000Z" itemprop="datePublished">2021-02-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2021/02/06/浏览器SetCookie动作失败的原因及解决/">浏览器SetCookie动作失败的原因及解决</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在开发过程中遇到一个奇怪的现象，登录接口明明成功了，但紧接着下一个接口却返回未登录。<br>于是页面上的逻辑变得非常恶心，刚刚登录成功却又被强制跳转回登录页面：</p>
+<img src="/2021/02/06/浏览器SetCookie动作失败的原因及解决/blog-hexo/2021/02/06/浏览器SetCookie动作失败的原因及解决/1.gif" alt="示例图" title="示例图">
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>经过问题排查发现，登录接口的 <code>Response Header</code> 里带上了 <code>set-cookie</code> 信息，然而在浏览器后续发送的请求中，在 <code>Request Header</code> 里却并没有 <code>Cookie</code> 信息。问题大概锁定在了浏览器收到了带 <code>set-cookie</code> 字段的 <code>Response Header</code> 却没有为当前域名的后续请求添加上关联的 <code>Cookie</code>。</p>
+<p>这个问题很奇怪，仔细检查登录接口的 <code>Response Headers</code> 信息，可以看到一行设置。<br><img src="/2021/02/06/浏览器SetCookie动作失败的原因及解决/blog-hexo/2021/02/06/浏览器SetCookie动作失败的原因及解决/2.png" alt="Set-Cookie字段有警告信息" title="Set-Cookie字段有警告信息"></p>
+<blockquote>
+<p>The Set-Cookie didn’t specify a “SameSite” attribute and was defaulted to “SameSite=Lax”, and was blocked because it came from a cross-site response which was not the response to a top-level navigation. The Set-Cookie had to have been set with “SameSite=None” to enable cross-site usage.</p>
+</blockquote>
+<p>在跨域的场景下，<code>Set-Cookie</code> 信息还需要指定 <code>SameSite</code> 字段为 <code>None</code>，并且开启 Secure=True操作，才能够满足跨域场景的需求。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>如果后台使用的是 Laravel 框架，可以参考 <a href="https://github.com/laravel/framework/issues/30832" target="_blank" rel="external">这篇文章</a> ，修改 <code>config/session.php</code> 中的配置完成：</p>
+<p>1、将 <code>path</code> 配置项中添加 <code>SameSite</code> 内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&apos;path&apos; =&gt; &apos;/;samesite=none&apos;</div></pre></td></tr></table></figure></p>
+<p>2、修改 <code>secure</code> 配置项：<br>将 <code>.env</code> 文件中的 <code>SESSION_SECURE_COOKIE</code> 的值设置为 <code>true</code>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>跨域请求如果希望实现登录时 <code>Set-Cookie</code> 的相关功能，需要后台将 session 相关的配置项进行修改，在返回的信息中拼上 <code>;samesite=none</code> 标识。   </p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li><a href="https://github.com/laravel/framework/issues/30832" target="_blank" rel="external">https://github.com/laravel/framework/issues/30832</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2021/02/06/浏览器SetCookie动作失败的原因及解决/" data-id="clcpwy3in00kt5e8t6b8o3spa" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Cookie/">Cookie</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Laravel给request参数中添加内容" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2021/02/05/Laravel给request参数中添加内容/" class="article-date">
+  <time datetime="2021-02-05T15:56:40.000Z" itemprop="datePublished">2021-02-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2021/02/05/Laravel给request参数中添加内容/">Laravel给request参数中添加内容</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在使用 Laravel 框架的过程中，可以发现正常情况下每个 Controller 文件的方法中都默认带有一个类型为 <code>Illuminate\Http\Request</code> 的参数 <code>$request</code>，在方法中通常会使用它获取 HTTP 请求的参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public function getFoo(Request $request)&#123;</div><div class="line">    $param_a = $request-&gt;input(&apos;param_a&apos;, &apos;default&apos;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>也可以通过 <code>$request-&gt;input()</code> 获取所有参数。</p>
+<p>基于上述背景，在工作中可能遇到这样一类需求，比如某类账户登录后，默认只能返回特定范围内的数据。后者可以通过 Filter 方式添加查询条件实现，但更关键的逻辑是如何添加这个查询条件。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>按照我个人习惯的架构风格，所有查询类的方法都会将 <code>$request-&gt;input()</code> 的值赋给一个名称为 <code>$search_condition</code> 的参数，在后续的底层数据查询过程中，会使用 <code>xxxFilter</code> 接收这个参数。</p>
+<p>在上述逻辑下，当查询条件添加时，只需要前端传递对应的 key，在底层特定数据模型的 <code>Filter</code> 文件中添加对该键值的查询逻辑即可，上层业务代码都不需要改动。   </p>
+<p>如果现在需要根据登录账户进行筛选，可以考虑使用一个中间件，中间件完成的功能是：<strong>针对某类账户，给 <code>$request</code> 变量中添加相关的搜索条件。</strong></p>
+<p>向 <code>$request</code> 变量中添加值，可以参考 <a href="https://stackoverflow.com/questions/37107903/laravel-is-there-a-way-to-add-values-to-a-request-array" target="_blank" rel="external">这篇回答</a> 完成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$request-&gt;request-&gt;add([&apos;param_key&apos; =&gt; &#123;$param_value&#125;]);</div></pre></td></tr></table></figure></p>
+<p>对于中间件的撰写也很简单，逻辑大概是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public function handle($request, Closure $next)</div><div class="line">&#123;</div><div class="line">    // get login user</div><div class="line">    $user_base = getLoginUser();</div><div class="line">    if($user_base-&gt;xxx1 == xxx2) &#123;</div><div class="line">        $param_value = getRelativeValue();</div><div class="line">        $request-&gt;request-&gt;add([&apos;param_key&apos; =&gt; $param_value]);</div><div class="line">    &#125;</div><div class="line">    return $next($request);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后给需要进行数据范围控制的接口，添加上当前中间件即可。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>针对客户的无理需求不要害怕，利用优秀的代码架构设计，可以用最小的修改代价实现相关的需求。<br>…算了不忍了，客户领导真TMD傻X，大过年的下午提个需求明天就要。。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://stackoverflow.com/questions/37107903/laravel-is-there-a-way-to-add-values-to-a-request-array" target="_blank" rel="external">https://stackoverflow.com/questions/37107903/laravel-is-there-a-way-to-add-values-to-a-request-array</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2021/02/05/Laravel给request参数中添加内容/" data-id="clcpwy3c1005o5e8ta985907l" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-faiss-gpu智障的patch版本升级" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2021/01/22/faiss-gpu智障的patch版本升级/" class="article-date">
+  <time datetime="2021-01-22T15:38:19.000Z" itemprop="datePublished">2021-01-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2021/01/22/faiss-gpu智障的patch版本升级/">faiss-gpu智障的patch版本升级</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天遇到一个智障的问题，跑一个示例项目的代码过程中，抛出了 <code>fassi</code> 相关的错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">AttributeError: module &apos;faiss&apos; has no attribute &apos;cast_integer_to_long_ptr&apos;</div></pre></td></tr></table></figure></p>
+<p>拿这个错误信息去搜索，完全找不到相关的内容。</p>
+<img src="/2021/01/22/faiss-gpu智障的patch版本升级/blog-hexo/2021/01/22/faiss-gpu智障的patch版本升级/1.png" alt="google不到真相" title="google不到真相">
+<p>由于 fassi 自身的安装有点混乱，有时候成功安装的版本也可能缺少相关依赖库。在这个 <a href="https://github.com/facebookresearch/faiss/issues/888" target="_blank" rel="external">Issue</a> 下作者甚至直接表示仅支持通过 conda 安装，使用 pip 安装的可能有问题，现在不再支持 pip 安装了：</p>
+<blockquote>
+<p>@sree5472 As @Silent-Zebra mentioned, the supported way of installing Faiss is through conda, and we do not support pip at the moment.</p>
+</blockquote>
+<p>于是在这种背景下，很容易让人以为，并不是包的问题而是自己安装的有问题（开发者是没有错的，错的就是你打开的方式不正确）。<br>然而花了大量时间控制变量地遍历所有安装方式，包括 {pip/conda} 组合 {faiss-cpu/faiss-gpu} 等情况， 依然无法解决上述有问题。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>忙活了一个多小时，最后灵机一动，降个版本试试，当前 faiss-gpu 是 <code>1.6.5</code>，降到 <code>1.6.4</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install --ignore-installed faiss-gpu==1.6.4</div></pre></td></tr></table></figure></p>
+<p>然后就不抛错了……MDZZ。。。</p>
+<p>下载 <a href="https://github.com/facebookresearch/faiss" target="_blank" rel="external">faiss-gpu源码</a>，切换到 <code>v1.6.4</code> 的标签下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/facebookresearch/faiss.git</div><div class="line">git checkout v1.6.4</div></pre></td></tr></table></figure></p>
+<p>搜索关键词 <code>cast_integer_to_long_ptr</code> 是能够找到内容的，在 <code>swigfaiss.swig</code> 文件中有定义该方法，且 <code>pytorch_tensors.py</code> 的 <code>swig_ptr_from_LongTensor</code> 方法中有调用示例：</p>
+<img src="/2021/01/22/faiss-gpu智障的patch版本升级/blog-hexo/2021/01/22/faiss-gpu智障的patch版本升级/2.png" alt="搜索结果" title="搜索结果">
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">long * cast_integer_to_long_ptr (long x) &#123;</div><div class="line">    return (long*)x;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果把版本切到 <code>1.6.5</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git checkout v1.6.5</div></pre></td></tr></table></figure></p>
+<p>搜索关键词 <code>cast_integer_to_long_ptr</code> 就啥也找不着了：</p>
+<img src="/2021/01/22/faiss-gpu智障的patch版本升级/blog-hexo/2021/01/22/faiss-gpu智障的patch版本升级/3.png" alt="搜索结果" title="搜索结果">
+<p>在 <code>v1.6.5</code> 版本中的 <code>contrib/torch_utils.py</code> 文件与之前的 <code>pytorch_tensors.py</code> 内容相似，但其中包含了 <code>swig_ptr_from_UInt8Tensor</code>、<code>swig_ptr_from_FloatTensor</code>、<code>swig_ptr_from_IntTensor</code> 等方法，唯独没有了 <code>swig_ptr_from_LongTensor</code> 方法，不知道是什么原因。</p>
+<p>所以最终的结论就是，<code>fassi</code> 库自己升了一个 <code>patch</code> 版本，却修改了可能引发 breaking change 的内容，导致其它引用该方法的代码崩溃。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>太蠢了，这种智障问题浪费了我一个多小时配环境，更蠢的是我还花了半小时时间复盘和记录这个错误的原因和修复方式。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://github.com/facebookresearch/faiss/issues/888" target="_blank" rel="external">https://github.com/facebookresearch/faiss/issues/888</a></li>
+<li><a href="https://github.com/facebookresearch/faiss" target="_blank" rel="external">https://github.com/facebookresearch/faiss</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2021/01/22/faiss-gpu智障的patch版本升级/" data-id="clcpwy3fg00d25e8trz6nwstt" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Faiss/">Faiss</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Laravel自定义带日期滚动的日志器" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2021/01/12/Laravel自定义带日期滚动的日志器/" class="article-date">
+  <time datetime="2021-01-12T12:21:24.000Z" itemprop="datePublished">2021-01-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2021/01/12/Laravel自定义带日期滚动的日志器/">Laravel自定义带日期滚动的日志器</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在使用 Laravel 框架的过程中，如果希望定义拆分日志器（不记录到默认的 <code>laravel.log</code> 文件），可以通过添加 <code>Monolog\Logger</code> 的方式进行。</p>
+<h2 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">use Monolog\Logger;</div><div class="line">use Monolog\Handler\StreamHandler;</div><div class="line">use Illuminate\Support\Facades\Log;</div><div class="line"></div><div class="line">class CustomLogger</div><div class="line">&#123;</div><div class="line">    public static $logger_map = array();</div><div class="line">    public static function getLogger($logger_name)</div><div class="line">    &#123;</div><div class="line">        if (array_key_exists($logger_name,CustomLogger::$logger_map) == false) &#123;</div><div class="line">            $logger = new Logger($logger_name);</div><div class="line">            $log_file = storage_path() . &apos;/logs/&apos;. $logger_name . &apos;-&apos; . date(&apos;Y-m-d&apos;) .&apos;.log&apos;;</div><div class="line">            $logger-&gt;pushHandler(new StreamHandler($log_file, Logger::DEBUG));</div><div class="line">            CustomLogger::$logger_map[$logger_name] = $logger;</div><div class="line">        &#125;</div><div class="line">        returnCustomLogger::$logger_map[$logger_name];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用的时候可以直接用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CustomLogger::getLogger(&apos;custom_name&apos;)-&gt;info(&apos;xxx&apos;);</div></pre></td></tr></table></figure></p>
+<h2 id="修改为带日期滚动"><a href="#修改为带日期滚动" class="headerlink" title="修改为带日期滚动"></a>修改为带日期滚动</h2><p>按照上述方式添加的日志器不会受到 Laravel 默认日志器配置项 <code>log_max_files</code> 的影响，即不会自动进行日期滚动。<br>如果希望实现日期滚动，需要将上述的 <code>StreamHandler</code> 替换为 <code>RotatingFileHandler</code>。<code>RotatingFileHanlder</code> 定义在 <code>monolog\monolog\src\Monolog\Handler\RotatingFileHandler.php</code> 中，是 <code>StreamHandler</code> 的一个子类。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * Stores logs to files that are rotated every day and a limited number of files are kept.</div><div class="line"> *</div><div class="line"> * This rotation is only intended to be used as a workaround. Using logrotate to</div><div class="line"> * handle the rotation is strongly encouraged when you can use it.</div><div class="line"> *</div><div class="line"> * @author Christophe Coevoet &lt;stof@notk.org&gt;</div><div class="line"> * @author Jordi Boggiano &lt;j.boggiano@seld.be&gt;</div><div class="line"> */</div><div class="line">class RotatingFileHandler extends StreamHandler</div><div class="line">&#123;</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<p>对上述代码进行修改：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public static function getLogger($logger_name)</div><div class="line">    &#123;</div><div class="line">        if (array_key_exists($logger_name, CustomLogger::$logger_map) == false) &#123;</div><div class="line">            $logger = new Logger($logger_name);</div><div class="line">            $log_file = storage_path() . &apos;/logs/&apos; . $logger_name . &apos;.log&apos;;</div><div class="line">            $max_files = config(&apos;app.log_max_files&apos;, 5);</div><div class="line">            $logger-&gt;pushHandler(new RotatingFileHandler($log_file, $max_files, Logger::DEBUG));</div><div class="line">            CustomLogger::$logger_map[$logger_name] = $logger;</div><div class="line">        &#125;</div><div class="line">        return CustomLogger::$logger_map[$logger_name];</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>注意需要将日志文件名称去除 <code>data(&#39;Y-m-d&#39;)</code> 的内容，因为 <code>RotatingFileHandler</code> 会自动添加日期。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如果希望使用 <code>Monolog\Logger</code> 定义的带日期滚动的日志器，需要在创建处理器的过程中使用 <code>RotatingFileHandler</code> 类。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://laravel.com/docs/5.5/errors" target="_blank" rel="external">https://laravel.com/docs/5.5/errors</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2021/01/12/Laravel自定义带日期滚动的日志器/" data-id="clcpwy3c2005q5e8tqvw6f9u4" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-非root用户安装zsh" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2021/01/01/非root用户安装zsh/" class="article-date">
+  <time datetime="2021-01-01T15:31:32.000Z" itemprop="datePublished">2021-01-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2021/01/01/非root用户安装zsh/">非root用户安装zsh</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>有些时候希望给终端安装一个 <code>oh-my-zsh</code>，然而系统中没有 <code>zsh</code>。如果有 sudo 权限，可以直接安装一个即可，但有些情况下偏偏没有 root 权限，这种时候只能手动编译安装 <code>zsh</code>。</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><p>安装 <code>zsh</code> 的步骤其实很简单，就是将其源码下载后编译即可。将生成后的可执行程序添加到 PATH 目录中，即可实现和直接 <code>apt install</code> 或 <code>yum install</code> 一样的效果。</p>
+<h4 id="编译安装zsh"><a href="#编译安装zsh" class="headerlink" title="编译安装zsh"></a>编译安装zsh</h4><p>首先假定 <code>~/tmp</code> 为工作目录，在当前目录下执行下面的步骤。</p>
+<p>从 <code>sourceforge</code> 上下载源码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget -O zsh.tar.xz https://sourceforge.net/projects/zsh/files/latest/download</div></pre></td></tr></table></figure></p>
+<p>解压：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir zsh &amp;&amp; tar -xvf zsh.tar.xz -C zsh --strip-components 1</div></pre></td></tr></table></figure></p>
+<p>创建一个目录：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir ~/usr</div></pre></td></tr></table></figure></p>
+<p>配置和安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">./configure --prefix=$HOME/usr/</div><div class="line">make</div><div class="line">make install</div></pre></td></tr></table></figure></p>
+<p>这里选择 <code>$HOME/usr</code> 作为安装目标目录，之后 zsh 相关的库都会被放在这里。</p>
+<p>如果一切顺利的话，上述步骤结束后中，zsh就可以使用了。</p>
+<h4 id="安装ncurse-devel"><a href="#安装ncurse-devel" class="headerlink" title="*安装ncurse-devel"></a>*安装ncurse-devel</h4><p>世事艰难，很有可能上一步 <code>./configure</code> 的过程中会抛错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">configure: error: &quot;No terminal handling library was found on your system. This is probably a library called curses or ncurses. You may need to install a package called &apos;curses-devel&apos; or &apos;ncurses-devel&apos; on your system&quot;</div></pre></td></tr></table></figure></p>
+<p>这是没有找到 <code>ncurse</code> 库导致的。同样需要手动安装这个库。</p>
+<p>参考<a href="https://www.jianshu.com/p/e91e3dfbb6fd" target="_blank" rel="external">这篇文章</a>的指导，首先添加环境变量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">export CXXFLAGS=&quot;-fPIC&quot;</div><div class="line">export CFLAGS=&quot;-fPIC&quot;</div><div class="line">export LD_LIBRARY_PATH=$HOME/usr/lib:$LD_LIBRARY_PATH</div><div class="line">export CPPFLAGS=&quot;-I$HOME/usr/include&quot; LDFLAGS=&quot;-L$HOME/usr/lib&quot;</div></pre></td></tr></table></figure></p>
+<p>注意这里 <code>CXXFLAGS</code> 和 <code>CFLAGS</code> 的编译选项还挺重要的，一开始没有加，后缀就会出问题。</p>
+<p>下载并安装 <code>ncurse</code>，在 <code>~/tmp</code> 目录下执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">wget http://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.1.tar.gz</div><div class="line">tar -xzvf ncurses-6.1.tar.gz</div><div class="line">cd ncurses-6.1</div><div class="line">./configure --prefix=$HOME/usr --with-shared --without-debug --enable-widec</div></pre></td></tr></table></figure></p>
+<p>祈祷命令不出错，然后执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">make</div><div class="line">make install</div></pre></td></tr></table></figure></p>
+<p>理论上这里不应该抛出错误。如果一切正常，<code>ncurse</code> 已经安装在了正确的位置 <code>$HOME/usr</code> 目录中，并且已经设置了 <code>--with-shared</code> 选项，在编译安装 <code>zsh</code> 过程中能够正确找到。</p>
+<h2 id="添加相关环境变量"><a href="#添加相关环境变量" class="headerlink" title="添加相关环境变量"></a>添加相关环境变量</h2><p>为确保自行编译安装的 zsh 可以正确使用，需要将一些路径添加到环境变量中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export PATH=$HOME/usr/bin:$PATH</div><div class="line">export LD_LIBRARY_PATH=$HOME/usr/lib:$LD_LIBRARY_PATH</div></pre></td></tr></table></figure></p>
+<p>可以把上述两行代码添加到 <code>~/.bashrc</code> 中，这样每次进入 Shell 环境时都会自动加载。</p>
+<h2 id="安装oh-my-zsh"><a href="#安装oh-my-zsh" class="headerlink" title="安装oh-my-zsh"></a>安装oh-my-zsh</h2><p>安装 <code>oh-my-zsh</code> 的步骤就省心多了，参考<a href="https://ohmyz.sh/#install" target="_blank" rel="external">官方网站</a>的提示，执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sh -c &quot;$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)&quot;</div></pre></td></tr></table></figure></p>
+<p>其中会自动下载脚本并安装，如果服务器访问速度缓慢，也可以在本地下载好 <code>install.sh</code> 文件，上传到服务器上执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sh install.sh</div></pre></td></tr></table></figure></p>
+<p>如果上述 zsh 安装过程正确，且将 zsh 二进制文件所在的位置加入到了 <code>PATH</code> 环境变量中，这里应该不会抛错。</p>
+<p>这样安装 <code>oh-my-zsh</code> 的任务能完成了。</p>
+<h2 id="后续步骤"><a href="#后续步骤" class="headerlink" title="后续步骤"></a>后续步骤</h2><p>如果希望每次连接到服务器时，自动进入 zsh 环境，可以在 <code>~/.bashrc</code> 文件的最后一行添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">exec $HOME/usr/bin/zsh</div></pre></td></tr></table></figure></p>
+<p>其中 <code>$HOME/usr/bin/zsh</code> 是 zsh 二进制文件所在的位置。</p>
+<h2 id="验证成果"><a href="#验证成果" class="headerlink" title="验证成果"></a>验证成果</h2><p>上述步骤完成后，重新开一个 ssh 客户端连接到服务器。一切顺利的话，就可以看到 <code>oh-my-zsh</code> 的欢迎标语了。</p>
+<h2 id="Trouble-Shooting"><a href="#Trouble-Shooting" class="headerlink" title="*Trouble Shooting"></a>*Trouble Shooting</h2><h4 id="libncursesw错误"><a href="#libncursesw错误" class="headerlink" title="libncursesw错误"></a>libncursesw错误</h4><p>如果抛错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/path/to/bin/zsh: error while loading shared libraries: libncursesw.so.6: cannot open shared object file: No such file or directory</div></pre></td></tr></table></figure></p>
+<p>这可能的原因是没有正确设置 <code>LD_LIBRARY_PATH</code> 环境变量，导致无法找到这个动态链接库文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export LD_LIBRARY_PATH=$HOME/usr/lib:$LD_LIBRARY_PATH</div></pre></td></tr></table></figure></p>
+<p>其中 <code>$HOME/usr/lib</code> 设置为 <code>ncurse</code> 库安装的位置。</p>
+<h4 id="tcsetpgrp错误"><a href="#tcsetpgrp错误" class="headerlink" title="tcsetpgrp错误"></a>tcsetpgrp错误</h4><p>有可能在安装 <code>ncurse</code> 后安装 <code>zsh</code> 时报错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zsh configure checking if tcsetpgrp() actually works... error</div></pre></td></tr></table></figure></p>
+<p>原因未知，当时安装的版本是 <code>ncurse-6.2</code>，在更换为安装 <code>ncurse-6.1</code> 后就没有出现这个错误了。<br>网络上有说添加 <code>--with-tcsetpgrp</code> 的方式（<a href="https://github.com/VerKnowSys/sofin/issues/2" target="_blank" rel="external">这篇文章</a>），这种方法能够使 <code>make</code> 不出错，但最终build出来的 zsh 有问题，终端下各种乱码。</p>
+<h4 id="zsh-stat-加载失败"><a href="#zsh-stat-加载失败" class="headerlink" title="zsh/stat 加载失败"></a>zsh/stat 加载失败</h4><p>理论上不应该遇到这个错，如果遇到说明此前的编译过程有问题。<br>如果实在希望解决，可以参考<a href="https://iosre.com/t/ios-13-oh-my-zsh/17387" target="_blank" rel="external">这篇文章</a> 的方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">grep -r &apos;zsh/stat&apos; ~/.oh-my-zsh</div></pre></td></tr></table></figure></p>
+<p>找到所有加载的代码，并注释掉 <code>zmodload -F zsh/stat b:zstat</code> 语句。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://www.gowhich.com/blog/807" target="_blank" rel="external">https://www.gowhich.com/blog/807</a></li>
+<li><a href="https://iosre.com/t/ios-13-oh-my-zsh/17387/3" target="_blank" rel="external">https://iosre.com/t/ios-13-oh-my-zsh/17387/3</a></li>
+<li><a href="https://harttle.land/2016/10/25/install-oh-my-zsh-locally.html" target="_blank" rel="external">https://harttle.land/2016/10/25/install-oh-my-zsh-locally.html</a></li>
+<li><a href="https://www.niconya.com/bv/e207/" target="_blank" rel="external">https://www.niconya.com/bv/e207/</a></li>
+<li><a href="https://www.jianshu.com/p/0c6abc1ac123" target="_blank" rel="external">https://www.jianshu.com/p/0c6abc1ac123</a></li>
+<li><a href="https://www.jianshu.com/p/e91e3dfbb6fd" target="_blank" rel="external">https://www.jianshu.com/p/e91e3dfbb6fd</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2021/01/01/非root用户安装zsh/" data-id="clcpwy3iu00le5e8tpq7s89j7" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/zsh/">zsh</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-初识faiss" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/12/31/初识faiss/" class="article-date">
+  <time datetime="2020-12-30T16:02:08.000Z" itemprop="datePublished">2020-12-31</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/12/31/初识faiss/">初识faiss</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>由 Facebook AI Research 开发的<code>fassi</code> 是一个针对密集向量的高效的相似性查询和聚类库，它包含了在一个向量集合中操作的各种算法，甚至于在内存中不可行的方案。它包含了评估的代码以及参数的调整策略。<code>fassi</code> 是用 C++ 撰写的，同时兼容 Python/numpy。一些最常用的算法也在 GPU 上实现了。<br>更多信息可以参考其 <a href="https://github.com/facebookresearch/faiss" target="_blank" rel="external">代码仓库</a>。</p>
+<h2 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h2><p>通常使用 faiss 的场景是大规模数据的索引与查询，假定有一个 gallery 和一个 query，目标是在 gallery 中查找 query 的 k 近邻。<br>规范化定理符号 <code>d</code> 表示特征向量维度， <code>g_array</code> 表示一个 <code>num_g x d</code> 大小的矩阵，表示 <code>num_g</code> 条底库特征；<code>q_array</code> 表示一个 <code>num_q x d</code> 大小的矩阵，表示 <code>num_q</code> 条底库特征。</p>
+<h4 id="数据准备"><a href="#数据准备" class="headerlink" title="数据准备"></a>数据准备</h4><p>准备 <code>100k</code> 底库和 <code>10k</code> 查询：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">import numpy as np</div><div class="line">d = 64</div><div class="line">nb = 100000</div><div class="line">nq = 10000</div><div class="line">np.random.seed(1234)</div><div class="line">g_array = np.random.random((g_array, d)).astype(&apos;float32&apos;)</div><div class="line">g_array[:, 0] += np.arange(g_array) / 1000.</div><div class="line">q_array = np.random.random((q_array, d)).astype(&apos;float32&apos;)</div><div class="line">q_array[:, 0] += np.arange(q_array) / 1000.</div><div class="line">print(&quot;g_array.shape=&#123;g_array&#125;&quot;)</div><div class="line">print(&quot;q_array.shape=&#123;q_array&#125;&quot;)</div></pre></td></tr></table></figure></p>
+<p>输出为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">g_array.shape=(100000, 64)</div><div class="line">q_array.shape=(10000, 64)</div></pre></td></tr></table></figure></p>
+<h4 id="构建索引"><a href="#构建索引" class="headerlink" title="构建索引"></a>构建索引</h4><p>为查询目标（底库）构建索引：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">import faiss</div><div class="line">index = faiss.IndexFlatL2(d)</div><div class="line">print(index.is_trained)</div><div class="line">index.add(g_array)</div><div class="line">print(index.ntotal)</div></pre></td></tr></table></figure></p>
+<p>Faiss 基于 <code>Index</code> 对象 构建，它能将数据库的向量集合封装好进行预处理，以获得更优的查询性能。有各类索引可以使用，这里使用了最简单的版本 <code>IndexFlatL2</code>，执行暴力搜索L2距离。<br>在构建索引的时候，需要明确声明向量的维度大小，其它索引可能需要一个训练过程，这里 <code>IndexFlatL2</code> 可以忽略。<br>当索引构建完成后，有两个操作可以执行：<code>add</code> 和 <code>search</code>。其中 <code>add</code> 能够把元素添加到索引中，比如将待查询的 gallery 数组添加进去。而 <code>search</code> 则用于检索和查询。</p>
+<h4 id="检索近邻"><a href="#检索近邻" class="headerlink" title="检索近邻"></a>检索近邻</h4><p>比如针对每个查询向量，查找底库中与其最近的 k 个近邻，可以使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">k = 10</div><div class="line">D, I = index.search(q_array, k)</div><div class="line">print(I[:5])</div></pre></td></tr></table></figure></p>
+<p>其中 <code>D</code> 和 <code>I</code> 保存的是距离和元素的索引。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[[ 381  207  210  477  588  329  417  555   93  111]</div><div class="line"> [ 526  911  142   72  300  576   64  846  144 1273]</div><div class="line"> [ 838  527 1290  425  281  637 1541  197  789  614]</div><div class="line"> [ 196  184  164  359  466  599  281 1130  758  427]</div><div class="line"> [ 526  377  120  425  545  917  161  416   64  434]]</div></pre></td></tr></table></figure></p>
+<p>这里显示的是前 5 个 query 的查询结果，比如对于 q_array 数组中的每一个元素，它的 k 近邻是底库中索引为 <code>381  207  210  477  588  329  417  555   93  111</code> 的元素。</p>
+<p>一个直观可以证明的是，如果查询的底库向量中包含自身，则返回的第一列一定是自己，且距离是 <code>0.0</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">k = 5</div><div class="line">D, I = index.search(g_array[:5], k)</div><div class="line">print(I)</div><div class="line">print(D)</div></pre></td></tr></table></figure></p>
+<p>输出结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[[  0 393 363  78]</div><div class="line"> [  1 555 277 364]</div><div class="line"> [  2 304 101  13]</div><div class="line"> [  3 173  18 182]</div><div class="line"> [  4 288 370 531]]</div><div class="line">[[0.        7.175174  7.2076287 7.251163 ]</div><div class="line"> [0.        6.323565  6.684582  6.799944 ]</div><div class="line"> [0.        5.7964087 6.3917365 7.2815127]</div><div class="line"> [0.        7.277905  7.5279875 7.6628447]</div><div class="line"> [0.        6.763804  7.295122  7.368814 ]]</div></pre></td></tr></table></figure></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://github.com/facebookresearch/faiss/wiki/Getting-started" target="_blank" rel="external">https://github.com/facebookresearch/faiss/wiki/Getting-started</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/12/31/初识faiss/" data-id="clcpwy3i100j65e8t5202t4x4" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/faiss/">faiss</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-配置Laravel-Swagger" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/12/28/配置Laravel-Swagger/" class="article-date">
+  <time datetime="2020-12-28T07:07:18.000Z" itemprop="datePublished">2020-12-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/12/28/配置Laravel-Swagger/">配置Laravel-Swagger</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p><a href="https://swagger.io/tools/swagger-ui/" target="_blank" rel="external">Swagger UI</a> 是一款可交互的 API 文档包。它能够为 API 代码生成文档，通过前端页面显示，甚至可以在前端页面上直接完成与 API 接口的交互。<br>在使用 <a href="https://github.com/tiangolo/fastapi" target="_blank" rel="external">fastapi</a> 框架的过程中，其内置的 Swagger UI 能够自动生成接口文档。<br>对于 Laravel 项目来说，也可以集成 Swagger UI，但需要手工为其填写相关注释。</p>
+<h2 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h2><p>在 Laravel 项目中集成 Swagger UI，通常使用开源框架 <a href="https://github.com/DarkaOnLine/L5-Swagger" target="_blank" rel="external">L5-Swagger</a>。参考其<a href="https://github.com/DarkaOnLine/L5-Swagger/wiki/Installation-&amp;-Configuration" target="_blank" rel="external">安装文档</a>，对于 Laravel 5.5 版本而言，需要执行的操作为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer require &quot;darkaonline/l5-swagger:5.5.*&quot;</div></pre></td></tr></table></figure></p>
+<p>然后尝试执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">php artisan l5-swagger:generate</div></pre></td></tr></table></figure></p>
+<p>这时候可能会抛出错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ php artisan l5-swagger:generate</div><div class="line">Regenerating docs</div><div class="line">In Generator.php line 28:</div><div class="line">  Call to undefined function Swagger\scan()</div></pre></td></tr></table></figure></p>
+<h4 id="错误的解决方案"><a href="#错误的解决方案" class="headerlink" title="错误的解决方案"></a>错误的解决方案</h4><p>这时候如果参考网上的<a href="https://github.com/DarkaOnLine/L5-Swagger/issues/161" target="_blank" rel="external">一些资料</a>，尝试通过安装 <code>zircote/swagger-php:2.*</code> 来解决，可能会有问题。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer require zircote/swagger-php:2.*</div></pre></td></tr></table></figure></p>
+<p>再次执行，依然会抛错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ php artisan l5-swagger:generate</div><div class="line">Regenerating docs</div><div class="line">In Logger.php line 38:</div><div class="line">  Required @SWG\Info() not found</div></pre></td></tr></table></figure></p>
+<p>通过 <a href="`https://stackoverflow.com/questions/32884345/required-swg-info-not-found`">这个文章</a> 在代码中添加相关注释能够解决。<br>如果执行 <code>php artisan l5-swagger:generate</code> 没有报错，算是走通了。然而，如果走这条路，就走到死胡同了。<br>原因在于，上述解决方案把版本引入了 swagger-php 的 2.0 版本，该版本会去查找所有 <code>@SWG</code> 开头的注解，但目前最新版本的代码已经切换为 <code>OpenApi</code> 格式的内容，大部分内容都以 <code>@OA</code> 为前缀。一个典型的问题是，页面中提到的 <code>Swagger annotations can be found here</code> 所导向的 <a href="https://github.com/DarkaOnLine/L5-Swagger/blob/master/tests/storage/annotations/Swagger/Anotations.php" target="_blank" rel="external">页面</a> 已经是 404 了。</p>
+<img src="/2020/12/28/配置Laravel-Swagger/blog-hexo/2020/12/28/配置Laravel-Swagger/1.png" alt="官方链接失效" title="官方链接失效">
+<h4 id="正确的解决方案"><a href="#正确的解决方案" class="headerlink" title="正确的解决方案"></a>正确的解决方案</h4><p>忽略安装教程中对于版本的混乱引导，执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">php artisan vendor:publish --provider &quot;L5Swagger\L5SwaggerServiceProvider&quot;</div></pre></td></tr></table></figure></p>
+<p>这一步会在 <code>config</code> 目录下生成一个 <code>l5-swagger.php</code> 文件，其中包含了相关配置；此外还会在 <code>resources</code> 目录下生成 <code>views/vender/l5-swagger</code> 目录，包含了 Swagger UI 所需要的前端页面。<br>参考 <a href="https://ask.csdn.net/questions/1923937" target="_blank" rel="external">这篇文章</a> 的解决方法，在 <code>l5-swagger.php</code> 配置中将 <code>SWAGGER_VERSION</code> 默认值修改为 <code>3.0</code>（也可以在 <code>.env</code> 文件中添加配置项），然后执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">php artisan l5-swagger:generate</div></pre></td></tr></table></figure></p>
+<p>此时错误信息会变化，变成了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ php artisan l5-swagger:generate</div><div class="line">Regenerating docs</div><div class="line">In Logger.php line 39:</div><div class="line">  Required @OA\Info() not found</div></pre></td></tr></table></figure></p>
+<p>这是因为代码中不包含一个必要的全局注释造成的，参考官方教程中给出的 <a href="https://github.com/DarkaOnLine/L5-Swagger/blob/master/tests/storage/annotations/OpenApi/Anotations.php" target="_blank" rel="external">示例</a>，添加一个以 <code>@OA\info</code> 为前缀的注释信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * @OA\OpenApi(</div><div class="line"> *     @OA\Info(</div><div class="line"> *         version=&quot;1.0.0&quot;,</div><div class="line"> *         title=&quot;Hello Laravel Swagger&quot;,</div><div class="line"> *         description=&quot;to do &quot;,</div><div class="line"> *         termsOfService=&quot;http://swagger.io/terms/&quot;,</div><div class="line"> *         @OA\Contact(</div><div class="line"> *             email=&quot;apiteam@swagger.io&quot;</div><div class="line"> *         ),</div><div class="line"> *         @OA\License(</div><div class="line"> *             name=&quot;Apache 2.0&quot;,</div><div class="line"> *             url=&quot;http://www.apache.org/licenses/LICENSE-2.0.html&quot;</div><div class="line"> *         )</div><div class="line"> *     ),</div><div class="line"> *     @OA\Server(</div><div class="line"> *         description=&quot;OpenApi host&quot;,</div><div class="line"> *         url=&quot;http://localhost:9800/&quot;</div><div class="line"> *     ),</div><div class="line"> *     @OA\ExternalDocumentation(</div><div class="line"> *         description=&quot;Find out more about Swagger&quot;,</div><div class="line"> *         url=&quot;http://swagger.io&quot;</div><div class="line"> *     )</div><div class="line"> * )</div><div class="line"> */</div></pre></td></tr></table></figure></p>
+<p>其中最重要的是 <code>@OA\Server</code> 下的 <code>url</code> 项，这将直接关联到此后执行 API 时的 URL 前缀。<br>添加后可能还会抛错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ php artisan l5-swagger:generate</div><div class="line">Regenerating docs</div><div class="line">In Logger.php line 39:</div><div class="line">  Required @OA\PathItem() not found</div></pre></td></tr></table></figure></p>
+<p>这是因为至少需要一个路径的定义，才能渲染相关信息，添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * @OA\Get(</div><div class="line"> *      path=&quot;/api/test/testdb&quot;,</div><div class="line"> *      operationId=&quot;testdb&quot;,</div><div class="line"> *      tags=&#123;&quot;Test&quot;&#125;,</div><div class="line"> *      summary=&quot;Get db info&quot;,</div><div class="line"> *      description=&quot;Returns list of testdb&quot;,</div><div class="line"> *      @OA\Response(</div><div class="line"> *          response=200,</div><div class="line"> *          description=&quot;successful operation&quot;</div><div class="line"> *       ),</div><div class="line"> *     )</div><div class="line"> *</div><div class="line"> * Returns testdb</div><div class="line"> */</div></pre></td></tr></table></figure></p>
+<p>添加了一个导向 <code>/api/test/testdb</code> 路由的定义，再次执行 <code>php artisan l5-swagger:generate</code> 应该就不抛错了。</p>
+<h2 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h2><p>在每次执行 <code>php artisan l5-swagger:generate</code> 后，这个库会扫描代码文件，根据注释生成一个 <code>api-docs.json</code> 文件，默认存储在 <code>stoarge/api-docs/</code> 目录下。<br>根据 <code>l5-swagger.php</code> 配置文件中定义的 <code>routes</code> 信息，假定网站所在的地址为 <code>http://127.0.0.1:8000</code>，默认访问 <code>http://127.0.0.1:8000/api/documentation</code> 就能显示出 Swagger UI 的熟悉界面：</p>
+<img src="/2020/12/28/配置Laravel-Swagger/blog-hexo/2020/12/28/配置Laravel-Swagger/2.png" alt="Swagger页面" title="Swagger页面">
+<p>但这时执行，有可能会抛错 <code>Could not render n, see the console</code>：</p>
+<img src="/2020/12/28/配置Laravel-Swagger/blog-hexo/2020/12/28/配置Laravel-Swagger/3.png" alt="执行错误" title="执行错误">
+<p>打开控制台可以看到：</p>
+<img src="/2020/12/28/配置Laravel-Swagger/blog-hexo/2020/12/28/配置Laravel-Swagger/4.png" alt="控制台错误" title="控制台错误">
+<p>搜索后根据 <a href="https://github.com/DarkaOnLine/L5-Swagger/issues/304" target="_blank" rel="external">这个Issue</a> 下的方式，将 <code>resources/views/vendor/l5-swagger/index.blade.php</code> 中第 <code>84</code> 行的方法修改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">requestInterceptor: function(req) &#123;</div><div class="line">  req.headers[&apos;X-CSRF-TOKEN&apos;] = &apos;&#123;&#123; csrf_token() &#125;&#125;&apos;;</div><div class="line">  return req;</div><div class="line">&#125;,</div></pre></td></tr></table></figure></p>
+<p>刷新页面就可以访问了。</p>
+<img src="/2020/12/28/配置Laravel-Swagger/blog-hexo/2020/12/28/配置Laravel-Swagger/5.png" alt="成功调用API" title="成功调用API">
+<p>后续的问题，就是参考 <a href="https://github.com/DarkaOnLine/L5-Swagger/blob/master/tests/storage/annotations/OpenApi/Anotations.php" target="_blank" rel="external">注释示例</a> 完善文档的工作了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>使用 <a href="https://github.com/DarkaOnLine/L5-Swagger/" target="_blank" rel="external">L5-Swagger</a> 库可以方便地将 Swagger UI 的功能集成到 Laravel 中。<br>相比于 <code>fastapi</code> 等 Python 框架，在 Laravel 中无法通过代码自动生成文档，需要添加相关的注释，这点其实是很费工夫的。从另一个角度看，相比于 <code>apidocjs</code> 等文档生成工具，Swagger UI 的便利之处在于可以在 Model 上定义 Schema，也支持直接在文档页面上调用 API，这是便利之处。  </p>
+<h2 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h2><ul>
+<li><a href="https://swagger.io/tools/swagger-ui" target="_blank" rel="external">https://swagger.io/tools/swagger-ui</a></li>
+<li><a href="https://github.com/DarkaOnLine/L5-Swagger" target="_blank" rel="external">https://github.com/DarkaOnLine/L5-Swagger</a></li>
+<li><a href="https://medium.com/@ivankolodiy/how-to-write-swagger-documentation-for-laravel-api-tips-examples-5510fb392a94" target="_blank" rel="external">https://medium.com/@ivankolodiy/how-to-write-swagger-documentation-for-laravel-api-tips-examples-5510fb392a94</a></li>
+<li><a href="https://ask.csdn.net/questions/1923937" target="_blank" rel="external">https://ask.csdn.net/questions/1923937</a></li>
+<li><a href="https://github.com/DarkaOnLine/L5-Swagger/issues/304" target="_blank" rel="external">https://github.com/DarkaOnLine/L5-Swagger/issues/304</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/12/28/配置Laravel-Swagger/" data-id="clcpwy3it00la5e8tbvzsof6z" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Swagger/">Swagger</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-conda创建虚拟环境时抛错的解决方案" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2020/12/25/conda创建虚拟环境时抛错的解决方案/" class="article-date">
+  <time datetime="2020-12-25T09:47:36.000Z" itemprop="datePublished">2020-12-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2020/12/25/conda创建虚拟环境时抛错的解决方案/">conda创建虚拟环境时抛错的解决方案</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在使用 <code>conda</code> 创建虚拟环境时，可能会遇到一个奇怪的无法联网的错误。<br>事故现场：</p>
+<ul>
+<li>Windows 8</li>
+<li>Miniconda3</li>
+</ul>
+<p>具体的现象是，执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">conda create env_name -n python=3.8</div></pre></td></tr></table></figure></p>
+<p>抛错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ conda create -n pytorch3d python=3.8</div><div class="line">Collecting package metadata (current_repodata.json): ...working... failed</div><div class="line">CondaHTTPError: HTTP 000 CONNECTION FAILED for url &lt;https://repo.anaconda.com/pkgs/main/win-64/current_repodata.json&gt;</div><div class="line">Elapsed: -</div><div class="line">An HTTP error occurred when trying to retrieve this URL.</div><div class="line">HTTP errors are often intermittent, and a simple retry will get you on your way.</div><div class="line">If your current network has https://www.anaconda.com blocked, please file</div><div class="line">a support request with your network engineering team.</div><div class="line">&apos;https://repo.anaconda.com/pkgs/main/win-64&apos;</div></pre></td></tr></table></figure></p>
+<p>在网上查了各种添加 chnnel 的方式都不能解决。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>其实 <code>https://repo.anaconda.com/pkgs/main/win-64/current_repodata.json</code> 这个文件 URL 是可以访问且内容正常的，只是 anaconda 本身的 HTTP 请求有问题。</p>
+<p>参考 <a href="https://github.com/conda/conda/issues/9746" target="_blank" rel="external">这个Issue</a>（虽然还是 open 的状态）下的一个回复解决了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">Never mind. I found the solution in another thread. Copying here so it helps anyone else who lands up here:</div><div class="line"></div><div class="line">D:\Anaconda3\DLLs_ssl.pyd search for the OpenSSL DLLs but in the wrong/current location!</div><div class="line">As they are not found the search goes to C:\Windows\System32 where we have the same DLLs, installed by an other application, but with a different version. :-(</div><div class="line"></div><div class="line">The DLLs delivered by Anaconda3 are located here:</div><div class="line">D:\Anaconda3\Library\bin</div><div class="line"></div><div class="line">My workaround:</div><div class="line">I have copied the following files</div><div class="line"></div><div class="line">libcrypto-1_1-x64.*</div><div class="line">libssl-1_1-x64.*</div><div class="line">from D:\Anaconda3\Library\bin to D:\Anaconda3\DLLs.</div><div class="line"></div><div class="line">And it works as a charm!</div></pre></td></tr></table></figure></p>
+<img src="/2020/12/25/conda创建虚拟环境时抛错的解决方案/blog-hexo/2020/12/25/conda创建虚拟环境时抛错的解决方案/1.png" alt="厉害的回复" title="厉害的回复">
+<p>所以操作步骤就是把目录 <code>miniconda3\Library\bin</code> 中的 <code>libcrypto-1_1-x64.dll</code> 和 <code>libssl-1_1-x64.dll</code> 文件拷到操作系统文件夹的 DLL 文件所在的目录 <code>Windows\System32</code> 即可，比如 <code>C:\Windows\System32</code> 里。</p>
+<p>然后重新执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">conda create env_name -n python=3.8</div></pre></td></tr></table></figure></p>
+<p>就可以了。</p>
+<p>正如下面人说的，这小子值得一枚奖章。<br><img src="/2020/12/25/conda创建虚拟环境时抛错的解决方案/blog-hexo/2020/12/25/conda创建虚拟环境时抛错的解决方案/2.png" alt="回复" title="回复"></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://github.com/conda/conda/issues/9746" target="_blank" rel="external">https://github.com/conda/conda/issues/9746</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2020/12/25/conda创建虚拟环境时抛错的解决方案/" data-id="clcpwy3ff00cy5e8tvjihhswx" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/conda/">conda</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/4/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/3/">3</a><a class="page-number" href="/blog-hexo/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/blog-hexo/page/6/">6</a><a class="page-number" href="/blog-hexo/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/24/">24</a><a class="extend next" rel="next" href="/blog-hexo/page/6/">weiter &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Kategorien</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工作/">工作</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/科研/">科研</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/3D/">3D</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Alembic/">Alembic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Anime-js/">Anime.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Blender/">Blender</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CMake/">CMake</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/COCO/">COCO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/COCOAPI/">COCOAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CentOS/">CentOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Code-Coverage/">Code Coverage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Composer/">Composer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Cookie/">Cookie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Debug/">Debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/DeepLearning/">DeepLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Django/">Django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FFMpeg/">FFMpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FIGlet/">FIGlet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faiss/">Faiss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FastAPI/">FastAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Flask/">Flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Flyway/">Flyway</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Gem/">Gem</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git-Bash/">Git Bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/GitHub/">GitHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/GitLab/">GitLab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Go/">Go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JdbcTemplate/">JdbcTemplate</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Loguru/">Loguru</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MS-COCO/">MS COCO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Markdown/">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Math/">Math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Matplotlib/">Matplotlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Maven/">Maven</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Memory/">Memory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mkdocs/">Mkdocs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MyBatis/">MyBatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MyBatisPlus/">MyBatisPlus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mybatis/">Mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Noise/">Noise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Numpy/">Numpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nvidia-Driver/">Nvidia Driver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oh-My-Zsh/">Oh-My-Zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenCV/">OpenCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PDF/">PDF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Paper-js/">Paper.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pip/">Pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PosixPath/">PosixPath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PyTorch/">PyTorch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PyYAML/">PyYAML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pythonenv/">Pythonenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/RLE/">RLE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ruby/">Ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/RuleEngine/">RuleEngine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Rust/">Rust</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SQLAlchemy/">SQLAlchemy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring-Boot/">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SpringCloud/">SpringCloud</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Supervisor/">Supervisor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Swagger/">Swagger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Swagger-UI/">Swagger-UI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/TensorRT/">TensorRT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Torch/">Torch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/TorchServe/">TorchServe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VB/">VB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VS-Code/">VS Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VSCode/">VSCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Visual-Studio/">Visual Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue-js/">Vue.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vuetify/">Vuetify</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/YAML/">YAML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/axios/">axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/base64/">base64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/bpy/">bpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/bumpversion/">bumpversion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/conda/">conda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/cookiecutter/">cookiecutter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/coverage/">coverage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/crontab/">crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/faiss/">faiss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastapi/">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastjson/">fastjson</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/heatmap-js/">heatmap.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/hexdump/">hexdump</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/interact-js/">interact.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/iptables/">iptables</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/libfacedetection/">libfacedetection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/nvidia/">nvidia</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/obj/">obj</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/peewee/">peewee</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/pip/">pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/pytest/">pytest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/scp/">scp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/sed/">sed</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/setuptools/">setuptools</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ssh/">ssh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/torchvision/">torchvision</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/verdaccio/">verdaccio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/vim/">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/virtualenv/">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/xargs/">xargs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/yacs/">yacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/yaml/">yaml</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/zip/">zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/zsh/">zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/blog-hexo/tags/3D/" style="font-size: 10px;">3D</a> <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Alembic/" style="font-size: 10px;">Alembic</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 11.43px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/Blender/" style="font-size: 10px;">Blender</a> <a href="/blog-hexo/tags/C/" style="font-size: 11.43px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CMake/" style="font-size: 10px;">CMake</a> <a href="/blog-hexo/tags/COCO/" style="font-size: 10px;">COCO</a> <a href="/blog-hexo/tags/COCOAPI/" style="font-size: 10px;">COCOAPI</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 10.71px;">CSharp</a> <a href="/blog-hexo/tags/CentOS/" style="font-size: 10px;">CentOS</a> <a href="/blog-hexo/tags/Code-Coverage/" style="font-size: 10px;">Code Coverage</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 10.71px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Cookie/" style="font-size: 10.71px;">Cookie</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Debug/" style="font-size: 10px;">Debug</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/DeepLearning/" style="font-size: 10px;">DeepLearning</a> <a href="/blog-hexo/tags/Django/" style="font-size: 10px;">Django</a> <a href="/blog-hexo/tags/Docker/" style="font-size: 10.71px;">Docker</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.14px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10.71px;">Excel</a> <a href="/blog-hexo/tags/FFMpeg/" style="font-size: 10px;">FFMpeg</a> <a href="/blog-hexo/tags/FIGlet/" style="font-size: 10px;">FIGlet</a> <a href="/blog-hexo/tags/Faiss/" style="font-size: 10px;">Faiss</a> <a href="/blog-hexo/tags/FastAPI/" style="font-size: 10px;">FastAPI</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Flask/" style="font-size: 10px;">Flask</a> <a href="/blog-hexo/tags/Flyway/" style="font-size: 10px;">Flyway</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15px;">Git</a> <a href="/blog-hexo/tags/Git-Bash/" style="font-size: 10px;">Git Bash</a> <a href="/blog-hexo/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/blog-hexo/tags/GitLab/" style="font-size: 10px;">GitLab</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Go/" style="font-size: 10.71px;">Go</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10.71px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 12.14px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 16.43px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 12.14px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.14px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.57px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 17.86px;">Linux</a> <a href="/blog-hexo/tags/Loguru/" style="font-size: 10px;">Loguru</a> <a href="/blog-hexo/tags/MS-COCO/" style="font-size: 10px;">MS COCO</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/blog-hexo/tags/Math/" style="font-size: 10.71px;">Math</a> <a href="/blog-hexo/tags/Matplotlib/" style="font-size: 10px;">Matplotlib</a> <a href="/blog-hexo/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/blog-hexo/tags/Memory/" style="font-size: 10px;">Memory</a> <a href="/blog-hexo/tags/Mkdocs/" style="font-size: 10px;">Mkdocs</a> <a href="/blog-hexo/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/blog-hexo/tags/MyBatisPlus/" style="font-size: 10px;">MyBatisPlus</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 10.71px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10.71px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.43px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Noise/" style="font-size: 10px;">Noise</a> <a href="/blog-hexo/tags/Numpy/" style="font-size: 10px;">Numpy</a> <a href="/blog-hexo/tags/Nvidia-Driver/" style="font-size: 10px;">Nvidia Driver</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenCV/" style="font-size: 10.71px;">OpenCV</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 11.43px;">Oracle</a> <a href="/blog-hexo/tags/PDF/" style="font-size: 10px;">PDF</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Paper-js/" style="font-size: 10px;">Paper.js</a> <a href="/blog-hexo/tags/Pip/" style="font-size: 10px;">Pip</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PosixPath/" style="font-size: 10px;">PosixPath</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 10.71px;">PowerShell</a> <a href="/blog-hexo/tags/PyTorch/" style="font-size: 10.71px;">PyTorch</a> <a href="/blog-hexo/tags/PyYAML/" style="font-size: 10px;">PyYAML</a> <a href="/blog-hexo/tags/Python/" style="font-size: 19.29px;">Python</a> <a href="/blog-hexo/tags/Pythonenv/" style="font-size: 10px;">Pythonenv</a> <a href="/blog-hexo/tags/RLE/" style="font-size: 10px;">RLE</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SQLAlchemy/" style="font-size: 10px;">SQLAlchemy</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12.86px;">SSH</a> <a href="/blog-hexo/tags/Shell/" style="font-size: 14.29px;">Shell</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 13.57px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Supervisor/" style="font-size: 10px;">Supervisor</a> <a href="/blog-hexo/tags/Swagger/" style="font-size: 10px;">Swagger</a> <a href="/blog-hexo/tags/Swagger-UI/" style="font-size: 10px;">Swagger-UI</a> <a href="/blog-hexo/tags/TensorRT/" style="font-size: 10px;">TensorRT</a> <a href="/blog-hexo/tags/Terminal/" style="font-size: 10px;">Terminal</a> <a href="/blog-hexo/tags/Torch/" style="font-size: 10px;">Torch</a> <a href="/blog-hexo/tags/TorchServe/" style="font-size: 10.71px;">TorchServe</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 11.43px;">Ubuntu</a> <a href="/blog-hexo/tags/VB/" style="font-size: 10px;">VB</a> <a href="/blog-hexo/tags/VS-Code/" style="font-size: 10.71px;">VS Code</a> <a href="/blog-hexo/tags/VSCode/" style="font-size: 10.71px;">VSCode</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15.71px;">Vue</a> <a href="/blog-hexo/tags/Vue-js/" style="font-size: 10px;">Vue.js</a> <a href="/blog-hexo/tags/Vuetify/" style="font-size: 10px;">Vuetify</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12.86px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/YAML/" style="font-size: 10.71px;">YAML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 10.71px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/bpy/" style="font-size: 10px;">bpy</a> <a href="/blog-hexo/tags/bumpversion/" style="font-size: 10px;">bumpversion</a> <a href="/blog-hexo/tags/conda/" style="font-size: 10.71px;">conda</a> <a href="/blog-hexo/tags/cookiecutter/" style="font-size: 10px;">cookiecutter</a> <a href="/blog-hexo/tags/coverage/" style="font-size: 10px;">coverage</a> <a href="/blog-hexo/tags/crontab/" style="font-size: 10px;">crontab</a> <a href="/blog-hexo/tags/faiss/" style="font-size: 10px;">faiss</a> <a href="/blog-hexo/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/ffmpeg/" style="font-size: 10px;">ffmpeg</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10.71px;">grep</a> <a href="/blog-hexo/tags/heatmap-js/" style="font-size: 10px;">heatmap.js</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/iptables/" style="font-size: 10.71px;">iptables</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10.71px;">npm</a> <a href="/blog-hexo/tags/nvidia/" style="font-size: 10px;">nvidia</a> <a href="/blog-hexo/tags/obj/" style="font-size: 10px;">obj</a> <a href="/blog-hexo/tags/peewee/" style="font-size: 10px;">peewee</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/pytest/" style="font-size: 10.71px;">pytest</a> <a href="/blog-hexo/tags/python/" style="font-size: 10px;">python</a> <a href="/blog-hexo/tags/scp/" style="font-size: 10px;">scp</a> <a href="/blog-hexo/tags/sed/" style="font-size: 10px;">sed</a> <a href="/blog-hexo/tags/setuptools/" style="font-size: 10px;">setuptools</a> <a href="/blog-hexo/tags/shell/" style="font-size: 10px;">shell</a> <a href="/blog-hexo/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/blog-hexo/tags/torchvision/" style="font-size: 10px;">torchvision</a> <a href="/blog-hexo/tags/verdaccio/" style="font-size: 10px;">verdaccio</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/xargs/" style="font-size: 10px;">xargs</a> <a href="/blog-hexo/tags/yacs/" style="font-size: 10px;">yacs</a> <a href="/blog-hexo/tags/yaml/" style="font-size: 10px;">yaml</a> <a href="/blog-hexo/tags/zip/" style="font-size: 10px;">zip</a> <a href="/blog-hexo/tags/zsh/" style="font-size: 10px;">zsh</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 11.43px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2023/01/">January 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/11/">November 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/10/">October 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog-hexo/2023/01/10/Vue使用js-yaml解析yaml文件/">Vue使用js-yaml解析yaml文件</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2023/01/04/Vue导出HTML页面至PDF/">Vue导出HTML页面至PDF</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/11/09/python将秒数转为格式化时间字符串/">python将秒数转为格式化时间字符串</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/10/19/使用Verdaccio搭建私有npm源/">使用Verdaccio搭建私有npm源</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/09/08/Docker实时查看容器的内存占用/">Docker实时查看容器的内存占用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 ckmessi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog-hexo/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog-hexo/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/blog-hexo/fancybox/jquery.fancybox.css">
+  <script src="/blog-hexo/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/blog-hexo/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

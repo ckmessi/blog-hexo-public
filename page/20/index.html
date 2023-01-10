@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>不止是一位程序员</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Lionel的技术笔记总结">
+<meta property="og:type" content="website">
+<meta property="og:title" content="不止是一位程序员">
+<meta property="og:url" content="http://ckmessi.github.io/page/20/index.html">
+<meta property="og:site_name" content="不止是一位程序员">
+<meta property="og:description" content="Lionel的技术笔记总结">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="不止是一位程序员">
+<meta name="twitter:description" content="Lionel的技术笔记总结">
+  
+    <link rel="alternate" href="/blog-hexo/atom.xml" title="不止是一位程序员" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/blog-hexo/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog-hexo/" id="logo">不止是一位程序员</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog-hexo/" id="subtitle">Lionel的技术空间</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog-hexo/">Home</a>
+        
+          <a class="main-nav-link" href="/blog-hexo/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog-hexo/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ckmessi.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-Nginx-PHP上传大文件场景需要注意的配置" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" class="article-date">
+  <time datetime="2018-03-08T11:49:12.000Z" itemprop="datePublished">2018-03-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/">Nginx+PHP上传大文件场景需要注意的配置</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在使用nginx+php作为后台服务器时，如果遇到需要上传文件的业务逻辑，需要注意两者对文件的限制大小。</p>
+<h2 id="Ngnix配置"><a href="#Ngnix配置" class="headerlink" title="Ngnix配置"></a>Ngnix配置</h2><p>首先，有可能遇到的情况是，前端网页上传文件时报错了；而后台服务器没有接到访问请求。这是由于nginx对客户端的body大小的限制，请求会中断在nginx，无法到达php。默认情况下，上传大文件可能造成错误<code>413 Request Entity Too Large</code>的情况。</p>
+<p>在<code>nginx.conf</code>中，添加一行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">client_max_body_size 20m</div></pre></td></tr></table></figure></p>
+<p><code>client_max_body_size</code>的默认值为<code>1m</code>，上述语句表示客户端可以上传的最大body大小为20Mb。</p>
+<p>至于在哪个层级下设置，查找到一篇博客是这样说的：</p>
+<blockquote>
+<p>可以选择在http{ }中设置：client_max_body_size 20m;<br>也可以选择在server{ }中设置：client_max_body_size 20m;<br>还可以选择在location{ }中设置：client_max_body_size 20m;<br>三者到区别是：http{} 中控制着所有nginx收到的请求。而报文大小限制设置在server｛｝中，则控制该server收到的请求报文大小，同理，如果配置在location中，则报文大小限制，只对匹配了location 路由规则的请求生效。</p>
+</blockquote>
+<h2 id="PHP配置"><a href="#PHP配置" class="headerlink" title="PHP配置"></a>PHP配置</h2><p>解决nginx的配置问题后，还有可能在php代码中出现获取不到提交文件的问题。这是由于php对于文件大小也有限制。</p>
+<p>在<code>php.ini</code>中，相关需要考虑的参数在<code>File Uploads</code>区域，有如下几个：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">file_uploads = On</div><div class="line">upload_max_filesize = 2M</div><div class="line">post_max_size = 8M</div></pre></td></tr></table></figure></p>
+<p>其中<code>file_uploads</code>表示开启文件上传，<code>upload_max_filesize</code>限制最大文件大小，<code>post_max_size</code>限制了一次POST请求数据的大小。   </p>
+<p>某篇博客中提，一般来说，设置好上述参数后，在网络正常的情况下，上传小于8M的文件是不成问题的。但如果上传大文件的话，只设置上述还不一定能行的通，因为还有响应时间的限制。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">max_execution_time 600 每个PHP页面运行的最大时间值(秒)，默认30秒 </div><div class="line">max_input_time 600 每个PHP页面接收数据所需的最大时间，默认60秒 </div><div class="line">memory_limit 8m 每个PHP页面所吃掉的最大内存，默认8M</div></pre></td></tr></table></figure></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://blog.csdn.net/li396864285/article/details/53522828" target="_blank" rel="external">http://blog.csdn.net/li396864285/article/details/53522828</a><br><a href="http://blog.csdn.net/webnoties/article/details/17266651" target="_blank" rel="external">http://blog.csdn.net/webnoties/article/details/17266651</a><br><a href="https://www.jianshu.com/p/9a4a423e1ca6" target="_blank" rel="external">https://www.jianshu.com/p/9a4a423e1ca6</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/03/08/Nginx-PHP上传大文件场景需要注意的配置/" data-id="clcpwy3cq007f5e8tmgou3vcw" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-初识AIDL" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/03/01/初识AIDL/" class="article-date">
+  <time datetime="2018-03-01T12:01:01.000Z" itemprop="datePublished">2018-03-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/03/01/初识AIDL/">初识AIDL</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>AIDL（Android Interface Definition Language），称为Android接口定义语言，目的是为了实现Android的进程间通信，尤其是涉及到多进程并发情况下的进程间通信。</p>
+<p>宏观上讲，可以将两个需要通信的进程分别视为客户端和服务端，双方定义一份<code>aidl</code>文件，作为通信协议约定。<br>服务端需要保存<code>xxx.aidl</code>文件，并实现其中定义的方法；客户端需要保存<code>xxx.aidl</code>文件，并以此尝试与服务端建立连接，调用其相关方法。<br>AIDL的使用过程主要可划分为以下几个步骤：</p>
+<ul>
+<li>创建一份<code>aidl</code>文件，在其中定义接口；</li>
+<li>将进程间通信的被动端作为服务端，在服务端创建Service，实现<code>aidl</code>文件中的接口所定义的方法逻辑，用于处理客户端的调用请求；</li>
+<li>将主动调用端作为客户端，与服务端建立连接，并调用相关方法获取结果。</li>
+</ul>
+<p>下面将以一份实现样例进行说明，代码可参考：<a href="https://github.com/ckmessi/AIDLDemo/" target="_blank" rel="external">https://github.com/ckmessi/AIDLDemo/</a></p>
+<h2 id="实例：实现服务端-amp-客户端"><a href="#实例：实现服务端-amp-客户端" class="headerlink" title="实例：实现服务端&amp;客户端"></a>实例：实现服务端&amp;客户端</h2><p>在实际使用过程中，往往根据需求只需要将自己的程序作为服务端或客户端使用，但在学习过程中，需要两者之间的配合才能跑通。因此，首先从自己实现服务端和客户端开始。</p>
+<p>使用<code>Android Studio</code>创建两个项目：<code>AIDLServer</code>和<code>AIDLClient</code>。</p>
+<h4 id="（1）撰写AIDLServer项目"><a href="#（1）撰写AIDLServer项目" class="headerlink" title="（1）撰写AIDLServer项目"></a>（1）撰写<code>AIDLServer</code>项目</h4><h6 id="step1-1-创建一个aidl文件"><a href="#step1-1-创建一个aidl文件" class="headerlink" title="step1.1 创建一个aidl文件"></a>step1.1 创建一个aidl文件</h6><p>在<code>Android Studio</code>中，可以通过在<code>Project</code>视图中右键点击<code>app/src/main</code>，选择<code>New-&gt;AIDL-&gt;AIDL File</code>进行创建。</p>
+<img src="/2018/03/01/初识AIDL/blog-hexo/2018/03/01/初识AIDL/1.png" alt="示例图" title="示例图">
+<img src="/2018/03/01/初识AIDL/blog-hexo/2018/03/01/初识AIDL/2.png" alt="示例图" title="示例图">
+<p>生成默认名称<code>IMyAidlInterface</code>的<code>aidl</code>文件如下：</p>
+<img src="/2018/03/01/初识AIDL/blog-hexo/2018/03/01/初识AIDL/3.png" alt="示例图" title="示例图">
+<p>将其中的方法修改为一个简单的加法运算。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">// IMyAidlInterface.aidl</div><div class="line">package com.ckmessi.aidlserver;</div><div class="line">// Declare any non-default types here with import statements</div><div class="line">interface IMyAidlInterface &#123;</div><div class="line">    /**</div><div class="line">     * Demonstrates some basic types that you can use as parameters</div><div class="line">     * and return values in AIDL.</div><div class="line">     */</div><div class="line">    int add(int a, int b);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<img src="/2018/03/01/初识AIDL/blog-hexo/2018/03/01/初识AIDL/4.png" alt="示例图" title="示例图">
+<p>至此，<code>aidl</code>文件在服务端就准备完毕了。</p>
+<h6 id="step1-2-编译项目"><a href="#step1-2-编译项目" class="headerlink" title="step1.2 编译项目"></a>step1.2 编译项目</h6><p>在创建Service之前需要编译一下项目，目的是为了之后能够正确resolve关键字<code>IMyAidInterface</code>。<br>点击菜单栏的<code>Build-&gt;Make Project</code>按钮：</p>
+<img src="/2018/03/01/初识AIDL/blog-hexo/2018/03/01/初识AIDL/5.png" alt="示例图" title="示例图">
+<h6 id="step1-3-创建Service："><a href="#step1-3-创建Service：" class="headerlink" title="step1.3 创建Service："></a>step1.3 创建Service：</h6><p>在<code>Android Studio</code>中，可以通过右键点击包名称，选择<code>New-&gt;Service-&gt;Serivce</code>创建一个Service。</p>
+<img src="/2018/03/01/初识AIDL/blog-hexo/2018/03/01/初识AIDL/6.png" alt="示例图" title="示例图">
+<p>按照默认配置执行即可。</p>
+<img src="/2018/03/01/初识AIDL/blog-hexo/2018/03/01/初识AIDL/7.png" alt="示例图" title="示例图">
+<p>修改Service内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public class MyService extends Service &#123;</div><div class="line">    private static final String TAG = &quot;AIDLService&quot;;</div><div class="line">    private Binder mBinder = new IMyAidlInterface.Stub() &#123;</div><div class="line">        @Override</div><div class="line">        public int add(int a, int b) throws RemoteException &#123;</div><div class="line">            Log.d(TAG, &quot;add: a=&quot; + a + &quot;, b=&quot; + b);</div><div class="line">            return a + b;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">    @Override</div><div class="line">    public IBinder onBind(Intent intent) &#123;</div><div class="line">        return mBinder;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<img src="/2018/03/01/初识AIDL/blog-hexo/2018/03/01/初识AIDL/8.png" alt="示例图" title="示例图">
+<h6 id="step1-4-查看并修改AndroidManifest-xml文件，确保服务被正确注册。"><a href="#step1-4-查看并修改AndroidManifest-xml文件，确保服务被正确注册。" class="headerlink" title="step1.4 查看并修改AndroidManifest.xml文件，确保服务被正确注册。"></a>step1.4 查看并修改<code>AndroidManifest.xml</code>文件，确保服务被正确注册。</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;service</div><div class="line">    android:name=&quot;.MyService&quot;</div><div class="line">    android:enabled=&quot;true&quot;</div><div class="line">    android:exported=&quot;true&quot;&gt;</div><div class="line">    &lt;intent-filter&gt;</div><div class="line">        &lt;action android:name=&quot;com.ckmessi.aidlserver.myservice&quot;/&gt;</div><div class="line">    &lt;/intent-filter&gt;</div><div class="line">&lt;/service&gt;</div></pre></td></tr></table></figure>
+<img src="/2018/03/01/初识AIDL/blog-hexo/2018/03/01/初识AIDL/9.png" alt="示例图" title="示例图">
+<h6 id="step1-5-运行，即可启动Serivce"><a href="#step1-5-运行，即可启动Serivce" class="headerlink" title="step1.5 运行，即可启动Serivce"></a>step1.5 运行，即可启动Serivce</h6><img src="/2018/03/01/初识AIDL/blog-hexo/2018/03/01/初识AIDL/10.png" alt="示例图" title="示例图">
+<h4 id="（2）撰写AIDLClient项目"><a href="#（2）撰写AIDLClient项目" class="headerlink" title="（2）撰写AIDLClient项目"></a>（2）撰写<code>AIDLClient</code>项目</h4><h6 id="step2-1-存储aidl文件"><a href="#step2-1-存储aidl文件" class="headerlink" title="step2.1 存储aidl文件"></a>step2.1 存储<code>aidl</code>文件</h6><p>将刚刚服务端的<code>aidl</code>文件在客户端存储一份，注意包名称要与服务器端完全相同。</p>
+<img src="/2018/03/01/初识AIDL/blog-hexo/2018/03/01/初识AIDL/11.png" alt="示例图" title="示例图">
+<h6 id="step2-2-创建服务管理类"><a href="#step2-2-创建服务管理类" class="headerlink" title="step2.2 创建服务管理类"></a>step2.2 创建服务管理类</h6><p>首先注意先<code>Make Project</code>，然后在<code>app/src/main/java/com.ckmessi.aidlclient</code>包中添加一个服务管理器<code>MyServiceManager</code>，用于处理相关逻辑。</p>
+<img src="/2018/03/01/初识AIDL/blog-hexo/2018/03/01/初识AIDL/12.png" alt="示例图" title="示例图">
+<p>其中主要逻辑是创建<code>myConnection</code>以及通过<code>bindService</code>建立连接后绑定<code>myService</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">private void bindMyService()&#123;</div><div class="line">    myConnection = new ServiceConnection() &#123;</div><div class="line">        @Override</div><div class="line">        public void onServiceConnected(ComponentName name, IBinder service) &#123;</div><div class="line">            Log.d(TAG, &quot;connected to service&quot;);</div><div class="line">            myService = IMyAidlInterface.Stub.asInterface(service);</div><div class="line">            mConnecting = true;</div><div class="line">        &#125;</div><div class="line">        @Override</div><div class="line">        public void onServiceDisconnected(ComponentName name) &#123;</div><div class="line">            Log.d(TAG, &quot;disconnected&quot;);</div><div class="line">            myService = null;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">    Intent intent = new Intent();</div><div class="line">    intent.setAction(ACTION_NAME);</div><div class="line">    intent.setPackage(PACKAGE_NAME);</div><div class="line">    context.bindService(intent, myConnection, context.BIND_AUTO_CREATE);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>此外，对外提供一个调用服务端<code>add</code>功能的方法<code>callServiceAdd</code>，其中逻辑就是通过<code>this.myService.add</code>调用服务端的方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"> public int callServiceAdd(int a, int b)&#123;</div><div class="line">    try &#123;</div><div class="line">        return this.myService.add(a, b);</div><div class="line">    &#125; catch (RemoteException e) &#123;</div><div class="line">        e.printStackTrace();</div><div class="line">        return 0;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h6 id="step2-3-主活动添加相关逻辑"><a href="#step2-3-主活动添加相关逻辑" class="headerlink" title="step2.3 主活动添加相关逻辑"></a>step2.3 主活动添加相关逻辑</h6><p>在主活动<code>MainActivity</code>类中，创建一个类型为<code>MyServiceManager</code>的成员变量，在<code>onCreate</code>函数中初始化它，建立与服务端的连接。<br>在页面中添加一个按钮：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">    android:layout_width=&quot;match_parent&quot;</div><div class="line">    android:layout_height=&quot;match_parent&quot;</div><div class="line">    android:orientation=&quot;vertical&quot;</div><div class="line">    &gt;</div><div class="line">    &lt;Button</div><div class="line">        android:id=&quot;@+id/button&quot;</div><div class="line">        android:text=&quot;call service&quot;</div><div class="line">        android:layout_width=&quot;match_parent&quot;</div><div class="line">        android:layout_height=&quot;wrap_content&quot; /&gt;</div><div class="line">&lt;/LinearLayout&gt;</div></pre></td></tr></table></figure></p>
+<p>设置其点击事件为，调用<code>myServiceManager</code>函数，调用服务端的加法运算，返回结果并显示。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">public class MainActivity extends AppCompatActivity &#123;</div><div class="line">    private MyServiceManager myServiceManager;</div><div class="line">    @Override</div><div class="line">    protected void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">        super.onCreate(savedInstanceState);</div><div class="line">        setContentView(R.layout.activity_main);</div><div class="line">        myServiceManager = new MyServiceManager(this);</div><div class="line">        Button button = (Button) findViewById(R.id.button);</div><div class="line">        button.setOnClickListener(new View.OnClickListener() &#123;</div><div class="line">            @Override</div><div class="line">            public void onClick(View view) &#123;</div><div class="line">                int result = myServiceManager.callServiceAdd(1, 3);</div><div class="line">                Toast.makeText(MainActivity.this, String.valueOf(result), Toast.LENGTH_SHORT).show();</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<img src="/2018/03/01/初识AIDL/blog-hexo/2018/03/01/初识AIDL/13.png" alt="示例图" title="示例图">
+<h6 id="step2-4-运行"><a href="#step2-4-运行" class="headerlink" title="step2.4 运行"></a>step2.4 运行</h6><p>运行，可以看到弹出一个<code>Toast</code>显示加法结果为<code>4</code>（4 = 1 + 3）。</p>
+<img src="/2018/03/01/初识AIDL/blog-hexo/2018/03/01/初识AIDL/14.png" alt="示例图" title="示例图">
+<p>至此，完成了利用AIDL完成客户端调用服务端加法服务的实例。</p>
+<h2 id="客户端常用流程概括"><a href="#客户端常用流程概括" class="headerlink" title="客户端常用流程概括"></a>客户端常用流程概括</h2><p>在现实场景中，最可能发生的是当前程序需要通过AIDL调用其它进程的某项服务。<br>在这种情况下，可以将自己的程序视为<code>客户端</code>，将假定存在的服务所在的进程视为<code>服务端</code>，使用AIDL的目标是完成调用。<br>项目中需要用到的已知信息如下：</p>
+<ul>
+<li>目标服务的包名称，如<code>com.x.example</code></li>
+<li>AIDL文件<code>XService.aidl</code>，对应接口名称为<code>IXService</code></li>
+</ul>
+<p>对于客户端来说，所需要进行的流程为以下几点：</p>
+<ul>
+<li>将AIDL文件添加到项目中</li>
+<li>在项目中定义一个连接<code>XConnection</code>和一个服务<code>XService</code>，使用<code>bindServce</code>方法，将连接与对应的目标服务绑定，将绑定结果存储到<code>XService</code>中</li>
+<li>通过获取到的服务<code>XService</code>调用对应的接口</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本篇文章简单介绍了AIDL的概念和功能，并用一个简单的实例完成AIDL的调用。<br>在实际工作中，调用<code>Service</code>的方式可能会有一些变化，但总之目标都是完成绑定。<br>作为客户端，向服务端索要的信息包括<code>包名称</code>、<code>aidl</code>文件和<code>绑定Service的方式（可能需要知道对应的ACTION名称等）</code>。<br>之后会介绍更为高级的内容，比如AIDL能够定义的接口返回值类型限制等。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://zhuanlan.zhihu.com/p/31460556" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/31460556</a><br><a href="http://blog.csdn.net/luoyanglizi/article/details/51980630" target="_blank" rel="external">http://blog.csdn.net/luoyanglizi/article/details/51980630</a><br><a href="http://blog.csdn.net/man_help/article/details/51173450" target="_blank" rel="external">http://blog.csdn.net/man_help/article/details/51173450</a><br><a href="http://blog.csdn.net/p106786860/article/details/17733223" target="_blank" rel="external">http://blog.csdn.net/p106786860/article/details/17733223</a><br><a href="http://blog.csdn.net/qian520ao/article/details/78072250#%E5%AE%A2%E6%88%B7%E7%AB%AF" target="_blank" rel="external">http://blog.csdn.net/qian520ao/article/details/78072250#%E5%AE%A2%E6%88%B7%E7%AB%AF</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/03/01/初识AIDL/" data-id="clcpwy3hd00hh5e8twu4d5gr4" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Laravel-Vue前后端分离跨域CORS的一点知识" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" class="article-date">
+  <time datetime="2018-02-06T11:52:44.000Z" itemprop="datePublished">2018-02-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/">Laravel+Vue前后端分离跨域CORS的一点知识</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>CORS（Cross-Origin Resource Sharing）是一种允许一个网页访问其它域资源的方式。<br>在前后端分离的Web应用中，这个知识非常关键，它是允许前端跨域访问后台API接口的关键。</p>
+<p>此前一直没有弄得非常明白，在网络上查询得到的答案基本都是特定情况下的解决方案，不求甚解，令人很头痛。<br>这次稍微弄清楚了一些。</p>
+<h2 id="0-CORS的概念"><a href="#0-CORS的概念" class="headerlink" title="0. CORS的概念"></a>0. CORS的概念</h2><p>根据MDN官方文档中<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS" target="_blank" rel="external">HTTP访问控制（CORS）</a>的解说，可以了解CORS概念的基本知识。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">当一个资源从与该资源本身所在的服务器不同的域或端口请求一个资源时，资源会发起一个跨域 HTTP 请求。</div><div class="line">比如，站点 http://domain-a.com 的某 HTML 页面通过 &lt;img&gt; 的 src 请求 http://domain-b.com/image.jpg。网络上的许多页面都会加载来自不同域的CSS样式表，图像和脚本等资源。</div><div class="line">出于安全原因，浏览器限制从脚本内发起的跨源HTTP请求。 例如，XMLHttpRequest和Fetch API遵循同源策略。 </div><div class="line">这意味着使用这些API的Web应用程序只能从加载应用程序的同一个域请求HTTP资源，除非使用CORS头文件。</div><div class="line">跨域资源共享（ CORS ）机制允许 Web 应用服务器进行跨域访问控制，从而使跨域数据传输得以安全进行。浏览器支持在 API 容器中（例如 XMLHttpRequest 或 Fetch ）使用 CORS，以降低跨域 HTTP 请求所带来的风险。</div></pre></td></tr></table></figure></p>
+<p>此外，CORS标准还规定了请求的两种不同类型：<code>简单请求</code>和<code>非简单请求</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">跨域资源共享标准的规范要求，对那些可能对服务器数据产生副作用的 HTTP 请求方法（特别是 GET 以外的 HTTP 请求，或者搭配某些 MIME 类型的 POST 请求），浏览器必须首先使用 OPTIONS 方法发起一个预检请求（preflight request），从而获知服务端是否允许该跨域请求。服务器确认允许之后，才发起实际的 HTTP 请求。在预检请求的返回中，服务器端也可以通知客户端，是否需要携带身份凭证（包括 Cookies 和 HTTP 认证相关数据）。</div></pre></td></tr></table></figure></p>
+<p>在实际操作过程中，针对两种不同类型的请求，需要进行的操作也是不同的。</p>
+<h4 id="简单请求"><a href="#简单请求" class="headerlink" title="简单请求"></a>简单请求</h4><p>某些请求不会触发 CORS 预检请求，这样的请求归纲为“简单请求”。“简单请求”的请求有以下限制：<br>请求方式必须是下列方法之一：</p>
+<ul>
+<li>GET</li>
+<li>HEAD</li>
+<li>POST</li>
+</ul>
+<p><code>Content-Type</code>的值仅限于下列三者之一：</p>
+<ul>
+<li>text/plain</li>
+<li>multipart/form-data</li>
+<li>application/x-www-form-urlencoded</li>
+</ul>
+<p>更多限制可参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS#Preflighted_requests" target="_blank" rel="external">简单请求</a>。</p>
+<h4 id="非简单请求"><a href="#非简单请求" class="headerlink" title="非简单请求"></a>非简单请求</h4><p>如果一个请求不是<code>简单请求</code>，那就是<code>非简单请求</code>。<br><code>非简单请求</code>会首先执行一个类型为<code>OPTIONS</code>的预检请求，预检请求完成之后，发送实际请求。</p>
+<h2 id="1-CORS代码实例"><a href="#1-CORS代码实例" class="headerlink" title="1. CORS代码实例"></a>1. CORS代码实例</h2><p>在这份代码实例中，后台使用<code>php</code>+<code>Laravel</code>框架，前端使用<code>Vue</code>框架，通过<code>axios</code>执行ajax请求。</p>
+<h4 id="1-1-基础样例"><a href="#1-1-基础样例" class="headerlink" title="1.1 基础样例"></a>1.1 基础样例</h4><p>首先，后台需要声明允许访问<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">header(&quot;Access-Control-Allow-Origin: *&quot;);</div><div class="line">header(&quot;Access-Control-Allow-Credentials: true&quot;);</div></pre></td></tr></table></figure></p>
+<p>更多的设置还有（但貌似没有什么影响）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">header(&apos;Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE&apos;);</div><div class="line">header(&apos;Access-Control-Allow-Headers: Origin, Access-Control-Request-Headers, SERVER_NAME, Access-Control-Allow-Headers, cache-control, token, X-Requested-With, Content-Type, Accept, Connection, User-Agent, Cookie&apos;);</div></pre></td></tr></table></figure></p>
+<p>前端使用了<code>axios</code>插件执行ajax访问：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">axios.get(url).</div><div class="line">    then(function (response) &#123;</div><div class="line">        console.log(response)</div><div class="line">    &#125;)</div><div class="line">    .catch(function (error) &#123;</div><div class="line">        console.log(error)</div><div class="line">    &#125;);</div></pre></td></tr></table></figure></p>
+<p>这样最基础的跨域GET请求就可以访问了。</p>
+<h4 id="1-2-跨域Session的问题"><a href="#1-2-跨域Session的问题" class="headerlink" title="1.2 跨域Session的问题"></a>1.2 跨域Session的问题</h4><p>上述代码有可能遇到一个问题，即跨域时每次<code>axios</code>发送的ajax请求的Session的ID会变，这样无法保留登录信息。</p>
+<p>查询<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS" target="_blank" rel="external">文档</a>可知：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">一般而言，对于跨域 XMLHttpRequest 或 Fetch 请求，浏览器不会发送身份凭证信息。如果要发送凭证信息，需要设置 XMLHttpRequest 的某个特殊标志位。</div></pre></td></tr></table></figure></p>
+<p>这是由于前端使用axios调用ajax请求时，不带Cookie导致的。查找<a href="https://segmentfault.com/a/1190000009208644" target="_blank" rel="external">解决方案</a>发现需要添加设置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">axios.defaults.withCredentials=true;</div></pre></td></tr></table></figure></p>
+<p>即可使客户端在发送请求时带上Cookie信息。<br>但此时又会报错，查找<a href="https://segmentfault.com/q/1010000008671922" target="_blank" rel="external">解决方案</a>可知当这个选项开启时，服务器的<code>Access-Control-Allow-Origin</code>选项不能为<code>*</code>，而需要指定客户端的地址。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">设置 withCredentials = true 也是需要服务器支持的，这个选项的作用是跨域的情况接收服务器response的set-cookies，当启用这个选项的时候，服务器不能设置 Access-Control-Allow-Origin 为 *，如果是nginx可以使用$http_origin，否则写成你真实请求的origin地址。</div></pre></td></tr></table></figure></p>
+<p>在Laravel中可以使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$origin = $request-&gt;header(&apos;ORIGIN&apos;, &apos;*&apos;);</div><div class="line">header(&quot;Access-Control-Allow-Origin: $origin&quot;);</div><div class="line">header(&quot;Access-Control-Allow-Credentials: true&quot;);</div></pre></td></tr></table></figure></p>
+<p>完成相关设置，至此可以实现跨域请求保留Session信息。</p>
+<h4 id="1-3-前端POST简单请求的可选方案"><a href="#1-3-前端POST简单请求的可选方案" class="headerlink" title="1.3 前端POST简单请求的可选方案"></a>1.3 前端POST简单请求的可选方案</h4><p>上述内容完成了简单的GET请求，然而前端使用<code>axios</code>执行带参数的POST请求时，容易遇到错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Response to preflight request doesn&apos;t pass access control check: No &apos;Access-Control-Allow-Origin&apos; header is present on the requested resource. Origin &apos;http://localhost:8082&apos; is therefore not allowed access.</div></pre></td></tr></table></figure></p>
+<p>这是由于<code>axios</code>默认的方式是<code>application/json</code>，并不是简单请求限制<code>Content-Type</code>的三个值之一，这将导致请求成为一个<code>非简单请求</code>。<br>此时，客户端将先发送一个类型为<code>OPTIONS</code>的预检请求，要求服务器允许正式请求。在服务器端未能正确处理预检请求时，访问将报上述错误。</p>
+<p>假定当前<code>POST</code>请求的参数为变量<code>data</code>保存的键值对。</p>
+<p>有几个野路子：</p>
+<ol>
+<li>显示设置request中header的<code>Content-Type</code>为<code>application/x-www-form-urlencoded</code>，抛弃参数<code>data</code>的作用，将参数添加在url中。<br>提交的数据按照<code>key1=val1&amp;key2=val2</code>的方式进行编码，key和val都进行URL转码。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">return axios.post(baseUrl + &apos;api/login?account=admin&amp;password=admin&apos;, data, &#123;</div><div class="line">          headers: &#123;</div><div class="line">              &apos;Content-Type&apos;: &apos;application/x-www-form-urlencoded&apos;</div><div class="line">          &#125;</div><div class="line">      &#125;);</div></pre></td></tr></table></figure>
+<p>这种方式的原理是将<code>Content-Type</code>手动设置为<code>application/x-www-form-urlencoded</code>，以确保请求的类型是简单请求。<br>这个比较坑的是，参数只能手动加在url里，传入的参数data毫无用处。</p>
+<ol>
+<li>将参数JSON.stringfy化<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">return axios.post(baseUrl + &apos;api/login&apos;, JSON.stringify(data));</div><div class="line">return axios.post(baseUrl + &apos;api/login&apos;, &apos;a=1&amp;b=2&apos;);</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这种方式的原理与前两种类似，使用字符串作为参数，这将使<code>Content-Type</code>自动 为<code>application/x-www-form-urlencoded</code>类型，<code>data</code>字符串参数的格式保证了服务器端接收的正确性<br>这个比较坑的是，需要按格式组织好参数。</p>
+<ol>
+<li>将参数转为FormData提交 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var form = new FormData()</div><div class="line">form.append(&apos;account&apos;, data.account)</div><div class="line">form.append(&apos;password&apos;, data.password)</div><div class="line">axios.post(baseUrl + &apos;api/login&apos;, form);</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这种方式的原理与上一种类似，使用<code>FormData</code>类作为参数，将自动设置<code>Content-Type</code>为<code>multipart/form-data</code>类型，以确保请求的类型是简单请求。<br>这个比较坑的是，每次都需要手动逐个添加form的key-value键值，好处是可以处理文件类型。</p>
+<p>上述三个方案都是通过将问题转化为<code>简单请求</code>以完成跨域访问。</p>
+<h4 id="1-4-非简单请求代码"><a href="#1-4-非简单请求代码" class="headerlink" title="1.4 非简单请求代码"></a>1.4 非简单请求代码</h4><p>如果一定要是<code>非简单请求</code>，前端直接将<code>Object</code>类型的变量作为参数传入，此时打开浏览器可以看到Request的<code>header</code>内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Content-Type:application/json;charset=UTF-8</div></pre></td></tr></table></figure></p>
+<p>在这种情况下，如果服务器对<code>OPTIONS</code>请求没有正确响应，则会报错。<br>至于Laravel如何处理OPTIONS请求，可参考<a href="http://ckmessi.github.io/blog-hexo/2018/01/31/Laravel%E4%B8%AD%E5%AF%B9OPTIONS%E8%AF%B7%E6%B1%82%E7%9A%84%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86/">Laravel中对OPTIONS请求的批量处理</a>。</p>
+<p>此时前端的代码就显得非常简单而优雅了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">return axios.post(baseUrl + &apos;api/login&apos;, data);</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/02/06/Laravel-Vue前后端分离跨域CORS的一点知识/" data-id="clcpwy3bd00485e8tkthcmwh8" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-MySQL连接缓慢的情况处理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/02/02/MySQL连接缓慢的情况处理/" class="article-date">
+  <time datetime="2018-02-02T09:50:06.000Z" itemprop="datePublished">2018-02-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/02/02/MySQL连接缓慢的情况处理/">MySQL连接缓慢的情况处理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>工作中遇到连接远程的MySQL数据库缓慢的情况，导致每次Ajax请求都需要10秒左右，很奇怪。<br>如果从MySQL数据库所在服务器进行访问则很快。<br>在同事的指导下，了解到可能是MySQL需要进行域名解析的原因。<br>查询<a href="http://www.jb51.net/article/27616.htm" target="_blank" rel="external">这篇文章</a>可知，如果MySQL主机查询DNS很慢或是有很多客户端主机时会导致连接很慢。由于服务器不能够连接外网的，所以DNS解析是不可能完成的，也正是为什么连接这么慢的原因。</p>
+<p>解决方法是在<code>/etc/mysql/mysql.conf.d/mysqld.cnf</code>文件中，添加一行命令使MySQL不进行域名解析。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">skip-name-resolve</div></pre></td></tr></table></figure></p>
+<p>重启MySQL<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo /etc/init.d/mysql restart</div></pre></td></tr></table></figure></p>
+<p>瞬间速度就快了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/02/02/MySQL连接缓慢的情况处理/" data-id="clcpwy3ck006y5e8t8h017dy5" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Laravel中对OPTIONS请求的批量处理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/01/31/Laravel中对OPTIONS请求的批量处理/" class="article-date">
+  <time datetime="2018-01-31T06:05:51.000Z" itemprop="datePublished">2018-01-31</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/01/31/Laravel中对OPTIONS请求的批量处理/">Laravel中对OPTIONS请求的原理探索及批量处理方案</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在前后端分离的应用中，需要使用<code>CORS</code>完成跨域访问。在<code>CORS</code>中发送<code>非简单请求</code>时，前端会发一个请求方式为<code>OPTIONS</code>的预请求，前端只有收到服务器对这个<code>OPTIONS</code>请求的正确响应，才会发送正常的请求，否则将抛出跨域相关的错误。</p>
+<p>这篇文章主要总结对Laravel中处理<code>OPTIONS</code>请求处理机制的探索，以及如何正确处理这类OPTIONS请求的解决方案。</p>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>Laravel处理<code>OPTIONS</code>方式请求的机制是个谜。</p>
+<p>假设我们请求的URL是<code>http://localhost:8080/api/test</code>，请求方式是<code>OPTIONS</code>。<br>如果请求的URL不存在相关的其它方式（如<code>GET</code>或<code>POST</code>）的请求，则会返回<code>404 NOT FOUND</code>的错误。<br>如果存在相同URL的请求，会返回一个状态码为<code>200</code>的成功响应，但没有任何额外内容。</p>
+<p>举例而言，在路由文件<code>routes/api.php</code>中如果存在下面的定义，则以<code>OPTIONS</code>方式调用<code>/api/test</code>请求时，返回状态码为<code>200</code>的成功响应。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Route::get(&apos;/test&apos;, &apos;TestController@test&apos;);</div></pre></td></tr></table></figure></p>
+<p>但同时通过分析可以发现，这个<code>OPTIONS</code>请求不会进到此<code>api</code>路由文件的生命周期内，至少该<code>GET</code>请求所在路由文件<code>api</code>所绑定的中间件是没有进入的。</p>
+<p>此时如果手动添加一个<code>OPTIONS</code>请求，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Route::get(&apos;/test&apos;, &apos;TestController@test&apos;);</div><div class="line">Route::options(&apos;/test&apos;, function(Request $request) &#123;</div><div class="line">    return response(&apos;abc&apos;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>则至少会进入该<code>GET</code>请求所在路由文件<code>api</code>绑定的中间件，可以在相关<code>handle</code>函数中捕获到这个请求。</p>
+<h2 id="分析源码"><a href="#分析源码" class="headerlink" title="分析源码"></a>分析源码</h2><p>通过仔细查看Laravel的源码，发现了一些端倪。</p>
+<p>在<code>vendor/laravel/framework/src/Illuminate/Routing/RouteCollection.php</code>文件的第<code>159</code>行左右，源码内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">$routes = $this-&gt;get($request-&gt;getMethod());</div><div class="line"></div><div class="line">// First, we will see if we can find a matching route for this current request</div><div class="line">// method. If we can, great, we can just return it so that it can be called</div><div class="line">// by the consumer. Otherwise we will check for routes with another verb.</div><div class="line">$route = $this-&gt;matchAgainstRoutes($routes, $request);</div><div class="line"></div><div class="line">if (! is_null($route)) &#123;</div><div class="line">    return $route-&gt;bind($request);</div><div class="line">&#125;</div><div class="line"></div><div class="line">// If no route was found we will now check if a matching route is specified by</div><div class="line">// another HTTP verb. If it is we will need to throw a MethodNotAllowed and</div><div class="line">// inform the user agent of which HTTP verb it should use for this route.</div><div class="line">$others = $this-&gt;checkForAlternateVerbs($request);</div><div class="line"></div><div class="line">if (count($others) &gt; 0) &#123;</div><div class="line">    return $this-&gt;getRouteForMethods($request, $others);</div><div class="line">&#125;</div><div class="line"></div><div class="line">throw new NotFoundHttpException;</div></pre></td></tr></table></figure></p>
+<p>这里的逻辑是：</p>
+<ol>
+<li>首先根据当前HTTP方法（GET/POST/PUT/…）查找是否有匹配的路由，如果有（<code>if(! is_null($route))</code>条件成立)，非常好，绑定后直接返回，继续此后的调用流程即可；</li>
+<li>否则，根据<code>$request</code>的路由找到可能匹配的HTTP方法（即URL匹配，但是HTTP请求方式为其它品种的），如果<code>count($others) &gt; 0)</code>条件成立，则继续进入<code>$this-&gt;getRouteForMethods($request, $others);</code>方法；</li>
+<li>否则抛出<code>NotFoundHttpException</code>，即上述说到的<code>404 NOT FOUND</code>错误。</li>
+</ol>
+<p>倘若走的是第<code>2</code>步，则跳转文件的<code>234</code>行，可看到函数逻辑为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">protected function getRouteForMethods($request, array $methods)</div><div class="line">&#123;</div><div class="line">    if ($request-&gt;method() == &apos;OPTIONS&apos;) &#123;</div><div class="line">        return (new Route(&apos;OPTIONS&apos;, $request-&gt;path(), function () use ($methods) &#123;</div><div class="line">            return new Response(&apos;&apos;, 200, [&apos;Allow&apos; =&gt; implode(&apos;,&apos;, $methods)]);</div><div class="line">        &#125;))-&gt;bind($request);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    $this-&gt;methodNotAllowed($methods);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>判断如果请求方式是<code>OPTIONS</code>，则返回状态码为<code>200</code>的正确响应（但是没有添加任何<code>header</code>信息），否则返回一个<code>methodNotAllowed</code>状态码为<code>405</code>的错误（即请求方式不允许的情况）。</p>
+<p>此处Laravel针对<code>OPTIONS</code>方式的HTTP请求处理方式已经固定了，这样就有点头疼，不知道在哪里添加代码针对<code>OPTIONS</code>请求的<code>header</code>进行处理。最笨的方法是对跨域请求的每一个<code>GET</code>或<code>POST</code>请求都撰写一个同名的<code>OPTIONS</code>类型的路由。</p>
+<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><p>解决方案有两种，一种是添加中间件，一种是使用通配路由匹配方案。<br>总体思想都是在系统处理<code>OPTIONS</code>请求的过程中添加相关<code>header</code>信息。</p>
+<h4 id="中间件方案"><a href="#中间件方案" class="headerlink" title="中间件方案"></a>中间件方案</h4><p>在文件<code>app/Http/Kernel.php</code>中，有两处可以定义中间件。<br>第一处是总中间件<code>$middleware</code>，任何请求都会通过这里；第二处是群组中间件<code>middlewareGroups</code>，只有路由匹配上对应群组模式的才会通过这部分。</p>
+<p>这是总中间件<code>$middleware</code>的定义代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">protected $middleware = [</div><div class="line">    \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,</div><div class="line">    \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,</div><div class="line">    \App\Http\Middleware\TrimStrings::class,</div><div class="line">    \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,</div><div class="line">    \App\Http\Middleware\TrustProxies::class,</div><div class="line">];</div></pre></td></tr></table></figure></p>
+<p>这是群组中间件<code>$middlewareGroups</code>的定义代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">* The application&apos;s route middleware groups.</div><div class="line">*</div><div class="line">* @var array</div><div class="line">*/</div><div class="line">protected $middlewareGroups = [</div><div class="line">    &apos;web&apos; =&gt; [</div><div class="line">        \App\Http\Middleware\EncryptCookies::class,</div><div class="line">        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,</div><div class="line">        \Illuminate\Session\Middleware\StartSession::class,</div><div class="line">        // \Illuminate\Session\Middleware\AuthenticateSession::class,</div><div class="line">        \Illuminate\View\Middleware\ShareErrorsFromSession::class,</div><div class="line">        \App\Http\Middleware\VerifyCsrfToken::class,</div><div class="line">        \Illuminate\Routing\Middleware\SubstituteBindings::class,</div><div class="line">    ],</div><div class="line">    &apos;api&apos; =&gt; [</div><div class="line">        &apos;throttle:60,1&apos;,</div><div class="line">        &apos;bindings&apos;,</div><div class="line">        \Illuminate\Session\Middleware\StartSession::class,</div><div class="line">    ],</div><div class="line">];</div></pre></td></tr></table></figure></p>
+<p>由于群组路由中间件是在路由匹配过程之后才进入，因此之前实验中提及的<code>OPTIONS</code>请求尚未通过此处中间件的<code>handle</code>函数，就已经返回了。</p>
+<p>因此我们添加的中间件，需要添加到<code>$middleware</code>数组中，不能添加到<code>api</code>群组路由中间件中。<br>在<code>app/Http/Middleware</code>文件夹下新建<code>PreflightResponse.php</code>文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">namespace App\Http\Middleware;</div><div class="line">use Closure;</div><div class="line">class PreflightResponse</div><div class="line">&#123;</div><div class="line">    /**</div><div class="line">    * Handle an incoming request.</div><div class="line">    *</div><div class="line">    * @param  \Illuminate\Http\Request  $request</div><div class="line">    * @param  \Closure  $next</div><div class="line">    * @param  string|null  $guard</div><div class="line">    * @return mixed</div><div class="line">    */</div><div class="line">    public function handle($request, Closure $next, $guard = null)</div><div class="line">    &#123;</div><div class="line">        if($request-&gt;getMethod() === &apos;OPTIONS&apos;)&#123;</div><div class="line">            $origin = $request-&gt;header(&apos;ORIGIN&apos;, &apos;*&apos;);</div><div class="line">            header(&quot;Access-Control-Allow-Origin: $origin&quot;);</div><div class="line">            header(&quot;Access-Control-Allow-Credentials: true&quot;);</div><div class="line">            header(&apos;Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE&apos;);</div><div class="line">            header(&apos;Access-Control-Allow-Headers: Origin, Access-Control-Request-Headers, SERVER_NAME, Access-Control-Allow-Headers, cache-control, token, X-Requested-With, Content-Type, Accept, Connection, User-Agent, Cookie, X-XSRF-TOKEN&apos;);</div><div class="line">        &#125;</div><div class="line">        return $next($request);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>其中这里针对<code>OPTIONS</code>请求的处理内容是添加多个<code>header</code>内容，可根据实际需要修改相关处理逻辑：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$origin = $request-&gt;header(&apos;ORIGIN&apos;, &apos;*&apos;);</div><div class="line">header(&quot;Access-Control-Allow-Origin: $origin&quot;);</div><div class="line">header(&quot;Access-Control-Allow-Credentials: true&quot;);</div><div class="line">header(&apos;Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE&apos;);</div><div class="line">header(&apos;Access-Control-Allow-Headers: Origin, Access-Control-Request-Headers, SERVER_NAME, Access-Control-Allow-Headers, cache-control, token, X-Requested-With, Content-Type, Accept, Connection, User-Agent, Cookie, X-XSRF-TOKEN&apos;);</div></pre></td></tr></table></figure></p>
+<p>至此，所有<code>OPTIONS</code>方式的HTTP请求都得到了相关处理。</p>
+<h4 id="通配路由匹配方案"><a href="#通配路由匹配方案" class="headerlink" title="通配路由匹配方案"></a>通配路由匹配方案</h4><p>如果不使用中间件，查询Laravel官方文档<a href="https://laravel.com/docs/5.5/routing#parameters-regular-expression-constraints" target="_blank" rel="external">Routing</a>，可知如何在路由中使用正则表达式进行模式匹配。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Route::get(&apos;user/&#123;id&#125;/&#123;name&#125;&apos;, function ($id, $name) &#123;</div><div class="line">    //</div><div class="line">&#125;)-&gt;where([&apos;id&apos; =&gt; &apos;[0-9]+&apos;, &apos;name&apos; =&gt; &apos;[a-z]+&apos;]);</div></pre></td></tr></table></figure></p>
+<p>类似的，可以撰写针对<code>OPTIONS</code>类型请求的泛化处理路由条件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Route::options(&apos;/&#123;all&#125;&apos;, function(Request $request) &#123;</div><div class="line">     return response(&apos;options here!&apos;);</div><div class="line">&#125;)-&gt;where([&apos;all&apos; =&gt; &apos;([a-zA-Z0-9-]|/)+&apos;]);</div></pre></td></tr></table></figure></p>
+<p><strong>注：这里正则表达式中不能使用符号<code>*</code></strong></p>
+<p>因此，针对跨域问题，对于<code>OPTIONS</code>方式的请求可以撰写如下路由响应：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Route::options(&apos;/&#123;all&#125;&apos;, function(Request $request) &#123;</div><div class="line">    $origin = $request-&gt;header(&apos;ORIGIN&apos;, &apos;*&apos;);</div><div class="line">    header(&quot;Access-Control-Allow-Origin: $origin&quot;);</div><div class="line">    header(&quot;Access-Control-Allow-Credentials: true&quot;);</div><div class="line">    header(&apos;Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE&apos;);</div><div class="line">    header(&apos;Access-Control-Allow-Headers: Origin, Access-Control-Request-Headers, SERVER_NAME, Access-Control-Allow-Headers, cache-control, token, X-Requested-With, Content-Type, Accept, Connection, User-Agent, Cookie&apos;);</div><div class="line">&#125;)-&gt;where([&apos;all&apos; =&gt; &apos;([a-zA-Z0-9-]|/)+&apos;]);</div></pre></td></tr></table></figure></p>
+<p>这样所有的<code>OPTIONS</code>请求都能找到匹配的路由，在此处可统一处理所有OPTIONS请求，不需要额外进行处理。</p>
+<p>参考链接：<br><a href="https://medium.com/@neo/handling-xmlhttprequest-options-pre-flight-request-in-laravel-a4c4322051b9" target="_blank" rel="external">https://medium.com/@neo/handling-xmlhttprequest-options-pre-flight-request-in-laravel-a4c4322051b9</a><br><a href="https://laravel.com/docs/5.5/routing#parameters-regular-expression-constraints" target="_blank" rel="external">https://laravel.com/docs/5.5/routing#parameters-regular-expression-constraints</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/01/31/Laravel中对OPTIONS请求的批量处理/" data-id="clcpwy3bj004n5e8tgwnviiqt" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-借鉴py-faster-rcnn完成自定义的对象检测任务" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/" class="article-date">
+  <time datetime="2018-01-13T05:13:15.000Z" itemprop="datePublished">2018-01-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/深度学习/">深度学习</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/">借鉴py-faster-rcnn完成自定义的对象检测任务</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这篇文章主要讲解如何基于<code>py-faster-rcnn</code>完成自定义的对象检测任务。</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>有时，在工作中需要使用<code>对象检测</code>方法在图片中检测出特定类别的物体。作为目前相对先进的对象检测算法，<code>faster-rcnn</code>成为可选算法之一，此外还可以考虑<code>YOLO</code>、<code>SSD</code>等方法。<br>本文借鉴了rgb大神的<code>py-faster-rcnn</code>项目进行修改，主要记录进行的相关修改内容。<br><code>py-faster-rcnn</code>的Github地址：<a href="https://github.com/rbgirshick/py-faster-rcnn" target="_blank" rel="external">https://github.com/rbgirshick/py-faster-rcnn</a></p>
+<p>项目<code>py-faster-rcnn</code>是基于<code>Caffe</code>框架用<code>Python</code>语言实现的<code>faster-rcnn</code>算法，因此需要有以下基本知识背景：</p>
+<ul>
+<li>基本的Python语法</li>
+<li>Caffe框架使用方法</li>
+<li>Pascal VOC数据集</li>
+</ul>
+<p>本文基于的系统环境为：</p>
+<ul>
+<li>Unbuntu 16.04</li>
+<li>python 2.7.12</li>
+<li>Cuda 8.0</li>
+</ul>
+<h2 id="第1部，运行Demo"><a href="#第1部，运行Demo" class="headerlink" title="第1部，运行Demo"></a>第1部，运行Demo</h2><p>首先参考项目主页的README文档内容，尝试跑通<code>py-faster-rcnn</code>项目，以验证环境是否满足相关依赖。</p>
+<p>1.1）首先递归地clone整个项目：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone --recursive https://github.com/rbgirshick/py-faster-rcnn.git</div></pre></td></tr></table></figure></p>
+<p>1.2）安装Cython模块：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd $FRCN_ROOT/lib</div><div class="line">make</div></pre></td></tr></table></figure></p>
+<p>其中<code>$FRCN_ROOT</code>表示<code>py-faster-rcnn</code>项目所在目录的根路径。</p>
+<p>1.3）安装Caffe和pycaffe，注意<code>Makefile.config</code>中要设置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># In your Makefile.config, make sure to have this line uncommented</div><div class="line">WITH_PYTHON_LAYER := 1</div><div class="line"># Unrelatedly, it&apos;s also recommended that you use CUDNN</div><div class="line">USE_CUDNN := 1</div></pre></td></tr></table></figure></p>
+<p>其中设置<code>WITH_PYTHON_LAYER</code>是必须的，而<code>USE_CUDNN</code>是可选的。配置好<code>Makefile.config</code>文件后，执行命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd $FRCN_ROOT/caffe-fast-rcnn</div><div class="line">make -j16</div><div class="line">make pycaffe</div></pre></td></tr></table></figure></p>
+<p>1.4）下载预先训练好的Faster R-CNN模型，里面包含了一个<code>VGG16</code>和一个<code>ZF</code>的caffemodel。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd $FRCN_ROOT</div><div class="line">./data/scripts/fetch_faster_rcnn_models.sh</div></pre></td></tr></table></figure></p>
+<p>目标是在<code>$FRCN_ROOT/data</code>目录下存在<code>faster_rcnn_models</code>文件夹，里面放置着相关模型文件。</p>
+<p>1.5）讲道理，这时候就可以运行demo了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd $FRCN_ROOT</div><div class="line">./tools/demo.py</div></pre></td></tr></table></figure></p>
+<p>顺利的话，如果你的操作系统有图形界面，此时会弹出几张图片，图片上用颜色框出了被检测到的对象。</p>
+<p>注：</p>
+<ul>
+<li>其中可能会遇到各种问题，大多数是python库缺失的问题，可以使用<code>pip install xxx</code>解决。</li>
+<li>在<code>demo.py</code>脚本中使用的图片路径是<code>cfg.DATA_DIR</code>，实质是<code>lib/fast_rcnn/config.py</code>文件中的配置，默认是<code>data/demo</code>下的几张图片，可以根据需要修改为自定义的图片路径。</li>
+<li>另外，官方教程将demo放在这一步，没有考虑一个问题：大多数服务器是没有图形界面的。而<code>demo.py</code>中需要显示图片，在命令行下是会报错的。需要进行相应修改，具体可参考<code>demo.py</code>文件中的<code>vis_detections()</code>函数。</li>
+</ul>
+<h2 id="第2步，运行官方的训练"><a href="#第2步，运行官方的训练" class="headerlink" title="第2步，运行官方的训练"></a>第2步，运行官方的训练</h2><p>在完成demo后，接下来可以尝试根据官方教程执行训练操作，为此后自定义地进行模型训练打下基础。<br>这个部分的流程主要有以下几点：</p>
+<ul>
+<li>准备数据集</li>
+<li>准备预训练模型</li>
+<li>修改对应训练脚本</li>
+<li>执行脚本。</li>
+</ul>
+<p>2.1）下载<code>Pascal VOC</code>数据集，包括<code>VOC2007</code>相关的训练集、验证集和测试集，以及相关开发包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">wget http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCtrainval_06-Nov-2007.tar</div><div class="line">wget http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCtest_06-Nov-2007.tar</div><div class="line">wget http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCdevkit_08-Jun-2007.tar</div></pre></td></tr></table></figure></p>
+<p>解压到放置大型数据的位置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">tar xvf VOCtrainval_06-Nov-2007.tar</div><div class="line">tar xvf VOCtest_06-Nov-2007.tar</div><div class="line">tar xvf VOCdevkit_08-Jun-2007.tar</div></pre></td></tr></table></figure></p>
+<p>此时，在相关位置，目录文件结构应该是如下的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$VOCdevkit/  # VOC开发工具包根目录</div><div class="line">$VOCdevkit/VOCcode/ # VOC工具代码</div><div class="line">$VOCdevkit/VOC2007 # 图片、标注信息等</div></pre></td></tr></table></figure></p>
+<p>在<code>py-faster-rcnn</code>项目中设置软链接，指向真实的数据存放位置。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd $FRCN_ROOT/data</div><div class="line">ln -s $VOCdevkit VOCdevkit2007</div></pre></td></tr></table></figure></p>
+<p>这种方式有助于在多个项目中共享同一份数据集文件，并且能够控制代码项目的大小，将所有较大的数据集文件统一归类放置。</p>
+<p>2.2）下载训练好的<code>ImageNet</code>网络模型：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd $FRCN_ROOT</div><div class="line">./data/scripts/fetch_imagenet_models.sh</div></pre></td></tr></table></figure></p>
+<p>2.3）修改对应的脚本内容：</p>
+<p>这一步由于目前是执行官方训练，不需要修改相关内容。</p>
+<p>2.4）执行训练脚本，执行<code>experiments/scripts/faster_rcnn_end2end.sh</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">cd $FRCN_ROOT</div><div class="line">./experiments/scripts/faster_rcnn_end2end.sh [GPU_ID] [NET] [--set ...]</div><div class="line"># GPU_ID is the GPU you want to train on</div><div class="line"># NET in &#123;ZF, VGG_CNN_M_1024, VGG16&#125; is the network arch to use</div><div class="line"># --set ... allows you to specify fast_rcnn.config options, e.g.</div><div class="line"># --set EXP_DIR seed_rng1701 RNG_SEED 1701</div></pre></td></tr></table></figure></p>
+<p>上述是官方文档的示例说明，实质上执行的命令为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./experiments/scripts/faster_rcnn_end2end.sh 0 VGG16 pascal_voc</div></pre></td></tr></table></figure></p>
+<p>这一步可能会遇到挺多问题，主要问题有两个：</p>
+<p>遇到<code>AttributeError: &#39;module&#39; object has no attribute &#39;text_format&#39;</code>的问题，参考<a href="https://github.com/rbgirshick/py-faster-rcnn/issues/198，解决方案是在`tools/train_net.py`前添加：" target="_blank" rel="external">https://github.com/rbgirshick/py-faster-rcnn/issues/198，解决方案是在`tools/train_net.py`前添加：</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import google.protobuf.text_format</div></pre></td></tr></table></figure></p>
+<p>可能会遇到<code>TypeError: slice indices must be integers or None or have an index method</code>的问题，参考<a href="https://github.com/rbgirshick/py-faster-rcnn/issues/480，为了解决numpy1.13不支持Float作为数组下标的问题，在`lib/proposal_target_layer.py`文件中添加：" target="_blank" rel="external">https://github.com/rbgirshick/py-faster-rcnn/issues/480，为了解决numpy1.13不支持Float作为数组下标的问题，在`lib/proposal_target_layer.py`文件中添加：</a><br>（在126行之后）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">start=int(start)</div><div class="line">end=int(end)</div></pre></td></tr></table></figure></p>
+<p>（在166行之后）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fg_rois_per_this_image=int(fg_rois_per_this_image)</div></pre></td></tr></table></figure></p>
+<p>解决相关问题后，训练脚本应该可以运行，结果文件输出在<code>$FRCN_ROOT/output</code>文件夹中。</p>
+<h2 id="第3步，改造模型"><a href="#第3步，改造模型" class="headerlink" title="第3步，改造模型"></a>第3步，改造模型</h2><p><code>py-faster-rcnn</code>项目实现了端到端的对象检测算法，基础模型包含了20个类别。<br>在某些场景下可能不需要这么多类别，并且希望检测的对象类别可能不在上述20个类别中，这时候需要改造<code>py-faster-rcnn</code>，训练适合自定义任务的网络模型。<br>改造模型的流程类似于第2步中的4个步骤：</p>
+<ul>
+<li>准备数据集（这一步比较辛苦，需要进行数据的标注，并以指定格式组织好）</li>
+<li>准备预训练模型（这一步很简单，直接使用此前的<code>ImageNet</code>模型即可）</li>
+<li>修改对应训练脚本（这一步比较关键，主要是类比<code>pascal_voc</code>数据集的训练方法，创建属于自定义任务的训练方法</li>
+<li>执行脚本。</li>
+</ul>
+<p>因此，改造模型的工作量主要集中在数据集的准备以及相关脚本代码的修改。<br>假定我们的数据集名称为<code>custom_task</code>，这个名称的性质与<code>pascal_voc</code>相同，会在之后的修改中多次用到。</p>
+<h4 id="准备数据集"><a href="#准备数据集" class="headerlink" title="准备数据集"></a>准备数据集</h4><p><code>Pascal VOC</code>这个数据集比较著名，仔细研究之后可以发现，与对象检测相关的数据文件有几个：</p>
+<ul>
+<li>原始图片，放置在<code>JPEGImages</code>目录下，假定有n张图片</li>
+<li>图片标注，放置在<code>Annotations</code>目录下，同样也有n个文件，文件名称与图片名称一一对应，后缀名由<code>.jpg</code>替换为<code>.xml</code></li>
+<li>训练/测试图片列表文件，可命名为<code>trainval.txt</code>，放置在<code>ImageSets/Main</code>目录下</li>
+</ul>
+<p>其中原始图片全都放置在<code>JPEGImages</code>目录下即可。<br>对应根据划分生成<code>trainval.txt</code>文件内容，每行为一个文件名称，格式可参考<code>Pascal VOC</code>数据集中相关文件的格式。<br>比较麻烦的图片标注，生成的xml文件格式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&lt;annotation&gt;    # 标准tag根节点</div><div class="line">        &lt;folder&gt;CUSTOM2018&lt;/folder&gt;    # 数据集名称，需要与数据集所在根目录名称相同</div><div class="line">        &lt;filename&gt;0000110.jpg&lt;/filename&gt;    # 图片名称</div><div class="line">        &lt;object&gt;</div><div class="line">                &lt;name&gt;class_2&lt;/name&gt;    # 类别名称，需要与此后datasets相关脚本中的类别相同</div><div class="line">                &lt;difficult&gt;0&lt;/difficult&gt;    # 不确定有什么用，但缺少了会报错</div><div class="line">                &lt;bndbox&gt;                        # bounding box信息，包含4个值</div><div class="line">                        &lt;xmin&gt;945&lt;/xmin&gt;</div><div class="line">                        &lt;ymin&gt;696&lt;/ymin&gt;</div><div class="line">                        &lt;xmax&gt;1131&lt;/xmax&gt;</div><div class="line">                        &lt;ymax&gt;897&lt;/ymax&gt;</div><div class="line">                &lt;/bndbox&gt;</div><div class="line">        &lt;/object&gt;</div><div class="line">        &lt;object&gt;</div><div class="line">                &lt;name&gt;class_2&lt;/name&gt;</div><div class="line">                &lt;difficult&gt;0&lt;/difficult&gt;</div><div class="line">                &lt;bndbox&gt;</div><div class="line">                        &lt;xmin&gt;566&lt;/xmin&gt;</div><div class="line">                        &lt;ymin&gt;945&lt;/ymin&gt;</div><div class="line">                        &lt;xmax&gt;756&lt;/xmax&gt;</div><div class="line">                        &lt;ymax&gt;1080&lt;/ymax&gt;</div><div class="line">                &lt;/bndbox&gt;</div><div class="line">        &lt;/object&gt;</div><div class="line">&lt;/annotation&gt;</div></pre></td></tr></table></figure></p>
+<p>借鉴<code>Pascal VOC</code>数据集中相关文件的格式，生成并组织好自己的数据集，就可以执行接下来的步骤。</p>
+<h4 id="修改相关脚本文件"><a href="#修改相关脚本文件" class="headerlink" title="修改相关脚本文件"></a>修改相关脚本文件</h4><p>这一步内容比较庞大，将详细讲解。<br>3.1）修改相关网络结构定义<br>在路径<code>$FRCN_ROOT/models/[dataset_name]/[model_name]/faster_rcnn_end2end</code>目录下，放置着三个网络结构定义文件：</p>
+<ul>
+<li>test.prototxt</li>
+<li>train.prototxt</li>
+<li>solver.prototxt</li>
+</ul>
+<p>对于自定义的数据集，也需要创建类似路径的文件，并修改网络结构。其中主要是针对检测目标类别数量的修改：<br>对于<code>solver.prototxt</code>，修改：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">train_net: &quot;models/pascal_voc/VGG16/faster_rcnn_end2end/train.prototxt&quot;</div></pre></td></tr></table></figure></p>
+<p>为对应自身对应的<code>train.prototxt</code>路径：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">train_net: &quot;models/[dataset_name]/[model_name]/faster_rcnn_end2end/train.prototxt&quot;</div></pre></td></tr></table></figure></p>
+<p>另外，对于快照存放路径：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">snapshot_prefix: &quot;vgg16_faster_rcnn&quot;</div></pre></td></tr></table></figure></p>
+<p>最好修改为其它路径，否则会在<code>$FRCN_ROOT</code>项目根目录下产生很多模型文件，使项目目录杂乱无章。</p>
+<p>对于<code>test.prototxt</code>和<code>train.prototxt</code>文件，主要有以下几点：<br>（搜索”input-data”层相关）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">layer &#123;</div><div class="line">  name: &apos;input-data&apos;</div><div class="line">  type: &apos;Python&apos;</div><div class="line">  top: &apos;data&apos;</div><div class="line">  top: &apos;im_info&apos;</div><div class="line">  top: &apos;gt_boxes&apos;</div><div class="line">  python_param &#123;</div><div class="line">    module: &apos;roi_data_layer.layer&apos;</div><div class="line">    layer: &apos;RoIDataLayer&apos;</div><div class="line">    param_str: &quot;&apos;num_classes&apos;: 21&quot;    # 这里需要修改为类别数量+1</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>（搜索”roi-data”层相关）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">layer &#123;</div><div class="line">  name: &apos;roi-data&apos;</div><div class="line">  type: &apos;Python&apos;</div><div class="line">  bottom: &apos;rpn_rois&apos;</div><div class="line">  bottom: &apos;gt_boxes&apos;</div><div class="line">  top: &apos;rois&apos;</div><div class="line">  top: &apos;labels&apos;</div><div class="line">  top: &apos;bbox_targets&apos;</div><div class="line">  top: &apos;bbox_inside_weights&apos;</div><div class="line">  top: &apos;bbox_outside_weights&apos;</div><div class="line">  python_param &#123;</div><div class="line">    module: &apos;rpn.proposal_target_layer&apos;</div><div class="line">    layer: &apos;ProposalTargetLayer&apos;</div><div class="line">    param_str: &quot;&apos;num_classes&apos;: 21&quot;    # 这里需要修改为类别数量+1</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>（搜索”cls_score”层相关）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">layer &#123;</div><div class="line">  name: &quot;cls_score&quot;</div><div class="line">  type: &quot;InnerProduct&quot;</div><div class="line">  bottom: &quot;fc7&quot;</div><div class="line">  top: &quot;cls_score&quot;</div><div class="line">  param &#123;</div><div class="line">    lr_mult: 1</div><div class="line">  &#125;</div><div class="line">  param &#123;</div><div class="line">    lr_mult: 2</div><div class="line">  &#125;</div><div class="line">  inner_product_param &#123;</div><div class="line">    num_output: 21    # 这里需要修改为类别数量+1</div><div class="line">    weight_filler &#123;</div><div class="line">      type: &quot;gaussian&quot;</div><div class="line">      std: 0.01</div><div class="line">    &#125;</div><div class="line">    bias_filler &#123;</div><div class="line">      type: &quot;constant&quot;</div><div class="line">      value: 0</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>（搜索”bbox_pred”层相关）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">layer &#123;</div><div class="line">  name: &quot;bbox_pred&quot;</div><div class="line">  type: &quot;InnerProduct&quot;</div><div class="line">  bottom: &quot;fc7&quot;</div><div class="line">  top: &quot;bbox_pred&quot;</div><div class="line">  param &#123;</div><div class="line">    lr_mult: 1</div><div class="line">  &#125;</div><div class="line">  param &#123;</div><div class="line">    lr_mult: 2</div><div class="line">  &#125;</div><div class="line">  inner_product_param &#123;</div><div class="line">    num_output: 84    # 这里需要修改为(类别数量+1) * 4</div><div class="line">    weight_filler &#123;</div><div class="line">      type: &quot;gaussian&quot;</div><div class="line">      std: 0.001</div><div class="line">    &#125;</div><div class="line">    bias_filler &#123;</div><div class="line">      type: &quot;constant&quot;</div><div class="line">      value: 0</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>3.2）修改自定义的训练数据集定义脚本</p>
+<p>主要修改文件有两个：</p>
+<ul>
+<li>修改<code>./lib/datasets/factory.py</code></li>
+<li>添加<code>./lib/datasets/custom_task.py</code>文件</li>
+</ul>
+<p>在文件<code>./lib/datasets/factory.py</code>中，依照<code>pascal_voc</code>和<code>coco</code>的相关代码，添加相关代码。<br>导入代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">from datasets.custom_task import custom_task</div></pre></td></tr></table></figure></p>
+<p>需要设置<code>__sets</code>变量中对应键值的内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">for year in [&apos;2018&apos;]:</div><div class="line">    for split in [&apos;trainval&apos;, &apos;test&apos;]:</div><div class="line">        name = &apos;custom_task_&#123;&#125;_&#123;&#125;&apos;.format(year, split)</div><div class="line">        __sets[name] = (lambda split=split, year=year: head(split, year))</div></pre></td></tr></table></figure></p>
+<p>至于新创建的<code>./lib/datasets/custom_task.py</code>文件，可以模仿<code>./lib/datasets/pascal_voc.py</code>进行修改，主要注意修改如下几点：<br>所有名称出现<code>voc</code>的位置进行对应替换：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">imdb.__init__(self, &apos;voc_&apos; + year + &apos;_&apos; + image_set)</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">annopath = os.path.join(</div><div class="line">            self._devkit_path,</div><div class="line">            &apos;VOC&apos; + self._year,</div><div class="line">            &apos;Annotations&apos;,</div><div class="line">            &apos;&#123;:s&#125;.xml&apos;)</div><div class="line">        imagesetfile = os.path.join(</div><div class="line">            self._devkit_path,</div><div class="line">            &apos;VOC&apos; + self._year,</div><div class="line">            &apos;ImageSets&apos;,</div><div class="line">            &apos;Main&apos;,</div><div class="line">            self._image_set + &apos;.txt&apos;)</div></pre></td></tr></table></figure>
+<p>修改类别名称及数量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">self._classes = (&apos;__background__&apos;, # always index 0</div><div class="line">                         &apos;aeroplane&apos;, &apos;bicycle&apos;, &apos;bird&apos;, &apos;boat&apos;,</div><div class="line">                         &apos;bottle&apos;, &apos;bus&apos;, &apos;car&apos;, &apos;cat&apos;, &apos;chair&apos;,</div><div class="line">                         &apos;cow&apos;, &apos;diningtable&apos;, &apos;dog&apos;, &apos;horse&apos;,</div><div class="line">                         &apos;motorbike&apos;, &apos;person&apos;, &apos;pottedplant&apos;,</div><div class="line">                         &apos;sheep&apos;, &apos;sofa&apos;, &apos;train&apos;, &apos;tvmonitor&apos;)</div></pre></td></tr></table></figure></p>
+<p>3.3）修改训练脚本<br>执行训练的入口是<code>./experiments/scripts/faster_rcnn_end2end.sh</code>脚本。<br>我们希望执行的也是一个端到端的训练，因此不需要新建训练脚本，只需要在文件<code>faster_rcnn_end2end.sh</code>中添加一个新的数据集：<br>原始脚本中关于数据集选择的定义代码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">case $DATASET in</div><div class="line">  pascal_voc)</div><div class="line">    TRAIN_IMDB=&quot;voc_2007_trainval&quot;</div><div class="line">    TEST_IMDB=&quot;voc_2007_test&quot;</div><div class="line">    PT_DIR=&quot;pascal_voc&quot;</div><div class="line">    ITERS=70000</div><div class="line">    ;;</div><div class="line">  coco)</div><div class="line">    # This is a very long and slow training schedule</div><div class="line">    # You can probably use fewer iterations and reduce the</div><div class="line">    # time to the LR drop (set in the solver to 350,000 iterations).</div><div class="line">    TRAIN_IMDB=&quot;coco_2014_train&quot;</div><div class="line">    TEST_IMDB=&quot;coco_2014_minival&quot;</div><div class="line">    PT_DIR=&quot;coco&quot;</div><div class="line">    ITERS=490000</div><div class="line">    ;;</div><div class="line">  *)</div><div class="line">    echo &quot;No dataset given&quot;</div><div class="line">    exit</div><div class="line">    ;;</div><div class="line">esac</div></pre></td></tr></table></figure></p>
+<p>类比于<code>pascal_voc</code>和<code>coco</code>，添加自定义的数据集任务如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">customer_task)</div><div class="line">  TRAIN_IMDB=&quot;custom_task_2018_trainval&quot;</div><div class="line">  TEST_IMDB=&quot;custom_task_2014_test&quot;</div><div class="line">  PT_DIR=&quot;custom_task&quot;</div><div class="line">  ITERS=50000</div><div class="line">  ;;</div></pre></td></tr></table></figure></p>
+<p>查看脚本后续代码可知：<br><code>PT_DIR</code>用于定义<code>--solver</code>的路径名称，因此设置<code>PT_DIR=&quot;custom_task&quot;</code>意味着能够在<code>models/custom_task/[model_name]/faster_rcnn_end2end/</code>目录下找到<code>solver.prototxt</code>文件；<br><code>TRAIN_IMDB</code>和<code>TEST_IMDB</code>作为<code>--imdb</code>参数的内容传入<code>$PRCN_ROOT/tools/train_net.py</code>和<code>$PRCN_ROOT/tool/test_net.py</code>脚本中，具体使用内容可查看相关代码，基本格式是<code>[dataset_name]_[year]_[split_name]</code>。</p>
+<p>完成上述修改后，可以尝试开始执行训练。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文记录了借鉴<code>py-faster-rcnn</code>进行改造，完成自定义对象检测任务的主要流程。<br>其中包括了必须执行的相关步骤，以及可能遇到的一些坑。</p>
+<h2 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h2><p>参考链接：<a href="https://github.com/rbgirshick/py-faster-rcnn" target="_blank" rel="external">https://github.com/rbgirshick/py-faster-rcnn</a><br>参考链接：<a href="https://saicoco.github.io/object-detection-4/" target="_blank" rel="external">https://saicoco.github.io/object-detection-4/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/01/13/借鉴py-faster-rcnn完成自定义的对象检测任务/" data-id="clcpwy3ha00h75e8tbh9r637d" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Linux命令在文件中查找字符串" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/01/12/Linux命令在文件中查找字符串/" class="article-date">
+  <time datetime="2018-01-12T05:44:14.000Z" itemprop="datePublished">2018-01-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/01/12/Linux命令在文件中查找字符串/">Linux命令在文件中查找字符串</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="使用grep命令"><a href="#使用grep命令" class="headerlink" title="使用grep命令"></a>使用<code>grep</code>命令</h2><h4 id="指定文件"><a href="#指定文件" class="headerlink" title="指定文件"></a>指定文件</h4><p>在指定文件中查找相关字符串，可以使用<code>grep</code>命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">grep [target_str] [target_file]</div></pre></td></tr></table></figure></p>
+<p>比如查找后台访问日志中，调用接口<code>v1/user/profile/2</code>的所有记录：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">grep v1/user/profile/2 storage/logs/laravel-2016-11-25.log</div></pre></td></tr></table></figure></p>
+<h4 id="指定文件夹"><a href="#指定文件夹" class="headerlink" title="指定文件夹"></a>指定文件夹</h4><p>在指定文件夹中查找相关字符串，可以使用带参数的<code>grep</code>命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">grep -rnw [target_dir] -e [target_str]</div></pre></td></tr></table></figure></p>
+<p>其中<code>-r</code>或<code>-R</code>表示递归向下搜索，<code>-n</code>是显示匹配行号，<code>-w</code>表示匹配整个字符。</p>
+<h2 id="使用find命令结合grep命令"><a href="#使用find命令结合grep命令" class="headerlink" title="使用find命令结合grep命令"></a>使用<code>find</code>命令结合<code>grep</code>命令</h2><p>在一堆文件中查找相关字符串及其出现的文件，可以使用<code>find</code>命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">find [dir_path] -type f -exec grep -H [target_str] &#123;&#125; \;</div></pre></td></tr></table></figure></p>
+<p>其中<code>find</code>命令是Linux中常用的查找命令，后面接着的<code>-exec grep ... {} \;</code>表示执行<code>grep</code>命令，注意后面的<code>{} \;</code>是必须的。grep</p>
+<p>这类命令还是以实际使用场景为准，具体问题查询具体的参数语法即可。</p>
+<p>参考链接：<a href="https://stackoverflow.com/questions/16956810/how-do-i-find-all-files-containing-specific-text-on-linux" target="_blank" rel="external">https://stackoverflow.com/questions/16956810/how-do-i-find-all-files-containing-specific-text-on-linux</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/01/12/Linux命令在文件中查找字符串/" data-id="clcpwy3c900635e8tnppmqj04" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Linux管道和awk实现字符连接" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/01/04/Linux管道和awk实现字符连接/" class="article-date">
+  <time datetime="2018-01-04T11:30:09.000Z" itemprop="datePublished">2018-01-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/01/04/Linux管道和awk实现字符连接/">Linux管道和awk实现字符连接</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在工作中遇到一个需求，快速将某个目录下的所有文件的完整路径输出，每行一个文件路径。<br>遇到这个需求时，非常直观的两个想法是：</p>
+<ol>
+<li><code>ls</code>命令：在Linux操作系统中，用<code>ls</code>能够列举目录下所有文件的列表</li>
+<li><code>&gt;</code>重定向符号：使用重定向符号能够将输出结果重定向到目标文件中</li>
+</ol>
+<p>然而存在一个问题，<code>ls</code>命令只列出了文件名称，相比于完整目录还缺少目录的路径。</p>
+<h2 id="awk简介"><a href="#awk简介" class="headerlink" title="awk简介"></a><code>awk</code>简介</h2><p><code>awk</code>是Linux一个强大的文本分析工具，使用方法为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">awk &apos;&#123;pattern + action&#125;&apos; &#123;filenames&#125;</div></pre></td></tr></table></figure></p>
+<p>其中<code>pattern</code>表示AWK在数据中查找的内容，而<code>action</code>是找到匹配内容是所执行的命令。花括号<code>{}</code>不需要始终出现，但可以用于根据特定的模式对一系列指令进行分组。<br><code>awk</code>的工作流程是，读入有’\n’换行符分割的记录，然后将记录按指定的域分隔符划分域，填充域。<code>$0</code>表示所有域，<code>$1</code>表示第一个域，<code>$n</code>表示第n个域。默认域分隔符是<code>空白键</code>或<code>tab键</code>。<br>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">awk &apos;&#123;print &quot;1234&quot;$1&quot;6&quot;$2&#125;&apos;</div></pre></td></tr></table></figure></p>
+<p>然后输入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">5 7</div></pre></td></tr></table></figure></p>
+<p>输出结果为<code>1234567</code>。<br>也可以使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo &quot;5 7&quot; | awk &apos;&#123;print &quot;1234&quot;$1&quot;6&quot;$2&#125;&apos;</div></pre></td></tr></table></figure></p>
+<p>同样输出<code>1234567</code>。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>根据管道和<code>awk</code>工具的特点，我们可以针对问题提出如下解决方案：<br>假设目标目录为<code>path/to/dir</code>，要生成一个文件<code>list.txt</code>，文件中每一行是目录下文件的完整目录名：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ls path/to/dir | awk &apos;&#123;print &quot;path/to/dir&quot;$1&#125;&apos; &gt; list.txt</div></pre></td></tr></table></figure></p>
+<p>即可完成。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/01/04/Linux管道和awk实现字符连接/" data-id="clcpwy3ce006g5e8tmj6z134d" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Mac使用命令行快速生成zip包" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2018/01/02/Mac使用命令行快速生成zip包/" class="article-date">
+  <time datetime="2018-01-02T05:49:52.000Z" itemprop="datePublished">2018-01-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2018/01/02/Mac使用命令行快速生成zip包/">Mac使用命令行快速生成zip包</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Mac OS自带<code>zip</code>命令，可以用于生成<code>.zip</code>格式压缩文件。   </p>
+<h4 id="压缩单个文件"><a href="#压缩单个文件" class="headerlink" title="压缩单个文件"></a>压缩单个文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zip -e [file_name.zip] [file_name]</div></pre></td></tr></table></figure>
+<p>其中<code>-e</code>选项表示加密压缩，需要在上述命令后输入密码和确认密码。</p>
+<h4 id="压缩文件夹"><a href="#压缩文件夹" class="headerlink" title="压缩文件夹"></a>压缩文件夹</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zip -e -r [file_name.zip] [file_dir]</div></pre></td></tr></table></figure>
+<p>其中<code>-r</code>选项表示递归地进行压缩，与Linux命令中<code>rm -r</code>的使用方式类似。</p>
+<p>关于输入密码也可以通过一行命令直接完成。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zip -r -p [password] [file_name.zip] [file_dir]</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2018/01/02/Mac使用命令行快速生成zip包/" data-id="clcpwy3ci006q5e8t40zlt09j" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Mysql导出数据库表结构到Excel" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog-hexo/2017/11/21/Mysql导出数据库表结构到Excel/" class="article-date">
+  <time datetime="2017-11-21T14:07:09.000Z" itemprop="datePublished">2017-11-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog-hexo/categories/后台/">后台</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog-hexo/2017/11/21/Mysql导出数据库表结构到Excel/">Mysql导出数据库表结构到Excel</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在工作中遇到这样一个问题，希望能够将Mysql数据库的表结构导出，方便进行分析。<br>通常情况下，可以使用<code>mysqldump</code>命令，添加只导出数据库结构的选项，得到sql文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysqldump --opt --host [db_host] -d [db_name] -u [user_name] -p &gt; output.sql</div></pre></td></tr></table></figure></p>
+<p>然而得到的结果文件是sql语法的，尽管能够用于再次导入，但可读性较差。  </p>
+<img src="/2017/11/21/Mysql导出数据库表结构到Excel/blog-hexo/2017/11/21/Mysql导出数据库表结构到Excel/1.png" alt="输出的sql文件内容" title="输出的sql文件内容">
+<p>后来发现一种方式，能够直接在可视化数据库连接应用（如<code>Navicat</code>, <code>Sequel Pro</code>）中获取数据库表结构。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">SELECT</div><div class="line">  TABLE_NAME 表名,</div><div class="line">  COLUMN_NAME 列名,</div><div class="line">  COLUMN_TYPE 数据类型,</div><div class="line">    DATA_TYPE 字段类型,</div><div class="line">  CHARACTER_MAXIMUM_LENGTH 长度,</div><div class="line">  IS_NULLABLE 是否为空,</div><div class="line">  COLUMN_DEFAULT 默认值,</div><div class="line">  COLUMN_COMMENT 备注 </div><div class="line">FROM</div><div class="line"> INFORMATION_SCHEMA.COLUMNS</div><div class="line">WHERE</div><div class="line">table_schema =&apos;[database_name]&apos;</div></pre></td></tr></table></figure></p>
+<p>得到的结果直接全选复制，粘贴到Excel表格中即可。</p>
+<img src="/2017/11/21/Mysql导出数据库表结构到Excel/blog-hexo/2017/11/21/Mysql导出数据库表结构到Excel/2.png" alt="SequelPro中的查询结果" title="SequelPro中的查询结果">
+<p>参考链接：<br>    <a href="http://www.jb51.net/article/28855.htm" target="_blank" rel="external">http://www.jb51.net/article/28855.htm</a><br>    <a href="http://blog.csdn.net/yangshijin1988/article/details/70229473" target="_blank" rel="external">http://blog.csdn.net/yangshijin1988/article/details/70229473</a>     </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ckmessi.github.io/2017/11/21/Mysql导出数据库表结构到Excel/" data-id="clcpwy3cp007b5e8tiigru2rg" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/blog-hexo/page/19/">&laquo; zurück</a><a class="page-number" href="/blog-hexo/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/18/">18</a><a class="page-number" href="/blog-hexo/page/19/">19</a><span class="page-number current">20</span><a class="page-number" href="/blog-hexo/page/21/">21</a><a class="page-number" href="/blog-hexo/page/22/">22</a><span class="space">&hellip;</span><a class="page-number" href="/blog-hexo/page/24/">24</a><a class="extend next" rel="next" href="/blog-hexo/page/21/">weiter &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Kategorien</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/人脸识别/">人脸识别</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/前端/">前端</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/后台/">后台</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工作/">工作</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/深度学习/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/blog-hexo/categories/科研/">科研</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/3D/">3D</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/AIDL/">AIDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Alembic/">Alembic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Anime-js/">Anime.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Azure/">Azure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Blender/">Blender</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C#</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CMake/">CMake</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/COCO/">COCO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/COCOAPI/">COCOAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CSharp/">CSharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/CentOS/">CentOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Code-Coverage/">Code Coverage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Command-Line/">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Composer/">Composer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Cookie/">Cookie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Crontab/">Crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Debug/">Debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Deep-Learning/">Deep Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/DeepLearning/">DeepLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Django/">Django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ElementUI/">ElementUI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Excel/">Excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FFMpeg/">FFMpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FIGlet/">FIGlet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faiss/">Faiss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/FastAPI/">FastAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Faster-RCNN/">Faster RCNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Flask/">Flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Flyway/">Flyway</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Frontend/">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Gem/">Gem</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Git-Bash/">Git Bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/GitHub/">GitHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/GitLab/">GitLab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Go/">Go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Grunt/">Grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/HTML/">HTML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/JdbcTemplate/">JdbcTemplate</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel/">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Laravel扩展/">Laravel扩展</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/License/">License</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Loguru/">Loguru</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MS-COCO/">MS COCO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mac/">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MacOS/">MacOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Markdown/">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Math/">Math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Matplotlib/">Matplotlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Maven/">Maven</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Memory/">Memory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mkdocs/">Mkdocs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MyBatis/">MyBatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MyBatisPlus/">MyBatisPlus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mybatis/">Mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/NodeJS/">NodeJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Noise/">Noise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Numpy/">Numpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Nvidia-Driver/">Nvidia Driver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oh-My-Zsh/">Oh-My-Zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenCV/">OpenCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/OpenSSH/">OpenSSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Oracle/">Oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PDF/">PDF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PHPUnit/">PHPUnit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Paper-js/">Paper.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pip/">Pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pipe/">Pipe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PosixPath/">PosixPath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PowerShell/">PowerShell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PyTorch/">PyTorch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/PyYAML/">PyYAML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Pythonenv/">Pythonenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/RLE/">RLE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ruby/">Ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/RuleEngine/">RuleEngine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Rust/">Rust</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SQLAlchemy/">SQLAlchemy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SSH/">SSH</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Shell/">Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Spring-Boot/">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/SpringCloud/">SpringCloud</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Supervisor/">Supervisor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Swagger/">Swagger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Swagger-UI/">Swagger-UI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/TensorRT/">TensorRT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Torch/">Torch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/TorchServe/">TorchServe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Ubuntu/">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VB/">VB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VS-Code/">VS Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VSCode/">VSCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Visual-Studio/">Visual Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/VisualStudio/">VisualStudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue/">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vue-js/">Vue.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Vuetify/">Vuetify</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Windows/">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/YAML/">YAML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/Zip/">Zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/axios/">axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/base64/">base64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/bpy/">bpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/bumpversion/">bumpversion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/conda/">conda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/cookiecutter/">cookiecutter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/coverage/">coverage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/crontab/">crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/faiss/">faiss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastapi/">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/fastjson/">fastjson</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/heatmap-js/">heatmap.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/hexdump/">hexdump</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/interact-js/">interact.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/iptables/">iptables</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/libfacedetection/">libfacedetection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/md5/">md5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/nvidia/">nvidia</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/obj/">obj</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/peewee/">peewee</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/pip/">pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/pytest/">pytest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/scp/">scp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/sed/">sed</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/setuptools/">setuptools</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/ssh/">ssh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/torchvision/">torchvision</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/verdaccio/">verdaccio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/vim/">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/virtualenv/">virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/xargs/">xargs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/yacs/">yacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/yaml/">yaml</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/zip/">zip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/zsh/">zsh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/个人博客/">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/对象检测/">对象检测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/概率论/">概率论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog-hexo/tags/正则表达式/">正则表达式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/blog-hexo/tags/3D/" style="font-size: 10px;">3D</a> <a href="/blog-hexo/tags/AIDL/" style="font-size: 10px;">AIDL</a> <a href="/blog-hexo/tags/Ajax/" style="font-size: 10px;">Ajax</a> <a href="/blog-hexo/tags/Alembic/" style="font-size: 10px;">Alembic</a> <a href="/blog-hexo/tags/Android/" style="font-size: 10px;">Android</a> <a href="/blog-hexo/tags/Angular/" style="font-size: 11.43px;">Angular</a> <a href="/blog-hexo/tags/Anime-js/" style="font-size: 10px;">Anime.js</a> <a href="/blog-hexo/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/blog-hexo/tags/Azure/" style="font-size: 10px;">Azure</a> <a href="/blog-hexo/tags/Blender/" style="font-size: 10px;">Blender</a> <a href="/blog-hexo/tags/C/" style="font-size: 11.43px;">C#</a> <a href="/blog-hexo/tags/C/" style="font-size: 10px;">C++</a> <a href="/blog-hexo/tags/CMake/" style="font-size: 10px;">CMake</a> <a href="/blog-hexo/tags/COCO/" style="font-size: 10px;">COCO</a> <a href="/blog-hexo/tags/COCOAPI/" style="font-size: 10px;">COCOAPI</a> <a href="/blog-hexo/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/blog-hexo/tags/CSharp/" style="font-size: 10.71px;">CSharp</a> <a href="/blog-hexo/tags/CentOS/" style="font-size: 10px;">CentOS</a> <a href="/blog-hexo/tags/Code-Coverage/" style="font-size: 10px;">Code Coverage</a> <a href="/blog-hexo/tags/Command-Line/" style="font-size: 10.71px;">Command Line</a> <a href="/blog-hexo/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/blog-hexo/tags/Cookie/" style="font-size: 10.71px;">Cookie</a> <a href="/blog-hexo/tags/Crontab/" style="font-size: 10px;">Crontab</a> <a href="/blog-hexo/tags/Debug/" style="font-size: 10px;">Debug</a> <a href="/blog-hexo/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/blog-hexo/tags/DeepLearning/" style="font-size: 10px;">DeepLearning</a> <a href="/blog-hexo/tags/Django/" style="font-size: 10px;">Django</a> <a href="/blog-hexo/tags/Docker/" style="font-size: 10.71px;">Docker</a> <a href="/blog-hexo/tags/ElementUI/" style="font-size: 12.14px;">ElementUI</a> <a href="/blog-hexo/tags/Excel/" style="font-size: 10.71px;">Excel</a> <a href="/blog-hexo/tags/FFMpeg/" style="font-size: 10px;">FFMpeg</a> <a href="/blog-hexo/tags/FIGlet/" style="font-size: 10px;">FIGlet</a> <a href="/blog-hexo/tags/Faiss/" style="font-size: 10px;">Faiss</a> <a href="/blog-hexo/tags/FastAPI/" style="font-size: 10px;">FastAPI</a> <a href="/blog-hexo/tags/Faster-RCNN/" style="font-size: 10px;">Faster RCNN</a> <a href="/blog-hexo/tags/Flask/" style="font-size: 10px;">Flask</a> <a href="/blog-hexo/tags/Flyway/" style="font-size: 10px;">Flyway</a> <a href="/blog-hexo/tags/Frontend/" style="font-size: 10px;">Frontend</a> <a href="/blog-hexo/tags/Gem/" style="font-size: 10px;">Gem</a> <a href="/blog-hexo/tags/Git/" style="font-size: 15px;">Git</a> <a href="/blog-hexo/tags/Git-Bash/" style="font-size: 10px;">Git Bash</a> <a href="/blog-hexo/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/blog-hexo/tags/GitLab/" style="font-size: 10px;">GitLab</a> <a href="/blog-hexo/tags/Github/" style="font-size: 10px;">Github</a> <a href="/blog-hexo/tags/Go/" style="font-size: 10.71px;">Go</a> <a href="/blog-hexo/tags/Grunt/" style="font-size: 10px;">Grunt</a> <a href="/blog-hexo/tags/HTML/" style="font-size: 10.71px;">HTML</a> <a href="/blog-hexo/tags/Hexo/" style="font-size: 12.14px;">Hexo</a> <a href="/blog-hexo/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/blog-hexo/tags/Java/" style="font-size: 16.43px;">Java</a> <a href="/blog-hexo/tags/JavaScript/" style="font-size: 12.14px;">JavaScript</a> <a href="/blog-hexo/tags/Javascript/" style="font-size: 17.14px;">Javascript</a> <a href="/blog-hexo/tags/JdbcTemplate/" style="font-size: 10px;">JdbcTemplate</a> <a href="/blog-hexo/tags/Laravel/" style="font-size: 18.57px;">Laravel</a> <a href="/blog-hexo/tags/Laravel扩展/" style="font-size: 10px;">Laravel扩展</a> <a href="/blog-hexo/tags/License/" style="font-size: 10px;">License</a> <a href="/blog-hexo/tags/Linux/" style="font-size: 17.86px;">Linux</a> <a href="/blog-hexo/tags/Loguru/" style="font-size: 10px;">Loguru</a> <a href="/blog-hexo/tags/MS-COCO/" style="font-size: 10px;">MS COCO</a> <a href="/blog-hexo/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/blog-hexo/tags/MacOS/" style="font-size: 10px;">MacOS</a> <a href="/blog-hexo/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/blog-hexo/tags/Math/" style="font-size: 10.71px;">Math</a> <a href="/blog-hexo/tags/Matplotlib/" style="font-size: 10px;">Matplotlib</a> <a href="/blog-hexo/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/blog-hexo/tags/Memory/" style="font-size: 10px;">Memory</a> <a href="/blog-hexo/tags/Mkdocs/" style="font-size: 10px;">Mkdocs</a> <a href="/blog-hexo/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/blog-hexo/tags/MyBatisPlus/" style="font-size: 10px;">MyBatisPlus</a> <a href="/blog-hexo/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog-hexo/tags/Mybatis/" style="font-size: 10.71px;">Mybatis</a> <a href="/blog-hexo/tags/Mysql/" style="font-size: 10.71px;">Mysql</a> <a href="/blog-hexo/tags/Nginx/" style="font-size: 11.43px;">Nginx</a> <a href="/blog-hexo/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/blog-hexo/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/blog-hexo/tags/Noise/" style="font-size: 10px;">Noise</a> <a href="/blog-hexo/tags/Numpy/" style="font-size: 10px;">Numpy</a> <a href="/blog-hexo/tags/Nvidia-Driver/" style="font-size: 10px;">Nvidia Driver</a> <a href="/blog-hexo/tags/Oh-My-Zsh/" style="font-size: 10px;">Oh-My-Zsh</a> <a href="/blog-hexo/tags/OpenCV/" style="font-size: 10.71px;">OpenCV</a> <a href="/blog-hexo/tags/OpenSSH/" style="font-size: 10px;">OpenSSH</a> <a href="/blog-hexo/tags/Oracle/" style="font-size: 11.43px;">Oracle</a> <a href="/blog-hexo/tags/PDF/" style="font-size: 10px;">PDF</a> <a href="/blog-hexo/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/blog-hexo/tags/PHPUnit/" style="font-size: 10px;">PHPUnit</a> <a href="/blog-hexo/tags/Paper-js/" style="font-size: 10px;">Paper.js</a> <a href="/blog-hexo/tags/Pip/" style="font-size: 10px;">Pip</a> <a href="/blog-hexo/tags/Pipe/" style="font-size: 10px;">Pipe</a> <a href="/blog-hexo/tags/PosixPath/" style="font-size: 10px;">PosixPath</a> <a href="/blog-hexo/tags/PowerShell/" style="font-size: 10.71px;">PowerShell</a> <a href="/blog-hexo/tags/PyTorch/" style="font-size: 10.71px;">PyTorch</a> <a href="/blog-hexo/tags/PyYAML/" style="font-size: 10px;">PyYAML</a> <a href="/blog-hexo/tags/Python/" style="font-size: 19.29px;">Python</a> <a href="/blog-hexo/tags/Pythonenv/" style="font-size: 10px;">Pythonenv</a> <a href="/blog-hexo/tags/RLE/" style="font-size: 10px;">RLE</a> <a href="/blog-hexo/tags/React/" style="font-size: 10px;">React</a> <a href="/blog-hexo/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/blog-hexo/tags/RuleEngine/" style="font-size: 10px;">RuleEngine</a> <a href="/blog-hexo/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/blog-hexo/tags/SQLAlchemy/" style="font-size: 10px;">SQLAlchemy</a> <a href="/blog-hexo/tags/SSH/" style="font-size: 12.86px;">SSH</a> <a href="/blog-hexo/tags/Shell/" style="font-size: 14.29px;">Shell</a> <a href="/blog-hexo/tags/Spring/" style="font-size: 13.57px;">Spring</a> <a href="/blog-hexo/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/blog-hexo/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/blog-hexo/tags/Supervisor/" style="font-size: 10px;">Supervisor</a> <a href="/blog-hexo/tags/Swagger/" style="font-size: 10px;">Swagger</a> <a href="/blog-hexo/tags/Swagger-UI/" style="font-size: 10px;">Swagger-UI</a> <a href="/blog-hexo/tags/TensorRT/" style="font-size: 10px;">TensorRT</a> <a href="/blog-hexo/tags/Terminal/" style="font-size: 10px;">Terminal</a> <a href="/blog-hexo/tags/Torch/" style="font-size: 10px;">Torch</a> <a href="/blog-hexo/tags/TorchServe/" style="font-size: 10.71px;">TorchServe</a> <a href="/blog-hexo/tags/Ubuntu/" style="font-size: 11.43px;">Ubuntu</a> <a href="/blog-hexo/tags/VB/" style="font-size: 10px;">VB</a> <a href="/blog-hexo/tags/VS-Code/" style="font-size: 10.71px;">VS Code</a> <a href="/blog-hexo/tags/VSCode/" style="font-size: 10.71px;">VSCode</a> <a href="/blog-hexo/tags/Visual-Studio/" style="font-size: 10px;">Visual Studio</a> <a href="/blog-hexo/tags/VisualStudio/" style="font-size: 10px;">VisualStudio</a> <a href="/blog-hexo/tags/Vue/" style="font-size: 15.71px;">Vue</a> <a href="/blog-hexo/tags/Vue-js/" style="font-size: 10px;">Vue.js</a> <a href="/blog-hexo/tags/Vuetify/" style="font-size: 10px;">Vuetify</a> <a href="/blog-hexo/tags/Windows/" style="font-size: 12.86px;">Windows</a> <a href="/blog-hexo/tags/XML/" style="font-size: 10px;">XML</a> <a href="/blog-hexo/tags/YAML/" style="font-size: 10.71px;">YAML</a> <a href="/blog-hexo/tags/Zip/" style="font-size: 10px;">Zip</a> <a href="/blog-hexo/tags/axios/" style="font-size: 10.71px;">axios</a> <a href="/blog-hexo/tags/base64/" style="font-size: 10px;">base64</a> <a href="/blog-hexo/tags/bpy/" style="font-size: 10px;">bpy</a> <a href="/blog-hexo/tags/bumpversion/" style="font-size: 10px;">bumpversion</a> <a href="/blog-hexo/tags/conda/" style="font-size: 10.71px;">conda</a> <a href="/blog-hexo/tags/cookiecutter/" style="font-size: 10px;">cookiecutter</a> <a href="/blog-hexo/tags/coverage/" style="font-size: 10px;">coverage</a> <a href="/blog-hexo/tags/crontab/" style="font-size: 10px;">crontab</a> <a href="/blog-hexo/tags/faiss/" style="font-size: 10px;">faiss</a> <a href="/blog-hexo/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/blog-hexo/tags/fastjson/" style="font-size: 10px;">fastjson</a> <a href="/blog-hexo/tags/ffmpeg/" style="font-size: 10px;">ffmpeg</a> <a href="/blog-hexo/tags/grep/" style="font-size: 10.71px;">grep</a> <a href="/blog-hexo/tags/heatmap-js/" style="font-size: 10px;">heatmap.js</a> <a href="/blog-hexo/tags/hexdump/" style="font-size: 10px;">hexdump</a> <a href="/blog-hexo/tags/interact-js/" style="font-size: 10px;">interact.js</a> <a href="/blog-hexo/tags/iptables/" style="font-size: 10.71px;">iptables</a> <a href="/blog-hexo/tags/libfacedetection/" style="font-size: 10px;">libfacedetection</a> <a href="/blog-hexo/tags/md5/" style="font-size: 10px;">md5</a> <a href="/blog-hexo/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog-hexo/tags/npm/" style="font-size: 10.71px;">npm</a> <a href="/blog-hexo/tags/nvidia/" style="font-size: 10px;">nvidia</a> <a href="/blog-hexo/tags/obj/" style="font-size: 10px;">obj</a> <a href="/blog-hexo/tags/peewee/" style="font-size: 10px;">peewee</a> <a href="/blog-hexo/tags/pip/" style="font-size: 10px;">pip</a> <a href="/blog-hexo/tags/pytest/" style="font-size: 10.71px;">pytest</a> <a href="/blog-hexo/tags/python/" style="font-size: 10px;">python</a> <a href="/blog-hexo/tags/scp/" style="font-size: 10px;">scp</a> <a href="/blog-hexo/tags/sed/" style="font-size: 10px;">sed</a> <a href="/blog-hexo/tags/setuptools/" style="font-size: 10px;">setuptools</a> <a href="/blog-hexo/tags/shell/" style="font-size: 10px;">shell</a> <a href="/blog-hexo/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/blog-hexo/tags/torchvision/" style="font-size: 10px;">torchvision</a> <a href="/blog-hexo/tags/verdaccio/" style="font-size: 10px;">verdaccio</a> <a href="/blog-hexo/tags/vim/" style="font-size: 10px;">vim</a> <a href="/blog-hexo/tags/virtualenv/" style="font-size: 10px;">virtualenv</a> <a href="/blog-hexo/tags/xargs/" style="font-size: 10px;">xargs</a> <a href="/blog-hexo/tags/yacs/" style="font-size: 10px;">yacs</a> <a href="/blog-hexo/tags/yaml/" style="font-size: 10px;">yaml</a> <a href="/blog-hexo/tags/zip/" style="font-size: 10px;">zip</a> <a href="/blog-hexo/tags/zsh/" style="font-size: 10px;">zsh</a> <a href="/blog-hexo/tags/个人博客/" style="font-size: 11.43px;">个人博客</a> <a href="/blog-hexo/tags/前端/" style="font-size: 10px;">前端</a> <a href="/blog-hexo/tags/对象检测/" style="font-size: 10px;">对象检测</a> <a href="/blog-hexo/tags/概率论/" style="font-size: 10px;">概率论</a> <a href="/blog-hexo/tags/正则表达式/" style="font-size: 10px;">正则表达式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2023/01/">January 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/11/">November 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/10/">October 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog-hexo/archives/2017/05/">May 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog-hexo/2023/01/10/Vue使用js-yaml解析yaml文件/">Vue使用js-yaml解析yaml文件</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2023/01/04/Vue导出HTML页面至PDF/">Vue导出HTML页面至PDF</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/11/09/python将秒数转为格式化时间字符串/">python将秒数转为格式化时间字符串</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/10/19/使用Verdaccio搭建私有npm源/">使用Verdaccio搭建私有npm源</a>
+          </li>
+        
+          <li>
+            <a href="/blog-hexo/2022/09/08/Docker实时查看容器的内存占用/">Docker实时查看容器的内存占用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 ckmessi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog-hexo/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog-hexo/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/blog-hexo/fancybox/jquery.fancybox.css">
+  <script src="/blog-hexo/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/blog-hexo/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
